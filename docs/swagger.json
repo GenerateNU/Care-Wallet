@@ -1,0 +1,51 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is an API for the CareWallet App.",
+        "title": "Care Wallet API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "basePath": "/",
+    "paths": {
+        "/medications": {
+            "get": {
+                "description": "get all user medications",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "medications"
+                ],
+                "summary": "Get All Meds",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/types.Medication"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "types.Medication": {
+            "type": "object",
+            "properties": {
+                "medication_id": {
+                    "type": "integer"
+                },
+                "medication_name": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
