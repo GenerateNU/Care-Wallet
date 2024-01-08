@@ -11,6 +11,16 @@ type PgModel struct {
 	Conn *pgx.Conn
 }
 
+func GetMedicationGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
+
+	medications := v1.Group("medications")
+	{
+		medications.GET("", c.GetMedications)
+	}
+
+	return medications
+}
+
 // GetMedications godoc
 //
 //	@Summary		Get All Meds

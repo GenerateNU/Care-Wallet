@@ -2,7 +2,6 @@ package main
 
 import (
 	"carewallet/backend/db"
-	"carewallet/backend/schema/group"
 	"carewallet/backend/schema/medication"
 	"carewallet/configuration"
 	"fmt"
@@ -35,7 +34,7 @@ func main() {
 
 	v1 := r.Group("/")
 	{
-		group.GetMedicationGroup(v1, &medication.PgModel{Conn: conn})
+		medication.GetMedicationGroup(v1, &medication.PgModel{Conn: conn})
 		//...
 	}
 

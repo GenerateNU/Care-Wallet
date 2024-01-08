@@ -1,11 +1,16 @@
 version: '3'
 
 tasks:
+  build: npm install --prefix client && go get . && pre-commit install
+
   run:
     - 'go run main.go'
 
   dev:
     - 'swag i --parseDependency && go run main.go'
+
+  pre-commit:
+    - 'pre-commit run --all-files'
 
   test-all:
     - 'go test -count=1 && go test -count=1 carewallet/backend/...'

@@ -25,8 +25,8 @@ type DatabaseSettings struct {
 type Environment string
 
 const (
-	EnvironmentLocal      Environment = "local"
-	EnvironmentProduction Environment = "production"
+	EnvironmentLocal  Environment = "local"
+	EnvironmentGitHub Environment = "github"
 )
 
 var (
@@ -43,15 +43,15 @@ func GetConfiguration() (Settings, error) {
 
 	var environment Environment
 	if env := os.Getenv("GITHUB_ACTIONS"); env != "" {
-		environment = Environment("github")
+		environment = EnvironmentGitHub
 	} else {
-		environment = "local"
+		environment = EnvironmentLocal
 	}
 
 	v.SetConfigName(string(environment))
 
 	if err := v.ReadInConfig(); err != nil {
-		return settings, fmt.Errorf("failed to read %s configuration: %w", "local", err)
+		return settings, fmt.Errorf("failed to read %s configuration: %w", environment, err)
 	}
 
 	if err := v.Unmarshal(&settings); err != nil {
