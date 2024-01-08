@@ -2,11 +2,12 @@ package db
 
 import (
 	"carewallet/configuration"
-	"database/sql"
+	"context"
 	"fmt"
 	"os"
 	"testing"
 
+	"github.com/huandu/go-assert"
 	_ "github.com/lib/pq"
 )
 
@@ -18,22 +19,12 @@ func TestDBConnection(t *testing.T) {
 		os.Exit(1)
 	}
 
-	dbURL := fmt.Sprintf("postgres://%s:%s@%s:%d/%s?sslmode=disable",
-		config.Database.Username,
-		config.Database.Password,
-		config.Database.Host,
-		config.Database.Port,
-		config.Database.DatabaseName,
-	)
+	t.Run("TestConnectPosgresDatabase", func(t *testing.T) {
+		conn := ConnectPosgresDatabase(config)
+		defer conn.Close()
 
-	db, err := sql.Open("postgres", dbURL)
-	if err != nil {
-		t.Fatalf("failed to connect to the database: %v", err)
-	}
-	defer db.Close()
+		err = conn.Ping(context.Background())
 
-	err = db.Ping()
-	if err != nil {
-		t.Fatalf("failed to ping the database: %v", err)
-	}
+		assert.AssertEqual(t, err, nil)
+	})
 }

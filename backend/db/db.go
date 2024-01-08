@@ -18,6 +18,7 @@ func ConnectPosgresDatabase(settings configuration.Settings) *pgx.Conn {
 		Host:     settings.Database.Host,
 		Port:     settings.Database.Port,
 	}
+
 	var err error
 	if exists {
 		cfg, err = pgx.ParseConnectionString(db_url)
