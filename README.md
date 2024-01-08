@@ -1,12 +1,12 @@
-<h1 align="center">Care-Wallet</h1>
-  <div align="center">
+<div align="center">
+<h1>Care-Wallet</h1>
+  <div>
       A fullstack application for the Care-Wallet project
   </div>
-<br />
-<div align="center">
+  <br/>
   <!-- Github Actions -->
-  <a href="https://github.com/GenerateNU/Care-Wallet/actions/workflows/test.yml">
-    <img src="https://github.com/GenerateNU/Care-Wallet/actions/workflows/test.yml/badge.svg"
+  <a href="https://github.com/GenerateNU/Care-Wallet/actions/workflows/CI.yml">
+    <img src="https://github.com/GenerateNU/Care-Wallet/actions/workflows/CI.yml/badge.svg"
       alt="Workflow Status" />
   </a>
   <br/>
