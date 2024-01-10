@@ -15,11 +15,7 @@ info:
 paths:
   /medications:
     get:
-      consumes:
-      - application/json
       description: get all user medications
-      produces:
-      - application/json
       responses:
         "200":
           description: OK

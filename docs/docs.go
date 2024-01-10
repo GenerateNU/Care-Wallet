@@ -18,12 +18,6 @@ const docTemplate = `{
         "/medications": {
             "get": {
                 "description": "get all user medications",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
                 "tags": [
                     "medications"
                 ],

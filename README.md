@@ -24,18 +24,13 @@ First, understand the tech stack:
   [NativeWind](https://www.nativewind.dev) and uses [Expo](https://expo.dev/) as
   a build tool
 
-Before compiling and running our application, we need to install several
+Before compiling and running our application, we need to install/setup several
 languages, package managers, and various tools. The installation process can
 vary, so follow the instructions for each item below!
 
 - [Go](https://go.dev/doc/install) - our primary backend language
-  - Afterwards, install all go dependencies with the command `go get .` in the
-    root directory. This needs to be re-run if dependencies change.
 - [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) - our
   package manager in the frontend
-  - Afterwards, install all dependencies in the frontend with
-    `npm install --prefix client` in the root directory. This needs to be re-run
-    if dependencies change.
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/) - useful for
   running docker
 - [ngrok](https://ngrok.com/docs/getting-started/) - Allows us to easily connect
@@ -65,22 +60,35 @@ process can vary, so follow the instructions for each item below!
 
 - [pre-commit](https://pre-commit.com) - our development tool to standardize
   development and ensure every file follows the same styling guidelines.
-  - Afterwards, install all pre-commit hooks with `pre-commit install`, in the
-    root directory. This needs to be re-run if hooks change.
 - [Task](https://taskfile.dev/installation/) - our development tool to quickly
   run commands that run, test, and clean files.
 
 ## Running the project
 
 1. Launch Docker Desktop
-2. In the base of the repo: run `docker-compose up`
+2. In the base of the repo: run `task start-docker`
+
+- This will run `docker-compose down` then `docker-compose up`
+
 3. To build all of the dependencies of the project: run `task build`
-4. Then, open a new tab to run commands in: run `task dev`. This will generate
-   swagger docs and start the backend of the project.
-5. Next, open another new tab to run commands in: run
-   `npm start --prefix client`. This will start the frontend.
-6. Next, open one last tab to run commands in: run
-   `ngrok http --domain=[your ngrok domain here] 8080`
-7. To open the app on a mobile device through expo-go, scan the QR code produced
-   from step 4. Otherwise, open xcode or android studio by following the
-   instructions on the screen of step 4.
+
+- This will install both frontend and backend dependencies
+
+4. Then, open a new tab to run commands in: run `task start-backend`
+
+- This will generate the swagger docs as well as start the backend
+- You can now view swagger: http://localhost:8080/swagger/index.html
+
+5. Next, open one last tab to run commands in: run `task start-ngrok`
+
+- This will just give you a prompt to enter your ngrok domain for example mine
+  is:
+
+  `kind-dane-roughly.ngrok-free.app`
+
+6. Next, open another new tab to run commands in: run `task start-frontend`
+
+- This will start the frontend
+
+7. From here follow the prompt in step 6 to launch the frontend on your device
+   of choice
