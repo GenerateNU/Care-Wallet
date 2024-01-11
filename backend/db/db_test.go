@@ -7,7 +7,6 @@ import (
 	"os"
 	"testing"
 
-	"github.com/huandu/go-assert"
 	_ "github.com/lib/pq"
 )
 
@@ -25,6 +24,8 @@ func TestDBConnection(t *testing.T) {
 
 		err = conn.Ping(context.Background())
 
-		assert.AssertEqual(t, err, nil)
+		if err != nil {
+			t.Error("Failed to connect to the Database")
+		}
 	})
 }

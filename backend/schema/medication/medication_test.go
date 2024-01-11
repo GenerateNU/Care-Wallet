@@ -1,9 +1,9 @@
 package medication
 
 import (
-	"carewallet/backend/db"
-	"carewallet/backend/types"
 	"carewallet/configuration"
+	"carewallet/db"
+	"carewallet/types"
 	"fmt"
 	"os"
 	"slices"
@@ -16,8 +16,6 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
-
-	"github.com/huandu/go-assert"
 )
 
 func TestGetMedication(t *testing.T) {
@@ -43,19 +41,22 @@ func TestGetMedication(t *testing.T) {
 		GetMedicationGroup(v1, &controller)
 	}
 
-	a := assert.New(t)
-
 	t.Run("TestGetMedication", func(t *testing.T) {
 		w := httptest.NewRecorder()
 		req, _ := http.NewRequest("GET", "/medications", nil)
 		router.ServeHTTP(w, req)
 
 		// Check for HTTP Status OK (200)
-		assert.Equal(t, http.StatusOK, w.Code)
+		if http.StatusOK != w.Code {
+			t.Error("Failed to retrieve medications.")
+		}
 
 		var responseMedication []types.Medication
 		err := json.Unmarshal(w.Body.Bytes(), &responseMedication)
-		a.NilError(t, err, "Error unmarshaling JSON response")
+
+		if err != nil {
+			t.Error("Failed to unmarshal json")
+		}
 
 		// Define the expected medication data
 		expectedMedication := []types.Medication{
@@ -71,7 +72,10 @@ func TestGetMedication(t *testing.T) {
 				MedicationName: "Medication E"},
 		}
 
-		assert.Assert(t, slices.Equal(expectedMedication, responseMedication))
+		if !slices.Equal(expectedMedication, responseMedication) {
+			t.Error("Result was not correct")
+		}
+
 	})
 
 }

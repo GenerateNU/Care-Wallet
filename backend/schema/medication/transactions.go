@@ -1,7 +1,7 @@
 package medication
 
 import (
-	"carewallet/backend/types"
+	"carewallet/types"
 
 	"github.com/jackc/pgx"
 )

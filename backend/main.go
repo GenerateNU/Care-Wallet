@@ -1,10 +1,10 @@
 package main
 
 import (
-	"carewallet/backend/db"
-	"carewallet/backend/schema/medication"
 	"carewallet/configuration"
+	"carewallet/db"
 	_ "carewallet/docs"
+	"carewallet/schema/medication"
 	"fmt"
 	"os"
 

@@ -4,19 +4,22 @@ tasks:
   build:
     - |
       npm install --prefix client
-      go get .
       go mod tidy
 
   start-backend:
     - |
+      cd backend
       swag i --parseDependency
       go run main.go
 
   start-frontend:
-    - npm start --prefix client
+    - |
+      cd client
+      npm start
 
   start-ngrok:
     - |
+      cd backend
       echo "Type ngrok domain name:"
       read ngrok;
       ngrok http --domain=${ngrok} 8080
@@ -28,7 +31,8 @@ tasks:
 
   test-all:
     - |
-      go test -count=1 carewallet/backend/...
+      cd backend
+      go test -count=1 carewallet/...
 
   pre-commit:
     - pre-commit run --all-files
