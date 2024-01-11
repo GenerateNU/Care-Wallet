@@ -30,8 +30,9 @@ jobs:
 
       - name: Lint Go code
         run: |
+          cd backend
           go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
-          golangci-lint run ./backend/...
+          golangci-lint run ./...
 
       - name: Format Frontend
         run: |
