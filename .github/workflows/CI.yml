@@ -110,6 +110,12 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+      - name: Install Task
+        uses: arduino/setup-task@v1
+        with:
+          version: 3.x
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Build app
         run: |
           task build
