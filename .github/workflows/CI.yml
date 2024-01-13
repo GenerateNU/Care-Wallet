@@ -105,7 +105,11 @@ jobs:
         with:
           go-version: ${{ matrix.go-version }}
 
-      - name: Build Go app
+      - name: Set up Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Build app
         run: |
-          cd backend
-          go build -v
+          task build

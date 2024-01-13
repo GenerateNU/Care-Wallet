@@ -3,8 +3,20 @@ version: '3'
 tasks:
   build:
     - |
-      npm install --prefix client
+      cd client
+      npm install
+      cd ../backend
       go mod tidy
+      go install .
+
+  format:
+    - |
+      cd client
+      npm run format
+      cd ../backend
+      go fmt
+      go vet
+      golangci-lint run ./...
 
   start-backend:
     - |
