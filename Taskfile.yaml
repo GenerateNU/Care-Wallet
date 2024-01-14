@@ -1,5 +1,5 @@
 version: '3'
-
+dotenv: ['.env']
 tasks:
   build:
     - |
@@ -30,11 +30,11 @@ tasks:
       npm start
 
   start-ngrok:
-    - |
-      cd backend
-      echo "Type ngrok domain name:"
-      read ngrok;
-      ngrok http --domain=${ngrok} 8080
+    dotenv: ['.env']
+    cmds:
+      - |
+        cd backend
+        ngrok http --domain=$EXPO_PUBLIC_API_DOMAIN 8080
 
   start-docker:
     - |

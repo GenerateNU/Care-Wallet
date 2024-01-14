@@ -79,16 +79,14 @@ process can vary, so follow the instructions for each item below!
 - This will generate the swagger docs as well as start the backend
 - You can now view swagger: http://localhost:8080/swagger/index.html
 
-5. Next, open one last tab to run commands in: run `task start-ngrok`
+5. Next, create a .env file in the root directory with a single line:
+   `EXPO_PUBLIC_API_DOMAIN={your ngrok static domain here}`
 
-- This will just give you a prompt to enter your ngrok domain for example mine
-  is:
+6. Next, open one last tab to run commands in: run `task start-ngrok`
 
-  `kind-dane-roughly.ngrok-free.app`
-
-6. Next, open another new tab to run commands in: run `task start-frontend`
+7. Next, open another new tab to run commands in: run `task start-frontend`
 
 - This will start the frontend
 
-7. From here follow the prompt in step 6 to launch the frontend on your device
+8. From here follow the prompt in step 6 to launch the frontend on your device
    of choice

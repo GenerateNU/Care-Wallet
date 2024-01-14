@@ -1,8 +1,7 @@
 import axios from 'axios';
-
-import config from '../config.json';
+import { api_url } from './api-links';
 
 export const getAllMedications = async (): Promise<Medication[]> => {
-  const response = await axios.get(`${config['api-link']}/medications`);
+  const response = await axios.get(`${api_url}/medications`);
   return response.data;
 };
