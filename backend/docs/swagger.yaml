@@ -1,0 +1,29 @@
+basePath: /
+definitions:
+  models.Medication:
+    properties:
+      medication_id:
+        type: integer
+      medication_name:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: This is an API for the Care-Wallet App.
+  title: Care-Wallet API
+  version: "1.0"
+paths:
+  /medications:
+    get:
+      description: get all user medications
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Medication'
+            type: array
+      summary: Get All Meds
+      tags:
+      - medications
+swagger: "2.0"

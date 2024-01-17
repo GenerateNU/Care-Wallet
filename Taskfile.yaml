@@ -1,0 +1,52 @@
+version: '3'
+dotenv: ['.env']
+tasks:
+  build:
+    - |
+      cd client
+      npm install
+      cd ../backend
+      go mod tidy
+      go install .
+
+  format:
+    - |
+      cd client
+      npm run format
+      cd ../backend
+      go fmt
+      go vet
+      swag f
+
+  start-backend:
+    - |
+      cd backend
+      swag i --parseDependency
+      go run main.go
+
+  start-frontend:
+    - |
+      cd client
+      npm start
+
+  start-ngrok:
+    dotenv: ['.env']
+    cmds:
+      - |
+        cd backend
+        ngrok http --domain=$EXPO_PUBLIC_API_DOMAIN 8080
+
+  start-docker:
+    - |
+      docker-compose down
+      docker-compose up
+
+  test-all:
+    - |
+      cd backend
+      go test -count=1 carewallet/...
+
+  pre-commit:
+    - |
+      pre-commit install
+      pre-commit run --all-files
