@@ -63,30 +63,34 @@ process can vary, so follow the instructions for each item below!
 - [Task](https://taskfile.dev/installation/) - our development tool to quickly
   run commands that run, test, and clean files.
 
+## Before Running
+
+1. Create a .env file in the root directory with a single line:
+   `EXPO_PUBLIC_API_DOMAIN=your-ngrok-static-domain-here`
+   - this will be used by the frontend services as well as the task file to
+     launch ngrok!
+
 ## Running the project
 
 1. Launch Docker Desktop
 2. In the base of the repo: run `task start-docker`
 
-- This will run `docker-compose down` then `docker-compose up`
+   - This will run `docker-compose down` then `docker-compose up`
 
 3. To build all of the dependencies of the project: run `task build`
 
-- This will install both frontend and backend dependencies
+   - This will install both frontend and backend dependencies
 
 4. Then, open a new tab to run commands in: run `task start-backend`
 
-- This will generate the swagger docs as well as start the backend
-- You can now view swagger: http://localhost:8080/swagger/index.html
+   - This will generate the swagger docs as well as start the backend
+   - You can now view swagger: http://localhost:8080/swagger/index.html
 
-5. Next, create a .env file in the root directory with a single line:
-   `EXPO_PUBLIC_API_DOMAIN={your ngrok static domain here}`
+5. Next, in a new tab run `task start-ngrok`
 
-6. Next, open one last tab to run commands in: run `task start-ngrok`
+6. Finally, open one last new tab: run `task start-frontend`
 
-7. Next, open another new tab to run commands in: run `task start-frontend`
+   - This will start the frontend
 
-- This will start the frontend
-
-8. From here follow the prompt in step 6 to launch the frontend on your device
+7. From here follow the prompt in step 6 to launch the frontend on your device
    of choice

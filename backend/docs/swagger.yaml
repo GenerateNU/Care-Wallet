@@ -1,6 +1,6 @@
 basePath: /
 definitions:
-  types.Medication:
+  models.Medication:
     properties:
       medication_id:
         type: integer
@@ -9,8 +9,8 @@ definitions:
     type: object
 info:
   contact: {}
-  description: This is an API for the CareWallet App.
-  title: Care Wallet API
+  description: This is an API for the Care-Wallet App.
+  title: Care-Wallet API
   version: "1.0"
 paths:
   /medications:
@@ -21,7 +21,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/types.Medication'
+              $ref: '#/definitions/models.Medication'
             type: array
       summary: Get All Meds
       tags:

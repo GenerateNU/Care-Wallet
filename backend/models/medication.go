@@ -1,4 +1,4 @@
-package types
+package models
 
 type Medication struct {
 	MedicationID   int    `json:"medication_id"`

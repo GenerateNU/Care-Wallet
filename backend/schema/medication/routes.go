@@ -23,11 +23,11 @@ func GetMedicationGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 
 // GetMedications godoc
 //
-//	@Summary		Get All Meds
-//	@Description	get all user medications
-//	@Tags			medications
-//	@Success		200	{array}	types.Medication
-//	@Router			/medications [get]
+//	@summary		Get All Meds
+//	@description	get all user medications
+//	@tags			medications
+//	@success		200	{array}	models.Medication
+//	@router			/medications [get]
 func (pg *PgModel) GetMedications(c *gin.Context) {
 	med, err := GetAllMedsFromDB(pg.Conn)
 

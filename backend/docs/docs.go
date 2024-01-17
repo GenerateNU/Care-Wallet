@@ -28,7 +28,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/types.Medication"
+                                "$ref": "#/definitions/models.Medication"
                             }
                         }
                     }
@@ -37,7 +37,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "types.Medication": {
+        "models.Medication": {
             "type": "object",
             "properties": {
                 "medication_id": {
@@ -57,8 +57,8 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "",
 	BasePath:         "/",
 	Schemes:          []string{},
-	Title:            "Care Wallet API",
-	Description:      "This is an API for the CareWallet App.",
+	Title:            "Care-Wallet API",
+	Description:      "This is an API for the Care-Wallet App.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

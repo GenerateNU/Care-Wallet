@@ -13,10 +13,12 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-// @title Care Wallet API
-// @version 1.0
-// @description This is an API for the CareWallet App.
-// @BasePath /
+// Care-Wallet API godoc
+//
+//	@title			Care-Wallet API
+//	@version		1.0
+//	@description	This is an API for the Care-Wallet App.
+//	@BasePath		/
 func main() {
 	config, err := configuration.GetConfiguration()
 

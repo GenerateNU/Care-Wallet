@@ -1,12 +1,12 @@
 package medication
 
 import (
-	"carewallet/types"
+	"carewallet/models"
 
 	"github.com/jackc/pgx"
 )
 
-func GetAllMedsFromDB(pool *pgx.Conn) ([]types.Medication, error) {
+func GetAllMedsFromDB(pool *pgx.Conn) ([]models.Medication, error) {
 	rows, err := pool.Query("SELECT medication_id, medication_name FROM medication;")
 
 	if err != nil {
@@ -17,10 +17,10 @@ func GetAllMedsFromDB(pool *pgx.Conn) ([]types.Medication, error) {
 
 	defer rows.Close()
 
-	var results []types.Medication
+	var results []models.Medication
 
 	for rows.Next() {
-		med := types.Medication{}
+		med := models.Medication{}
 		err := rows.Scan(&med.MedicationID, &med.MedicationName)
 
 		if err != nil {

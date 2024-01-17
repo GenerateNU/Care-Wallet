@@ -3,7 +3,7 @@ package medication
 import (
 	"carewallet/configuration"
 	"carewallet/db"
-	"carewallet/types"
+	"carewallet/models"
 	"fmt"
 	"os"
 	"slices"
@@ -51,7 +51,7 @@ func TestGetMedication(t *testing.T) {
 			t.Error("Failed to retrieve medications.")
 		}
 
-		var responseMedication []types.Medication
+		var responseMedication []models.Medication
 		err := json.Unmarshal(w.Body.Bytes(), &responseMedication)
 
 		if err != nil {
@@ -59,7 +59,7 @@ func TestGetMedication(t *testing.T) {
 		}
 
 		// Define the expected medication data
-		expectedMedication := []types.Medication{
+		expectedMedication := []models.Medication{
 			{MedicationID: 1,
 				MedicationName: "Medication A"},
 			{MedicationID: 2,

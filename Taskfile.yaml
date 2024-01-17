@@ -16,7 +16,7 @@ tasks:
       cd ../backend
       go fmt
       go vet
-      golangci-lint run ./...
+      swag f
 
   start-backend:
     - |

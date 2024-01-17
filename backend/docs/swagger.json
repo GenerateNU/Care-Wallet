@@ -1,8 +1,8 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "This is an API for the CareWallet App.",
-        "title": "Care Wallet API",
+        "description": "This is an API for the Care-Wallet App.",
+        "title": "Care-Wallet API",
         "contact": {},
         "version": "1.0"
     },
@@ -21,7 +21,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/types.Medication"
+                                "$ref": "#/definitions/models.Medication"
                             }
                         }
                     }
@@ -30,7 +30,7 @@
         }
     },
     "definitions": {
-        "types.Medication": {
+        "models.Medication": {
             "type": "object",
             "properties": {
                 "medication_id": {
