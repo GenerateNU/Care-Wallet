@@ -58,8 +58,25 @@ Next, understand the development tools that will make our lives easier:
 Before committing anything, we need to install several tools. The installation
 process can vary, so follow the instructions for each item below!
 
-- [pre-commit](https://pre-commit.com) - our development tool to standardize
-  development and ensure every file follows the same styling guidelines.
+- [pre-commit](https://pre-commit.com/#installation) - our development tool to
+  standardize development and ensure every file follows the same styling
+  guidelines.
+- [commitizen](https://commitizen-tools.github.io/commitizen/#installation) -
+  This allows us to organize commits! By typing `cz c` instead of
+  `git commit -m ""`, we can organize each of our commits into one of nine
+  categories:
+  - **fix**: A bug fix. Correlates with PATCH in SemVer
+  - **feat**: A new feature. Correlates with MINOR in SemVer
+  - **docs**: Documentation only changes
+  - **style**: Changes that do not affect the meaning of the code (white-space,
+    formatting, missing semi-colons, etc)
+  - **refactor**: A code change that neither fixes a bug nor adds a feature
+  - **perf**: A code change that improves performance
+  - **test**: Adding missing or correcting existing tests
+  - **build**: Changes that affect the build system or external dependencies
+    (example scopes: pip, docker, npm)
+  - **ci**: Changes to our CI configuration files and scripts (example scopes:
+    GitLabCI)
 - [Task](https://taskfile.dev/installation/) - our development tool to quickly
   run commands that run, test, and clean files.
 

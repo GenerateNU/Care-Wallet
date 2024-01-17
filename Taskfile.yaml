@@ -47,4 +47,6 @@ tasks:
       go test -count=1 carewallet/...
 
   pre-commit:
-    - pre-commit run --all-files
+    - |
+      pre-commit install
+      pre-commit run --all-files
