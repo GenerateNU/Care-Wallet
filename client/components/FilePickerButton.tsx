@@ -21,10 +21,17 @@ export default function FilePickerButton(){
     }
   };
 
+  const handleFileUpload = () => {
+    // TODO: implement uploading the file to the postgres !
+    // thoughts : probs will need user id/auth for db
+    console.log(`Uploading file: ${pickedDocument}`);
+  };
+
   return (
     <View>
       <Button title="Pick Document" onPress={pickDocument} />
       {pickedDocument && <Text>Picked Document: {pickedDocument}</Text>}
+      {pickedDocument && <Button title="Upload" onPress={handleFileUpload} />}
     </View>
   );
 };
