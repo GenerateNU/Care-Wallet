@@ -1,4 +1,4 @@
-package services
+package backend
 
 import (
 	"github.com/aws/aws-sdk-go/aws"
