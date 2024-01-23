@@ -11,6 +11,7 @@ DROP TABLE IF EXISTS file;
 
 CREATE TYPE role AS ENUM ('PATIENT', 'PRIMARY', 'SECONDARY');
 CREATE TYPE status AS ENUM ('ACCEPTED', 'DECLINED', 'NOTIFIED');
+CREATE TYPE progress AS ENUM ('TODO', 'INPROGRESS', 'DONE');
 
 CREATE TABLE IF NOT EXISTS medication (
     medication_id integer NOT NULL UNIQUE,
@@ -55,6 +56,7 @@ CREATE TABLE IF NOT EXISTS task (
     created_date timestamp NOT NULL, -- add default val with current timestamp?
     start_date timestamp,
     end_date timestamp,
+    progress progress NOT NULL,
     PRIMARY KEY (task_id),
     FOREIGN KEY (group_id) REFERENCES care_group (group_id),
     FOREIGN KEY (created_by) REFERENCES users (user_id)
