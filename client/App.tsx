@@ -5,10 +5,8 @@ import UnionSvg from './assets/Union.svg';
 
 export default function App() {
   const [medications, setMedications] = React.useState<Medication[]>();
-
   React.useEffect(() => {
     getAllMedications().then((med) => setMedications(med));
-
   }, []);
   // Adding the UnionSvg component here to show that it's able to be displayed here
   return (
