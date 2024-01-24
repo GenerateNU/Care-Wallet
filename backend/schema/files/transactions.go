@@ -61,7 +61,7 @@ func UploadFile(file models.File, reader io.Reader) error {
 	return nil
 }
 
-func DeleteFile(file models.File, id string, s3Only bool) error {
+func DeleteFile(file models.File, s3Only bool) error {
 	// TODO: Add error check for db (legacy johnson)
 
 	// Create session yas
@@ -78,7 +78,7 @@ func DeleteFile(file models.File, id string, s3Only bool) error {
 		Key:    aws.String(file.FileName),
 	})
 	if err != nil {
-		return errors.New("failed to delete file from S3")
+		return errors.New("failed to delete file from AWS")
 	}
 
 	// TODO: Delete file from database if s3Only is false
