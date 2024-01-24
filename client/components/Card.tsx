@@ -11,6 +11,7 @@ interface ClickableCardProps {
   const ClickableCard: React.FC<ClickableCardProps> = ({ onPress, children }) => {
     return (
       <Card onPress={onPress}>
+       <Card.Title title="Card Title" subtitle="Card Subtitle" />
         <Card.Content>
           {children}
         </Card.Content>
