@@ -8,7 +8,6 @@ DROP TABLE IF EXISTS label;
 DROP TABLE IF EXISTS task_labels;
 DROP TABLE IF EXISTS file;
 
-
 CREATE TYPE role AS ENUM ('PATIENT', 'PRIMARY', 'SECONDARY');
 CREATE TYPE status AS ENUM ('ACCEPTED', 'DECLINED', 'NOTIFIED');
 CREATE TYPE progress AS ENUM ('TODO', 'INPROGRESS', 'DONE');
@@ -18,7 +17,6 @@ CREATE TABLE IF NOT EXISTS medication (
     medication_name varchar NOT NULL,
     PRIMARY KEY (medication_id)
 );
-
 
 CREATE TABLE IF NOT EXISTS care_group (
     group_id varchar NOT NULL UNIQUE,
@@ -54,6 +52,7 @@ CREATE TABLE IF NOT EXISTS task (
     group_id varchar NOT NULL,
     created_by varchar NOT NULL,
     created_date timestamp NOT NULL, -- add default val with current timestamp?
+    description varchar,
     start_date timestamp,
     end_date timestamp,
     progress progress NOT NULL,
@@ -75,25 +74,18 @@ CREATE TABLE IF NOT EXISTS task_assignees (
     FOREIGN KEY (assigned_by) REFERENCES users (user_id)
 );
 
-  CREATE TABLE If NOT EXISTS label (
+    -- A label should remain, even when task is removed.
+  CREATE TABLE If NOT EXISTS task_label (
+    task_id varchar,
     group_id varchar NOT NULL,
     label_name varchar NOT NULL,
-    -- label color as an enum maybe?
-    PRIMARY KEY (group_id, label_name),
-    FOREIGN KEY (group_id) REFERENCES care_group (group_id)
+    FOREIGN KEY (task_id) REFERENCES task (task_id)
 );
 
-  CREATE TABLE If NOT EXISTS task_labels (
-    task_id varchar NOT NULL,
-    group_id varchar NOT NULL,
-    label_name varchar NOT NULL,
-    PRIMARY KEY (task_id, label_name),
-    FOREIGN KEY (task_id) REFERENCES task (task_id),
-    FOREIGN KEY (group_id, label_name) REFERENCES label (group_id, label_name) -- NOTE: unsure about label/task_labels table constraints, uncommenting this line is err
-);
+-- TODO: Add different tables for different types of tasks
 
 CREATE TABLE IF NOT EXISTS file (
-    file_id varchar NOT NULL,
+    file_id varchar NOT NULL UNIQUE,
     group_id varchar NOT NULL,
     upload_by varchar NOT NULL,
     upload_date timestamp NOT NULL,
@@ -103,11 +95,6 @@ CREATE TABLE IF NOT EXISTS file (
     FOREIGN KEY (upload_by) REFERENCES users (user_id),
     FOREIGN KEY (task_id) REFERENCES task (task_id)
     );
-
-
-
-
-
 
 -- Insert sample data into "medication" table
 INSERT INTO medication (medication_id, medication_name)
