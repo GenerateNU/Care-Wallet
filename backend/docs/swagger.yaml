@@ -13,6 +13,23 @@ info:
   title: Care-Wallet API
   version: "1.0"
 paths:
+  /api/files/{uid}:
+    delete:
+      description: Delete a file to database and S3 bucket
+      responses:
+        "204":
+          description: No Content
+      summary: Delete a File
+      tags:
+      - file
+    post:
+      description: Upload a file to database and S3 bucket
+      responses:
+        "201":
+          description: Created
+      summary: Upload a file
+      tags:
+      - file
   /medications:
     get:
       description: get all user medications

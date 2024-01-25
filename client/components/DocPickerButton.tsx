@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Button, Text } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
+import { uploadFile } from '../services/file';
 
 export default function DocPickerButton(){
   const [pickedDocument, setPickedDocument] = useState<string | null>(null);
@@ -14,24 +15,23 @@ export default function DocPickerButton(){
       console.log('result', result);
 
       if (result.canceled === false) {
-        setPickedDocument(result.assets[0].name);
+        handleFileUpload(result.assets[0]);
       }
     } catch (err) {
       console.log('err', err);
     }
   };
 
-  const handleFileUpload = () => {
-    // TODO: implement uploading the file to the postgres !
-    // thoughts : probs will need user id/auth as param for db ?
-    console.log(`Uploading file: ${pickedDocument}`);
+  const handleFileUpload = async (doc: DocumentPicker.DocumentPickerAsset) => {
+    // TODO access userID somehow
+    const userID = 100;
+    await uploadFile(doc, userID);
   };
 
   return (
     <View>
       <Button title="Pick Document" onPress={pickDocument} />
       {pickedDocument && <Text>Picked Document: {pickedDocument}</Text>}
-      {pickedDocument && <Button title="Upload" onPress={handleFileUpload} />}
     </View>
   );
 };

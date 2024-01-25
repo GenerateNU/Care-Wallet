@@ -89,7 +89,7 @@ func DeleteFile(pool *pgx.Conn, id string, s3Only bool) error {
 		return errors.New("Failed to delete file from AWS")
 	}
 
-	// Delete file from the database if s3Only is false
+	// Delete file from the database
 	if !s3Only {
 		_, err := pool.Exec("DELETE FROM files WHERE id = $1", id)
 		if err != nil {

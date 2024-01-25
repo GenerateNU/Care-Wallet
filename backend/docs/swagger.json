@@ -8,6 +8,32 @@
     },
     "basePath": "/",
     "paths": {
+        "/api/files/{uid}": {
+            "post": {
+                "description": "Upload a file to database and S3 bucket",
+                "tags": [
+                    "file"
+                ],
+                "summary": "Upload a file",
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete a file to database and S3 bucket",
+                "tags": [
+                    "file"
+                ],
+                "summary": "Delete a File",
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    }
+                }
+            }
+        },
         "/medications": {
             "get": {
                 "description": "get all user medications",

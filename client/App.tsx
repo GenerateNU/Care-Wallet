@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { View, Text } from 'react-native';
 import { getAllMedications } from './services/medication';
-import DocPickerScreen from './screens/DocPickerScreen';
+import DocPickerButton from './components/DocPickerButton';
 
 export default function App() {
   const [medications, setMedications] = React.useState<Medication[]>();
@@ -17,7 +17,7 @@ export default function App() {
             {`Name: ${med.medication_name} id: ${med.medication_id}`}
           </Text>
         ))} */}
-        <DocPickerScreen/>
+        <DocPickerButton/>
     </View>
   );
 }
