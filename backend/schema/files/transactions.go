@@ -38,7 +38,7 @@ func createAWSSession() (*session.Session, error) {
 	return nil, err
 }
 
-func UploadFile(file models.File, reader io.Reader) error {
+func UploadFile(userID string, file models.File, reader io.Reader) error {
 	// Upload the file to the S3 bucket
 	sess, err := createAWSSession()
 	if err != nil {
