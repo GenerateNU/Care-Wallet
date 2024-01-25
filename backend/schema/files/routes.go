@@ -12,7 +12,6 @@ type PgModel struct {
 	Conn *pgx.Conn
 }
 
-
 func GetFileGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 
 	files := v1.Group("files")
@@ -56,7 +55,7 @@ func (pg *PgModel) UploadFileRoute(c *gin.Context) {
 
 	err = UploadFile(pg.Conn, userID, file, fileData)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to create file: "+err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to create file: " + err.Error()})
 		return
 	}
 
