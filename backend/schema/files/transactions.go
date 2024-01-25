@@ -38,6 +38,7 @@ func createAWSSession() (*session.Session, error) {
 	return nil, err
 }
 
+// return error/success status code (200)
 func UploadFile(pool *pgx.Conn, userID string, file models.File, reader io.Reader) error {
 	// Upload the file to the S3 bucket
 	sess, err := createAWSSession()
@@ -60,7 +61,6 @@ func UploadFile(pool *pgx.Conn, userID string, file models.File, reader io.Reade
 
 	return nil
 }
-
 
 func DeleteFile(pool *pgx.Conn, id string, s3Only bool) error {
 	var test_file models.File

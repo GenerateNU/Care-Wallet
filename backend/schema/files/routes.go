@@ -2,6 +2,7 @@ package files
 
 import (
 	"carewallet/models"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -12,6 +13,7 @@ type PgModel struct {
 	Conn *pgx.Conn
 }
 
+// routes might not work bc under the same path
 func GetFileGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 
 	files := v1.Group("files")
@@ -31,6 +33,7 @@ func GetFileGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 //	@success		201
 //	@router			/api/files/{uid} [post]
 func (pg *PgModel) UploadFileRoute(c *gin.Context) {
+	fmt.Println("uploading file in the backend ya")
 	var file models.File
 	userID := c.Param("uid")
 

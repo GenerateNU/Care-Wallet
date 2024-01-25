@@ -2,6 +2,9 @@ import * as React from 'react';
 import { View, Text } from 'react-native';
 import { getAllMedications } from './services/medication';
 import DocPickerButton from './components/DocPickerButton';
+import { QueryClient, QueryClientProvider, useMutation } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
 
 export default function App() {
   const [medications, setMedications] = React.useState<Medication[]>();
@@ -10,6 +13,7 @@ export default function App() {
   }, []);
 
   return (
+    <QueryClientProvider client={queryClient}>
     <View className="flex-1 items-center w-[100vw] justify-center bg-white">
       {/* {medications &&
         medications.map((med, index) => (
@@ -19,5 +23,6 @@ export default function App() {
         ))} */}
         <DocPickerButton/>
     </View>
+    </QueryClientProvider>
   );
 }

@@ -3,10 +3,7 @@ import { api_url } from './api-links';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 
-export const uploadFile = async (
-  file: DocumentPicker.DocumentPickerAsset,
-  userId: number
-) => {
+export const uploadFile = async (file: DocumentPicker.DocumentPickerAsset, userId: number) => {
   try {
     const uploadResumable = FileSystem.createUploadTask(
       `${api_url}/files/${userId}`,
@@ -19,17 +16,18 @@ export const uploadFile = async (
     );
 
     const response = await uploadResumable.uploadAsync();
+    console.log("Response code:" + response);
 
     if (response && response.status === 200) {
       console.log('File uploaded!');
       return response;
     } else {
-      console.log('Upload failed!');
+      console.log('Upload failed! (inside file.ts)');
       throw new Error('Upload failed!');
     }
   } catch (error) {
-    console.log('Error uploading file', error);
-    throw new Error('Error uploading file');
+    console.log('Error uploading file (inside file.ts)', error);
+    throw new Error('Error uploading file (inside file.ts)');
   }
 };
 
