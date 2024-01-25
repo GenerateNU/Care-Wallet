@@ -17,8 +17,8 @@ func GetFileGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 
 	files := v1.Group("files")
 	{
-		// files.DELETE("", c.DeleteFileRoute)
 		files.POST("/:uid", c.UploadFileRoute)
+		files.DELETE("/:uid", c.DeleteFileRoute)
 	}
 
 	return files
@@ -26,11 +26,11 @@ func GetFileGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 
 // GetFiles godoc
 //
-//	@summary		Upload A File
+//	@summary		Upload a File
 //	@description	Upload a file to database and S3 bucket
 //	@tags			file
 //	@success		201
-//	@router			/api/files [put]
+//	@router			/api/files/{uid} [post]
 func (pg *PgModel) UploadFileRoute(c *gin.Context) {
 	var file models.File
 	userID := c.Param("uid")
@@ -54,12 +54,31 @@ func (pg *PgModel) UploadFileRoute(c *gin.Context) {
 	}
 	defer fileData.Close()
 
-	err = UploadFile(userID, file, fileData)
+	err = UploadFile(pg.Conn, userID, file, fileData)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to create file: "+err.Error()})
 		return
 	}
 
 	c.JSON(http.StatusOK, file)
+	return
+}
+
+// GetFiles godoc
+//
+//	@summary		Delete a File
+//	@description	Delete a file to database and S3 bucket
+//	@tags			file
+//	@success		201
+//	@router			/api/files/{uid} [delete]
+func (pg *PgModel) DeleteFileRoute(c *gin.Context) {
+	fileID := c.Param("fid")
+
+	if err := DeleteFile(pg.Conn, fileID, false); err != nil {
+		c.JSON(http.StatusNotFound, "Failed to delete file")
+		return
+	}
+
+	c.JSON(http.StatusOK, "File deleted")
 	return
 }
