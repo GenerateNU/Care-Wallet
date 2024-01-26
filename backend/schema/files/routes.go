@@ -2,6 +2,7 @@ package files
 
 import (
 	"carewallet/models"
+	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -34,6 +35,7 @@ func GetFileGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 //	@success		201
 //	@router			/files/{uid} [post]
 func (pg *PgModel) UploadFileRoute(c *gin.Context) {
+	fmt.Println("inside backend route")
 	form, err := c.MultipartForm()
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to get form"})

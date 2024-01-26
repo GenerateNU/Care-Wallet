@@ -8,17 +8,19 @@ export const uploadFile = async (
   file: DocumentPicker.DocumentPickerAsset,
   userId: number
 ) => {
-  const uploadResumable = FileSystem.createUploadTask(
-    `${api_url}/files`,
-    file.uri,
-    {
-      httpMethod: 'POST',
-      uploadType: FileSystem.FileSystemUploadType.MULTIPART,
-      fieldName: 'file_data'
-    }
-  );
+  // create a new FormData object and append the file to it
+  const formData = new FormData();
+  formData.append("file_data", file.uri);
+  formData.append("user_id", userId.toString());
+  formData.append("group_id", "1");
 
-  const response = await uploadResumable.uploadAsync();
+  console.log("Uploading file to server...")
+  
+  const response = await axios.post(`${api_url}/files`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    }
+  });
   console.log('Response code:' + response);
 
   if (response && response.status === 200) {
