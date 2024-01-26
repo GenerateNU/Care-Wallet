@@ -2,8 +2,9 @@ package files
 
 import (
 	"carewallet/models"
-	"fmt"
 	"net/http"
+	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx"
@@ -18,7 +19,7 @@ func GetFileGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 
 	files := v1.Group("files")
 	{
-		files.POST("/:uid", c.UploadFileRoute)
+		files.POST("/", c.UploadFileRoute)
 		files.DELETE("/:fid", c.DeleteFileRoute)
 	}
 
@@ -31,17 +32,8 @@ func GetFileGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 //	@description	Upload a file to database and S3 bucket
 //	@tags			file
 //	@success		201
-//	@router			/api/files/{uid} [post]
+//	@router			/files/{uid} [post]
 func (pg *PgModel) UploadFileRoute(c *gin.Context) {
-	fmt.Println("uploading file in the backend ya")
-	var file models.File
-	userID := c.Param("uid")
-
-	if err := c.Bind(&file); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Unable to process body"})
-		return
-	}
-
 	form, err := c.MultipartForm()
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to get form"})
@@ -49,6 +41,28 @@ func (pg *PgModel) UploadFileRoute(c *gin.Context) {
 	}
 
 	fileResponse := form.File["file_data"][0]
+	userID, err := strconv.Atoi(form.Value["user_id"][0])
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to get user ID"})
+		return
+	}
+	groupID, err := strconv.Atoi(form.Value["group_id"][0])
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to get group ID"})
+		return
+	}
+
+	uploadDate := time.Now().String()
+
+	// Create a file object:
+	file := models.File{
+		FileName:   fileResponse.Filename,
+		FileSize:   fileResponse.Size,
+		GroupID:    groupID,
+		UploadBy:   userID,
+		UploadDate: uploadDate,
+	}
+
 	fileData, err := fileResponse.Open()
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to open file"})
@@ -56,7 +70,7 @@ func (pg *PgModel) UploadFileRoute(c *gin.Context) {
 	}
 	defer fileData.Close()
 
-	err = UploadFile(pg.Conn, userID, file, fileData)
+	err = UploadFile(pg.Conn, file, fileData)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to create file: " + err.Error()})
 		return
@@ -72,12 +86,12 @@ func (pg *PgModel) UploadFileRoute(c *gin.Context) {
 //	@description	Delete a file to database and S3 bucket
 //	@tags			file
 //	@success		204
-//	@router			/api/files/{uid} [delete]
+//	@router			/api/files/{fid} [delete]
 func (pg *PgModel) DeleteFileRoute(c *gin.Context) {
 	fileID := c.Param("fid")
 
 	if err := DeleteFile(pg.Conn, fileID, false); err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Failed to delete file"})
+		c.JSON(http.StatusNotFound, gin.H{"error": "Failed to delete file" + err.Error()})
 		return
 	}
 

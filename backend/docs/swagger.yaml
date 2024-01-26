@@ -13,7 +13,7 @@ info:
   title: Care-Wallet API
   version: "1.0"
 paths:
-  /api/files/{uid}:
+  /api/files/{fid}:
     delete:
       description: Delete a file to database and S3 bucket
       responses:
@@ -22,6 +22,7 @@ paths:
       summary: Delete a File
       tags:
       - file
+  /files/{uid}:
     post:
       description: Upload a file to database and S3 bucket
       responses:
