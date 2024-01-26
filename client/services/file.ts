@@ -15,7 +15,8 @@ export const uploadFile = async (
   formData.append("group_id", "1");
 
   console.log("Uploading file to server...")
-  
+
+  // This will always send 307 err atm...
   const response = await axios.post(`${api_url}/files`, formData, {
     headers: {
       "Content-Type": "multipart/form-data",
