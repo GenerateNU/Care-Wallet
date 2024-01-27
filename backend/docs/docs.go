@@ -29,7 +29,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/files/{uid}": {
+        "/files/upload": {
             "post": {
                 "description": "Upload a file to database and S3 bucket",
                 "tags": [
@@ -37,8 +37,8 @@ const docTemplate = `{
                 ],
                 "summary": "Upload a file",
                 "responses": {
-                    "201": {
-                        "description": "Created"
+                    "200": {
+                        "description": "OK"
                     }
                 }
             }

@@ -22,12 +22,12 @@ paths:
       summary: Delete a File
       tags:
       - file
-  /files/{uid}:
+  /files/upload:
     post:
       description: Upload a file to database and S3 bucket
       responses:
-        "201":
-          description: Created
+        "200":
+          description: OK
       summary: Upload a file
       tags:
       - file

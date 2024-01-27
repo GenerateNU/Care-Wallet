@@ -1,36 +1,30 @@
-import axios from 'axios';
+import axios, { HttpStatusCode } from 'axios';
 import { api_url } from './api-links';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 
-// TODO create FormData w file data, user_id, group_id
 export const uploadFile = async (
   file: DocumentPicker.DocumentPickerAsset,
   userId: number
 ) => {
-  // create a new FormData object and append the file to it
-  const formData = new FormData();
-  formData.append("file_data", file.uri);
-  formData.append("user_id", userId.toString());
-  formData.append("group_id", "1");
-
-  console.log("Uploading file to server...")
-
-  // This will always send 307 err atm...
-  const response = await axios.post(`${api_url}/files`, formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
+  const uploadResumable = FileSystem.createUploadTask(
+    `${api_url}/files/upload`,
+    file.uri,
+    {
+      httpMethod: 'POST',
+      uploadType: FileSystem.FileSystemUploadType.MULTIPART,
+      fieldName: 'file_data'
     }
-  });
-  console.log('Response code:' + response);
+  );
 
-  if (response && response.status === 200) {
-    console.log('File uploaded!');
-    return response;
-  } else {
-    console.log('Upload failed! (inside file.ts)');
+  await uploadResumable.uploadAsync().then((res) => {
+    if (res && res.status === HttpStatusCode.Ok) {
+      console.log('File uploaded!');
+      return res.status;
+    }
+    console.log('Upload failed!');
     throw new Error('Upload failed!');
-  }
+  });
 };
 
 export const deleteFile = async (fileID: number) => {
