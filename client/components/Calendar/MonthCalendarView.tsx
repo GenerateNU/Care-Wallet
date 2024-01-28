@@ -1,15 +1,14 @@
-import React, { useState } from 'react';
+import * as React from 'react';
 import { View, Text, Button, TouchableOpacity } from 'react-native';
 import { months } from './constants';
 import { generateMatrix } from './utils';
-import Task from '../Task/Task';
 
 export default function Calendar() {
-  const [activeDate, setActiveDate] = useState(new Date());
-  const [showTaskList, setShowTaskList] = useState(false);
+  const [activeDate, setActiveDate] = React.useState(new Date());
+  const [showTaskList, setShowTaskList] = React.useState(false);
+
   const _onPress = (item: number) => {
     if (typeof item !== 'string' && item != -1) {
-
       const newDate = new Date(activeDate.setDate(item));
       setActiveDate(newDate);
       setShowTaskList(true);
@@ -18,85 +17,80 @@ export default function Calendar() {
 
   const matrix = generateMatrix(activeDate);
 
-  const rows = matrix.map((row, rowIndex: number) => {
-    const rowItems = row.map((item: any, colIndex: number) => (
-      <TouchableOpacity
-        key={colIndex}
-        onPress={() => _onPress(item)}
-        style={{
-          height: 40,
-          width: 40,
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: item == activeDate.getDate() ? 'green' : 'white',
-        }}
-      >
-        <Text style={{ textAlign: 'center', fontSize: 14, fontWeight: item == activeDate.getDate() ? 'bold' : 'normal' }}>
-          {item != -1 ? item : ''}
-        </Text>
-      </TouchableOpacity>
-    ));
+  let rows = [];
+
+  rows = matrix.map((row, rowIndex: number) => {
+    let rowItems = row.map((item: any, colIndex: number) => {
+      return (
+        <TouchableOpacity
+          key={colIndex}
+          onPress={() => _onPress(item)}
+          className={
+            'h-10 w-10 justify-center align-middle ' +
+            `${item == activeDate.getDate() ? 'bg-green-400 rounded-3xl' : 'bg-white'}`
+          }
+        >
+          <Text
+            className={
+              'text-center text-small ' +
+              `${item == activeDate.getDate() ? 'font-bold' : 'font-normal'}`
+            }
+          >
+            {item != -1 ? item : ''}
+          </Text>
+        </TouchableOpacity>
+      );
+    });
 
     return (
       <View
         key={rowIndex}
-        style={{
-          flex: 1,
-          flexDirection: 'row',
-          justifyContent: 'space-around',
-          alignItems: 'center',
-        }}
+        className="flex-1 flex-row justify-around align-middle"
       >
         {rowItems}
       </View>
     );
   });
+  const taskDates = ['task1', 'task2']
 
   const changeMonth = (n: number) => {
     const newDate = new Date(activeDate.setMonth(activeDate.getMonth() + n));
+    console.log(newDate);
     setActiveDate(newDate);
   };
-  const taskDates = ['task1', 'task2']
 
   return (
-    <View style={{ flex: 1 }}>
-      <View style={{ padding: 10, borderBottomWidth: 2, borderBottomColor: 'gray' }}>
-        <Text style={{ fontSize: 24, fontWeight: 'bold', textAlign: 'center' }}>
-          {`${months[activeDate.getMonth()]} ${activeDate.getFullYear()}`}
-        </Text>
-      </View>
-      <View style={{ flex: 1, marginTop: 10 }}>
-        {rows}
-      </View>
-
-      {/* TaskList view */}
-      {showTaskList && (
-        <View style={{ position: 'absolute', bottom: 0, width: '100%' }}>
-          {taskDates.map((Task, index) => (
-           <View
-           key={index}
-           style={{
-             backgroundColor: 'red', // Background color of the rounded box
-             padding: 10,
-             top: 250,
-             left: 35,
-             borderRadius: 10, // Adjust the border radius for rounded corners
-             marginBottom: 20, // Adjust the margin at the bottom of each box
-             width: '70%', // Adjust the width of the rounded box
-             alignItems: 'center', // Center the content inside the box horizontally
-           }}
-         >
-           <Text>{Task}</Text>
-         </View>
-
-          ))}
+    <View className="p-3 border-b-2 border-gray-300">
+      <Text className="font-bold text-3xl text-center">
+        {`${months[activeDate.getMonth()]} ${activeDate.getFullYear()}`}
+      </Text>
+      <View>{rows}</View>
+      <View className="flex-1 flex-row justify-around mt-2">
+        <View className="flex-1 mx-2">
+          <Button
+            title="Previous"
+            color={'#0abb92'}
+            onPress={() => changeMonth(-1)}
+          />
         </View>
-      )}
-
-      <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 10 }}>
-        <Button title="Previous" color={'#0abb92'} onPress={() => changeMonth(-1)} />
-        <Button title="Next" color={'#0abb92'} onPress={() => changeMonth(1)} />
+        <View className="flex-1 mx-2">
+          <Button
+            title="Next"
+            color={'#0abb92'}
+            onPress={() => changeMonth(+1)}
+          />
+        </View>
       </View>
-    </View>
+      {showTaskList && (
+      <View className="flex justify-between mt-4">
+        {taskDates.map((task, index) => (
+          <View key={index} className={`p-4 ${index % 2 === 0 ? 'bg-blue-300' : 'bg-green-300'} rounded-lg w-40 items-center`}>
+            <Text>{task}</Text>
+          </View>
+        ))}
+      </View>
+    )}
+  </View>
   );
+
 }
