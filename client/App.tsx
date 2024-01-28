@@ -1,7 +1,9 @@
 import * as React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, LogBox } from 'react-native';
 import { getAllMedications } from './services/medication';
 import Calendar from './screens/Calendar';
+
+LogBox.ignoreLogs([`to contain units`]);
 
 export default function App() {
   const [medications, setMedications] = React.useState<Medication[]>();

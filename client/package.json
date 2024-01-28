@@ -13,6 +13,7 @@
   "dependencies": {
     "@react-navigation/native": "^6.1.9",
     "axios": "^1.6.4",
+    "clsx": "^2.1.0",
     "expo": "~49.0.15",
     "expo-status-bar": "~1.6.0",
     "nativewind": "^2.0.11",
