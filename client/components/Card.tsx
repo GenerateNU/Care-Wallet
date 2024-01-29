@@ -4,17 +4,19 @@ import { Card } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 
 interface ClickableCardProps {
+  med: Medication;
   onPress: () => void;
   children: JSX.Element[] | JSX.Element;
-  cardStyle?: object; 
-  navigateTo?: string; 
+  cardStyle?: object;
+  navigateTo?: string;
 }
 
 const ClickableCard: React.FC<ClickableCardProps> = ({
+  med,
   onPress,
   children,
   cardStyle,
-  navigateTo,
+  navigateTo
 }) => {
   const navigation = useNavigation();
 
@@ -28,7 +30,10 @@ const ClickableCard: React.FC<ClickableCardProps> = ({
 
   return (
     <Card style={[styles.card, cardStyle]} onPress={handlePress}>
-      <Card.Title title="Card Title" subtitle="Card Subtitle" />
+      <Card.Title
+        title={med.medication_name}
+        subtitle={`ID: ${med.medication_id}`}
+      />
       <Card.Content>{children}</Card.Content>
     </Card>
   );
@@ -36,8 +41,8 @@ const ClickableCard: React.FC<ClickableCardProps> = ({
 
 const styles = StyleSheet.create({
   card: {
-    margin: 10,
-  },
+    margin: 10
+  }
 });
 
 export default ClickableCard;
