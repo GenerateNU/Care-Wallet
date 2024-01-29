@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS care_group (
 );
 
 CREATE TABLE IF NOT EXISTS users (
-    user_id serial NOT NULL UNIQUE,
+    user_id varchar NOT NULL UNIQUE,
     first_name varchar NOT NULL,
     last_name varchar NOT NULL,
     email varchar NOT NULL,
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS group_roles (
     group_id serial NOT NULL,
-    user_id integer NOT NULL,
+    user_id varchar NOT NULL,
     role role NOT NULL,
     PRIMARY KEY (group_id, user_id),
     FOREIGN KEY (group_id) REFERENCES care_group (group_id),
@@ -52,10 +52,15 @@ CREATE TABLE IF NOT EXISTS group_roles (
 CREATE TABLE IF NOT EXISTS task (
     task_id serial NOT NULL,
     group_id integer NOT NULL,
-    created_by integer NOT NULL,
+    created_by varchar NOT NULL,
     created_date timestamp NOT NULL, -- add default val with current timestamp?
     start_date timestamp,
     end_date timestamp,
+    notes varchar,
+    repeating BOOLEAN,
+    repeating_interval varchar,
+    repeating_end_date timestamp,
+    task_status task_status NOT NULL,
     PRIMARY KEY (task_id),
     FOREIGN KEY (group_id) REFERENCES care_group (group_id),
     FOREIGN KEY (created_by) REFERENCES users (user_id)
@@ -63,9 +68,9 @@ CREATE TABLE IF NOT EXISTS task (
 
 CREATE TABLE IF NOT EXISTS task_assignees (
     task_id integer NOT NULL,
-    user_id integer NOT NULL,
-    task_status task_assignment_status NOT NULL,
-    assigned_by integer NOT NULL,
+    user_id varchar NOT NULL,
+    assignment_status task_assignment_status NOT NULL,
+    assigned_by varchar NOT NULL,
     assigned_date timestamp NOT NULL, -- add default val with current timestamp?
     last_notified timestamp,
     PRIMARY KEY (task_id, user_id),
@@ -94,7 +99,7 @@ CREATE TABLE IF NOT EXISTS task_assignees (
 CREATE TABLE IF NOT EXISTS file (
     file_id serial NOT NULL,
     group_id integer NOT NULL,
-    upload_by integer NOT NULL,
+    upload_by varchar NOT NULL,
     upload_date timestamp NOT NULL,
     task_id serial,
     PRIMARY KEY (file_id),
@@ -102,36 +107,6 @@ CREATE TABLE IF NOT EXISTS file (
     FOREIGN KEY (upload_by) REFERENCES users (user_id),
     FOREIGN KEY (task_id) REFERENCES task (task_id)
     );
-
-CREATE TABLE IF NOT EXISTS prescription_mgmt_task ( -- Prescription management task for pharmacy, online pharmacy or mail order
-    task_id integer NOT NULL UNIQUE,
-    name varchar NOT NULL,
-    address varchar NOT NULL,
-    phone varchar NOT NULL,
-    diagnosis varchar NOT NULL,
-    prescribing_physician varchar NOT NULL,
-    PRIMARY KEY (task_id, name),
-    FOREIGN KEY (task_id) REFERENCES task (task_id)
-);
-
-Create TABLE IF NOT EXISTS support_or_transport_task ( --Task for Transportation: Medical/Non-medical, Respite & caregiver support, Home safety
-    task_id integer NOT NULL,
-    name varchar NOT NULL,
-    address varchar NOT NULL,
-    phone varchar NOT NULL,
-    PRIMARY KEY (task_id, name),
-    FOREIGN KEY (task_id) REFERENCES prescription_mgmt_task (task_id)
-);
-
-CREATE TABLE IF NOT EXISTS legal_financial_task ( --legal and financial tasks
-    task_id integer NOT NULL,
-    name varchar NOT NULL,
-    address varchar NOT NULL,
-    phone varchar NOT NULL,
-    proxy_agent varchar NOT NULL,
-    PRIMARY KEY (task_id, proxy_agent),
-    FOREIGN KEY (task_id) REFERENCES prescription_mgmt_task (task_id)
-);
 
 
 
