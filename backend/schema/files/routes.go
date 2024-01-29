@@ -2,7 +2,6 @@ package files
 
 import (
 	"carewallet/models"
-	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -21,7 +20,7 @@ func GetFileGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 	files := v1.Group("files")
 	{
 		files.POST("/", c.UploadFileRoute)
-		files.DELETE("/:fid", c.DeleteFileRoute)
+		files.DELETE("/:fname", c.DeleteFileRoute)
 	}
 
 	return files
@@ -33,15 +32,15 @@ func GetFileGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 //	@description	Upload a file to database and S3 bucket
 //	@tags			file
 //	@success		201
-//	@router			/files/{uid} [post]
+//	@router			/files [post]
 func (pg *PgModel) UploadFileRoute(c *gin.Context) {
-	fmt.Println("inside backend route")
 	form, err := c.MultipartForm()
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to get form"})
 		return
 	}
 
+	// TODO update based on file model when confirmed
 	fileResponse := form.File["file_data"][0]
 	userID, err := strconv.Atoi(form.Value["user_id"][0])
 	if err != nil {
@@ -84,19 +83,19 @@ func (pg *PgModel) UploadFileRoute(c *gin.Context) {
 
 // GetFiles godoc
 //
-//	@summary		Delete a File
-//	@description	Delete a file to database and S3 bucket
+//	@summary		Delete a file
+//	@description	Delete a file from database and S3 bucket
 //	@tags			file
 //	@success		204
-//	@router			/api/files/{fid} [delete]
+//	@router			/files/{fname} [delete]
 func (pg *PgModel) DeleteFileRoute(c *gin.Context) {
-	fileID := c.Param("fid")
+	fileName := c.Param("fname")
 
-	if err := DeleteFile(pg.Conn, fileID, false); err != nil {
+	if err := DeleteFile(pg.Conn, fileName, false); err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Failed to delete file" + err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"error": "File deleted"})
+	c.JSON(http.StatusOK, gin.H{"message": "File deleted"})
 	return
 }

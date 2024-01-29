@@ -41,13 +41,11 @@ func createAWSSession() (*session.Session, error) {
 	return nil, err
 }
 
-// return error/success status code (200)
 func UploadFile(pool *pgx.Conn, file models.File, reader io.Reader) error {
 	// Upload the file to the S3 bucket
-	// TODO fix w Matt - Access Denied
 	sess, err := createAWSSession()
 	if err != nil {
-		return errors.New("failed to create AWS session")
+		return errors.New("Failed to create AWS session")
 	}
 
 	uploader := s3manager.NewUploader(sess)
@@ -62,6 +60,7 @@ func UploadFile(pool *pgx.Conn, file models.File, reader io.Reader) error {
 	}
 
 	// Add file to database, delete from S3 if it can't be made
+	// TODO update based on file model when confirmed
 	query := `INSERT INTO files (group_id, upload_by, upload_date) VALUES ($1, $2, $3)`
 	_, err = pool.Exec(query, strconv.Itoa(file.GroupID), strconv.Itoa(file.UploadBy), file.UploadDate)
 	if err != nil {
@@ -73,14 +72,8 @@ func UploadFile(pool *pgx.Conn, file models.File, reader io.Reader) error {
 	return nil
 }
 
-func DeleteFile(pool *pgx.Conn, id string, s3Only bool) error {
+func DeleteFile(pool *pgx.Conn, fName string, s3Only bool) error {
 	var test_file models.File
-
-	// Query file from the database
-	err := pool.QueryRow("SELECT file_name FROM files WHERE group_id = $1", id).Scan(&test_file.FileName)
-	if err != nil {
-		return err
-	}
 
 	// Create AWS session
 	sess, err := createAWSSession()
@@ -102,9 +95,9 @@ func DeleteFile(pool *pgx.Conn, id string, s3Only bool) error {
 
 	// Delete file from the database
 	if !s3Only {
-		_, err := pool.Exec("DELETE FROM files WHERE group_id = $1", id)
+		_, err := pool.Exec("DELETE FROM files WHERE file_name = $1", fName)
 		if err != nil {
-			return errors.New("Failed to find file in database")
+			return errors.New("Failed to delete file from database")
 		}
 	}
 

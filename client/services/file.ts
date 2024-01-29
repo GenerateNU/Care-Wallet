@@ -3,7 +3,6 @@ import { api_url } from './api-links';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 
-// TODO create FormData w file data, user_id, group_id
 export const uploadFile = async (
   file: DocumentPicker.DocumentPickerAsset,
   userId: number
@@ -16,7 +15,7 @@ export const uploadFile = async (
 
   console.log("Uploading file to server...")
 
-  // This will always send 307 err atm...
+  // TODO This will always send 307 err atm...
   const response = await axios.post(`${api_url}/files`, formData, {
     headers: {
       "Content-Type": "multipart/form-data",
