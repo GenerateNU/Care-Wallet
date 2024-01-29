@@ -87,14 +87,8 @@ func UploadFile(pool *pgx.Conn, file models.File, data *multipart.FileHeader, re
 	return nil
 }
 
-func DeleteFile(pool *pgx.Conn, id string, s3Only bool) error {
+func DeleteFile(pool *pgx.Conn, fName string, s3Only bool) error {
 	var test_file models.File
-
-	// Query file from the database
-	err := pool.QueryRow("SELECT file_name FROM files WHERE group_id = $1", id).Scan(&test_file.FileName)
-	if err != nil {
-		return err
-	}
 
 	// Create AWS session
 	sess, err := createAWSSession()
@@ -116,7 +110,7 @@ func DeleteFile(pool *pgx.Conn, id string, s3Only bool) error {
 
 	// Delete file from the database
 	if !s3Only {
-		_, err := pool.Exec("DELETE FROM files WHERE group_id = $1", id)
+		_, err := pool.Exec("DELETE FROM files WHERE file_name = $1", fName)
 		if err != nil {
 			return errors.New("failed to find file in database")
 		}

@@ -45,6 +45,7 @@ func (pg *PgModel) UploadFileRoute(c *gin.Context) {
 		return
 	}
 
+	// TODO update based on file model when confirmed
 	fileResponse := form.File["file_data"][0]
 	fileData, err := fileResponse.Open()
 	if err != nil {
@@ -65,15 +66,15 @@ func (pg *PgModel) UploadFileRoute(c *gin.Context) {
 
 // GetFiles godoc
 //
-//	@summary		Delete a File
-//	@description	Delete a file to database and S3 bucket
+//	@summary		Delete a file
+//	@description	Delete a file from database and S3 bucket
 //	@tags			file
 //	@success		204
-//	@router			/api/files/{fid} [delete]
+//	@router			/files/{fname} [delete]
 func (pg *PgModel) DeleteFileRoute(c *gin.Context) {
-	fileID := c.Param("fid")
+	fileName := c.Param("fname")
 
-	if err := DeleteFile(pg.Conn, fileID, false); err != nil {
+	if err := DeleteFile(pg.Conn, fileName, false); err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Failed to delete file" + err.Error()})
 		return
 	}
