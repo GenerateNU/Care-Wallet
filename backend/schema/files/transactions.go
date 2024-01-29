@@ -3,13 +3,13 @@ package files
 import (
 	"carewallet/models"
 	"errors"
+	"fmt"
 	"io"
-	"os"
+	"mime/multipart"
 	"strconv"
+	"strings"
 
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/aws/aws-sdk-go/aws/session"
 
 	"github.com/aws/aws-sdk-go/service/s3"
 
@@ -19,54 +19,69 @@ import (
 
 var AWS_BUCKET_NAME = "care-wallet-storage"
 
-func createAWSSession() (*session.Session, error) {
-	// Could cache session to avoid making a new one every time
-	access_key, access_exists := os.LookupEnv("AWS_ACCESS_KEY")
-	secret_key, secret_exists := os.LookupEnv("AWS_SECRET_KEY")
+// TODO: Add Group ID support
+// TODO: Add Task ID support
+// TODO: Add Date/Time Support
+// TODO: Add Uploaded By Support
+// TODO: Can this be cleaned up at all?
+func UploadFile(pool *pgx.Conn, file models.File, data *multipart.FileHeader, reader io.Reader) error {
+	file.FileName = data.Filename
 
-	var err error
-	if access_exists && secret_exists {
-		sess, err := session.NewSession(&aws.Config{
-			Region:      aws.String("us-east-1"),
-			Credentials: credentials.NewStaticCredentials(access_key, secret_key, ""),
-		})
-
-		if err != nil {
-			return nil, err
-		}
-
-		return sess, nil
+	// Check if the file size is greater than 5 MB
+	if data.Size > 5000000 {
+		fmt.Println("maximum file size 5 MB")
+		return errors.New("maximum file size 5 MB")
 	}
 
-	return nil, err
-}
-
-func UploadFile(pool *pgx.Conn, file models.File, reader io.Reader) error {
-	// Upload the file to the S3 bucket
 	sess, err := createAWSSession()
 	if err != nil {
-		return errors.New("Failed to create AWS session")
+		fmt.Println(err.Error())
+		return err
+	}
+
+	err = pool.QueryRow("INSERT INTO files (file_name, group_id, upload_by, file_size, object_key) VALUES ($1, $2, $3, $4, $5) RETURNING file_id;",
+		file.FileName, "test-group", "test-user", data.Size, "temp-objectkey").Scan(&file.FileID)
+
+	if err != nil {
+		fmt.Println(err.Error())
+		return err
 	}
 
 	uploader := s3manager.NewUploader(sess)
 
-	_, err = uploader.Upload(&s3manager.UploadInput{
-		Bucket: aws.String(AWS_BUCKET_NAME),
-		Key:    aws.String(file.FileName),
-		Body:   reader,
-	})
+	objectKey := fmt.Sprintf("%v-%v", file.GroupID, file.FileName)
+	dotIndex := strings.LastIndex(objectKey, ".")
+	file_substring := objectKey[:dotIndex]
+	file_extension := objectKey[dotIndex:]
+
+	file.ObjectKey = file_substring + strconv.Itoa(file.FileID) + file_extension
+
+	_, err = pool.Exec("UPDATE files SET object_key = $1", file.ObjectKey)
+
 	if err != nil {
-		return errors.New(err.Error())
+		_, err2 := pool.Exec("DELETE FROM files WHERE file_id = $1", file.FileID)
+		if err2 != nil {
+			fmt.Println(err2.Error())
+			return err2
+		}
+		fmt.Println(err.Error())
+		return err
 	}
 
-	// Add file to database, delete from S3 if it can't be made
-	// TODO update based on file model when confirmed
-	query := `INSERT INTO files (group_id, upload_by, upload_date) VALUES ($1, $2, $3)`
-	_, err = pool.Exec(query, strconv.Itoa(file.GroupID), strconv.Itoa(file.UploadBy), file.UploadDate)
+	_, err = uploader.Upload(&s3manager.UploadInput{
+		Bucket: aws.String(AWS_BUCKET_NAME),
+		Key:    aws.String(file.ObjectKey),
+		Body:   reader,
+	})
+
 	if err != nil {
-		fileIDStr := strconv.Itoa(file.FileID)
-		DeleteFile(pool, fileIDStr, false)
-		return errors.New(err.Error())
+		_, err2 := pool.Exec("DELETE FROM files WHERE file_id = $1", file.FileID)
+		if err2 != nil {
+			fmt.Println(err2.Error())
+			return err2
+		}
+		fmt.Println(err.Error())
+		return err
 	}
 
 	return nil
@@ -78,7 +93,7 @@ func DeleteFile(pool *pgx.Conn, fName string, s3Only bool) error {
 	// Create AWS session
 	sess, err := createAWSSession()
 	if err != nil {
-		return errors.New("Failed to create AWS session")
+		return errors.New("failed to create AWS session")
 	}
 
 	// Create S3 service client
@@ -90,14 +105,14 @@ func DeleteFile(pool *pgx.Conn, fName string, s3Only bool) error {
 		Key:    aws.String(test_file.FileName),
 	})
 	if err != nil {
-		return errors.New("Failed to delete file from AWS")
+		return errors.New("failed to delete file from AWS")
 	}
 
 	// Delete file from the database
 	if !s3Only {
 		_, err := pool.Exec("DELETE FROM files WHERE file_name = $1", fName)
 		if err != nil {
-			return errors.New("Failed to delete file from database")
+			return errors.New("failed to find file in database")
 		}
 	}
 

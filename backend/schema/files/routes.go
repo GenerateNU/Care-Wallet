@@ -3,8 +3,6 @@ package files
 import (
 	"carewallet/models"
 	"net/http"
-	"strconv"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx"
@@ -14,13 +12,12 @@ type PgModel struct {
 	Conn *pgx.Conn
 }
 
-// routes might not work bc under the same path
 func GetFileGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 
 	files := v1.Group("files")
 	{
-		files.POST("/", c.UploadFileRoute)
-		files.DELETE("/:fname", c.DeleteFileRoute)
+		files.POST("/upload", c.UploadFileRoute)
+		files.DELETE("/:fid", c.DeleteFileRoute)
 	}
 
 	return files
@@ -31,54 +28,40 @@ func GetFileGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 //	@summary		Upload a file
 //	@description	Upload a file to database and S3 bucket
 //	@tags			file
-//	@success		201
-//	@router			/files [post]
+//	@success		200
+//	@router			/files/upload [post]
 func (pg *PgModel) UploadFileRoute(c *gin.Context) {
+	// TODO: Ensure Swagger Knows about there bad request returns!!!
+	var file models.File
+
+	if err := c.Bind(&file); err != nil {
+		c.JSON(http.StatusBadRequest, "Failed to process the request")
+		return
+	}
+
 	form, err := c.MultipartForm()
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to get form"})
+		c.JSON(http.StatusBadRequest, "Failed to get form")
 		return
 	}
 
 	// TODO update based on file model when confirmed
 	fileResponse := form.File["file_data"][0]
-	userID, err := strconv.Atoi(form.Value["user_id"][0])
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to get user ID"})
-		return
-	}
-	groupID, err := strconv.Atoi(form.Value["group_id"][0])
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to get group ID"})
-		return
-	}
-
-	uploadDate := time.Now().String()
-
-	// Create a file object:
-	file := models.File{
-		FileName:   fileResponse.Filename,
-		FileSize:   fileResponse.Size,
-		GroupID:    groupID,
-		UploadBy:   userID,
-		UploadDate: uploadDate,
-	}
-
 	fileData, err := fileResponse.Open()
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to open file"})
+		c.JSON(http.StatusBadRequest, "Failed to open file")
 		return
 	}
+
 	defer fileData.Close()
 
-	err = UploadFile(pg.Conn, file, fileData)
+	err = UploadFile(pg.Conn, file, fileResponse, fileData)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to create file: " + err.Error()})
+		c.JSON(http.StatusBadRequest, "Failed to create file: "+err.Error())
 		return
 	}
 
 	c.JSON(http.StatusOK, file)
-	return
 }
 
 // GetFiles godoc
@@ -96,6 +79,5 @@ func (pg *PgModel) DeleteFileRoute(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "File deleted"})
-	return
+	c.JSON(http.StatusOK, gin.H{"error": "File deleted"})
 }

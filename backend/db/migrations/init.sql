@@ -12,12 +12,15 @@ CREATE TABLE IF NOT EXISTS medication (
 );
 
 CREATE TABLE IF NOT EXISTS files (
-    --file_id varchar NOT NULL,
+    file_id serial UNIQUE NOT NULL,
+    file_name varchar NOT NULL,
+    file_size integer NOT NULL,
+    object_key varchar NOT NULL,
     group_id varchar NOT NULL,
     upload_by varchar NOT NULL,
-    upload_date varchar NOT NULL,
+    upload_date timestamp,
     task_id varchar,
-    PRIMARY KEY (group_id)
+    PRIMARY KEY (file_id)
 );
 
 -- Insert sample data into "medication" table
