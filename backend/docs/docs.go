@@ -15,20 +15,6 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/files/{fid}": {
-            "delete": {
-                "description": "Delete a file to database and S3 bucket",
-                "tags": [
-                    "file"
-                ],
-                "summary": "Delete a File",
-                "responses": {
-                    "204": {
-                        "description": "No Content"
-                    }
-                }
-            }
-        },
         "/files/upload": {
             "post": {
                 "description": "Upload a file to database and S3 bucket",
@@ -39,6 +25,20 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "OK"
+                    }
+                }
+            }
+        },
+        "/files/{fname}": {
+            "delete": {
+                "description": "Delete a file from database and S3 bucket",
+                "tags": [
+                    "file"
+                ],
+                "summary": "Delete a file",
+                "responses": {
+                    "204": {
+                        "description": "No Content"
                     }
                 }
             }

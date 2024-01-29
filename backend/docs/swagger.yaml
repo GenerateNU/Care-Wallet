@@ -13,13 +13,13 @@ info:
   title: Care-Wallet API
   version: "1.0"
 paths:
-  /api/files/{fid}:
+  /files/{fname}:
     delete:
-      description: Delete a file to database and S3 bucket
+      description: Delete a file from database and S3 bucket
       responses:
         "204":
           description: No Content
-      summary: Delete a File
+      summary: Delete a file
       tags:
       - file
   /files/upload:
