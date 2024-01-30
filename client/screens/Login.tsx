@@ -55,7 +55,7 @@ const LoginPage: React.FC = () => {
   );
 };
 
-// Add styles
+// Add styles - needed it just to see the board lol
 const styles = StyleSheet.create({
   container: {
     flex: 1,
