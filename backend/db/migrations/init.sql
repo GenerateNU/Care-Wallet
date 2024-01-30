@@ -61,6 +61,7 @@ CREATE TABLE IF NOT EXISTS task (
     repeating_interval varchar,
     repeating_end_date timestamp,
     task_status task_status NOT NULL,
+    task_info json,
     PRIMARY KEY (task_id),
     FOREIGN KEY (group_id) REFERENCES care_group (group_id),
     FOREIGN KEY (created_by) REFERENCES users (user_id)
@@ -101,12 +102,12 @@ CREATE TABLE IF NOT EXISTS file (
     group_id integer NOT NULL,
     upload_by varchar NOT NULL,
     upload_date timestamp NOT NULL,
-    task_id serial,
+    task_id integer,
     PRIMARY KEY (file_id),
     FOREIGN KEY (group_id) REFERENCES care_group (group_id),
     FOREIGN KEY (upload_by) REFERENCES users (user_id),
     FOREIGN KEY (task_id) REFERENCES task (task_id)
-    );
+);
 
 
 
