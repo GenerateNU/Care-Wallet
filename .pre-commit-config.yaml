@@ -8,8 +8,18 @@ repos:
       - id: end-of-file-fixer
         exclude: 'backend/docs/'
       - id: trailing-whitespace
-      - id: no-commit-to-branch
-        args: ['--branch', 'main']
+  - repo: local
+    hooks:
+      - id: test
+        language: script
+        name: Run Tests
+        entry: ./scripts/test.sh
+  - repo: local
+    hooks:
+      - id: format
+        language: script
+        name: Run Format
+        entry: ./scripts/format.sh
   - repo: https://github.com/commitizen-tools/commitizen
     rev: v3.13.0
     hooks:

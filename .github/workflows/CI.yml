@@ -1,4 +1,4 @@
-name: CI (Linting, Testing, Building)
+name: CI (Formatting, Testing, Building)
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   lint:
-    name: Lint
+    name: Format
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -28,17 +28,20 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Lint Go code
-        run: |
-          cd backend
-          go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
-          golangci-lint run ./...
+      - name: Install Task
+        uses: arduino/setup-task@v1
+        with:
+          version: 3.x
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Format Frontend
+      - name: Format
         run: |
+          task build
           cd client
-          npm install
           npm run format
+          cd ../backend
+          go fmt
+          go vet
 
   test:
     name: Test
@@ -87,6 +90,7 @@ jobs:
 
       - name: Run Go tests
         run: |
+          task build
           task test-all
 
   build:
