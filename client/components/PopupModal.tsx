@@ -8,12 +8,16 @@ import {
 } from 'react-native-paper';
 
 interface PopupModalProps {
+  med: Medication[];
+  onPress: () => void;
   buttonStyle?: object;
   modalStyle?: object;
   modalContent?: React.ReactNode;
 }
 
 const PopupModal: React.FC<PopupModalProps> = ({
+  med,
+  onPress,
   buttonStyle,
   modalStyle,
   modalContent
@@ -43,7 +47,7 @@ const PopupModal: React.FC<PopupModalProps> = ({
         style={{ marginTop: 30, ...buttonStyle, width: 200, maxHeight: 200 }}
         onPress={showModal}
       >
-        Show
+        {med[0].medication_name}
       </Button>
     </PaperProvider>
   );
