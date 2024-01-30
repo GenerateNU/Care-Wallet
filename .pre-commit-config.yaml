@@ -11,15 +11,15 @@ repos:
   - repo: local
     hooks:
       - id: test
-        language: script
+        language: python
         name: Run Tests
-        entry: ./scripts/test.sh
+        entry: bash -c 'task test-all'
   - repo: local
     hooks:
       - id: format
-        language: script
+        language: python
         name: Run Format
-        entry: ./scripts/format.sh
+        entry: bash -c 'task format'
   - repo: https://github.com/commitizen-tools/commitizen
     rev: v3.13.0
     hooks:
