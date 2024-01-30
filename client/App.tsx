@@ -11,23 +11,19 @@ export default function App() {
 
   const handleCardPress = () => {
     // Handle the card press event
-    console.log('Card pressed!');
+    console.log('Card Pressed!');
   };
 
   return (
-    <View className="flex-1 items-center w-[100vw] justify-center bg-white">
-      {medications &&
-        medications.map((med, index) => (
-          // <Text key={index} className="pb-2">
-          //   {`Name: ${med.medication_name} id: ${med.medication_id}`}
-          // </Text>
-          <ClickableCard
-            med={med}
-            key={index}
-            onPress={handleCardPress}
-            children={<></>}
-          />
-        ))}
+    <View className="flex-1 w-max items-center justify-center bg-white">
+      {medications && (
+        <ClickableCard
+          med={medications}
+          onPress={handleCardPress}
+          children={<Text> stuff</Text>}
+          navigateTo=""
+        />
+      )}
     </View>
   );
 }
