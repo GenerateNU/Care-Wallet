@@ -1,8 +1,4 @@
 import * as React from 'react';
-import { View, Text } from 'react-native';
-import { getAllMedications } from './services/medication';
-import UnionSvg from './assets/Union.svg';
-
 import { Text } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer, NavigationProp } from '@react-navigation/native';
@@ -19,11 +15,6 @@ const Tab = createBottomTabNavigator();
 
 // TODO: figure out a way to do this better, I didnt enjoy this way of doing it in SaluTemp there HAS to be a better way
 export default function App() {
-  const [medications, setMedications] = React.useState<Medication[]>();
-  React.useEffect(() => {
-    getAllMedications().then((med) => setMedications(med));
-  }, []);
-  // Adding the UnionSvg component here to show that it's able to be displayed here
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -39,15 +30,6 @@ export default function App() {
 
 function Tabs() {
   return (
-    <View className="flex-1 items-center w-[100vw] justify-center bg-white">
-    {medications &&
-      medications.map((med, index) => (
-        <Text key={index} className="pb-2">
-          {`Name: ${med.medication_name} id: ${med.medication_id}`}
-        </Text>
-      ))}
-      <UnionSvg/>
-  </View>
     <Tab.Navigator>
       <Tab.Screen
         name="Landing"
