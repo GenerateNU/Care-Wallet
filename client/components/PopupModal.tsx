@@ -1,5 +1,11 @@
 import React from 'react';
-import { Modal, Portal, Text, Button, Provider as PaperProvider } from 'react-native-paper';
+import {
+  Modal,
+  Portal,
+  Text,
+  Button,
+  Provider as PaperProvider
+} from 'react-native-paper';
 
 interface PopupModalProps {
   buttonStyle?: object;
@@ -7,21 +13,36 @@ interface PopupModalProps {
   modalContent?: React.ReactNode;
 }
 
-const PopupModal: React.FC<PopupModalProps> = ({ buttonStyle, modalStyle, modalContent }) => {
+const PopupModal: React.FC<PopupModalProps> = ({
+  buttonStyle,
+  modalStyle,
+  modalContent
+}) => {
   const [visible, setVisible] = React.useState(false);
 
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
-  const containerStyle = { backgroundColor: 'white', padding: 20, ...modalStyle };
+  const containerStyle = {
+    backgroundColor: 'white',
+    padding: 20,
+    ...modalStyle
+  };
 
   return (
     <PaperProvider>
       <Portal>
-        <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
+        <Modal
+          visible={visible}
+          onDismiss={hideModal}
+          contentContainerStyle={containerStyle}
+        >
           {modalContent || <Text>Default Modal Content</Text>}
         </Modal>
       </Portal>
-      <Button style={{ marginTop: 30, ...buttonStyle }} onPress={showModal}>
+      <Button
+        style={{ marginTop: 30, ...buttonStyle, width: 200, maxHeight: 200 }}
+        onPress={showModal}
+      >
         Show
       </Button>
     </PaperProvider>

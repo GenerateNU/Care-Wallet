@@ -2,7 +2,6 @@ import React from 'react';
 import { StyleSheet, View, GestureResponderEvent, Text } from 'react-native';
 import { Card } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
-import tailwind from 'tailwind-rn';
 
 interface ClickableCardProps {
   med: Medication[];
@@ -30,23 +29,37 @@ const ClickableCard: React.FC<ClickableCardProps> = ({
     }
   };
 
+  const styles = StyleSheet.create({
+    card: {
+      margin: 10,
+      width: 200,
+      borderRadius: 8,
+      borderWidth: 1,
+      borderColor: 'gray',
+      backgroundColor: 'lightblue',
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.3,
+      shadowRadius: 3,
+      elevation: 5
+    },
+    title: {
+      fontSize: 18,
+      marginBottom: 8,
+      fontWeight: 'bold'
+    },
+    content: {
+      fontSize: 16,
+      color: 'gray'
+    }
+  });
+
   return (
-    <Card style={tailwind('!bg-blue-500 !m-10 !w-10')} onPress={handlePress}>
-      <Card.Title title={med[0].medication_name} />
+    <Card style={styles.card} onPress={handlePress}>
+      <Card.Title style={styles.title} title={med[0].medication_name} />
       <Card.Content>{children}</Card.Content>
     </Card>
   );
 };
-
-const styles = StyleSheet.create({
-  card: {
-    flex: 0,
-    justifyContent: 'space-between',
-    backgroundColor: '#fff',
-    padding: 10,
-    margin: 10,
-    width: 200
-  }
-});
 
 export default ClickableCard;

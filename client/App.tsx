@@ -2,6 +2,7 @@ import * as React from 'react';
 import { View, Text } from 'react-native';
 import { getAllMedications } from './services/medication';
 import ClickableCard from './components/Card';
+import PopupModal from './components/PopupModal';
 
 export default function App() {
   const [medications, setMedications] = React.useState<Medication[]>();
@@ -15,14 +16,17 @@ export default function App() {
   };
 
   return (
-    <View className="flex-1 w-max items-center justify-center bg-white">
+    <View className="flex-1 w-max items-center justify-center bg-white pt-48">
       {medications && (
-        <ClickableCard
-          med={medications}
-          onPress={handleCardPress}
-          children={<Text> stuff</Text>}
-          navigateTo=""
-        />
+        <>
+          <ClickableCard
+            med={medications}
+            onPress={handleCardPress}
+            children={<Text> stuff</Text>}
+            navigateTo=""
+          />
+          <PopupModal></PopupModal>
+        </>
       )}
     </View>
   );
