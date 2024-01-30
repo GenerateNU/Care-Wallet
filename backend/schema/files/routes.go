@@ -38,6 +38,10 @@ func (pg *PgModel) UploadFileRoute(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, "Failed to process the request")
 		return
 	}
+	userID := c.GetHeader("user_id")
+	groupID := c.GetHeader("group_id")
+	file.UploadBy = userID
+	file.GroupID = groupID
 
 	form, err := c.MultipartForm()
 	if err != nil {
@@ -45,7 +49,6 @@ func (pg *PgModel) UploadFileRoute(c *gin.Context) {
 		return
 	}
 
-	// TODO update based on file model when confirmed
 	fileResponse := form.File["file_data"][0]
 	fileData, err := fileResponse.Open()
 	if err != nil {
@@ -72,9 +75,9 @@ func (pg *PgModel) UploadFileRoute(c *gin.Context) {
 //	@success		204
 //	@router			/files/{fname} [delete]
 func (pg *PgModel) DeleteFileRoute(c *gin.Context) {
-	fileName := c.Param("fname")
+	fileID := c.Param("fid")
 
-	if err := DeleteFile(pg.Conn, fileName, false); err != nil {
+	if err := DeleteFile(pg.Conn, fileID, false); err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Failed to delete file" + err.Error()})
 		return
 	}

@@ -8,6 +8,7 @@ import (
 	"mime/multipart"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
 
@@ -19,13 +20,9 @@ import (
 
 var AWS_BUCKET_NAME = "care-wallet-storage"
 
-// TODO: Add Group ID support
-// TODO: Add Task ID support
-// TODO: Add Date/Time Support
-// TODO: Add Uploaded By Support
-// TODO: Can this be cleaned up at all?
 func UploadFile(pool *pgx.Conn, file models.File, data *multipart.FileHeader, reader io.Reader) error {
 	file.FileName = data.Filename
+	file.UploadDate = time.Now().Format("2006-01-02 15:04:05")
 
 	// Check if the file size is greater than 5 MB
 	if data.Size > 5000000 {
@@ -33,52 +30,40 @@ func UploadFile(pool *pgx.Conn, file models.File, data *multipart.FileHeader, re
 		return errors.New("maximum file size 5 MB")
 	}
 
-	sess, err := createAWSSession()
+	// Insert file into database
+	err := pool.QueryRow("INSERT INTO files (file_name, group_id, upload_by, upload_date, file_size) VALUES ($1, $2, $3, $4, $5) RETURNING file_id;",
+		file.FileName, file.GroupID, file.UploadBy, file.UploadDate, data.Size).Scan(&file.FileID)
 	if err != nil {
 		fmt.Println(err.Error())
 		return err
 	}
 
-	err = pool.QueryRow("INSERT INTO files (file_name, group_id, upload_by, file_size, object_key) VALUES ($1, $2, $3, $4, $5) RETURNING file_id;",
-		file.FileName, "test-group", "test-user", data.Size, "temp-objectkey").Scan(&file.FileID)
-
-	if err != nil {
-		fmt.Println(err.Error())
-		return err
-	}
-
-	uploader := s3manager.NewUploader(sess)
-
+	// Create the AWS object key, upload the file to S3
 	objectKey := fmt.Sprintf("%v-%v", file.GroupID, file.FileName)
 	dotIndex := strings.LastIndex(objectKey, ".")
 	file_substring := objectKey[:dotIndex]
 	file_extension := objectKey[dotIndex:]
 
-	file.ObjectKey = file_substring + strconv.Itoa(file.FileID) + file_extension
+	aws_key := file_substring + strconv.Itoa(file.FileID) + file_extension
 
-	_, err = pool.Exec("UPDATE files SET object_key = $1", file.ObjectKey)
-
+	sess, err := createAWSSession()
 	if err != nil {
-		_, err2 := pool.Exec("DELETE FROM files WHERE file_id = $1", file.FileID)
-		if err2 != nil {
-			fmt.Println(err2.Error())
-			return err2
-		}
 		fmt.Println(err.Error())
 		return err
 	}
-
+	
+	uploader := s3manager.NewUploader(sess)
 	_, err = uploader.Upload(&s3manager.UploadInput{
 		Bucket: aws.String(AWS_BUCKET_NAME),
-		Key:    aws.String(file.ObjectKey),
+		Key:    aws.String(aws_key),
 		Body:   reader,
 	})
 
 	if err != nil {
-		_, err2 := pool.Exec("DELETE FROM files WHERE file_id = $1", file.FileID)
-		if err2 != nil {
-			fmt.Println(err2.Error())
-			return err2
+		_, err := pool.Exec("DELETE FROM files WHERE file_id = $1", file.FileID)
+		if err != nil {
+			fmt.Println(err.Error())
+			return err
 		}
 		fmt.Println(err.Error())
 		return err
@@ -88,8 +73,6 @@ func UploadFile(pool *pgx.Conn, file models.File, data *multipart.FileHeader, re
 }
 
 func DeleteFile(pool *pgx.Conn, fName string, s3Only bool) error {
-	var test_file models.File
-
 	// Create AWS session
 	sess, err := createAWSSession()
 	if err != nil {
@@ -102,7 +85,7 @@ func DeleteFile(pool *pgx.Conn, fName string, s3Only bool) error {
 	// Delete file from S3
 	_, err = svc.DeleteObject(&s3.DeleteObjectInput{
 		Bucket: aws.String(AWS_BUCKET_NAME),
-		Key:    aws.String(test_file.FileName),
+		Key:    aws.String(fName),
 	})
 	if err != nil {
 		return errors.New("failed to delete file from AWS")

@@ -16,8 +16,9 @@ export default function DocPickerButton(){
 
       if (result.canceled === false) {
         // TODO access user ID
-        const userID = 100;
-        await uploadFile(result.assets[0], userID)
+        const userID = 0;
+        const groupID = 0;
+        await uploadFile(result.assets[0], userID, groupID)
       }
     } catch (err) {
       console.log('err', err);
