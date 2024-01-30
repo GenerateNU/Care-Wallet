@@ -12,8 +12,6 @@ import (
 
 	"github.com/aws/aws-sdk-go/aws"
 
-	"github.com/aws/aws-sdk-go/service/s3"
-
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/jackc/pgx"
 )
@@ -67,36 +65,6 @@ func UploadFile(pool *pgx.Conn, file models.File, data *multipart.FileHeader, re
 		}
 		fmt.Println(err.Error())
 		return err
-	}
-
-	return nil
-}
-
-func DeleteFile(pool *pgx.Conn, fName string, s3Only bool) error {
-	// Create AWS session
-	sess, err := createAWSSession()
-	if err != nil {
-		return errors.New("failed to create AWS session")
-	}
-
-	// Create S3 service client
-	svc := s3.New(sess)
-
-	// Delete file from S3
-	_, err = svc.DeleteObject(&s3.DeleteObjectInput{
-		Bucket: aws.String(AWS_BUCKET_NAME),
-		Key:    aws.String(fName),
-	})
-	if err != nil {
-		return errors.New("failed to delete file from AWS")
-	}
-
-	// Delete file from the database
-	if !s3Only {
-		_, err := pool.Exec("DELETE FROM files WHERE file_name = $1", fName)
-		if err != nil {
-			return errors.New("failed to find file in database")
-		}
 	}
 
 	return nil

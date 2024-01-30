@@ -3,6 +3,7 @@ package files
 import (
 	"carewallet/models"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx"
@@ -17,7 +18,6 @@ func GetFileGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 	files := v1.Group("files")
 	{
 		files.POST("/upload", c.UploadFileRoute)
-		files.DELETE("/:fid", c.DeleteFileRoute)
 	}
 
 	return files
@@ -40,8 +40,8 @@ func (pg *PgModel) UploadFileRoute(c *gin.Context) {
 	}
 	userID := c.GetHeader("user_id")
 	groupID := c.GetHeader("group_id")
-	file.UploadBy = userID
-	file.GroupID = groupID
+	file.UploadBy, _ = strconv.Atoi(userID)
+	file.GroupID, _ = strconv.Atoi(groupID)
 
 	form, err := c.MultipartForm()
 	if err != nil {
@@ -65,22 +65,4 @@ func (pg *PgModel) UploadFileRoute(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, file)
-}
-
-// GetFiles godoc
-//
-//	@summary		Delete a file
-//	@description	Delete a file from database and S3 bucket
-//	@tags			file
-//	@success		204
-//	@router			/files/{fname} [delete]
-func (pg *PgModel) DeleteFileRoute(c *gin.Context) {
-	fileID := c.Param("fid")
-
-	if err := DeleteFile(pg.Conn, fileID, false); err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Failed to delete file" + err.Error()})
-		return
-	}
-
-	c.JSON(http.StatusOK, gin.H{"error": "File deleted"})
 }
