@@ -18,11 +18,12 @@ const ClickableCard: React.FC<ClickableCardProps> = ({
   cardStyle,
   navigateTo
 }) => {
-  const navigation = useNavigation();
+  // const navigation = useNavigation();
 
   const handlePress = () => {
     if (navigateTo) {
-      navigation.navigate(navigateTo as never);
+      console.log('trying to navigate!');
+      // navigation.navigate(navigateTo as never);
     } else {
       onPress();
     }
@@ -32,16 +33,23 @@ const ClickableCard: React.FC<ClickableCardProps> = ({
     <Card style={[styles.card, cardStyle]} onPress={handlePress}>
       <Card.Title
         title={med.medication_name}
-        subtitle={`ID: ${med.medication_id}`}
+        // subtitle={`ID: ${med.medication_id}`}
       />
-      <Card.Content>{children}</Card.Content>
+      <Card.Content>
+        <Text>{`ID: ${med.medication_name}`}</Text>
+      </Card.Content>
+      {/* <Card.Content>{children}</Card.Content> */}
     </Card>
   );
 };
 
 const styles = StyleSheet.create({
   card: {
-    margin: 10
+    flex: 1,
+    justifyContent: 'space-between',
+    backgroundColor: '#fff',
+    padding: 2,
+    margin: 1
   }
 });
 
