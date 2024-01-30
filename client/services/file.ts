@@ -16,8 +16,8 @@ export const uploadFile = async (
       uploadType: FileSystem.FileSystemUploadType.MULTIPART,
       fieldName: 'file_data',
       headers: {
-        'user_id': userId.toString(),
-        'group_id': groupId.toString()
+        user_id: userId.toString(),
+        group_id: groupId.toString()
       }
     }
   );
@@ -28,6 +28,6 @@ export const uploadFile = async (
       return res.status;
     }
     console.log('Upload failed!');
-    throw new Error('Upload failed!');
+    throw new Error(res?.body);
   });
 };

@@ -3,10 +3,11 @@ import { Text } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer, NavigationProp } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Medication from './screens/Medication';
+import MedList from './screens/Medication';
 import Home from './assets/home.svg';
+import DocPickerButton from './components/DocPickerButton';
 
-export type ScreenNames = ['BottomNav', 'Landing'];
+export type ScreenNames = ['BottomNav', 'Landing', 'TEMP-FileUpload'];
 export type RootStackParamList = Record<ScreenNames[number], any>;
 export type StackNavigation = NavigationProp<RootStackParamList>;
 
@@ -23,6 +24,11 @@ export default function App() {
           options={{ headerShown: false }}
           component={Tabs}
         />
+        <Stack.Screen
+          name="TEMP-FileUpload"
+          options={{ headerShown: true }}
+          component={DocPickerButton}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -38,7 +44,7 @@ function Tabs() {
           tabBarIcon: () => <Home color={'gray'} />,
           tabBarLabel: () => <Text>Landing</Text>
         }}
-        component={Medication}
+        component={MedList}
       />
     </Tab.Navigator>
   );

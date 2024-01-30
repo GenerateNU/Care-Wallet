@@ -29,20 +29,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/files/{fname}": {
-            "delete": {
-                "description": "Delete a file from database and S3 bucket",
-                "tags": [
-                    "file"
-                ],
-                "summary": "Delete a file",
-                "responses": {
-                    "204": {
-                        "description": "No Content"
-                    }
-                }
-            }
-        },
         "/medications": {
             "get": {
                 "description": "get all user medications",
