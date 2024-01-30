@@ -21,3 +21,5 @@ vendor
 *node_modules
 
 *.env
+backend/go.mod
+backend/go.sum
