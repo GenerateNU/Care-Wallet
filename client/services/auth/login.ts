@@ -8,7 +8,7 @@ import {
 export const logIn = async (
   email: string,
   password: string
-): Promise<User | Boolean> => {
+): Promise<User | string> => {
   try {
     const userCredential = await signInWithEmailAndPassword(
       auth,
@@ -17,6 +17,7 @@ export const logIn = async (
     );
     return userCredential.user;
   } catch (error: any) {
+    console.error('Error logging in: ', error.code);
     if (error.code === 'auth/user-not-found') {
       try {
         const newUserCredential = await createUserWithEmailAndPassword(
@@ -25,16 +26,12 @@ export const logIn = async (
           password
         );
         return newUserCredential.user;
-      } catch (creationError) {
-        console.error('Error creating user: ', creationError);
-        return false;
+      } catch (creationError: any) {
+        console.error('Error creating user: ', creationError.code);
+        return creationError.code;
       }
-    } else if (error.code === 'auth/wrong-password') {
-      console.error('Incorrect password for existing user.');
-      return false;
     } else {
-      console.error('Error logging in: ', error);
-      return false;
+      return error.code;
     }
   }
 };

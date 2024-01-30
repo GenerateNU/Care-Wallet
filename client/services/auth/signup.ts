@@ -5,7 +5,7 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 export const signUp = async (
   email: string,
   password: string
-): Promise<User | Boolean> => {
+): Promise<User | String> => {
   try {
     const userCredential = await createUserWithEmailAndPassword(
       auth,
@@ -13,8 +13,8 @@ export const signUp = async (
       password
     );
     return userCredential.user;
-  } catch (error) {
-    console.error('Error signing up: ', error);
-    return false;
+  } catch (error: any) {
+    console.error('Error signing up: ', error.code);
+    return error.code;
   }
 };

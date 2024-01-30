@@ -13,8 +13,8 @@ const LoginPage: React.FC = () => {
       return;
     }
     const result = await logIn(email, password);
-    if (!result) {
-      Alert.alert('Login Failed', 'Invalid email or password');
+    if (typeof result === 'string') {
+      Alert.alert('Login Failed', result.substring(5).replaceAll('-', ' '));
     } else {
       Alert.alert('Login Success', 'Welcome back!');
     }
@@ -26,8 +26,8 @@ const LoginPage: React.FC = () => {
       return;
     }
     const result = await signUp(email, password);
-    if (!result) {
-      Alert.alert('Signup Failed', 'Invalid email or password');
+    if (typeof result === 'string') {
+      Alert.alert('Signup Failed', result.substring(5).replaceAll('-', ' '));
     } else {
       Alert.alert('Signup Success', 'Welcome to the app!');
     }
