@@ -34,16 +34,16 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <View className="flex-1 justify-center items-center px-5">
       <TextInput
-        style={styles.input}
+        className="w-full my-2.5 py-2 px-3 border border-gray-300 rounded"
         value={email}
         onChangeText={setEmail}
         placeholder="Email"
         keyboardType="email-address"
       />
       <TextInput
-        style={styles.input}
+        className="w-full my-2.5 py-2 px-3 border border-gray-300 rounded"
         value={password}
         onChangeText={setPassword}
         placeholder="Password"
@@ -54,19 +54,5 @@ const LoginPage: React.FC = () => {
     </View>
   );
 };
-
-// Add styles - needed it just to see the board lol
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center', // Align children vertically in the center
-    alignItems: 'center', // Align children horizontally in the center
-    padding: 20
-  },
-  input: {
-    width: '100%', // Make input take full width of the container
-    marginVertical: 10 // Add vertical margin for spacing
-  }
-});
 
 export default LoginPage;
