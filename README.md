@@ -80,6 +80,12 @@ process can vary, so follow the instructions for each item below!
 - [Task](https://taskfile.dev/installation/) - our development tool to quickly
   run commands that run, test, and clean files.
 
+## Extra Dependencies
+
+Install these into the backend directory
+
+1. go install github.com/swaggo/swag/cmd/swag@latest
+
 ## Before Running
 
 1. Create a .env file in the root directory with a single line:

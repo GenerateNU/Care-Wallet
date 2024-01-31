@@ -1,66 +1,45 @@
 import * as React from 'react';
-import { View, Text } from 'react-native';
-import { getAllMedications } from './services/medication';
-import ClickableCard from './components/Card';
-import PopupModal from './components/PopupModal';
-import { StyleSheet } from 'react-native';
+import { Text } from 'react-native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NavigationContainer, NavigationProp } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Medication from './screens/Medication';
+import Home from './assets/home.svg';
 
+export type ScreenNames = ['BottomNav', 'Landing'];
+export type RootStackParamList = Record<ScreenNames[number], any>;
+export type StackNavigation = NavigationProp<RootStackParamList>;
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
+const Tab = createBottomTabNavigator();
+
+// TODO: figure out a way to do this better, I didnt enjoy this way of doing it in SaluTemp there HAS to be a better way
 export default function App() {
-  const [medications, setMedications] = React.useState<Medication[]>();
-  React.useEffect(() => {
-    getAllMedications().then((med) => setMedications(med));
-  }, []);
-
-  const handleCardPress = () => {
-    // Handle the card press event
-    console.log('Card Pressed!');
-  };
-
-  const handlePopupPress = () => {
-    // Handle the Popup press event
-    console.log('Popup Pressed!');
-  };
-
-  const styles = StyleSheet.create({
-    buttonStyle: {
-      margin: 10,
-      width: 200,
-      borderRadius: 8,
-      borderWidth: 1,
-      borderColor: 'gray',
-      backgroundColor: 'lightblue',
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.3,
-      shadowRadius: 3
-    },
-    content: {
-      fontSize: 16,
-      color: 'gray',
-      backgroundColor: 'lightgreen',
-      borderRadius: 5
-    }
-  });
-
   return (
-    <View className="flex-1 w-max items-center justify-center bg-orange-300 pt-48">
-      {medications && (
-        <>
-          <ClickableCard
-            med={medications}
-            onPress={handleCardPress}
-            children={<Text> stuff</Text>}
-            navigateTo=""
-          />
-          <PopupModal
-            med={medications}
-            modalStyle={styles.content}
-            buttonStyle={styles.buttonStyle}
-            onPress={handlePopupPress}
-            modalContent={<Text> stuff</Text>}
-          />
-        </>
-      )}
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="BottomNav"
+          options={{ headerShown: false }}
+          component={Tabs}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
+
+function Tabs() {
+  return (
+    <Tab.Navigator>
+      <Tab.Screen
+        name="Landing"
+        options={{
+          headerShown: true,
+          tabBarIcon: () => <Home color={'gray'} />,
+          tabBarLabel: () => <Text>Landing</Text>
+        }}
+        component={Medication}
+      />
+    </Tab.Navigator>
   );
 }
