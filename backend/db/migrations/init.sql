@@ -12,6 +12,8 @@ DROP TABLE IF EXISTS file;
 CREATE TYPE role AS ENUM ('PATIENT', 'PRIMARY', 'SECONDARY');
 CREATE TYPE task_assignment_status AS ENUM ('ACCEPTED', 'DECLINED', 'NOTIFIED');
 CREATE TYPE task_status AS ENUM ('INCOMPLETE', 'COMPLETE', 'PARTIAL');
+CREATE TYPE task_type AS ENUM ('med_mgmt', 'dr_appt', 'financial', 'other');
+
 
 CREATE TABLE IF NOT EXISTS medication (
     medication_id integer NOT NULL UNIQUE,
@@ -32,16 +34,16 @@ CREATE TABLE IF NOT EXISTS users (
     first_name varchar NOT NULL,
     last_name varchar NOT NULL,
     email varchar NOT NULL,
-    phone varchar NOT NULL,
-    address varchar NOT NULL,
-    pfp_s3_url varchar,
-    device_id varchar,
+    phone varchar, --potentially make phone/address required (NOT NULL)
+    address varchar,
+    pfp_s3_url varchar, --for profile picture if we implement that
+    device_id varchar, --expoPushToken for push notifications
     push_notification_enabled BOOLEAN DEFAULT FALSE,
     PRIMARY KEY (user_id)
 );
 
 CREATE TABLE IF NOT EXISTS group_roles (
-    group_id serial NOT NULL,
+    group_id integer NOT NULL,
     user_id varchar NOT NULL,
     role role NOT NULL,
     PRIMARY KEY (group_id, user_id),
@@ -61,7 +63,7 @@ CREATE TABLE IF NOT EXISTS task (
     repeating_interval varchar,
     repeating_end_date timestamp,
     task_status task_status NOT NULL,
-    -- maybe add a task-type enum later for pre-defined task types (eg. medication management, dr appointment, etc.)
+    task_type task_type NOT NULL, -- (eg. medication management, dr appointment, etc.)
     task_info json,
     PRIMARY KEY (task_id),
     FOREIGN KEY (group_id) REFERENCES care_group (group_id),
