@@ -36,6 +36,7 @@ jobs:
 
       - name: Format Frontend
         run: |
+          task build
           cd client
           fe_format_output=$(npm run format)
           if [[ -n "$fe_format_output" ]]; then
@@ -45,6 +46,7 @@ jobs:
           fi
       - name: Format Backend
         run: |
+          task build
           cd backend
           be_format_output=$(go fmt ./...)
           if [[ -n "$be_format_output" ]]; then
@@ -55,6 +57,7 @@ jobs:
           be_lint_output=$(go vet)
       - name: Lint Backend
         run: |
+          task build
           cd backend
           be_lint_output=$(go vet ./...)
           if [[ -n "$be_lint_output" ]]; then
