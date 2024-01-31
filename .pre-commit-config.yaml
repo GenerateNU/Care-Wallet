@@ -12,12 +12,6 @@ repos:
         args: ['--branch', 'main']
   - repo: local
     hooks:
-      - id: test
-        language: python
-        name: Run Tests
-        entry: bash -c 'task test-all'
-  - repo: local
-    hooks:
       - id: format
         language: python
         name: Run Format
@@ -26,4 +20,5 @@ repos:
     rev: v3.13.0
     hooks:
       - id: commitizen
-        stages: [commit-msg]
+      - id: commitizen-branch
+        stages: [push]
