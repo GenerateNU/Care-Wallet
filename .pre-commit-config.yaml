@@ -10,6 +10,12 @@ repos:
       - id: trailing-whitespace
       - id: no-commit-to-branch
         args: ["--branch", "main"]
+  - repo: local
+    hooks:
+      - id: format
+        language: python
+        name: Run Format
+        entry: bash -c 'task format'
   - repo: https://github.com/commitizen-tools/commitizen
     rev: v3.13.0
     hooks:
