@@ -4,9 +4,10 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer, NavigationProp } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Medication from './screens/Medication';
+import LoginPage from './screens/Login';
 import Home from './assets/home.svg';
 
-export type ScreenNames = ['BottomNav', 'Landing'];
+export type ScreenNames = ['BottomNav', 'Landing', 'Login'];
 export type RootStackParamList = Record<ScreenNames[number], any>;
 export type StackNavigation = NavigationProp<RootStackParamList>;
 
@@ -18,6 +19,13 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen
+          name="Login"
+          options={{
+            headerShown: true
+          }}
+          component={LoginPage}
+        />
         <Stack.Screen
           name="BottomNav"
           options={{ headerShown: false }}
