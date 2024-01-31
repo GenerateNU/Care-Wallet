@@ -49,7 +49,7 @@ func UploadFile(pool *pgx.Conn, file models.File, data *multipart.FileHeader, re
 		fmt.Println(err.Error())
 		return err
 	}
-	
+
 	uploader := s3manager.NewUploader(sess)
 	_, err = uploader.Upload(&s3manager.UploadInput{
 		Bucket: aws.String(AWS_BUCKET_NAME),
