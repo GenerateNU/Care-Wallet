@@ -106,8 +106,8 @@ CREATE TABLE IF NOT EXISTS files (
     upload_by varchar NOT NULL,
     upload_date timestamp,
     file_size integer NOT NULL,
-    task_id varchar,
-    PRIMARY KEY (file_id)
+    task_id integer,
+    PRIMARY KEY (file_id),
     FOREIGN KEY (group_id) REFERENCES care_group (group_id),
     FOREIGN KEY (upload_by) REFERENCES users (user_id),
     FOREIGN KEY (task_id) REFERENCES task (task_id)
