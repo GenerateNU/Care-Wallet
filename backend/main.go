@@ -4,6 +4,7 @@ import (
 	"carewallet/configuration"
 	"carewallet/db"
 	_ "carewallet/docs"
+	"carewallet/schema/files"
 	"carewallet/schema/medication"
 	"fmt"
 	"os"
@@ -36,6 +37,7 @@ func main() {
 	v1 := r.Group("/")
 	{
 		medication.GetMedicationGroup(v1, &medication.PgModel{Conn: conn})
+		files.GetFileGroup(v1, &files.PgModel{Conn: conn})
 	}
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

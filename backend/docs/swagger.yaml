@@ -13,6 +13,15 @@ info:
   title: Care-Wallet API
   version: "1.0"
 paths:
+  /files/upload:
+    post:
+      description: Upload a file to database and S3 bucket
+      responses:
+        "200":
+          description: OK
+      summary: Upload a file
+      tags:
+      - file
   /medications:
     get:
       description: get all user medications

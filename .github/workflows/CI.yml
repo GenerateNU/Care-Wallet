@@ -1,4 +1,4 @@
-name: CI (Linting, Testing, Building)
+name: CI (Formatting/Linting, Testing, Building)
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   lint:
-    name: Lint
+    name: Format
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -28,17 +28,37 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Lint Go code
-        run: |
-          cd backend
-          go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
-          golangci-lint run ./...
+      - name: Install Task
+        uses: arduino/setup-task@v1
+        with:
+          version: 3.x
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Format Frontend
         run: |
+          task build
           cd client
-          npm install
-          npm run format
+          npm run check
+      - name: Format Backend
+        run: |
+          task build
+          cd backend
+          be_format_output=$(go fmt ./...)
+          if [[ -n "$be_format_output" ]]; then
+          echo "$be_format_output"
+          echo "::error::Formatting issues found"
+          exit 1
+          fi
+      - name: Lint Backend
+        run: |
+          task build
+          cd backend
+          be_lint_output=$(go vet ./...)
+          if [[ -n "$be_lint_output" ]]; then
+          echo "$be_lint_output"
+          echo "::error::Linting issues found"
+          exit 1
+          fi
 
   test:
     name: Test
@@ -87,6 +107,7 @@ jobs:
 
       - name: Run Go tests
         run: |
+          task build
           task test-all
 
   build:
