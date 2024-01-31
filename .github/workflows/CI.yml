@@ -38,13 +38,7 @@ jobs:
         run: |
           task build
           cd client
-          fe_format_output=$(npx prettier . --check)
-          if [[ "$fe_format_output" == "Checking formatting..." + "\n" +
-          "All matched files use Prettier code style!" ]]; then
-          echo "$fe_format_output"
-          echo "::error::Formatting issues found"
-          exit 1
-          fi
+          npm run check
       - name: Format Backend
         run: |
           task build
