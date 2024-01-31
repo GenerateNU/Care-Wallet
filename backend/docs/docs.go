@@ -15,6 +15,20 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/files/upload": {
+            "post": {
+                "description": "Upload a file to database and S3 bucket",
+                "tags": [
+                    "file"
+                ],
+                "summary": "Upload a file",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/medications": {
             "get": {
                 "description": "get all user medications",

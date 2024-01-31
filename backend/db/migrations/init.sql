@@ -6,14 +6,13 @@ DROP TABLE IF EXISTS task;
 DROP TABLE IF EXISTS task_assignees;
 DROP TABLE IF EXISTS label;
 DROP TABLE IF EXISTS task_labels;
-DROP TABLE IF EXISTS file;
+DROP TABLE IF EXISTS files;
 
 
 CREATE TYPE role AS ENUM ('PATIENT', 'PRIMARY', 'SECONDARY');
 CREATE TYPE task_assignment_status AS ENUM ('ACCEPTED', 'DECLINED', 'NOTIFIED');
 CREATE TYPE task_status AS ENUM ('INCOMPLETE', 'COMPLETE', 'PARTIAL');
 CREATE TYPE task_type AS ENUM ('med_mgmt', 'dr_appt', 'financial', 'other');
-
 
 CREATE TABLE IF NOT EXISTS medication (
     medication_id integer NOT NULL UNIQUE,
@@ -100,18 +99,19 @@ CREATE TABLE IF NOT EXISTS task_assignees (
     FOREIGN KEY (group_id, label_name) REFERENCES label (group_id, label_name) -- NOTE: unsure about label/task_labels table constraints, uncommenting this line is err
 );
 
-CREATE TABLE IF NOT EXISTS file (
-    file_id serial NOT NULL,
+CREATE TABLE IF NOT EXISTS files (
+    file_id serial NOT NULL UNIQUE,
+    file_name varchar NOT NULL,
     group_id integer NOT NULL,
     upload_by varchar NOT NULL,
-    upload_date timestamp NOT NULL,
-    task_id integer,
-    PRIMARY KEY (file_id),
+    upload_date timestamp,
+    file_size integer NOT NULL,
+    task_id varchar,
+    PRIMARY KEY (file_id)
     FOREIGN KEY (group_id) REFERENCES care_group (group_id),
     FOREIGN KEY (upload_by) REFERENCES users (user_id),
     FOREIGN KEY (task_id) REFERENCES task (task_id)
 );
-
 
 
 -- Insert sample data into "medication" table
