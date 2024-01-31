@@ -1,4 +1,4 @@
-name: CI (Formatting, Testing, Building)
+name: CI (Formatting/Linting, Testing, Building)
 
 on:
   push:
@@ -34,14 +34,34 @@ jobs:
           version: 3.x
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Format
+      - name: Format Frontend
         run: |
-          task build
           cd client
-          npm run format
-          cd ../backend
-          go fmt
-          go vet
+          fe_format_output=$(npm run format)
+          if [[ -n "$fe_format_output" ]]; then
+          echo "$fe_format_output"
+          echo "::error::Formatting issues found"
+          exit 1
+          fi
+      - name: Format Backend
+        run: |
+          cd backend
+          be_format_output=$(go fmt ./...)
+          if [[ -n "$be_format_output" ]]; then
+          echo "$be_format_output"
+          echo "::error::Formatting issues found"
+          exit 1
+          fi
+          be_lint_output=$(go vet)
+      - name: Lint Backend
+        run: |
+          cd backend
+          be_lint_output=$(go vet ./...)
+          if [[ -n "$be_lint_output" ]]; then
+          echo "$be_lint_output"
+          echo "::error::Linting issues found"
+          exit 1
+          fi
 
   test:
     name: Test
