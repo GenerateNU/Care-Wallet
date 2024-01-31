@@ -61,6 +61,7 @@ CREATE TABLE IF NOT EXISTS task (
     repeating_interval varchar,
     repeating_end_date timestamp,
     task_status task_status NOT NULL,
+    -- maybe add a task-type enum later for pre-defined task types (eg. medication management, dr appointment, etc.)
     task_info json,
     PRIMARY KEY (task_id),
     FOREIGN KEY (group_id) REFERENCES care_group (group_id),
@@ -81,9 +82,9 @@ CREATE TABLE IF NOT EXISTS task_assignees (
 );
 
   CREATE TABLE If NOT EXISTS label (
-    group_id serial NOT NULL,
+    group_id integer NOT NULL,
     label_name varchar NOT NULL,
-    -- label color as an enum maybe?
+    label_color varchar NOT NULL, -- TODO:figure out what form color should be ("rgba(12,2,1,0)", "#21292F", "red" etc.) or just
     PRIMARY KEY (group_id, label_name),
     FOREIGN KEY (group_id) REFERENCES care_group (group_id)
 );
