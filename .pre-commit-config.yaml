@@ -8,6 +8,8 @@ repos:
       - id: end-of-file-fixer
         exclude: 'backend/docs/'
       - id: trailing-whitespace
+      - id: no-commit-to-branch
+        args: ['--branch', 'main']
   - repo: local
     hooks:
       - id: test
