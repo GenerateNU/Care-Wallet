@@ -6,15 +6,16 @@ repos:
       - id: check-added-large-files
       - id: check-merge-conflict
       - id: end-of-file-fixer
-        exclude: "backend/docs/"
+        exclude: 'backend/docs/'
       - id: trailing-whitespace
       - id: no-commit-to-branch
-        args: ["--branch", "main"]
+        args: ['--branch', 'main']
   - repo: local
     hooks:
       - id: format
         language: python
         name: Run Format
+        require_serial: true
         entry: bash -c 'task format'
   - repo: https://github.com/commitizen-tools/commitizen
     rev: v3.13.0

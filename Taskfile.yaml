@@ -10,11 +10,13 @@ tasks:
 
   format:
     - |
+      echo -e "Frontend Formatting..."
       cd client
       npm run format
+      echo -e "\nBackend Formatting...\n"
       cd ../backend
-      go fmt
-      go vet
+      go fmt ./...
+      go vet ./...
       swag f
 
   start-backend:
@@ -47,5 +49,6 @@ tasks:
 
   pre-commit:
     - |
+      pre-commit clean
       pre-commit install --hook-type commit-msg --hook-type pre-push --hook-type pre-commit
       pre-commit run --all-files
