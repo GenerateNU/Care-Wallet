@@ -1,19 +1,15 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Alert, StyleSheet } from 'react-native';
+import { View, TextInput, Button, Alert } from 'react-native';
 import { logIn } from '../services/auth/login';
 import { signUp } from '../services/auth/signup';
-import {
-  useNavigation,
-  StackActions,
-  useRoute
-} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigation } from '../navigation/AppStack';
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const navigation = useNavigation();
-  const route = useRoute();
+  const navigation = useNavigation<StackNavigation>();
 
   const handleLogin = async () => {
     if (!email || !password) {

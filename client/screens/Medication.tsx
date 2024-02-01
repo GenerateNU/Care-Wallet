@@ -2,9 +2,11 @@ import * as React from 'react';
 import { View, Text } from 'react-native';
 import { getAllMedications } from '../services/medication';
 import { Medication } from '../types/medication';
+import { useUser } from '../contexts/userContext';
 
 export default function MedList() {
   const [medications, setMedications] = React.useState<Medication[]>();
+  const { user } = useUser();
   React.useEffect(() => {
     getAllMedications().then((med) => setMedications(med));
   }, []);
@@ -17,6 +19,12 @@ export default function MedList() {
             {`Name: ${med.medication_name} id: ${med.medication_id}`}
           </Text>
         ))}
+      {user && (
+        <Text>
+          <Text>The user id is: {user.userID}</Text>
+          <Text>The user email is: {user.userEmail}</Text>
+        </Text>
+      )}
     </View>
   );
 }
