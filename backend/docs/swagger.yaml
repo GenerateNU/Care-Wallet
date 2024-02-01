@@ -7,6 +7,36 @@ definitions:
       medication_name:
         type: string
     type: object
+  models.Task:
+    properties:
+      created_by:
+        description: User ID
+        type: string
+      created_date:
+        type: string
+      end_date:
+        type: string
+      group_id:
+        type: integer
+      notes:
+        type: string
+      repeating:
+        type: boolean
+      repeating_end_date:
+        type: string
+      repeating_interval:
+        type: string
+      start_date:
+        type: string
+      task_id:
+        type: integer
+      task_info:
+        type: string
+      task_status:
+        type: string
+      task_type:
+        type: string
+    type: object
 info:
   contact: {}
   description: This is an API for the Care-Wallet App.
@@ -35,4 +65,82 @@ paths:
       summary: Get All Meds
       tags:
       - medications
+  /tasks/{endDate}:
+    get:
+      description: get all tasks by end date
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Task'
+            type: array
+      summary: Get All Tasks By End Date
+      tags:
+      - tasks
+  /tasks/{gid}:
+    get:
+      description: get all tasks by group id
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Task'
+            type: array
+      summary: Get All Tasks By Group ID
+      tags:
+      - tasks
+  /tasks/{startDate}:
+    get:
+      description: get all tasks by start date
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Task'
+            type: array
+      summary: Get All Tasks By Start Date
+      tags:
+      - tasks
+  /tasks/{status}:
+    get:
+      description: get all tasks by status
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Task'
+            type: array
+      summary: Get All Tasks By Status
+      tags:
+      - tasks
+  /tasks/{type}:
+    get:
+      description: get all tasks by type
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Task'
+            type: array
+      summary: Get All Tasks By Type
+      tags:
+      - tasks
+  /tasks/{uid}:
+    get:
+      description: get all tasks by user id
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Task'
+            type: array
+      summary: Get All Tasks By User ID
+      tags:
+      - tasks
 swagger: "2.0"
