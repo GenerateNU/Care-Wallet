@@ -2,25 +2,26 @@ import React from 'react';
 import { NavigationProp } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginPage from '../screens/Login';
-import BottomTabNavigator from './BottomTabNavigator';
-import { RootStackParamList } from './Router';
+import AppStackBottomTabNavigator from './BottomTabNavigator';
 
-export type StackNavigation = NavigationProp<RootStackParamList>;
-const Stack = createNativeStackNavigator<RootStackParamList>();
+export type AppScreenNames = ['BottomNavScreens', 'Landing', 'Login'];
+type AppStackParamList = Record<AppScreenNames[number], any>;
+export type StackNavigation = NavigationProp<AppStackParamList>;
+const AppStack = createNativeStackNavigator<AppStackParamList>();
 
-export default function AppStack() {
+export default function AppNavigation() {
   return (
-    <Stack.Navigator>
-      <Stack.Screen
+    <AppStack.Navigator>
+      <AppStack.Screen
         name="Login"
         options={{ headerShown: true }}
         component={LoginPage}
       />
-      <Stack.Screen
-        name="BottomNav"
+      <AppStack.Screen
+        name="BottomNavScreens"
         options={{ headerShown: false }}
-        component={BottomTabNavigator}
+        component={AppStackBottomTabNavigator}
       />
-    </Stack.Navigator>
+    </AppStack.Navigator>
   );
 }

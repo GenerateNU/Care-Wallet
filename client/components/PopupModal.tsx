@@ -6,6 +6,7 @@ import {
   Button,
   Provider as PaperProvider
 } from 'react-native-paper';
+import { Medication } from '../types/medication';
 
 interface PopupModalProps {
   med: Medication[];

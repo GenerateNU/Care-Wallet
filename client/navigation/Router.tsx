@@ -1,14 +1,12 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import AppStack from './AppStack';
-
-export type ScreenNames = ['BottomNav', 'Landing', 'Login'];
-export type RootStackParamList = Record<ScreenNames[number], any>;
+import AppNavigation from './AppStack';
 
 export default function Router() {
+  // TODO: If we ever introduce onboarding questionairs and stuff, it can probably be another stack on this page (<OnboardingNavigation />)
   return (
     <NavigationContainer>
-      <AppStack />
+      <AppNavigation />
     </NavigationContainer>
   );
 }

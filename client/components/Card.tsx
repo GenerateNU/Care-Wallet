@@ -1,7 +1,7 @@
 import React from 'react';
-import { StyleSheet, View, GestureResponderEvent, Text } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { Card } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
+import { Medication } from '../types/medication';
 
 interface ClickableCardProps {
   med: Medication[];

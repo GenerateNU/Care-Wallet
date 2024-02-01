@@ -4,12 +4,12 @@ import MedList from '../screens/Medication';
 import { Text } from 'react-native';
 import Home from '../assets/home.svg';
 
-const Tab = createBottomTabNavigator();
+const AppStackBottomTab = createBottomTabNavigator();
 
-export default function BottomTabNavigator() {
+export default function AppStackBottomTabNavigator() {
   return (
-    <Tab.Navigator>
-      <Tab.Screen
+    <AppStackBottomTab.Navigator>
+      <AppStackBottomTab.Screen
         name="Landing"
         options={{
           headerShown: true,
@@ -18,6 +18,6 @@ export default function BottomTabNavigator() {
         }}
         component={MedList}
       />
-    </Tab.Navigator>
+    </AppStackBottomTab.Navigator>
   );
 }
