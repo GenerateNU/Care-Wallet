@@ -185,8 +185,6 @@ func TestGetTasks(t *testing.T) {
 		}
 	})
 
-
-
 	t.Run("TestGetTasksByStartDate", func(t *testing.T) {
 		w := httptest.NewRecorder()
 		req, _ := http.NewRequest("GET", "/tasks/start/2024-02-05 10:00:00", nil)
