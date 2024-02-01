@@ -86,7 +86,7 @@ func TestGetTasks(t *testing.T) {
 			t.Error("Failed to unmarshal json")
 		}
 
-		createdDate, _ := time.Parse("2006-01-02 15:04:05", "2024-02-01 20:14:26.126136")
+		createdDate, _ := time.Parse("2006-01-02 15:04:05", "2024-02-03 10:45:00")
 		expectedTasks := []models.Task{
 			{
 				TaskID:      1,
@@ -136,6 +136,57 @@ func TestGetTasks(t *testing.T) {
 		}
 	})
 
+	t.Run("TestGetTasksByType", func(t *testing.T) {
+		w := httptest.NewRecorder()
+		req, _ := http.NewRequest("GET", "/tasks/type/other", nil)
+		router.ServeHTTP(w, req)
+
+		if http.StatusOK != w.Code {
+			t.Error("Failed to retrieve tasks by start date.")
+		}
+
+		var responseTasks []models.Task
+		err := json.Unmarshal(w.Body.Bytes(), &responseTasks)
+
+		if err != nil {
+			t.Error("Failed to unmarshal json")
+		}
+
+		createdDate1, _ := time.Parse("2006-01-02 15:04:05", "2024-02-20 23:59:59")
+		createdDate2, _ := time.Parse("2006-01-02 15:04:05", "2006-01-02 15:04:05")
+		expectedTasks := []models.Task{
+			{
+				TaskID:      2,
+				GroupID:     2,
+				CreatedBy:   "user3",
+				CreatedDate: createdDate1,
+				TaskStatus:  "INCOMPLETE",
+				TaskType:    "other",
+			},
+			{
+				TaskID:      4,
+				GroupID:     4,
+				CreatedBy:   "user1",
+				CreatedDate: createdDate2,
+				TaskStatus:  "COMPLETE",
+				TaskType:    "other",
+			},
+		}
+
+		fmt.Println(
+			"responseTasks: ", responseTasks,
+		)
+		fmt.Println(
+			"expectedTasks: ", expectedTasks,
+		)
+
+		if !reflect.DeepEqual(expectedTasks, responseTasks) {
+			t.Error("Result was not correct")
+		}
+	})
+
+
+
 	t.Run("TestGetTasksByStartDate", func(t *testing.T) {
 		w := httptest.NewRecorder()
 		req, _ := http.NewRequest("GET", "/tasks/start/2024-02-05 10:00:00", nil)
@@ -152,7 +203,7 @@ func TestGetTasks(t *testing.T) {
 			t.Error("Failed to unmarshal json")
 		}
 
-		createdDate, _ := time.Parse("2006-01-02 15:04:05", "2024-02-01 20:14:26.126136")
+		createdDate, _ := time.Parse("2006-01-02 15:04:05", "2024-02-03 10:45:00")
 		expectedTasks := []models.Task{
 			{
 				TaskID:      1,
@@ -163,9 +214,6 @@ func TestGetTasks(t *testing.T) {
 				TaskType:    "med_mgmt",
 			},
 		}
-
-		fmt.Println("Expected:", expectedTasks)
-		fmt.Println("Response: ", responseTasks)
 
 		if !reflect.DeepEqual(expectedTasks, responseTasks) {
 			t.Error("Result was not correct")
@@ -188,7 +236,7 @@ func TestGetTasks(t *testing.T) {
 			t.Error("Failed to unmarshal json")
 		}
 
-		createdDate, _ := time.Parse("2006-01-02 15:04:05", "2024-02-01 20:14:26.126136")
+		createdDate, _ := time.Parse("2006-01-02 15:04:05", "2024-02-03 10:45:00")
 		expectedTasks := []models.Task{
 			{
 				TaskID:      1,

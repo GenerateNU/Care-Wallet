@@ -151,11 +151,11 @@ const docTemplate = `{
         },
         "/tasks/{uid}": {
             "get": {
-                "description": "get all tasks by user id",
+                "description": "get all tasks by created by",
                 "tags": [
                     "tasks"
                 ],
-                "summary": "Get All Tasks By User ID",
+                "summary": "Get All Tasks By Created By",
                 "responses": {
                     "200": {
                         "description": "OK",
