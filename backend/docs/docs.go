@@ -149,6 +149,26 @@ const docTemplate = `{
                 }
             }
         },
+        "/tasks/{tid}/remove": {
+            "delete": {
+                "description": "remove users from task",
+                "tags": [
+                    "tasks"
+                ],
+                "summary": "Remove Users From Task",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.TaskUser"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/tasks/{type}": {
             "get": {
                 "description": "get all tasks by type",

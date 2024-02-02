@@ -197,21 +197,55 @@ func AssignUsersToTaskInDB(pool *pgx.Conn, users []string, taskID string, assign
 		return nil, err
 	}
 
-	var taskUsers []models.TaskUser
+	var assignedUsers []models.TaskUser
 
 	for _, user := range users {
 		print(task_id, " ", user)
 		_, err := pool.Exec("INSERT INTO task_assignees (task_id, user_id, assignment_status, assigned_by, assigned_date) VALUES ($1, $2, $3, $4, $5);", task_id, user, "NOTIFIED", assigner, time.Now())
 
 		if err != nil {
-			print(err, "error inserting users into task_user")
+			print(err, "error inserting users into task_assignees")
 
 			return nil, err
 		}
 
-		taskUsers = append(taskUsers, models.TaskUser{TaskID: task_id, UserID: user})
-		fmt.Println(taskUsers)
+		assignedUsers = append(assignedUsers, models.TaskUser{TaskID: task_id, UserID: user})
+		fmt.Println(assignedUsers)
 	}
 
-	return taskUsers, nil
+	return assignedUsers, nil
+}
+
+func RemoveUsersFromTaskInDB(pool *pgx.Conn, users []string, taskID string) ([]models.TaskUser, error) {
+	task_id, err := strconv.Atoi(taskID)
+	if err != nil {
+		print(err, "error converting task ID to int")
+		return nil, err
+	}
+
+	var removedUsers []models.TaskUser
+
+	for _, user := range users {
+		// Check if the user ID and task ID exist in the table
+		var exists int
+		err := pool.QueryRow("SELECT 1 FROM task_assignees WHERE task_id = $1 AND user_id = $2 LIMIT 1;", task_id, user).Scan(&exists)
+		if err != nil {
+			if err == pgx.ErrNoRows {
+				// User ID or task ID does not exist, return an error
+				return nil, fmt.Errorf("user not assigned to task")
+			}
+			print(err, "error checking if user and task exist in task_assignees")
+			return nil, err
+		}
+
+		_, err = pool.Exec("DELETE FROM task_assignees WHERE task_id = $1 AND user_id = $2;", task_id, user)
+		if err != nil {
+			print(err, "error deleting users from task_assignees")
+			return nil, err
+		}
+
+		removedUsers = append(removedUsers, models.TaskUser{TaskID: task_id, UserID: user})
+	}
+
+	return removedUsers, nil
 }

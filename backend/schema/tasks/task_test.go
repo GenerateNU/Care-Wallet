@@ -174,13 +174,6 @@ func TestTaskGroup(t *testing.T) {
 			},
 		}
 
-		fmt.Println(
-			"responseTasks: ", responseTasks,
-		)
-		fmt.Println(
-			"expectedTasks: ", expectedTasks,
-		)
-
 		if !reflect.DeepEqual(expectedTasks, responseTasks) {
 			t.Error("Result was not correct")
 		}
@@ -259,7 +252,7 @@ func TestTaskGroup(t *testing.T) {
 		}
 
 		assignRequest := AssignRequest{
-			UserIDs:  []string{"user3", "user4"},
+			UserIDs:  []string{"user3"},
 			Assigner: "user3",
 		}
 
@@ -268,11 +261,9 @@ func TestTaskGroup(t *testing.T) {
 			t.Error("Failed to marshal userIds to JSON")
 		}
 
-		fmt.Println("userIdsJSON: ", string(userIdsJSON))
-
 		// Create a request with the userIds JSON
 		w := httptest.NewRecorder()
-		req, _ := http.NewRequest("POST", "/tasks/1/assignees", bytes.NewBuffer(userIdsJSON))
+		req, _ := http.NewRequest("POST", "/tasks/4/assign", bytes.NewBuffer(userIdsJSON))
 		router.ServeHTTP(w, req)
 
 		if http.StatusOK != w.Code {
@@ -288,17 +279,55 @@ func TestTaskGroup(t *testing.T) {
 
 		expectedTaskUsers := []models.TaskUser{
 			{
-				TaskID: 1,
+				TaskID: 4,
 				UserID: "user3",
-			},
-			{
-				TaskID: 1,
-				UserID: "user4",
 			},
 		}
 
 		fmt.Println("responseTaskUsers: ", responseTaskUsers)
 		fmt.Println("expectedTaskUsers: ", expectedTaskUsers)
+
+		if !reflect.DeepEqual(expectedTaskUsers, responseTaskUsers) {
+			t.Error("Result was not correct")
+		}
+	})
+
+	t.Run("TestRemoveUsersFromTask", func(t *testing.T) {
+		type RemoveRequest struct {
+			UserIDs []string `json:"userIDs"`
+		}
+
+		removeRequest := RemoveRequest{
+			UserIDs: []string{"user2"},
+		}
+
+		userIdsJSON, err := json.Marshal(removeRequest)
+		if err != nil {
+			t.Error("Failed to marshal userIds to JSON")
+		}
+
+		// Create a request with the userIds JSON
+		w := httptest.NewRecorder()
+		req, _ := http.NewRequest("DELETE", "/tasks/4/remove", bytes.NewBuffer(userIdsJSON))
+		router.ServeHTTP(w, req)
+
+		if http.StatusOK != w.Code {
+			t.Error("Failed to remove users from task.")
+		}
+
+		var responseTaskUsers []models.TaskUser
+		err = json.Unmarshal(w.Body.Bytes(), &responseTaskUsers)
+
+		if err != nil {
+			t.Error("Failed to unmarshal json")
+		}
+
+		expectedTaskUsers := []models.TaskUser{
+			{
+				TaskID: 4,
+				UserID: "user2",
+			},
+		}
 
 		if !reflect.DeepEqual(expectedTaskUsers, responseTaskUsers) {
 			t.Error("Result was not correct")

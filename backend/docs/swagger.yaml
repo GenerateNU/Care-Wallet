@@ -137,6 +137,19 @@ paths:
       summary: Assign Users To Task
       tags:
       - tasks
+  /tasks/{tid}/remove:
+    delete:
+      description: remove users from task
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.TaskUser'
+            type: array
+      summary: Remove Users From Task
+      tags:
+      - tasks
   /tasks/{type}:
     get:
       description: get all tasks by type

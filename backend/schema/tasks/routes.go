@@ -22,7 +22,8 @@ func TaskGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 		tasks.GET("/type/:type", c.GetTasksByType)
 		tasks.GET("/start/:startDate", c.GetTasksByStartDate)
 		tasks.GET("/end/:endDate", c.GetTasksByEndDate)
-		tasks.POST("/:tid/assignees", c.AssignUsersToTask)
+		tasks.POST("/:tid/assign", c.AssignUsersToTask)
+		tasks.DELETE("/:tid/remove", c.RemoveUsersFromTask)
 	}
 
 	return tasks
@@ -149,11 +150,38 @@ func (pg *PgModel) AssignUsersToTask(c *gin.Context) {
 		return
 	}
 
-	taskUser, err := AssignUsersToTaskInDB(pg.Conn, requestBody.UserIDs, c.Param("tid"), requestBody.Assigner)
+	assignedUsers, err := AssignUsersToTaskInDB(pg.Conn, requestBody.UserIDs, c.Param("tid"), requestBody.Assigner)
 
 	if err != nil {
 		panic(err)
 	}
 
-	c.JSON(http.StatusOK, taskUser)
+	c.JSON(http.StatusOK, assignedUsers)
+}
+
+// RemoveUsersFromTask godoc
+//
+//	@summary		Remove Users From Task
+//	@description	remove users from task
+//	@tags			tasks
+//	@success		200	{array}	models.TaskUser
+//	@router			/tasks/{tid}/remove [delete]
+func (pg *PgModel) RemoveUsersFromTask(c *gin.Context) {
+	var requestBody struct {
+		UserIDs []string `json:"userIDs"`
+	}
+
+	if err := c.BindJSON(&requestBody); err != nil {
+		fmt.Println("error binding to request body: ", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	removedUsers, err := RemoveUsersFromTaskInDB(pg.Conn, requestBody.UserIDs, c.Param("tid"))
+
+	if err != nil {
+		panic(err)
+	}
+
+	c.JSON(http.StatusOK, removedUsers)
 }
