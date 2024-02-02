@@ -1,9 +1,8 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import AppNavigation from './AppStack';
+import AppNavigation from './AppNavigation';
 
 export default function Router() {
-  // TODO: If we ever introduce onboarding questionairs and stuff, it can probably be another stack on this page (<OnboardingNavigation />)
   return (
     <NavigationContainer>
       <AppNavigation />

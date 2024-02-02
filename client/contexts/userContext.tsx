@@ -8,6 +8,9 @@ type UserContextData = {
 
 const UserContext = createContext({} as UserContextData);
 
+// TODO: Add Group ID, and User Role to this.
+// TODO: Should maybe be a group prop and not inside user.
+// TODO: make name more generic
 export default function UserProvider({ children }: { children: any }) {
   const [user, setUser] = useState({} as User);
   const auth = getAuth();

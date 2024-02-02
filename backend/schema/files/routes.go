@@ -28,10 +28,13 @@ func GetFileGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 //	@summary		Upload a file
 //	@description	Upload a file to database and S3 bucket
 //	@tags			file
-//	@success		200
+//	@param			file_data	formData	file	true	"Body with file zip"
+//
+//	@success		200			{object}	models.File
+//	@failure		400
 //	@router			/files/upload [post]
 func (pg *PgModel) UploadFileRoute(c *gin.Context) {
-	// TODO: Ensure Swagger Knows about there bad request returns!!!
+	// TODO: Ensure Swagger Knows about the bad request returns!!!
 	var file models.File
 
 	if err := c.Bind(&file); err != nil {

@@ -6,7 +6,8 @@ import AppStackBottomTabNavigator from './BottomTabNavigator';
 
 export type AppScreenNames = ['BottomNavScreens', 'Landing', 'Login'];
 type AppStackParamList = Record<AppScreenNames[number], any>;
-export type StackNavigation = NavigationProp<AppStackParamList>;
+
+export type AppStackNavigation = NavigationProp<AppStackParamList>;
 const AppStack = createNativeStackNavigator<AppStackParamList>();
 
 export default function AppNavigation() {

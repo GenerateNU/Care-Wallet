@@ -3,13 +3,13 @@ import { View, TextInput, Button, Alert } from 'react-native';
 import { logIn } from '../services/auth/login';
 import { signUp } from '../services/auth/signup';
 import { useNavigation } from '@react-navigation/native';
-import { StackNavigation } from '../navigation/AppStack';
+import { AppStackNavigation } from '../navigation/AppNavigation';
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const navigation = useNavigation<StackNavigation>();
+  const navigation = useNavigation<AppStackNavigation>();
 
   const handleLogin = async () => {
     if (!email || !password) {
