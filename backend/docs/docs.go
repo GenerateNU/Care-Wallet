@@ -49,86 +49,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/tasks/{endDate}": {
-            "get": {
-                "description": "get all tasks by end date",
-                "tags": [
-                    "tasks"
-                ],
-                "summary": "Get All Tasks By End Date",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/models.Task"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/tasks/{gid}": {
-            "get": {
-                "description": "get all tasks by group id",
-                "tags": [
-                    "tasks"
-                ],
-                "summary": "Get All Tasks By Group ID",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/models.Task"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/tasks/{startDate}": {
-            "get": {
-                "description": "get all tasks by start date",
-                "tags": [
-                    "tasks"
-                ],
-                "summary": "Get All Tasks By Start Date",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/models.Task"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/tasks/{status}": {
-            "get": {
-                "description": "get all tasks by status",
-                "tags": [
-                    "tasks"
-                ],
-                "summary": "Get All Tasks By Status",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/models.Task"
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/tasks/{tid}/assignees": {
             "post": {
                 "description": "assign users to task",
@@ -168,46 +88,6 @@ const docTemplate = `{
                     }
                 }
             }
-        },
-        "/tasks/{type}": {
-            "get": {
-                "description": "get all tasks by type",
-                "tags": [
-                    "tasks"
-                ],
-                "summary": "Get All Tasks By Type",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/models.Task"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/tasks/{uid}": {
-            "get": {
-                "description": "get all tasks by created by",
-                "tags": [
-                    "tasks"
-                ],
-                "summary": "Get All Tasks By Created By",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/models.Task"
-                            }
-                        }
-                    }
-                }
-            }
         }
     },
     "definitions": {
@@ -218,51 +98,6 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "medication_name": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.Task": {
-            "type": "object",
-            "properties": {
-                "created_by": {
-                    "description": "User ID",
-                    "type": "string"
-                },
-                "created_date": {
-                    "type": "string"
-                },
-                "end_date": {
-                    "type": "string"
-                },
-                "group_id": {
-                    "type": "integer"
-                },
-                "notes": {
-                    "type": "string"
-                },
-                "repeating": {
-                    "type": "boolean"
-                },
-                "repeating_end_date": {
-                    "type": "string"
-                },
-                "repeating_interval": {
-                    "type": "string"
-                },
-                "start_date": {
-                    "type": "string"
-                },
-                "task_id": {
-                    "type": "integer"
-                },
-                "task_info": {
-                    "type": "string"
-                },
-                "task_status": {
-                    "type": "string"
-                },
-                "task_type": {
                     "type": "string"
                 }
             }
