@@ -10,59 +10,25 @@ import (
 )
 
 func GetTasksByQueryFromDB(pool *pgx.Conn, filterQuery TaskQuery) ([]models.Task, error) {
-	groupID := filterQuery.GroupID
-	createdBy := filterQuery.CreatedBy
-	taskStatus := filterQuery.TaskStatus
-	taskType := filterQuery.TaskType
-	startDate := filterQuery.StartDate
-	endDate := filterQuery.EndDate
-
+	query_fields := []string{
+		filterQuery.GroupID,
+		filterQuery.CreatedBy,
+		filterQuery.TaskStatus,
+		filterQuery.TaskType,
+		filterQuery.StartDate,
+		filterQuery.EndDate}
+	field_names := []string{"group_id", "created_by", "task_status", "task_type", "start_date", "end_date"}
 	var query string
 	var args []interface{}
 
-	if groupID != "" {
-		query += "group_id = $1"
-		args = append(args, groupID)
-	}
-
-	if createdBy != "" {
-		if query != "" {
-			query += " AND "
+	for i, field := range query_fields {
+		if field != "" {
+			if query != "" {
+				query += " AND "
+			}
+			query += fmt.Sprintf("%s = $%d", field_names[i], len(args)+1)
+			args = append(args, field)
 		}
-		query += fmt.Sprintf("created_by = $%d", len(args)+1)
-		args = append(args, createdBy)
-	}
-
-	if taskStatus != "" {
-		if query != "" {
-			query += " AND "
-		}
-		query += fmt.Sprintf("task_status = $%d", len(args)+1)
-		args = append(args, taskStatus)
-	}
-
-	if taskType != "" {
-		if query != "" {
-			query += " AND "
-		}
-		query += fmt.Sprintf("task_type = $%d", len(args)+1)
-		args = append(args, taskType)
-	}
-
-	if startDate != "" {
-		if query != "" {
-			query += " AND "
-		}
-		query += fmt.Sprintf("start_date = $%d", len(args)+1)
-		args = append(args, startDate)
-	}
-
-	if endDate != "" {
-		if query != "" {
-			query += " AND "
-		}
-		query += fmt.Sprintf("end_date = $%d", len(args)+1)
-		args = append(args, endDate)
 	}
 
 	rows, err := pool.Query("SELECT task_id, group_id, created_by, created_date, task_status, task_type FROM task WHERE "+query+";", args...)

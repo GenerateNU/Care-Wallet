@@ -42,9 +42,9 @@ func TestTaskGroup(t *testing.T) {
 	t.Run("TestGetFilteredTasks", func(t *testing.T) {
 		getRequest := TaskQuery{
 			GroupID:    "",
-			CreatedBy:  "user2",
-			TaskStatus: "INCOMPLETE",
-			TaskType:   "",
+			CreatedBy:  "",
+			TaskStatus: "",
+			TaskType:   "other",
 			StartDate:  "",
 			EndDate:    "",
 		}
@@ -74,14 +74,23 @@ func TestTaskGroup(t *testing.T) {
 
 		expectedTasks := []models.Task{
 			{
-				TaskID:      1,
-				GroupID:     1,
-				CreatedBy:   "user2",
-				CreatedDate: time.Date(2024, 2, 3, 10, 45, 0, 0, time.UTC),
+				TaskID:      2,
+				GroupID:     2,
+				CreatedBy:   "user3",
+				CreatedDate: time.Date(2024, 2, 20, 23, 59, 59, 0, time.UTC),
 				TaskStatus:  "INCOMPLETE",
-				TaskType:    "med_mgmt",
+				TaskType:    "other",
+			},
+			{
+				TaskID:      4,
+				GroupID:     4,
+				CreatedBy:   "user1",
+				CreatedDate: time.Date(2006, 1, 2, 15, 4, 5, 0, time.UTC),
+				TaskStatus:  "COMPLETE",
+				TaskType:    "other",
 			},
 		}
+
 		fmt.Println(expectedTasks)
 		fmt.Println(responseTasks)
 		if !reflect.DeepEqual(expectedTasks, responseTasks) {
