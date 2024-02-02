@@ -129,6 +129,26 @@ const docTemplate = `{
                 }
             }
         },
+        "/tasks/{tid}/assignees": {
+            "post": {
+                "description": "assign users to task",
+                "tags": [
+                    "tasks"
+                ],
+                "summary": "Assign Users To Task",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.TaskUser"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/tasks/{type}": {
             "get": {
                 "description": "get all tasks by type",
@@ -223,6 +243,17 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "task_type": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.TaskUser": {
+            "type": "object",
+            "properties": {
+                "taskID": {
+                    "type": "integer"
+                },
+                "userID": {
                     "type": "string"
                 }
             }

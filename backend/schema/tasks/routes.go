@@ -1,6 +1,7 @@
 package tasks
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -21,6 +22,7 @@ func TaskGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 		tasks.GET("/type/:type", c.GetTasksByType)
 		tasks.GET("/start/:startDate", c.GetTasksByStartDate)
 		tasks.GET("/end/:endDate", c.GetTasksByEndDate)
+		tasks.POST("/:tid/assignees", c.AssignUsersToTask)
 	}
 
 	return tasks
@@ -126,4 +128,32 @@ func (pg *PgModel) GetTasksByEndDate(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, tasks)
+}
+
+// AssignUsersToTask godoc
+//
+//	@summary		Assign Users To Task
+//	@description	assign users to task
+//	@tags			tasks
+//	@success		200	{array}	models.TaskUser
+//	@router			/tasks/{tid}/assignees [post]
+func (pg *PgModel) AssignUsersToTask(c *gin.Context) {
+	var requestBody struct {
+		UserIDs  []string `json:"userIDs"`
+		Assigner string   `json:"assigner"`
+	}
+
+	if err := c.BindJSON(&requestBody); err != nil {
+		fmt.Println("error binding to request body: ", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	taskUser, err := AssignUsersToTaskInDB(pg.Conn, requestBody.UserIDs, c.Param("tid"), requestBody.Assigner)
+
+	if err != nil {
+		panic(err)
+	}
+
+	c.JSON(http.StatusOK, taskUser)
 }

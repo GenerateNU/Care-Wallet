@@ -37,6 +37,13 @@ definitions:
       task_type:
         type: string
     type: object
+  models.TaskUser:
+    properties:
+      taskID:
+        type: integer
+      userID:
+        type: string
+    type: object
 info:
   contact: {}
   description: This is an API for the Care-Wallet App.
@@ -115,6 +122,19 @@ paths:
               $ref: '#/definitions/models.Task'
             type: array
       summary: Get All Tasks By Status
+      tags:
+      - tasks
+  /tasks/{tid}/assignees:
+    post:
+      description: assign users to task
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.TaskUser'
+            type: array
+      summary: Assign Users To Task
       tags:
       - tasks
   /tasks/{type}:

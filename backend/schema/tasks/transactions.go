@@ -2,8 +2,10 @@ package tasks
 
 import (
 	"carewallet/models"
+	"fmt"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/jackc/pgx"
 )
@@ -186,4 +188,30 @@ func GetTasksByEndDateFromDB(pool *pgx.Conn, endDate string) ([]models.Task, err
 	}
 
 	return results, nil
+}
+
+func AssignUsersToTaskInDB(pool *pgx.Conn, users []string, taskID string, assigner string) ([]models.TaskUser, error) {
+	task_id, err := strconv.Atoi(taskID)
+	if err != nil {
+		print(err, "error converting task ID to int")
+		return nil, err
+	}
+
+	var taskUsers []models.TaskUser
+
+	for _, user := range users {
+		print(task_id, " ", user)
+		_, err := pool.Exec("INSERT INTO task_assignees (task_id, user_id, assignment_status, assigned_by, assigned_date) VALUES ($1, $2, $3, $4, $5);", task_id, user, "NOTIFIED", assigner, time.Now())
+
+		if err != nil {
+			print(err, "error inserting users into task_user")
+
+			return nil, err
+		}
+
+		taskUsers = append(taskUsers, models.TaskUser{TaskID: task_id, UserID: user})
+		fmt.Println(taskUsers)
+	}
+
+	return taskUsers, nil
 }

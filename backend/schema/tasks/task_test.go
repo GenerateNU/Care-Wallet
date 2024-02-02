@@ -1,6 +1,7 @@
 package tasks
 
 import (
+	"bytes"
 	"carewallet/configuration"
 	"carewallet/db"
 	"carewallet/models"
@@ -17,7 +18,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func TestGetTasks(t *testing.T) {
+func TestTaskGroup(t *testing.T) {
 	config, err := configuration.GetConfiguration()
 
 	if err != nil {
@@ -247,6 +248,59 @@ func TestGetTasks(t *testing.T) {
 		}
 
 		if !reflect.DeepEqual(expectedTasks, responseTasks) {
+			t.Error("Result was not correct")
+		}
+	})
+
+	t.Run("TestAssignUsersToTask", func(t *testing.T) {
+		type AssignRequest struct {
+			UserIDs  []string `json:"userIDs"`
+			Assigner string   `json:"assigner"`
+		}
+
+		assignRequest := AssignRequest{
+			UserIDs:  []string{"user3", "user4"},
+			Assigner: "user3",
+		}
+
+		userIdsJSON, err := json.Marshal(assignRequest)
+		if err != nil {
+			t.Error("Failed to marshal userIds to JSON")
+		}
+
+		fmt.Println("userIdsJSON: ", string(userIdsJSON))
+
+		// Create a request with the userIds JSON
+		w := httptest.NewRecorder()
+		req, _ := http.NewRequest("POST", "/tasks/1/assignees", bytes.NewBuffer(userIdsJSON))
+		router.ServeHTTP(w, req)
+
+		if http.StatusOK != w.Code {
+			t.Error("Failed to assign users to task.")
+		}
+
+		var responseTaskUsers []models.TaskUser
+		err = json.Unmarshal(w.Body.Bytes(), &responseTaskUsers)
+
+		if err != nil {
+			t.Error("Failed to unmarshal json")
+		}
+
+		expectedTaskUsers := []models.TaskUser{
+			{
+				TaskID: 1,
+				UserID: "user3",
+			},
+			{
+				TaskID: 1,
+				UserID: "user4",
+			},
+		}
+
+		fmt.Println("responseTaskUsers: ", responseTaskUsers)
+		fmt.Println("expectedTaskUsers: ", expectedTaskUsers)
+
+		if !reflect.DeepEqual(expectedTaskUsers, responseTaskUsers) {
 			t.Error("Result was not correct")
 		}
 	})
