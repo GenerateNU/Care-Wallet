@@ -21,5 +21,3 @@ vendor
 *node_modules
 
 *.env
-
-/backend/docs/*
