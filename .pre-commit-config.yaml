@@ -14,9 +14,9 @@ repos:
     hooks:
       - id: build
         language: python
-        name: Run Build
+        name: Parse Swag Docs
         require_serial: true
-        entry: bash -c 'task build'
+        entry: bash -c 'cd backend && swag i --parseDependency'
   - repo: local
     hooks:
       - id: format
@@ -24,7 +24,6 @@ repos:
         name: Run Format
         require_serial: true
         entry: bash -c 'task format'
-
   - repo: https://github.com/commitizen-tools/commitizen
     rev: v3.13.0
     hooks:

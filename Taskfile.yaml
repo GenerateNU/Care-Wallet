@@ -7,7 +7,6 @@ tasks:
       npm install
       cd ../backend
       go mod tidy
-      swag i --parseDependency
 
   format:
     - |
