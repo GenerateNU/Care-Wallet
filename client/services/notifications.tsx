@@ -3,7 +3,7 @@ import { Platform } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import * as Device from 'expo-device';
 import * as Notification from 'expo-notifications';
-import * as Constants from 'expo-constants';
+import Constants from 'expo-constants';
 
 export async function registerForPushNotificationsAsync() {
   // checks that this is a physical device
@@ -29,13 +29,16 @@ export async function registerForPushNotificationsAsync() {
     });
   }
 
-  // const projectId = Constants.default.expoConfig?.extra?.eas.projectId;
+  const carewalletProjectId = Constants.easConfig?.projectId;
   // Constants.default.easConfig?.projectId;
+
+  // const appConfig = require('../app.json');
+  // const projectId = appConfig.expo.extra.eas.projectId;
 
   // gets push notification token
   const token = (
     await Notification.getExpoPushTokenAsync({
-      projectId: Constants.default.easConfig?.projectId
+      projectId: carewalletProjectId
     })
   ).data;
   console.log('ExpoPushToken: ', token);
@@ -49,6 +52,30 @@ export async function schedulePushNotification(
   repeat: boolean,
   date: Date
 ) {
+  let timeObject = new Date();
+  const milliseconds = 5 * 1000; // 10 seconds = 10000 milliseconds
+  timeObject = new Date(timeObject.getTime() + milliseconds);
+  // schedules notification for each weekday selected
+  const id = await Notification.scheduleNotificationAsync({
+    content: {
+      title: title,
+      body: body,
+      data: {}
+    },
+    trigger: {
+      // WeeklyTriggerInput
+      date: new Date().setUTCSeconds(date.getUTCSeconds() + 5)
+    }
+  });
+
+  console.log('Notification scheduled for: ', timeObject);
+  console.log('Notification id: ', id);
+}
+
+export async function scheduleInstantPushNotification(
+  title: string,
+  body: string
+) {
   // schedules notification for each weekday selected
   Notification.scheduleNotificationAsync({
     content: {
@@ -57,10 +84,7 @@ export async function schedulePushNotification(
       data: {}
     },
     trigger: {
-      // WeeklyTriggerInput
-      hour: date.getHours(),
-      minute: date.getMinutes(),
-      repeats: repeat
+      seconds: 2
     }
   });
 }
