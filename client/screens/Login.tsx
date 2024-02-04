@@ -22,7 +22,7 @@ const LoginPage: React.FC = () => {
     } else {
       Alert.alert('Login Success', 'Welcome back!');
       // console.log('result: ', result);
-      navigation.navigate('BottomNavScreens');
+      navigation.navigate('MainNavScreens');
     }
   };
 
@@ -37,7 +37,7 @@ const LoginPage: React.FC = () => {
     } else {
       Alert.alert('Signup Success', 'Welcome to the app!');
       // console.log('result: ', result);
-      navigation.navigate('BottomNavScreens');
+      navigation.navigate('MainNavScreens');
     }
   };
 

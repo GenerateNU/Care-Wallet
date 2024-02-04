@@ -1,57 +1,34 @@
+import { styled } from 'nativewind';
 import React from 'react';
-import {
-  Modal,
-  Portal,
-  Text,
-  Button,
-  Provider as PaperProvider
-} from 'react-native-paper';
-import { Medication } from '../types/medication';
+import { Modal, Portal } from 'react-native-paper';
 
 interface PopupModalProps {
-  med: Medication[];
-  onPress: () => void;
-  buttonStyle?: object;
-  modalStyle?: object;
-  modalContent?: React.ReactNode;
+  isVisible: boolean;
+  setVisible: (val: boolean) => void;
+  children?: JSX.Element[] | JSX.Element;
 }
 
-const PopupModal: React.FC<PopupModalProps> = ({
-  med,
-  onPress,
-  buttonStyle,
-  modalStyle,
-  modalContent
-}) => {
-  const [visible, setVisible] = React.useState(false);
+// rnp requires contentcontainerstyle to style the component, this will integrate native-wind into that
+const StyledModal = styled(Modal, {
+  props: {
+    contentContainerStyle: true
+  }
+});
 
-  const showModal = () => setVisible(true);
-  const hideModal = () => setVisible(false);
-  const containerStyle = {
-    backgroundColor: 'white',
-    padding: 20,
-    ...modalStyle
-  };
-
+export default function PopupModal({
+  children,
+  isVisible,
+  setVisible
+}: PopupModalProps) {
   return (
-    <PaperProvider>
-      <Portal>
-        <Modal
-          visible={visible}
-          onDismiss={hideModal}
-          contentContainerStyle={containerStyle}
-        >
-          {modalContent || <Text>Default Modal Content</Text>}
-        </Modal>
-      </Portal>
-      <Button
-        style={{ marginTop: 30, ...buttonStyle, width: 200, maxHeight: 200 }}
-        onPress={showModal}
+    <Portal>
+      <StyledModal
+        visible={isVisible}
+        onDismiss={() => setVisible(false)}
+        contentContainerStyle="border-10 rounded-3xl border-white w-[90%] h-[60%] self-center bg-white"
       >
-        {med[0].medication_name}
-      </Button>
-    </PaperProvider>
+        {children}
+      </StyledModal>
+    </Portal>
   );
-};
-
-export default PopupModal;
+}
