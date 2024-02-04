@@ -34,3 +34,25 @@ async function registerForPushNotificationsAsync() {
 
   return token;
 }
+
+export async function schedulePushNotification(
+  title: string,
+  body: string,
+  repeat: boolean,
+  date: Date
+) {
+  // schedules notification for each weekday selected
+  Notification.scheduleNotificationAsync({
+    content: {
+      title: title,
+      body: body,
+      data: {}
+    },
+    trigger: {
+      // WeeklyTriggerInput
+      hour: date.getHours(),
+      minute: date.getMinutes(),
+      repeats: repeat
+    }
+  });
+}
