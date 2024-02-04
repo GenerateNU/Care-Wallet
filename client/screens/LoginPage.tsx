@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Alert, Pressable, Text, TextInput, View } from 'react-native';
 
 import { onAuthStateChanged } from '@firebase/auth';
@@ -7,13 +7,25 @@ import { useNavigation } from '@react-navigation/native';
 import { auth } from '../firebase.config';
 import { AppStackNavigation } from '../navigation/types';
 import { useAuth } from '../services/auth';
+import Constants from 'expo-constants';
+import {
+  registerForPushNotificationsAsync,
+} from '../services/notifications';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { logInMutation, signUpMutation } = useAuth();
-
+  const [expoPushToken, setExpoPushToken] = useState('');
   const navigation = useNavigation<AppStackNavigation>();
+
+  useEffect(() => {
+    console.log(Constants.easConfig?.projectId); // --> undefined
+    console.log(Constants.expoConfig?.extra?.eas.projectId); // --> my project id
+
+    registerForPushNotificationsAsync().then((token) =>
+      setExpoPushToken(token!)
+    );, []);
 
   onAuthStateChanged(auth, (user) => {
     if (user) {

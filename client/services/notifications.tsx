@@ -3,8 +3,9 @@ import { Platform } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import * as Device from 'expo-device';
 import * as Notification from 'expo-notifications';
+import * as Constants from 'expo-constants';
 
-async function registerForPushNotificationsAsync() {
+export async function registerForPushNotificationsAsync() {
   // checks that this is a physical device
   if (!Device.isDevice) {
     alert(
@@ -28,8 +29,15 @@ async function registerForPushNotificationsAsync() {
     });
   }
 
+  // const projectId = Constants.default.expoConfig?.extra?.eas.projectId;
+  // Constants.default.easConfig?.projectId;
+
   // gets push notification token
-  const token = (await Notification.getExpoPushTokenAsync()).data;
+  const token = (
+    await Notification.getExpoPushTokenAsync({
+      projectId: Constants.default.easConfig?.projectId
+    })
+  ).data;
   console.log('ExpoPushToken: ', token);
 
   return token;
