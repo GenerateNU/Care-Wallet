@@ -1,19 +1,15 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Alert, StyleSheet } from 'react-native';
+import { View, TextInput, Button, Alert } from 'react-native';
 import { logIn } from '../services/auth/login';
 import { signUp } from '../services/auth/signup';
-import {
-  useNavigation,
-  StackActions,
-  useRoute
-} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
+import { AppStackNavigation } from '../navigation/AppNavigation';
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const navigation = useNavigation();
-  const route = useRoute();
+  const navigation = useNavigation<AppStackNavigation>();
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -26,7 +22,7 @@ const LoginPage: React.FC = () => {
     } else {
       Alert.alert('Login Success', 'Welcome back!');
       // console.log('result: ', result);
-      navigation.navigate('BottomNav');
+      navigation.navigate('MainNavScreens');
     }
   };
 
@@ -41,7 +37,7 @@ const LoginPage: React.FC = () => {
     } else {
       Alert.alert('Signup Success', 'Welcome to the app!');
       // console.log('result: ', result);
-      navigation.navigate('BottomNav');
+      navigation.navigate('MainNavScreens');
     }
   };
 

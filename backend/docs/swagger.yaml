@@ -1,5 +1,22 @@
 basePath: /
 definitions:
+  models.File:
+    properties:
+      file_id:
+        type: integer
+      file_name:
+        type: string
+      file_size:
+        type: integer
+      group_id:
+        type: integer
+      task_id:
+        type: integer
+      upload_by:
+        type: integer
+      upload_date:
+        type: string
+    type: object
   models.Medication:
     properties:
       medication_id:
@@ -23,9 +40,19 @@ paths:
   /files/upload:
     post:
       description: Upload a file to database and S3 bucket
+      parameters:
+      - description: Body with file zip
+        in: formData
+        name: file_data
+        required: true
+        type: file
       responses:
         '200':
           description: OK
+          schema:
+            $ref: '#/definitions/models.File'
+        "400":
+          description: Bad Request
       summary: Upload a file
       tags:
         - file
