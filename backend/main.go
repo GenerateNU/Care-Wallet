@@ -21,6 +21,7 @@ import (
 //	@description	This is an API for the Care-Wallet App.
 //	@BasePath		/
 func main() {
+	enviroment := configuration.GetEnviroment()
 	config, err := configuration.GetConfiguration()
 
 	if err != nil {
@@ -40,7 +41,10 @@ func main() {
 		files.GetFileGroup(v1, &files.PgModel{Conn: conn})
 	}
 
-	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	if enviroment == configuration.EnvironmentLocal {
+		r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	}
+
 	err = r.Run(":8080")
 
 	if err != nil {

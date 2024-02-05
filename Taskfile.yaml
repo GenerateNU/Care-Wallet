@@ -19,6 +19,11 @@ tasks:
       go vet ./...
       swag f
 
+  start-dev:
+    - |
+      echo -e "Starting Backend Live-Reload..."
+      nodemon -e go --ignore 'backend/docs/**' --signal SIGTERM --exec "task start-backend"
+
   start-backend:
     - |
       cd backend
