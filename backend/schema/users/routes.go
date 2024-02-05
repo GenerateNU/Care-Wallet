@@ -19,13 +19,6 @@ func GetUsersGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 	return users
 }
 
-// GetGroupIDByUID godoc
-//
-//	@summary		Get a groupID from UID
-//	@description	get a users groupID from their UID
-//	@tags			users
-//	@success		200	{array}	models.Medication
-//	@router			users/get-group/:uid [get]
 func (pg *PgModel) GetGroupIDByUID(c *gin.Context) {
 	uid := c.Param("uid")
 	groupID, err := GetGroupIDByUID(pg.Conn, uid)

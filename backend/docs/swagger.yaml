@@ -1,5 +1,14 @@
 basePath: /
 definitions:
+  models.CareGroup:
+    properties:
+      date_created:
+        type: string
+      group_id:
+        type: integer
+      group_name:
+        type: string
+    type: object
   models.Medication:
     properties:
       medication_id:
@@ -13,6 +22,19 @@ info:
   title: Care-Wallet API
   version: "1.0"
 paths:
+  /care-groups/:groupName:
+    post:
+      description: Creates a new care group with the provided group name.
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.CareGroup'
+            type: array
+      summary: Creates a care group
+      tags:
+      - groups
   /files/upload:
     post:
       description: Upload a file to database and S3 bucket

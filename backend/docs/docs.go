@@ -15,6 +15,26 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/care-groups/:groupName": {
+            "post": {
+                "description": "Creates a new care group with the provided group name.",
+                "tags": [
+                    "groups"
+                ],
+                "summary": "Creates a care group",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.CareGroup"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/files/upload": {
             "post": {
                 "description": "Upload a file to database and S3 bucket",
@@ -51,6 +71,20 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "models.CareGroup": {
+            "type": "object",
+            "properties": {
+                "date_created": {
+                    "type": "string"
+                },
+                "group_id": {
+                    "type": "integer"
+                },
+                "group_name": {
+                    "type": "string"
+                }
+            }
+        },
         "models.Medication": {
             "type": "object",
             "properties": {
