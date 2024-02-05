@@ -41,13 +41,7 @@ func GetConfiguration() (Settings, error) {
 
 	var settings Settings
 
-	var environment Environment
-	if env := os.Getenv("GITHUB_ACTIONS"); env != "" {
-		environment = EnvironmentGitHub
-	} else {
-		environment = EnvironmentLocal
-	}
-
+	environment := GetEnviroment()
 	v.SetConfigName(string(environment))
 
 	if err := v.ReadInConfig(); err != nil {
@@ -59,4 +53,15 @@ func GetConfiguration() (Settings, error) {
 	}
 
 	return settings, nil
+}
+
+func GetEnviroment() Environment {
+	var environment Environment
+	if env := os.Getenv("GITHUB_ACTIONS"); env != "" {
+		environment = EnvironmentGitHub
+	} else {
+		environment = EnvironmentLocal
+	}
+
+	return environment
 }
