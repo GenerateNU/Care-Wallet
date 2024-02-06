@@ -87,6 +87,38 @@
                     }
                 }
             }
+        },
+        "/users/getgroup/{uid}": {
+            "get": {
+                "description": "get the group id from the user id",
+                "tags": [
+                    "group"
+                ],
+                "summary": "get groupid",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "user id",
+                        "name": "uid",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {

@@ -6,8 +6,8 @@ import (
 	"github.com/jackc/pgx"
 )
 
-// GetGroupIDByUID returns the groupID of a user given their UID
-func GetGroupIDByUID(pool *pgx.Conn, uid string) (int, error) {
+// GetGroupIDByUIDFromDB returns the groupID of a user given their UID
+func GetGroupIDByUIDFromDB(pool *pgx.Conn, uid string) (int, error) {
 	var groupID int
 	err := pool.QueryRow("SELECT group_id FROM users WHERE uid = $1", uid).Scan(&groupID)
 

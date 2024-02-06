@@ -74,4 +74,25 @@ paths:
       summary: Get All Meds
       tags:
       - medications
+  /users/getgroup/{uid}:
+    get:
+      description: get the group id from the user id
+      parameters:
+      - description: user id
+        in: path
+        name: uid
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: get groupid
+      tags:
+      - group
 swagger: "2.0"
