@@ -64,6 +64,43 @@ const docTemplate = `{
                 }
             }
         },
+        "/tasks/assigned": {
+            "get": {
+                "description": "get tasks assigned to given users",
+                "tags": [
+                    "tasks"
+                ],
+                "summary": "Get Tasks Assigned To Given Users",
+                "parameters": [
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv",
+                        "name": "userIDs",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Task"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/tasks/filtered": {
             "get": {
                 "description": "get filtered tasks",
@@ -122,7 +159,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/tasks/{tid}/assignees": {
+        "/tasks/{tid}/assign": {
             "post": {
                 "description": "assign users to task",
                 "tags": [

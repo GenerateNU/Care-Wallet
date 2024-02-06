@@ -51,12 +51,12 @@ func TestTaskGroup(t *testing.T) {
 
 		w := httptest.NewRecorder()
 		query := url.Values{}
-		query.Set("GroupID", getRequest.GroupID)
-		query.Set("CreatedBy", getRequest.CreatedBy)
-		query.Set("TaskStatus", getRequest.TaskStatus)
-		query.Set("TaskType", getRequest.TaskType)
-		query.Set("StartDate", getRequest.StartDate)
-		query.Set("EndDate", getRequest.EndDate)
+		query.Set("groupID", getRequest.GroupID)
+		query.Set("createdBy", getRequest.CreatedBy)
+		query.Set("taskStatus", getRequest.TaskStatus)
+		query.Set("taskType", getRequest.TaskType)
+		query.Set("startDate", getRequest.StartDate)
+		query.Set("endDate", getRequest.EndDate)
 
 		req, _ := http.NewRequest("GET", "/tasks/filtered?"+query.Encode(), nil)
 		router.ServeHTTP(w, req)
@@ -96,73 +96,26 @@ func TestTaskGroup(t *testing.T) {
 		}
 	})
 
-	t.Run("TestAssignUsersToTask", func(t *testing.T) {
-		type AssignRequest struct {
-			UserIDs  []string `json:"userIDs"`
-			Assigner string   `json:"assigner"`
-		}
-
-		assignRequest := AssignRequest{
-			UserIDs:  []string{"user3"},
-			Assigner: "user3",
-		}
-
-		userIdsJSON, err := json.Marshal(assignRequest)
-		if err != nil {
-			t.Error("Failed to marshal userIds to JSON")
-		}
-
-		w := httptest.NewRecorder()
-		req, _ := http.NewRequest("POST", "/tasks/4/assign", bytes.NewBuffer(userIdsJSON))
-		router.ServeHTTP(w, req)
-
-		if http.StatusOK != w.Code {
-			t.Error("Failed to assign users to task.")
-		}
-
-		var responseTaskUsers []models.TaskUser
-		err = json.Unmarshal(w.Body.Bytes(), &responseTaskUsers)
-
-		if err != nil {
-			t.Error("Failed to unmarshal json")
-		}
-
-		expectedTaskUsers := []models.TaskUser{
-			{
-				TaskID: 4,
-				UserID: "user3",
-			},
-		}
-
-		if !reflect.DeepEqual(expectedTaskUsers, responseTaskUsers) {
-			t.Error("Result was not correct")
-		}
-	})
-
 	t.Run("TestRemoveUsersFromTask", func(t *testing.T) {
-		type RemoveRequest struct {
-			UserIDs []string `json:"userIDs"`
+		var removeRequest = Removal{
+			UserIDs: []string{"user1"},
 		}
 
-		removeRequest := RemoveRequest{
-			UserIDs: []string{"user2"},
-		}
-
-		userIdsJSON, err := json.Marshal(removeRequest)
+		requestJSON, err := json.Marshal(removeRequest)
 		if err != nil {
-			t.Error("Failed to marshal userIds to JSON")
+			t.Error("Failed to marshal remove request to JSON")
 		}
 
 		w := httptest.NewRecorder()
-		req, _ := http.NewRequest("DELETE", "/tasks/4/remove", bytes.NewBuffer(userIdsJSON))
+		req, _ := http.NewRequest("DELETE", "/tasks/1/remove", bytes.NewBuffer(requestJSON))
 		router.ServeHTTP(w, req)
 
 		if http.StatusOK != w.Code {
 			t.Error("Failed to remove users from task.")
 		}
 
-		var responseTaskUsers []models.TaskUser
-		err = json.Unmarshal(w.Body.Bytes(), &responseTaskUsers)
+		var removeResponse []models.TaskUser
+		err = json.Unmarshal(w.Body.Bytes(), &removeResponse)
 
 		if err != nil {
 			t.Error("Failed to unmarshal json")
@@ -170,14 +123,87 @@ func TestTaskGroup(t *testing.T) {
 
 		expectedTaskUsers := []models.TaskUser{
 			{
-				TaskID: 4,
-				UserID: "user2",
+				TaskID: 1,
+				UserID: "user1",
 			},
 		}
 
-		if !reflect.DeepEqual(expectedTaskUsers, responseTaskUsers) {
+		if !reflect.DeepEqual(expectedTaskUsers, removeResponse) {
 			t.Error("Result was not correct")
 		}
 	})
 
+	t.Run("TestAssignUsersToTask", func(t *testing.T) {
+		assignRequest := Assignment{
+			UserIDs:  []string{"user4"},
+			Assigner: "user1",
+		}
+
+		requestJSON, err := json.Marshal(assignRequest)
+		if err != nil {
+			t.Error("Failed to marshal assign request to JSON")
+		}
+
+		w := httptest.NewRecorder()
+		req, _ := http.NewRequest("POST", "/tasks/2/assign", bytes.NewBuffer(requestJSON))
+		router.ServeHTTP(w, req)
+
+		if http.StatusOK != w.Code {
+			t.Error("Failed to assign users to task.")
+		}
+
+		var assignResponse []models.TaskUser
+		err = json.Unmarshal(w.Body.Bytes(), &assignResponse)
+
+		if err != nil {
+			t.Error("Failed to unmarshal json")
+		}
+
+		expectedTaskUsers := []models.TaskUser{
+			{
+				TaskID: 2,
+				UserID: "user4",
+			},
+		}
+
+		if !reflect.DeepEqual(expectedTaskUsers, assignResponse) {
+			t.Error("Result was not correct")
+		}
+	})
+
+	t.Run("TestGetTasksByAssigned", func(t *testing.T) {
+		w := httptest.NewRecorder()
+		req, _ := http.NewRequest("GET", "/tasks/assigned?userIDs=user2", nil)
+		router.ServeHTTP(w, req)
+
+		if http.StatusOK != w.Code {
+			t.Error("Failed to retrieve tasks by assigned user.")
+		}
+
+		var responseTasks []models.Task
+		err = json.Unmarshal(w.Body.Bytes(), &responseTasks)
+
+		if err != nil {
+			t.Error("Failed to unmarshal json")
+		}
+
+		note := "Refill water pitcher"
+		expectedTasks := []models.Task{
+			{
+				TaskID:      4,
+				GroupID:     4,
+				CreatedBy:   "user1",
+				CreatedDate: time.Date(2006, 1, 2, 15, 4, 5, 0, time.UTC),
+				Notes:       &note,
+				TaskStatus:  "COMPLETE",
+				TaskType:    "other",
+			},
+		}
+
+		fmt.Println("Expected: ", expectedTasks)
+		fmt.Println("Response: ", responseTasks)
+		if !reflect.DeepEqual(expectedTasks, responseTasks) {
+			t.Error("Result was not correct")
+		}
+	})
 }

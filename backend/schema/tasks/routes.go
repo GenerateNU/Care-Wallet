@@ -1,7 +1,9 @@
 package tasks
 
 import (
+	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx"
@@ -18,6 +20,7 @@ func TaskGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 		tasks.GET("/filtered", c.GetFilteredTasks)
 		tasks.POST("/:tid/assign", c.AssignUsersToTask)
 		tasks.DELETE("/:tid/remove", c.RemoveUsersFromTask)
+		tasks.GET("/assigned", c.GetTasksByAssignedUsers)
 	}
 
 	return tasks
@@ -45,12 +48,12 @@ type TaskQuery struct {
 //	@router			/tasks/filtered [get]
 func (pg *PgModel) GetFilteredTasks(c *gin.Context) {
 	filterQuery := TaskQuery{
-		GroupID:    c.Query("GroupID"),
-		CreatedBy:  c.Query("CreatedBy"),
-		TaskStatus: c.Query("TaskStatus"),
-		TaskType:   c.Query("TaskType"),
-		StartDate:  c.Query("StartDate"),
-		EndDate:    c.Query("EndDate"),
+		GroupID:    c.Query("groupID"),
+		CreatedBy:  c.Query("createdBy"),
+		TaskStatus: c.Query("taskStatus"),
+		TaskType:   c.Query("taskType"),
+		StartDate:  c.Query("startDate"),
+		EndDate:    c.Query("endDate"),
 	}
 
 	tasks, err := GetTasksByQueryFromDB(pg.Conn, filterQuery)
@@ -79,11 +82,12 @@ type Assignment struct {
 //
 //	@success		200	{array}		models.TaskUser
 //	@failure		400	{object}	string
-//	@router			/tasks/{tid}/assignees [post]
+//	@router			/tasks/{tid}/assign [post]
 func (pg *PgModel) AssignUsersToTask(c *gin.Context) {
 	var requestBody Assignment
 
 	if err := c.BindJSON(&requestBody); err != nil {
+		print(err.Error())
 		c.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
@@ -130,4 +134,36 @@ func (pg *PgModel) RemoveUsersFromTask(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, removedUsers)
+}
+
+type AssignedQuery struct {
+	UserIDs []string `query:"userIDs"`
+}
+
+// GetTasksByAssignedUsers godoc
+//
+//	@summary		Get Tasks Assigned To Given Users
+//	@description	get tasks assigned to given users
+//	@tags			tasks
+//
+//	@param			_	query		AssignedQuery	true	"Users to return tasks for"
+//
+//	@success		200	{array}		models.Task
+//	@failure		400	{object}	string
+//	@router			/tasks/assigned [get]
+func (pg *PgModel) GetTasksByAssignedUsers(c *gin.Context) {
+	userIDs := c.Query("userIDs")
+	assignedQuery := AssignedQuery{
+		UserIDs: strings.Split(userIDs, ","),
+	}
+	fmt.Println(assignedQuery.UserIDs)
+
+	tasks, err := GetTasksByAssignedFromDB(pg.Conn, assignedQuery.UserIDs)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, tasks)
 }

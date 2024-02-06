@@ -6,6 +6,7 @@ import (
 	_ "carewallet/docs"
 	"carewallet/schema/files"
 	"carewallet/schema/medication"
+	"carewallet/schema/tasks"
 	"fmt"
 	"os"
 
@@ -39,6 +40,7 @@ func main() {
 	{
 		medication.GetMedicationGroup(v1, &medication.PgModel{Conn: conn})
 		files.GetFileGroup(v1, &files.PgModel{Conn: conn})
+		tasks.TaskGroup(v1, &tasks.PgModel{Conn: conn})
 	}
 
 	if enviroment == configuration.EnvironmentLocal {

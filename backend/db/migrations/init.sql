@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS task (
     start_date timestamp,
     end_date timestamp,
     notes varchar,
-    repeating BOOLEAN,
+    repeating BOOLEAN DEFAULT FALSE,
     repeating_interval varchar,
     repeating_end_date timestamp,
     task_status task_status NOT NULL,

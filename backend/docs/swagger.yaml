@@ -115,7 +115,7 @@ paths:
       summary: Get All Meds
       tags:
       - medications
-  /tasks/{tid}/assignees:
+  /tasks/{tid}/assign:
     post:
       description: assign users to task
       parameters:
@@ -171,6 +171,30 @@ paths:
           schema:
             type: string
       summary: Remove Users From Task
+      tags:
+      - tasks
+  /tasks/assigned:
+    get:
+      description: get tasks assigned to given users
+      parameters:
+      - collectionFormat: csv
+        in: query
+        items:
+          type: string
+        name: userIDs
+        type: array
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Task'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Get Tasks Assigned To Given Users
       tags:
       - tasks
   /tasks/filtered:
