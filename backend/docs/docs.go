@@ -64,6 +64,64 @@ const docTemplate = `{
                 }
             }
         },
+        "/tasks/filtered": {
+            "get": {
+                "description": "get filtered tasks",
+                "tags": [
+                    "tasks"
+                ],
+                "summary": "Get Filtered Tasks",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "name": "createdBy",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "endDate",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "groupID",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "startDate",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "taskStatus",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "taskType",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Task"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/tasks/{tid}/assignees": {
             "post": {
                 "description": "assign users to task",
@@ -71,6 +129,24 @@ const docTemplate = `{
                     "tasks"
                 ],
                 "summary": "Assign Users To Task",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Task ID to assign users to",
+                        "name": "tid",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Users to assign to task and assignee",
+                        "name": "_",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/tasks.Assignment"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -79,6 +155,12 @@ const docTemplate = `{
                             "items": {
                                 "$ref": "#/definitions/models.TaskUser"
                             }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 }
@@ -91,6 +173,24 @@ const docTemplate = `{
                     "tasks"
                 ],
                 "summary": "Remove Users From Task",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Task ID to remove users from",
+                        "name": "tid",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Users to remove from task",
+                        "name": "_",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/tasks.Removal"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -99,6 +199,12 @@ const docTemplate = `{
                             "items": {
                                 "$ref": "#/definitions/models.TaskUser"
                             }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 }
@@ -143,6 +249,51 @@ const docTemplate = `{
                 }
             }
         },
+        "models.Task": {
+            "type": "object",
+            "properties": {
+                "created_by": {
+                    "description": "User ID",
+                    "type": "string"
+                },
+                "created_date": {
+                    "type": "string"
+                },
+                "end_date": {
+                    "type": "string"
+                },
+                "group_id": {
+                    "type": "integer"
+                },
+                "notes": {
+                    "type": "string"
+                },
+                "repeating": {
+                    "type": "boolean"
+                },
+                "repeating_end_date": {
+                    "type": "string"
+                },
+                "repeating_interval": {
+                    "type": "string"
+                },
+                "start_date": {
+                    "type": "string"
+                },
+                "task_id": {
+                    "type": "integer"
+                },
+                "task_info": {
+                    "type": "string"
+                },
+                "task_status": {
+                    "type": "string"
+                },
+                "task_type": {
+                    "type": "string"
+                }
+            }
+        },
         "models.TaskUser": {
             "type": "object",
             "properties": {
@@ -151,6 +302,31 @@ const docTemplate = `{
                 },
                 "userID": {
                     "type": "string"
+                }
+            }
+        },
+        "tasks.Assignment": {
+            "type": "object",
+            "properties": {
+                "assigner": {
+                    "type": "string"
+                },
+                "userIDs": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "tasks.Removal": {
+            "type": "object",
+            "properties": {
+                "userIDs": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 }
             }
         }

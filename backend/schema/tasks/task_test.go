@@ -39,40 +39,16 @@ func TestTaskGroup(t *testing.T) {
 		TaskGroup(v1, &controller)
 	}
 
-	t.Run("TestGetTasksByGroupId", func(t *testing.T) {
-		w := httptest.NewRecorder()
-		req, _ := http.NewRequest("GET", "/tasks/group/4", nil)
-		router.ServeHTTP(w, req)
-
-		if http.StatusOK != w.Code {
-			t.Error("Failed to retrieve tasks by group id.")
+	t.Run("TestGetFilteredTasks", func(t *testing.T) {
+		getRequest := TaskQuery{
+			GroupID:    "",
+			CreatedBy:  "",
+			TaskStatus: "",
+			TaskType:   "other",
+			StartDate:  "",
+			EndDate:    "",
 		}
 
-		var responseTasks []models.Task
-		err := json.Unmarshal(w.Body.Bytes(), &responseTasks)
-
-		if err != nil {
-			t.Error("Failed to unmarshal json")
-		}
-
-		createdDate, _ := time.Parse("2006-01-02 15:04:05", "2006-01-02 15:04:05")
-		expectedTasks := []models.Task{
-			{
-				TaskID:      4,
-				GroupID:     4,
-				CreatedBy:   "user1",
-				CreatedDate: createdDate,
-				TaskStatus:  "COMPLETE",
-				TaskType:    "other",
-			},
-		}
-
-		if !reflect.DeepEqual(expectedTasks, responseTasks) {
-			t.Error("Result was not correct")
-		}
-	})
-
-	t.Run("TestGetTasksByCreatedBy", func(t *testing.T) {
 		w := httptest.NewRecorder()
 		query := url.Values{}
 		query.Set("GroupID", getRequest.GroupID)
@@ -115,8 +91,6 @@ func TestTaskGroup(t *testing.T) {
 			},
 		}
 
-		fmt.Println(expectedTasks)
-		fmt.Println(responseTasks)
 		if !reflect.DeepEqual(expectedTasks, responseTasks) {
 			t.Error("Result was not correct")
 		}
@@ -138,7 +112,6 @@ func TestTaskGroup(t *testing.T) {
 			t.Error("Failed to marshal userIds to JSON")
 		}
 
-		// Create a request with the userIds JSON
 		w := httptest.NewRecorder()
 		req, _ := http.NewRequest("POST", "/tasks/4/assign", bytes.NewBuffer(userIdsJSON))
 		router.ServeHTTP(w, req)
@@ -161,9 +134,6 @@ func TestTaskGroup(t *testing.T) {
 			},
 		}
 
-		fmt.Println("responseTaskUsers: ", responseTaskUsers)
-		fmt.Println("expectedTaskUsers: ", expectedTaskUsers)
-
 		if !reflect.DeepEqual(expectedTaskUsers, responseTaskUsers) {
 			t.Error("Result was not correct")
 		}
@@ -183,7 +153,6 @@ func TestTaskGroup(t *testing.T) {
 			t.Error("Failed to marshal userIds to JSON")
 		}
 
-		// Create a request with the userIds JSON
 		w := httptest.NewRecorder()
 		req, _ := http.NewRequest("DELETE", "/tasks/4/remove", bytes.NewBuffer(userIdsJSON))
 		router.ServeHTTP(w, req)

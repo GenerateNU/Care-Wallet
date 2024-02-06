@@ -1,7 +1,6 @@
 package tasks
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -38,7 +37,11 @@ type TaskQuery struct {
 //	@summary		Get Filtered Tasks
 //	@description	get filtered tasks
 //	@tags			tasks
-//	@success		200	{array}	models.Task
+//
+//	@param			_	query		TaskQuery	true	"Filters for task query"
+//
+//	@success		200	{array}		models.Task
+//	@failure		400	{object}	string
 //	@router			/tasks/filtered [get]
 func (pg *PgModel) GetFilteredTasks(c *gin.Context) {
 	filterQuery := TaskQuery{
@@ -53,10 +56,16 @@ func (pg *PgModel) GetFilteredTasks(c *gin.Context) {
 	tasks, err := GetTasksByQueryFromDB(pg.Conn, filterQuery)
 
 	if err != nil {
-		panic(err)
+		c.JSON(http.StatusBadRequest, err.Error())
+		return
 	}
 
 	c.JSON(http.StatusOK, tasks)
+}
+
+type Assignment struct {
+	UserIDs  []string `json:"userIDs"`
+	Assigner string   `json:"assigner"`
 }
 
 // AssignUsersToTask godoc
@@ -64,27 +73,33 @@ func (pg *PgModel) GetFilteredTasks(c *gin.Context) {
 //	@summary		Assign Users To Task
 //	@description	assign users to task
 //	@tags			tasks
-//	@success		200	{array}	models.TaskUser
+//
+//	@param			tid	path		string		true	"Task ID to assign users to"
+//	@param			_	body		Assignment	true	"Users to assign to task and assignee"
+//
+//	@success		200	{array}		models.TaskUser
+//	@failure		400	{object}	string
 //	@router			/tasks/{tid}/assignees [post]
 func (pg *PgModel) AssignUsersToTask(c *gin.Context) {
-	var requestBody struct {
-		UserIDs  []string `json:"userIDs"`
-		Assigner string   `json:"assigner"`
-	}
+	var requestBody Assignment
 
 	if err := c.BindJSON(&requestBody); err != nil {
-		fmt.Println("error binding to request body: ", err)
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
 
 	assignedUsers, err := AssignUsersToTaskInDB(pg.Conn, requestBody.UserIDs, c.Param("tid"), requestBody.Assigner)
 
 	if err != nil {
-		panic(err)
+		c.JSON(http.StatusBadRequest, err.Error())
+		return
 	}
 
 	c.JSON(http.StatusOK, assignedUsers)
+}
+
+type Removal struct {
+	UserIDs []string `json:"userIDs"`
 }
 
 // RemoveUsersFromTask godoc
@@ -92,23 +107,26 @@ func (pg *PgModel) AssignUsersToTask(c *gin.Context) {
 //	@summary		Remove Users From Task
 //	@description	remove users from task
 //	@tags			tasks
-//	@success		200	{array}	models.TaskUser
+//
+//	@param			tid	path		string	true	"Task ID to remove users from"
+//	@param			_	body		Removal	true	"Users to remove from task"
+//
+//	@success		200	{array}		models.TaskUser
+//	@failure		400	{object}	string
 //	@router			/tasks/{tid}/remove [delete]
 func (pg *PgModel) RemoveUsersFromTask(c *gin.Context) {
-	var requestBody struct {
-		UserIDs []string `json:"userIDs"`
-	}
+	var requestBody Removal
 
 	if err := c.BindJSON(&requestBody); err != nil {
-		fmt.Println("error binding to request body: ", err)
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
 
 	removedUsers, err := RemoveUsersFromTaskInDB(pg.Conn, requestBody.UserIDs, c.Param("tid"))
 
 	if err != nil {
-		panic(err)
+		c.JSON(http.StatusBadRequest, err.Error())
+		return
 	}
 
 	c.JSON(http.StatusOK, removedUsers)
