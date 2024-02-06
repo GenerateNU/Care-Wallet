@@ -20,11 +20,13 @@ export default function CareWalletProvider({ children }: { children: any }) {
         userID: user?.uid ?? '',
         userEmail: user?.email ?? ''
       };
+
       setUser(signedInUser);
-    });
-    setGroup({
-      groupID: -1,
-      role: 'TEMP - REPLACE WITH ACTUAL'
+
+      setGroup({
+        groupID: -1,
+        role: 'TEMP - REPLACE WITH ACTUAL'
+      });
     });
   }, []);
 

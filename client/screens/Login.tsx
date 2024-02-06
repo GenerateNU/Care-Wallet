@@ -4,12 +4,23 @@ import { logIn } from '../services/auth/login';
 import { signUp } from '../services/auth/signup';
 import { useNavigation } from '@react-navigation/native';
 import { AppStackNavigation } from '../navigation/AppNavigation';
+import { onAuthStateChanged } from '@firebase/auth';
+import { auth } from '../firebase.config';
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const navigation = useNavigation<AppStackNavigation>();
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      navigation.navigate('MainNavScreens');
+      return;
+    }
+
+    navigation.navigate('Login');
+  });
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -21,8 +32,6 @@ const LoginPage: React.FC = () => {
       Alert.alert('Login Failed', result.substring(5).replaceAll('-', ' '));
     } else {
       Alert.alert('Login Success', 'Welcome back!');
-      // console.log('result: ', result);
-      navigation.navigate('MainNavScreens');
     }
   };
 
@@ -36,8 +45,6 @@ const LoginPage: React.FC = () => {
       Alert.alert('Signup Failed', result.substring(5).replaceAll('-', ' '));
     } else {
       Alert.alert('Signup Success', 'Welcome to the app!');
-      // console.log('result: ', result);
-      navigation.navigate('MainNavScreens');
     }
   };
 
