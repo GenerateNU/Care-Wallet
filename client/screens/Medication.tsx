@@ -5,6 +5,7 @@ import { Medication } from '../types/medication';
 import { useCareWalletContext } from '../contexts/CareWalletContext';
 import ClickableCard from '../components/Card';
 import PopupModal from '../components/PopupModal';
+import DocPickerButton from '../components/DocPickerButton';
 
 export default function MedList() {
   const [medications, setMedications] = React.useState<Medication[]>();
@@ -23,6 +24,7 @@ export default function MedList() {
         </Text>
         <Text className="self-center">ID: {selectedMed?.medication_id}</Text>
       </PopupModal>
+      <DocPickerButton />
       <ScrollView>
         {medications &&
           medications.map((med, index) => (

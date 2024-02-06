@@ -23,7 +23,7 @@ export default function CareWalletProvider({ children }: { children: any }) {
       setUser(signedInUser);
     });
     setGroup({
-      groupID: 'TEMP - REPLACE WITH ACTUAL',
+      groupID: -1,
       role: 'TEMP - REPLACE WITH ACTUAL'
     });
   }, []);

@@ -29,6 +29,20 @@ const docTemplate = `{
                         "name": "file_data",
                         "in": "formData",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "The userId of the uploader",
+                        "name": "upload_by",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "The groupId of the uploader",
+                        "name": "group_id",
+                        "in": "formData",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -39,7 +53,10 @@ const docTemplate = `{
                         }
                     },
                     "400": {
-                        "description": "Bad Request"
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 }
             }
@@ -85,7 +102,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "upload_by": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "upload_date": {
                     "type": "string"

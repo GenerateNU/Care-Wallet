@@ -5,7 +5,7 @@ import * as FileSystem from 'expo-file-system';
 
 export const uploadFile = async (
   file: DocumentPicker.DocumentPickerAsset,
-  userId: number,
+  userId: string,
   groupId: number
 ) => {
   const uploadResumable = FileSystem.createUploadTask(
@@ -15,8 +15,8 @@ export const uploadFile = async (
       httpMethod: 'POST',
       uploadType: FileSystem.FileSystemUploadType.MULTIPART,
       fieldName: 'file_data',
-      headers: {
-        user_id: userId.toString(),
+      parameters: {
+        upload_by: userId,
         group_id: groupId.toString()
       }
     }
