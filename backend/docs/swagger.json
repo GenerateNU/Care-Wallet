@@ -28,6 +28,32 @@
                 }
             }
         },
+        "/care-groups/addUser/:userId/:groupId/:role": {
+            "post": {
+                "description": "Adds a user to a care group given a userID, groupID, and role",
+                "tags": [
+                    "groups"
+                ],
+                "summary": "Adds a user to a care group",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.CareGroup"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/files/upload": {
             "post": {
                 "description": "Upload a file to database and S3 bucket",

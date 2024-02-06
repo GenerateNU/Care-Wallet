@@ -35,6 +35,23 @@ paths:
       summary: Creates a care group
       tags:
       - groups
+  /care-groups/addUser/:userId/:groupId/:role:
+    post:
+      description: Adds a user to a care group given a userID, groupID, and role
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.CareGroup'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Adds a user to a care group
+      tags:
+      - groups
   /files/upload:
     post:
       description: Upload a file to database and S3 bucket
