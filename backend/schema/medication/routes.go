@@ -2,7 +2,6 @@ package medication
 
 import (
 	"carewallet/models"
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -54,11 +53,8 @@ func (pg *PgModel) GetMedications(c *gin.Context) {
 //	@router			/medications [post]
 func (pg *PgModel) AddMedications(c *gin.Context) {
 	var medbody models.Medication
-
 	c.Bind(&medbody)
 
-	fmt.Println(medbody.MedicationID)
-	fmt.Println(medbody.MedicationName)
 	med, err := AddMedToDB(pg.Conn, medbody)
 
 	if err != nil {

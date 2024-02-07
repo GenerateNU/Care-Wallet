@@ -12,14 +12,10 @@ import { useCareWalletContext } from '../contexts/CareWalletContext';
 import ClickableCard from '../components/Card';
 import PopupModal from '../components/PopupModal';
 import DocPickerButton from '../components/DocPickerButton';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Divider } from 'react-native-paper';
 import { useCallback, useState } from 'react';
-import {
-  addMedication,
-  getAllMedications,
-  useMedicationQuery
-} from '../services/medication';
+import useMedication from '../services/medication';
+import clsx from 'clsx';
 
 export default function MedList() {
   const [selectedMed, setSelectedMed] = useState<Medication>();
@@ -27,33 +23,39 @@ export default function MedList() {
   const [id, setId] = useState<string>('');
   const [visible, setVisible] = useState<boolean>(false);
   const [newMedVisible, setNewMedVisible] = useState<boolean>(false);
+  const [userGroupVisible, setUserGroupVisible] = useState<boolean>(false);
 
   const { user, group } = useCareWalletContext();
+
   const {
     medications,
     medicationsIsError,
     medicationsIsLoading,
     addMedicationMutation
-  } = useMedicationQuery();
-
-  const onListItemPress = (med: Medication) => {
-    console.log(med.medication_id);
-    setSelectedMed(med);
-    setVisible(true);
-  };
+  } = useMedication();
 
   const renderMedicationList = useCallback<ListRenderItem<Medication>>(
-    ({ item }) => {
+    ({ item, index }) => {
       return (
         <ClickableCard
           title={item.medication_name}
-          onPress={() => onListItemPress(item)}
+          onPress={() => {
+            setSelectedMed(item);
+            setVisible(true);
+          }}
         >
-          <Text>ID: {item.medication_id}</Text>
+          <Text
+            className={clsx(
+              'text-xl',
+              index % 2 == 0 ? 'text-blue-800' : 'text-red-400'
+            )}
+          >
+            ID: {item.medication_id}
+          </Text>
         </ClickableCard>
       );
     },
-    [onListItemPress]
+    []
   );
 
   if (medicationsIsLoading)
@@ -97,7 +99,6 @@ export default function MedList() {
             inputMode="text"
           />
         </View>
-
         <Pressable
           className="pt-5 self-center"
           onPress={() => {
@@ -127,14 +128,19 @@ export default function MedList() {
         keyExtractor={(item) => `id: ${item.medication_id}`}
         ItemSeparatorComponent={() => <Divider />}
       />
-      {user && group && (
+      <Pressable onPress={() => setUserGroupVisible(true)}>
+        <Text className="text-lg text-blue-600">Show User and Group Info</Text>
+      </Pressable>
+      <PopupModal isVisible={userGroupVisible} setVisible={setUserGroupVisible}>
         <View>
-          <Text>The user id is: {user.userID}</Text>
-          <Text>The user email is: {user.userEmail}</Text>
-          <Text>The group id is: {group.groupID}</Text>
-          <Text>The group role is: {group.role}</Text>
+          <Text className="self-start text-lg">User ID: {user.userID}</Text>
+          <Text className="self-start text-lg">
+            User Email: {user.userEmail}
+          </Text>
+          <Text className="self-start text-lg">Group ID: {group.groupID}</Text>
+          <Text className="self-start text-lg">Group Role: {group.role}</Text>
         </View>
-      )}
+      </PopupModal>
     </View>
   );
 }
