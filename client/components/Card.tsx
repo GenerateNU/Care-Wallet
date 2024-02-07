@@ -8,12 +8,6 @@ interface ClickableCardProps {
   children?: JSX.Element[] | JSX.Element;
 }
 
-const StyledModal = styled(Card.Title, {
-  props: {
-    titleStyle: true
-  }
-});
-
 export const ClickableCard: React.FC<ClickableCardProps> = ({
   title,
   onPress,

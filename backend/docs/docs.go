@@ -79,6 +79,38 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "post": {
+                "description": "add a medication to a users medlist",
+                "tags": [
+                    "medications"
+                ],
+                "summary": "add a medication",
+                "parameters": [
+                    {
+                        "description": "a medication",
+                        "name": "_",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Medication"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Medication"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
             }
         }
     },

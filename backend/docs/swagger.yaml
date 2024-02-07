@@ -74,4 +74,25 @@ paths:
       summary: Get All Meds
       tags:
       - medications
+    post:
+      description: add a medication to a users medlist
+      parameters:
+      - description: a medication
+        in: body
+        name: _
+        required: true
+        schema:
+          $ref: '#/definitions/models.Medication'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Medication'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: add a medication
+      tags:
+      - medications
 swagger: "2.0"

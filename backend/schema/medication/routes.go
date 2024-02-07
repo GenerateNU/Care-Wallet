@@ -1,6 +1,8 @@
 package medication
 
 import (
+	"carewallet/models"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -16,6 +18,7 @@ func GetMedicationGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 	medications := v1.Group("medications")
 	{
 		medications.GET("", c.GetMedications)
+		medications.POST("", c.AddMedications)
 	}
 
 	return medications
@@ -33,6 +36,34 @@ func (pg *PgModel) GetMedications(c *gin.Context) {
 
 	if err != nil {
 		panic(err)
+	}
+
+	c.JSON(http.StatusOK, med)
+}
+
+// AddMedications godoc
+//
+//	@summary		add a medication
+//	@description	add a medication to a users medlist
+//	@tags			medications
+//
+//	@param			_	body		models.Medication	true	"a medication"
+//
+//	@success		200	{object}	models.Medication
+//	@failure		400	{object}	string
+//	@router			/medications [post]
+func (pg *PgModel) AddMedications(c *gin.Context) {
+	var medbody models.Medication
+
+	c.Bind(&medbody)
+
+	fmt.Println(medbody.MedicationID)
+	fmt.Println(medbody.MedicationName)
+	med, err := AddMedToDB(pg.Conn, medbody)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, err.Error())
+		return
 	}
 
 	c.JSON(http.StatusOK, med)
