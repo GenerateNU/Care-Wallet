@@ -14,7 +14,6 @@ export default function DocPickerButton() {
         type: '*/*',
         copyToCacheDirectory: false
       });
-      console.log('result', result);
 
       if (result.canceled === false) {
         // TODO get userID and groupID
