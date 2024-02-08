@@ -16,6 +16,7 @@ func LabelGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 	labels := v1.Group("labels")
 	{
 		labels.POST("/new", c.CreateNewLabel)
+		labels.DELETE("/delete/:gid/:lname", c.DeleteLabel)
 	}
 
 	return labels
@@ -53,4 +54,29 @@ func (pg *PgModel) CreateNewLabel(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, label)
+}
+
+// DeleteLabel godoc
+//
+//	@summary		Delete A Label
+//	@description	delete a label
+//	@tags			labels
+//
+//	@param			:gid	path		string	true	"Group to delete label from"
+//	@param			:lname	path		string	true	"Name of label to delete"
+//
+//	@success		200		{object}	models.Label
+//	@failure		400		{object}	string
+//	@router			/labels/delete/{:gid}/{:lname} [DELETE]
+func (pg *PgModel) DeleteLabel(c *gin.Context) {
+	group_id := c.Param("gid")
+	label_name := c.Param("lname")
+
+	err := DeleteLabelFromDB(pg.Conn, group_id, label_name)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, nil)
 }

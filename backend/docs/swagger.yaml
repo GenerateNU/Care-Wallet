@@ -120,6 +120,32 @@ paths:
       summary: Upload a file
       tags:
       - file
+  /labels/delete/{:gid}/{:lname}:
+    delete:
+      description: delete a label
+      parameters:
+      - description: Group to delete label from
+        in: path
+        name: :gid
+        required: true
+        type: string
+      - description: Name of label to delete
+        in: path
+        name: :lname
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Label'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Delete A Label
+      tags:
+      - labels
   /labels/new:
     post:
       description: create a new label for a group
@@ -161,7 +187,7 @@ paths:
       parameters:
       - description: Task ID to assign users to
         in: path
-        name: tid
+        name: :tid
         required: true
         type: string
       - description: Users to assign to task and assignee
@@ -190,7 +216,7 @@ paths:
       parameters:
       - description: Task ID to remove users from
         in: path
-        name: tid
+        name: :tid
         required: true
         type: string
       - description: Users to remove from task

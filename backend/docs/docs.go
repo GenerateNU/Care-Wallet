@@ -44,6 +44,45 @@ const docTemplate = `{
                 }
             }
         },
+        "/labels/delete/{:gid}/{:lname}": {
+            "delete": {
+                "description": "delete a label",
+                "tags": [
+                    "labels"
+                ],
+                "summary": "Delete A Label",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Group to delete label from",
+                        "name": ":gid",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Name of label to delete",
+                        "name": ":lname",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Label"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/labels/new": {
             "post": {
                 "description": "create a new label for a group",
@@ -204,7 +243,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "Task ID to assign users to",
-                        "name": "tid",
+                        "name": ":tid",
                         "in": "path",
                         "required": true
                     },
@@ -248,7 +287,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "Task ID to remove users from",
-                        "name": "tid",
+                        "name": ":tid",
                         "in": "path",
                         "required": true
                     },

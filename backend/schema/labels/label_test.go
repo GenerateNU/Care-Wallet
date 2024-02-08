@@ -39,7 +39,7 @@ func TestLabelGroup(t *testing.T) {
 
 	t.Run("TestCreateNewLabel", func(t *testing.T) {
 		postRequest := LabelCreation{
-			GroupID:    1,
+			GroupID:    3,
 			LabelName:  "Laundry",
 			LabelColor: "Orange",
 		}
@@ -65,13 +65,23 @@ func TestLabelGroup(t *testing.T) {
 		}
 
 		expectedResponse := models.Label{
-			GroupID:    1,
+			GroupID:    3,
 			LabelName:  "Laundry",
 			LabelColor: "Orange",
 		}
 
 		if !reflect.DeepEqual(expectedResponse, postResponse) {
 			t.Error("Result was not correct")
+		}
+	})
+
+	t.Run("TestDeleteLabel", func(t *testing.T) {
+		w := httptest.NewRecorder()
+		req, _ := http.NewRequest("DELETE", "/labels/delete/2/Appointment", nil)
+		router.ServeHTTP(w, req)
+
+		if http.StatusOK != w.Code {
+			t.Error("Failed to delete label.")
 		}
 	})
 }

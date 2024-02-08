@@ -76,11 +76,11 @@ type Assignment struct {
 //	@description	assign users to task
 //	@tags			tasks
 //
-//	@param			tid	path		string		true	"Task ID to assign users to"
-//	@param			_	body		Assignment	true	"Users to assign to task and assignee"
+//	@param			:tid	path		string		true	"Task ID to assign users to"
+//	@param			_		body		Assignment	true	"Users to assign to task and assignee"
 //
-//	@success		200	{array}		models.TaskUser
-//	@failure		400	{object}	string
+//	@success		200		{array}		models.TaskUser
+//	@failure		400		{object}	string
 //	@router			/tasks/{tid}/assign [post]
 func (pg *PgModel) AssignUsersToTask(c *gin.Context) {
 	var requestBody Assignment
@@ -110,11 +110,11 @@ type Removal struct {
 //	@description	remove users from task
 //	@tags			tasks
 //
-//	@param			tid	path		string	true	"Task ID to remove users from"
-//	@param			_	body		Removal	true	"Users to remove from task"
+//	@param			:tid	path		string	true	"Task ID to remove users from"
+//	@param			_		body		Removal	true	"Users to remove from task"
 //
-//	@success		200	{array}		models.TaskUser
-//	@failure		400	{object}	string
+//	@success		200		{array}		models.TaskUser
+//	@failure		400		{object}	string
 //	@router			/tasks/{tid}/remove [delete]
 func (pg *PgModel) RemoveUsersFromTask(c *gin.Context) {
 	var requestBody Removal
