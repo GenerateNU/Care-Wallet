@@ -5,9 +5,9 @@ import (
 	"carewallet/db"
 	_ "carewallet/docs"
 	"carewallet/schema/files"
+	groupRoles "carewallet/schema/group-roles"
 	"carewallet/schema/groups"
 	"carewallet/schema/medication"
-	"carewallet/schema/users"
 	"fmt"
 	"os"
 
@@ -41,7 +41,7 @@ func main() {
 		medication.GetMedicationGroup(v1, &medication.PgModel{Conn: conn})
 		files.GetFileGroup(v1, &files.PgModel{Conn: conn})
 		groups.CreateCareGroup(v1, &groups.PgModel{Conn: conn})
-		users.GetUsersGroup(v1, &users.PgModel{Conn: conn})
+		groupRoles.GetGroupRolesGroup(v1, &groupRoles.PgModel{Conn: conn})
 	}
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
