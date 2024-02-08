@@ -70,9 +70,10 @@ Before contributing to the project, we need to install/setup several various
 tools. The installation process can vary, so follow the instructions for each
 item below!
 
-- [Pre-commit](https://pre-commit.com) - standardizing code style and commits
-- [Commitizen](https://commitizen-tools.github.io/commitizen/) - organizing our
-  commits into categories
+[Pre-commit](https://pre-commit.com) standardizing code style and commits
+
+[Commitizen](https://commitizen-tools.github.io/commitizen/) organizing our
+commits into categories
 
 ## Running The Project
 
