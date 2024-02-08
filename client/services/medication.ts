@@ -35,18 +35,16 @@ export default function useMedication() {
   } = useQuery<Medication[], Error>({
     queryKey: ['medList'], // if querying with a value add values here ex. ['medList', {id}]
     queryFn: getAllMedications,
-    staleTime: 5000, // marks the data is obsolete or stale
-    refetchInterval: 5000 // Will refetch the data every 5 seconds
+    staleTime: 20000, // marks the data as obsolete or stale
+    refetchInterval: 20000 // Will refetch the data every 5 seconds
   });
 
   const { mutate: addMedicationMutation } = useMutation({
     mutationFn: (med: Medication) => addMedication(med),
     onSuccess: () => {
-      queryClient
-        .invalidateQueries({
-          queryKey: ['medList']
-        })
-        .then(() => medicationsRefetch());
+      queryClient.invalidateQueries({
+        queryKey: ['medList'] // mark medlist as stale so it refetches
+      });
     }
   });
 
@@ -54,6 +52,7 @@ export default function useMedication() {
     medications,
     medicationsIsLoading,
     medicationsIsError,
+    medicationsRefetch,
     addMedicationMutation
   };
 }
