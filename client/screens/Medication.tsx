@@ -19,14 +19,14 @@ import clsx from 'clsx';
 
 export default function MedList() {
   const [selectedMed, setSelectedMed] = useState<Medication>();
-  const [name, setName] = useState<string>('');
-  const [id, setId] = useState<string>('');
-  const [visible, setVisible] = useState<boolean>(false);
+
+  const [newMedState, setNewMedState] = useState({ id: '', name: '' });
+
+  const [medVisible, setMedVisible] = useState<boolean>(false);
   const [newMedVisible, setNewMedVisible] = useState<boolean>(false);
   const [userGroupVisible, setUserGroupVisible] = useState<boolean>(false);
 
   const { user, group } = useCareWalletContext();
-
   const {
     medications,
     medicationsIsError,
@@ -41,7 +41,7 @@ export default function MedList() {
           title={item.medication_name}
           onPress={() => {
             setSelectedMed(item);
-            setVisible(true);
+            setMedVisible(true);
           }}
         >
           <Text
@@ -74,7 +74,7 @@ export default function MedList() {
 
   return (
     <View className="flex-1 items-center w-[100vw] justify-center bg-white">
-      <PopupModal isVisible={visible} setVisible={setVisible}>
+      <PopupModal isVisible={medVisible} setVisible={setMedVisible}>
         <Text className="self-center text-3xl">
           {selectedMed?.medication_name}
         </Text>
@@ -82,29 +82,29 @@ export default function MedList() {
       </PopupModal>
       <PopupModal isVisible={newMedVisible} setVisible={setNewMedVisible}>
         <View className="items-center flex flex-row self-center space-x-2">
-          <Text className="">ID:</Text>
+          <Text>ID:</Text>
           <TextInput
-            keyboardType="numeric"
             className="self-center w-[50vw] border border-gray-300 text-3xl mb-3"
-            onChangeText={(val) => setId(val)}
-            value={`${id}`}
+            onChangeText={(val) => setNewMedState({ ...newMedState, id: val })}
+            value={newMedState.id}
           />
         </View>
         <View className="items-center flex flex-row self-center space-x-2">
-          <Text className="">Name:</Text>
+          <Text>Name:</Text>
           <TextInput
             className="self-center w-[50vw] border border-gray-300 text-3xl mr-6"
-            onChangeText={(val) => setName(val)}
-            value={`${name}`}
-            inputMode="text"
+            onChangeText={(val) =>
+              setNewMedState({ ...newMedState, name: val })
+            }
+            value={newMedState.name}
           />
         </View>
         <Pressable
           className="pt-5 self-center"
           onPress={() => {
             addMedicationMutation({
-              medication_id: parseInt(id),
-              medication_name: name
+              medication_id: parseInt(newMedState.id),
+              medication_name: newMedState.name
             });
             setNewMedVisible(false);
           }}
