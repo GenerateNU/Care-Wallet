@@ -1,4 +1,4 @@
-name: CI (Formatting/Linting, Testing, Building)
+name: CI
 
 on:
   push:
