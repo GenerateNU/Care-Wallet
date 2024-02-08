@@ -13,7 +13,7 @@ type PgModel struct {
 	Conn *pgx.Conn
 }
 
-func GetFileGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
+func FileGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 
 	files := v1.Group("files")
 	{

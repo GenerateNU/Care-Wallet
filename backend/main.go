@@ -5,6 +5,7 @@ import (
 	"carewallet/db"
 	_ "carewallet/docs"
 	"carewallet/schema/files"
+	"carewallet/schema/labels"
 	"carewallet/schema/medication"
 	"carewallet/schema/tasks"
 	"fmt"
@@ -39,8 +40,9 @@ func main() {
 	v1 := r.Group("/")
 	{
 		medication.GetMedicationGroup(v1, &medication.PgModel{Conn: conn})
-		files.GetFileGroup(v1, &files.PgModel{Conn: conn})
+		files.FileGroup(v1, &files.PgModel{Conn: conn})
 		tasks.TaskGroup(v1, &tasks.PgModel{Conn: conn})
+		labels.LabelGroup(v1, &labels.PgModel{Conn: conn})
 	}
 
 	if enviroment == configuration.EnvironmentLocal {

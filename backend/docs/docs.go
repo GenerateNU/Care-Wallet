@@ -44,6 +44,40 @@ const docTemplate = `{
                 }
             }
         },
+        "/labels/new": {
+            "post": {
+                "description": "create a new label for a group",
+                "tags": [
+                    "labels"
+                ],
+                "summary": "Create A New Label",
+                "parameters": [
+                    {
+                        "description": "Label creation data",
+                        "name": "_",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/labels.LabelCreation"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Label"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/medications": {
             "get": {
                 "description": "get all user medications",
@@ -249,6 +283,20 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "labels.LabelCreation": {
+            "type": "object",
+            "properties": {
+                "group_id": {
+                    "type": "integer"
+                },
+                "label_color": {
+                    "type": "string"
+                },
+                "label_name": {
+                    "type": "string"
+                }
+            }
+        },
         "models.File": {
             "type": "object",
             "properties": {
@@ -271,6 +319,20 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "upload_date": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Label": {
+            "type": "object",
+            "properties": {
+                "group_id": {
+                    "type": "integer"
+                },
+                "label_color": {
+                    "type": "string"
+                },
+                "label_name": {
                     "type": "string"
                 }
             }

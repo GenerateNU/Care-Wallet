@@ -1,7 +1,6 @@
 package tasks
 
 import (
-	"fmt"
 	"net/http"
 	"strings"
 
@@ -87,7 +86,6 @@ func (pg *PgModel) AssignUsersToTask(c *gin.Context) {
 	var requestBody Assignment
 
 	if err := c.BindJSON(&requestBody); err != nil {
-		print(err.Error())
 		c.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
@@ -156,7 +154,6 @@ func (pg *PgModel) GetTasksByAssignedUsers(c *gin.Context) {
 	assignedQuery := AssignedQuery{
 		UserIDs: strings.Split(userIDs, ","),
 	}
-	fmt.Println(assignedQuery.UserIDs)
 
 	tasks, err := GetTasksByAssignedFromDB(pg.Conn, assignedQuery.UserIDs)
 
