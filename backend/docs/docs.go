@@ -95,27 +95,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/medications": {
-            "get": {
-                "description": "get all user medications",
-                "tags": [
-                    "medications"
-                ],
-                "summary": "Get All Meds",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/models.Medication"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/users/getgroup/{uid}": {
+        "/group-roles/get-group/{uid}": {
             "get": {
                 "description": "get the group id from the user id",
                 "tags": [
@@ -142,6 +122,26 @@ const docTemplate = `{
                         "description": "Bad Request",
                         "schema": {
                             "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/medications": {
+            "get": {
+                "description": "get all user medications",
+                "tags": [
+                    "medications"
+                ],
+                "summary": "Get All Meds",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Medication"
+                            }
                         }
                     }
                 }

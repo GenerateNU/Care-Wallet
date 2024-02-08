@@ -93,20 +93,7 @@ paths:
       summary: Get all group roles
       tags:
       - group-roles
-  /medications:
-    get:
-      description: get all user medications
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/models.Medication'
-            type: array
-      summary: Get All Meds
-      tags:
-      - medications
-  /users/getgroup/{uid}:
+  /group-roles/get-group/{uid}:
     get:
       description: get the group id from the user id
       parameters:
@@ -127,4 +114,17 @@ paths:
       summary: get groupid
       tags:
       - group
+  /medications:
+    get:
+      description: get all user medications
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Medication'
+            type: array
+      summary: Get All Meds
+      tags:
+      - medications
 swagger: "2.0"

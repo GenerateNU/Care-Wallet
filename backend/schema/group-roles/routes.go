@@ -14,7 +14,7 @@ type PgModel struct {
 func GetGroupRolesGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 	groupRoles := v1.Group("group-roles")
 	{
-		groupRoles.GET("/get-group-by-uid/:uid", c.GetGroupIDByUID)
+		groupRoles.GET("/get-group/:uid", c.GetGroupIDByUID)
 		groupRoles.GET("", c.GetGroupRoles)
 	}
 
@@ -31,7 +31,7 @@ func GetGroupRolesGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 //
 // @success 200 {object} string
 // @failure 400 {object} string
-// @router /group-roles/get-group-by-uid/{uid} [get]
+// @router /group-roles/get-group/{uid} [get]
 func (pg *PgModel) GetGroupIDByUID(c *gin.Context) {
 	uid := c.Param("uid")
 	groupID, err := GetGroupIDByUIDFromDB(pg.Conn, uid)
