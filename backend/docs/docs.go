@@ -75,6 +75,26 @@ const docTemplate = `{
                 }
             }
         },
+        "/group-roles": {
+            "get": {
+                "description": "get all group roles from the db",
+                "tags": [
+                    "group-roles"
+                ],
+                "summary": "Get all group roles",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.GroupRole"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/medications": {
             "get": {
                 "description": "get all user medications",
@@ -143,6 +163,20 @@ const docTemplate = `{
                 }
             }
         },
+        "models.GroupRole": {
+            "type": "object",
+            "properties": {
+                "group_id": {
+                    "type": "integer"
+                },
+                "role": {
+                    "$ref": "#/definitions/models.Role"
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
         "models.Medication": {
             "type": "object",
             "properties": {
@@ -153,6 +187,19 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        },
+        "models.Role": {
+            "type": "string",
+            "enum": [
+                "PATIENT",
+                "PRIMARY",
+                "SECONDARY"
+            ],
+            "x-enum-varnames": [
+                "RolePatient",
+                "RolePrimary",
+                "RoleSecondary"
+            ]
         }
     }
 }`

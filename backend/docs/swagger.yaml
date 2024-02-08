@@ -9,6 +9,15 @@ definitions:
       group_name:
         type: string
     type: object
+  models.GroupRole:
+    properties:
+      group_id:
+        type: integer
+      role:
+        $ref: '#/definitions/models.Role'
+      user_id:
+        type: string
+    type: object
   models.Medication:
     properties:
       medication_id:
@@ -16,6 +25,16 @@ definitions:
       medication_name:
         type: string
     type: object
+  models.Role:
+    enum:
+    - PATIENT
+    - PRIMARY
+    - SECONDARY
+    type: string
+    x-enum-varnames:
+    - RolePatient
+    - RolePrimary
+    - RoleSecondary
 info:
   contact: {}
   description: This is an API for the Care-Wallet App.
@@ -61,6 +80,19 @@ paths:
       summary: Upload a file
       tags:
       - file
+  /group-roles:
+    get:
+      description: get all group roles from the db
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.GroupRole'
+            type: array
+      summary: Get all group roles
+      tags:
+      - group-roles
   /medications:
     get:
       description: get all user medications
