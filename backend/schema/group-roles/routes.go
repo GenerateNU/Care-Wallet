@@ -23,7 +23,7 @@ func GetGroupRolesGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 
 // GetGroupIDByUID godoc
 //
-// @summary get groupid
+// @summary Retrieve a group id given a user id
 // @description get the group id from the user id
 // @tags group
 //

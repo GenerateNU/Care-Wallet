@@ -2,6 +2,7 @@ package groups
 
 import (
 	"errors"
+	"strconv"
 
 	"github.com/jackc/pgx"
 )
@@ -57,4 +58,32 @@ func AddUserCareGroupFromDB(conn *pgx.Conn, userId string, groupId string, role 
 
 	return lastUserId, nil
 
+}
+
+// Return all members of a group (by user_id)
+func GetGroupMembersFromDB(conn *pgx.Conn, groupId string) ([]string, error) {
+	groupIdInt, _ := strconv.Atoi(groupId)
+	rows, err := conn.Query("SELECT user_id FROM group_roles WHERE group_id = $1", groupIdInt)
+
+	if err != nil {
+		print(err, "from transactions err ")
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	var results []string
+
+	// iterate through the rows and append the user_id to the results slice
+	for rows.Next() {
+		var userId string
+		err := rows.Scan(&userId)
+		if err != nil {
+			print(err, "from transactions err2 ")
+			return nil, err
+		}
+		results = append(results, userId)
+	}
+
+	return results, nil
 }

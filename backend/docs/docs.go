@@ -61,6 +61,41 @@ const docTemplate = `{
                 }
             }
         },
+        "/care-groups/get-members/{groupId}": {
+            "get": {
+                "description": "retrieve all users in given group id",
+                "tags": [
+                    "groups"
+                ],
+                "summary": "Get all members from a group",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "group id",
+                        "name": "groupId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/files/upload": {
             "post": {
                 "description": "Upload a file to database and S3 bucket",
