@@ -3,10 +3,11 @@ import { Text } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer, NavigationProp } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import LoginPage from './screens/Login';
+// import LoginPage from './screens/Login';
 import MedList from './screens/Medication';
 import Home from './assets/home.svg';
 import DocPickerButton from './components/DocPickerButton';
+import GroupScreen from './screens/Groups';
 
 export type ScreenNames = ['BottomNav', 'Landing', 'TEMP-FileUpload', 'Login'];
 export type RootStackParamList = Record<ScreenNames[number], any>;
@@ -21,10 +22,15 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
+          name="Landing"
+          options={{ headerShown: true }}
+          component={GroupScreen}
+        />
+        {/* <Stack.Screen
           name="Login"
           options={{ headerShown: true }}
           component={LoginPage}
-        />
+        /> */}
         <Stack.Screen
           name="BottomNav"
           options={{ headerShown: false }}
