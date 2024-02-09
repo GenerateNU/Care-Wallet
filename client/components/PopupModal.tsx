@@ -14,7 +14,11 @@ const StyledModal = styled(Modal, {
   }
 });
 
-const PopupModal = ({ children, isVisible, setVisible }: PopupModalProps) => {
+export function PopupModal({
+  children,
+  isVisible,
+  setVisible
+}: PopupModalProps) {
   return (
     <Portal>
       <StyledModal
@@ -26,6 +30,4 @@ const PopupModal = ({ children, isVisible, setVisible }: PopupModalProps) => {
       </StyledModal>
     </Portal>
   );
-};
-
-export default PopupModal;
+}

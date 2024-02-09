@@ -1,10 +1,11 @@
 import React from 'react';
 import { View, Button } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
+
 import { useCareWalletContext } from '../contexts/CareWalletContext';
 import { useFile } from '../services/file';
 
-const DocPickerButton = () => {
+export function DocPickerButton() {
   const { user, group } = useCareWalletContext();
   const { uploadFileMutation } = useFile();
 
@@ -32,6 +33,4 @@ const DocPickerButton = () => {
       <Button title="Pick Document" onPress={pickDocument} />
     </View>
   );
-};
-
-export default DocPickerButton;
+}

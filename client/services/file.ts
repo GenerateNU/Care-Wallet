@@ -1,8 +1,9 @@
-import { api_url } from './api-links';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import { useMutation } from '@tanstack/react-query';
 import { HttpStatusCode } from 'axios';
+
+import { api_url } from './api-links';
 
 interface UploadFileProps {
   file: DocumentPicker.DocumentPickerAsset;
@@ -10,7 +11,11 @@ interface UploadFileProps {
   groupId: number;
 }
 
-const uploadFile = async ({ file, userId, groupId }: UploadFileProps) => {
+const uploadFile = async ({
+  file,
+  userId,
+  groupId
+}: UploadFileProps): Promise<FileSystem.FileSystemUploadResult | undefined> => {
   const uploadResumable = FileSystem.createUploadTask(
     `${api_url}/files/upload`,
     file.uri,
@@ -39,8 +44,8 @@ export const useFile = () => {
       }
       console.log('Failed to Upload File...');
     },
-    onError: () => {
-      console.log('Failed to Upload File...');
+    onError: (error) => {
+      console.log('Server Error: ', error.message);
     }
   });
 

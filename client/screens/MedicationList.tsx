@@ -1,14 +1,14 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { View, Text, Pressable, TextInput, ScrollView } from 'react-native';
+import { Divider } from 'react-native-paper';
+import clsx from 'clsx';
+
 import { Medication } from '../types/medication';
 import { useCareWalletContext } from '../contexts/CareWalletContext';
-import ClickableCard from '../components/ClickableCard';
-import PopupModal from '../components/PopupModal';
-import DocPickerButton from '../components/DocPickerButton';
-import { Divider } from 'react-native-paper';
-import { useState } from 'react';
-import useMedication from '../services/medication';
-import clsx from 'clsx';
+import { ClickableCard } from '../components/ClickableCard';
+import { PopupModal } from '../components/PopupModal';
+import { DocPickerButton } from '../components/DocPickerButton';
+import { useMedication } from '../services/medication';
 
 export default function MedicationList() {
   const [selectedMed, setSelectedMed] = useState<Medication>();

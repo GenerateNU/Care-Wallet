@@ -7,13 +7,15 @@ interface ClickableCardProps {
   children?: JSX.Element[] | JSX.Element;
 }
 
-const ClickableCard = ({ title, onPress, children }: ClickableCardProps) => {
+export function ClickableCard({
+  title,
+  onPress,
+  children
+}: ClickableCardProps) {
   return (
     <Card className="m-10 w-64 bg-blue-300" onPress={onPress}>
       <Card.Title className="mb-5" title={title} />
       <Card.Content>{children}</Card.Content>
     </Card>
   );
-};
-
-export default ClickableCard;
+}

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { AppStackNavigation } from '../navigation/AppNavigation';
 import { onAuthStateChanged } from '@firebase/auth';
+
+import { AppStackNavigation } from '../navigation/AppNavigation';
 import { auth } from '../firebase.config';
 import { useAuth } from '../services/auth';
 

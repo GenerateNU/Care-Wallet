@@ -1,26 +1,30 @@
 import { useMutation } from '@tanstack/react-query';
-import { auth } from '../firebase.config';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   User,
-  onAuthStateChanged as firebaseOnAuthStateChanged
+  onAuthStateChanged as firebaseOnAuthStateChanged,
+  UserCredential
 } from 'firebase/auth';
 import { Alert } from 'react-native';
+
+import { auth } from '../firebase.config';
 
 interface AuthProps {
   email: string;
   password: string;
 }
 
-const logIn = async ({ email, password }: AuthProps) => {
-  return await signInWithEmailAndPassword(auth, email, password);
-};
+const logIn = async ({ email, password }: AuthProps): Promise<UserCredential> =>
+  await signInWithEmailAndPassword(auth, email, password);
 
-const signUp = async ({ email, password }: AuthProps) => {
-  return await createUserWithEmailAndPassword(auth, email, password);
-};
+const signUp = async ({
+  email,
+  password
+}: AuthProps): Promise<UserCredential> =>
+  await createUserWithEmailAndPassword(auth, email, password);
 
+// TODO: update to use a toast instead of an alert
 export const useAuth = () => {
   const { mutate: logInMutation } = useMutation({
     mutationFn: (authProps: AuthProps) => logIn(authProps),
