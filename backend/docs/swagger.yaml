@@ -134,7 +134,7 @@ paths:
           description: Bad Request
           schema:
             type: string
-      summary: get groupid
+      summary: Retrieve a group id given a user id
       tags:
       - group
   /medications:

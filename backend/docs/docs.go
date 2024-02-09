@@ -136,7 +136,7 @@ const docTemplate = `{
                 "tags": [
                     "group"
                 ],
-                "summary": "get groupid",
+                "summary": "Retrieve a group id given a user id",
                 "parameters": [
                     {
                         "type": "string",
