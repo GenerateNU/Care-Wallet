@@ -1,11 +1,11 @@
-package grouproles
+package groups
 
 import (
 	"carewallet/configuration"
 	"carewallet/db"
 	"fmt"
 	"os"
-	"strconv"
+	"slices"
 	"testing"
 
 	"encoding/json"
@@ -17,7 +17,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
-func TestGetGroupRoles(t *testing.T) {
+func TestGetGroupMembers(t *testing.T) {
 	config, err := configuration.GetConfiguration()
 
 	if err != nil {
@@ -37,12 +37,12 @@ func TestGetGroupRoles(t *testing.T) {
 
 	v1 := router.Group("/")
 	{
-		GetGroupRolesGroup(v1, &controller)
+		CreateCareGroup(v1, &controller)
 	}
 
-	t.Run("TestGetGroupRoles", func(t *testing.T) {
+	t.Run("TestGetGroupMembers", func(t *testing.T) {
 		w := httptest.NewRecorder()
-		req, _ := http.NewRequest("GET", "/group-roles/get-group/user123", nil)
+		req, _ := http.NewRequest("GET", "/care-groups/get-members/1", nil)
 		router.ServeHTTP(w, req)
 
 		// Check for HTTP Status OK (200)
@@ -50,19 +50,20 @@ func TestGetGroupRoles(t *testing.T) {
 			t.Error("Failed to retrieve group roles.")
 		}
 
-		var responseGroupID int
+		var responseUsers []string
 
-		// Unmarshal the response JSON
-		if err := json.Unmarshal(w.Body.Bytes(), &responseGroupID); err != nil {
+		if err := json.Unmarshal(w.Body.Bytes(), &responseUsers); err != nil {
 			t.Errorf("Failed to unmarshal JSON: %v", err)
 		}
-		responseGroupIDString := strconv.Itoa(responseGroupID)
 
-		// Define the expected group ID
-		expectedGroupID := "1"
+		// Define the expected users
+		expectedUsers := []string{
+			"user123",
+			"user456",
+		}
 
-		if expectedGroupID != responseGroupIDString {
-			t.Errorf("Expected group ID: %s, Actual group ID: %s", expectedGroupID, responseGroupIDString)
+		if !slices.Equal(expectedUsers, responseUsers) {
+			t.Error("Result was not correct")
 		}
 	})
 }
