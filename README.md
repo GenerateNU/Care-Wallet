@@ -1,8 +1,11 @@
 <div align="center">
 <h1>Care-Wallet</h1>
-  <!-- Github Actions -->
-  <a href="https://github.com/GenerateNU/Care-Wallet/actions/workflows/CI.yml">
-    <img src="https://github.com/GenerateNU/Care-Wallet/actions/workflows/CI.yml/badge.svg"
+  <a href="https://github.com/GenerateNU/Care-Wallet/actions/workflows/BackendCI.yml">
+    <img src="https://github.com/GenerateNU/Care-Wallet/actions/workflows/BackendCI.yml/badge.svg"
+      alt="Workflow Status" />
+  </a>
+    <a href="https://github.com/GenerateNU/Care-Wallet/actions/workflows/FrontendCI.yml">
+    <img src="https://github.com/GenerateNU/Care-Wallet/actions/workflows/FrontendCI.yml/badge.svg"
       alt="Workflow Status" />
   </a>
   <br/>
