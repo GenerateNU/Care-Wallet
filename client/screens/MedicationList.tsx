@@ -15,11 +15,9 @@ export default function MedicationList() {
 
   const [newMedState, setNewMedState] = useState({ id: '', name: '' });
 
-  const [medPopupVisible, setMedPopupVisible] = useState({
-    medVisible: false,
-    newMedVisible: false,
-    userGroupVisible: false
-  });
+  const [medVisible, setMedVisible] = useState<boolean>(false);
+  const [newMedVisible, setNewMedVisible] = useState<boolean>(false);
+  const [userGroupVisible, setUserGroupVisible] = useState<boolean>(false);
 
   const { user, group } = useCareWalletContext();
 
@@ -42,29 +40,13 @@ export default function MedicationList() {
 
   return (
     <View className="flex-1 items-center w-[100vw] justify-center bg-white">
-      <PopupModal
-        isVisible={medPopupVisible.medVisible}
-        setVisible={(val: boolean) =>
-          setMedPopupVisible({
-            ...medPopupVisible,
-            medVisible: val
-          })
-        }
-      >
+      <PopupModal isVisible={medVisible} setVisible={setMedVisible}>
         <Text className="self-center text-3xl">
           {selectedMed?.medication_name}
         </Text>
         <Text className="self-center">ID: {selectedMed?.medication_id}</Text>
       </PopupModal>
-      <PopupModal
-        isVisible={medPopupVisible.newMedVisible}
-        setVisible={(val: boolean) =>
-          setMedPopupVisible({
-            ...medPopupVisible,
-            newMedVisible: val
-          })
-        }
-      >
+      <PopupModal isVisible={newMedVisible} setVisible={setNewMedVisible}>
         <View className="items-center flex flex-row self-center space-x-2">
           <Text>ID:</Text>
           <TextInput
@@ -90,10 +72,7 @@ export default function MedicationList() {
               medication_id: parseInt(newMedState.id),
               medication_name: newMedState.name
             });
-            setMedPopupVisible({
-              ...medPopupVisible,
-              newMedVisible: false
-            });
+            setNewMedVisible(false);
           }}
         >
           <Text className="text-blue-500">Add Medication</Text>
@@ -103,12 +82,7 @@ export default function MedicationList() {
         <DocPickerButton />
         <Pressable
           className="border-l pl-2 border-gray-300"
-          onPress={() =>
-            setMedPopupVisible({
-              ...medPopupVisible,
-              newMedVisible: true
-            })
-          }
+          onPress={() => setNewMedVisible(true)}
         >
           <Text className="text-lg text-blue-600">Add Medication</Text>
         </Pressable>
@@ -120,10 +94,7 @@ export default function MedicationList() {
               title={med.medication_name}
               onPress={() => {
                 setSelectedMed(med);
-                setMedPopupVisible({
-                  ...medPopupVisible,
-                  medVisible: true
-                });
+                setMedVisible(true);
               }}
             >
               <Text
@@ -140,25 +111,10 @@ export default function MedicationList() {
         ))}
       </ScrollView>
 
-      <Pressable
-        onPress={() =>
-          setMedPopupVisible({
-            ...medPopupVisible,
-            userGroupVisible: true
-          })
-        }
-      >
+      <Pressable onPress={() => setUserGroupVisible(true)}>
         <Text className="text-lg text-blue-600">Show User and Group Info</Text>
       </Pressable>
-      <PopupModal
-        isVisible={medPopupVisible.userGroupVisible}
-        setVisible={(val: boolean) =>
-          setMedPopupVisible({
-            ...medPopupVisible,
-            userGroupVisible: val
-          })
-        }
-      >
+      <PopupModal isVisible={userGroupVisible} setVisible={setUserGroupVisible}>
         <View>
           <Text className="self-start text-lg">User ID: {user.userID}</Text>
           <Text className="self-start text-lg">
