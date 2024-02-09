@@ -121,7 +121,7 @@ VALUES
   (2, 'Medication B'),
   (3, 'Medication C'),
   (4, 'Medication D'),
-  (5, 'Medication E')
+  (5, 'Medication E');
 
 INSERT INTO
     care_group (group_id, group_name, date_created)
