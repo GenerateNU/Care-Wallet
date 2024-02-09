@@ -22,12 +22,9 @@ const addMedication = async (med: Medication): Promise<number> => {
 export const useMedication = () => {
   const queryClient = useQueryClient();
 
-  const {
-    data: medications,
-    isLoading: medicationsIsLoading,
-    isError: medicationsIsError,
-    refetch: medicationsRefetch
-  } = useQuery<Medication[], Error>({
+  const { data: medications, isLoading: medicationsIsLoading } = useQuery<
+    Medication[]
+  >({
     queryKey: ['medList'], // if querying with a value add values here ex. ['medList', {id}]
     queryFn: getAllMedications,
     refetchInterval: 20000 // Will refetch the data every 20 seconds
@@ -53,8 +50,6 @@ export const useMedication = () => {
   return {
     medications,
     medicationsIsLoading,
-    medicationsIsError,
-    medicationsRefetch,
     addMedicationMutation
   };
 };

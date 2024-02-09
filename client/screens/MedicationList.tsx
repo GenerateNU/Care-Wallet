@@ -21,12 +21,8 @@ export default function MedicationList() {
 
   const { user, group } = useCareWalletContext();
 
-  const {
-    medications,
-    medicationsIsError,
-    medicationsIsLoading,
-    addMedicationMutation
-  } = useMedication();
+  const { medications, medicationsIsLoading, addMedicationMutation } =
+    useMedication();
 
   if (medicationsIsLoading)
     return (
@@ -35,7 +31,7 @@ export default function MedicationList() {
       </View>
     );
 
-  if (medicationsIsError)
+  if (!medications)
     return (
       <View className="text-3xl flex-1 items-center w-[100vw] justify-center bg-white">
         <Text className="text-xl">Could Not Load Medications List</Text>
@@ -92,28 +88,27 @@ export default function MedicationList() {
         </Pressable>
       </View>
       <ScrollView>
-        {medications &&
-          medications.map((med, index) => (
-            <View key={index}>
-              <ClickableCard
-                title={med.medication_name}
-                onPress={() => {
-                  setSelectedMed(med);
-                  setMedVisible(true);
-                }}
+        {medications.map((med, index) => (
+          <View key={index}>
+            <ClickableCard
+              title={med.medication_name}
+              onPress={() => {
+                setSelectedMed(med);
+                setMedVisible(true);
+              }}
+            >
+              <Text
+                className={clsx(
+                  'text-xl',
+                  index % 2 == 0 ? 'text-blue-800' : 'text-red-400'
+                )}
               >
-                <Text
-                  className={clsx(
-                    'text-xl',
-                    index % 2 == 0 ? 'text-blue-800' : 'text-red-400'
-                  )}
-                >
-                  ID: {med.medication_id}
-                </Text>
-              </ClickableCard>
-              {index !== medications.length - 1 ? <Divider /> : null}
-            </View>
-          ))}
+                ID: {med.medication_id}
+              </Text>
+            </ClickableCard>
+            {index !== medications.length - 1 ? <Divider /> : null}
+          </View>
+        ))}
       </ScrollView>
 
       <Pressable onPress={() => setUserGroupVisible(true)}>
