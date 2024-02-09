@@ -30,7 +30,8 @@ jobs:
       - name: Format Frontend
         run: |
           cd client
-          npm run check
+          npm install prettier
+          npx prettier --check .
 
   build:
     name: Build
