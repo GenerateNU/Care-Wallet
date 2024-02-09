@@ -13,7 +13,7 @@ describe how you tested the change.
 
 # Checklist
 
-- [] I have performed a self-review of my code
-- [] I have reached out to another developer to review my code
-- [] I have commented my code, particularly in hard-to-understand areas
-- [] New and existing unit tests pass locally with my changes
+- [ ] I have performed a self-review of my code
+- [ ] I have reached out to another developer to review my code
+- [ ] I have commented my code, particularly in hard-to-understand areas
+- [ ] New and existing unit tests pass locally with my changes
