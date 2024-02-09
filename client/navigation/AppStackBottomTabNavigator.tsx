@@ -1,6 +1,6 @@
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
-import MedList from '../screens/Medication';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import MedicationList from '../screens/MedicationList';
 import { Text } from 'react-native';
 import Home from '../assets/home.svg';
 
@@ -16,7 +16,7 @@ export default function AppStackBottomTabNavigator() {
           tabBarIcon: () => <Home color={'gray'} />,
           tabBarLabel: () => <Text>Landing</Text>
         }}
-        component={MedList}
+        component={MedicationList}
       />
     </AppStackBottomTab.Navigator>
   );

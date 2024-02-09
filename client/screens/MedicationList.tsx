@@ -1,23 +1,16 @@
 import * as React from 'react';
-import {
-  View,
-  Text,
-  FlatList,
-  ListRenderItem,
-  Pressable,
-  TextInput
-} from 'react-native';
+import { View, Text, Pressable, TextInput, ScrollView } from 'react-native';
 import { Medication } from '../types/medication';
 import { useCareWalletContext } from '../contexts/CareWalletContext';
-import ClickableCard from '../components/Card';
+import ClickableCard from '../components/ClickableCard';
 import PopupModal from '../components/PopupModal';
 import DocPickerButton from '../components/DocPickerButton';
 import { Divider } from 'react-native-paper';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import useMedication from '../services/medication';
 import clsx from 'clsx';
 
-export default function MedList() {
+export default function MedicationList() {
   const [selectedMed, setSelectedMed] = useState<Medication>();
 
   const [newMedState, setNewMedState] = useState({ id: '', name: '' });
@@ -27,36 +20,13 @@ export default function MedList() {
   const [userGroupVisible, setUserGroupVisible] = useState<boolean>(false);
 
   const { user, group } = useCareWalletContext();
+
   const {
     medications,
     medicationsIsError,
     medicationsIsLoading,
     addMedicationMutation
   } = useMedication();
-
-  const renderMedicationList = useCallback<ListRenderItem<Medication>>(
-    ({ item, index }) => {
-      return (
-        <ClickableCard
-          title={item.medication_name}
-          onPress={() => {
-            setSelectedMed(item);
-            setMedVisible(true);
-          }}
-        >
-          <Text
-            className={clsx(
-              'text-xl',
-              index % 2 == 0 ? 'text-blue-800' : 'text-red-400'
-            )}
-          >
-            ID: {item.medication_id}
-          </Text>
-        </ClickableCard>
-      );
-    },
-    []
-  );
 
   if (medicationsIsLoading)
     return (
@@ -121,13 +91,31 @@ export default function MedList() {
           <Text className="text-lg text-blue-600">Add Medication</Text>
         </Pressable>
       </View>
+      <ScrollView>
+        {medications &&
+          medications.map((med, index) => (
+            <View key={index}>
+              <ClickableCard
+                title={med.medication_name}
+                onPress={() => {
+                  setSelectedMed(med);
+                  setMedVisible(true);
+                }}
+              >
+                <Text
+                  className={clsx(
+                    'text-xl',
+                    index % 2 == 0 ? 'text-blue-800' : 'text-red-400'
+                  )}
+                >
+                  ID: {med.medication_id}
+                </Text>
+              </ClickableCard>
+              {index !== medications.length - 1 ? <Divider /> : null}
+            </View>
+          ))}
+      </ScrollView>
 
-      <FlatList
-        data={medications}
-        renderItem={renderMedicationList}
-        keyExtractor={(item) => `id: ${item.medication_id}`}
-        ItemSeparatorComponent={() => <Divider />}
-      />
       <Pressable onPress={() => setUserGroupVisible(true)}>
         <Text className="text-lg text-blue-600">Show User and Group Info</Text>
       </Pressable>

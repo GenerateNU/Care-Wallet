@@ -1,13 +1,16 @@
-import { HttpStatusCode } from 'axios';
 import { api_url } from './api-links';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
+import { useMutation } from '@tanstack/react-query';
+import { HttpStatusCode } from 'axios';
 
-export const uploadFile = async (
-  file: DocumentPicker.DocumentPickerAsset,
-  userId: string,
-  groupId: number
-) => {
+interface UploadFileProps {
+  file: DocumentPicker.DocumentPickerAsset;
+  userId: string;
+  groupId: number;
+}
+
+const uploadFile = async ({ file, userId, groupId }: UploadFileProps) => {
   const uploadResumable = FileSystem.createUploadTask(
     `${api_url}/files/upload`,
     file.uri,
@@ -22,12 +25,26 @@ export const uploadFile = async (
     }
   );
 
-  await uploadResumable.uploadAsync().then((res) => {
-    if (res && res.status === HttpStatusCode.Ok) {
-      console.log('File uploaded!');
-      return res.status;
+  return await uploadResumable.uploadAsync();
+};
+
+export const useFile = () => {
+  const { mutate: uploadFileMutation } = useMutation({
+    mutationFn: (fileUploadProps: UploadFileProps) =>
+      uploadFile(fileUploadProps),
+    onSuccess: (result) => {
+      if (result && result.status === HttpStatusCode.Ok) {
+        console.log('File Uploaded...');
+        return;
+      }
+      console.log('Failed to Upload File...');
+    },
+    onError: () => {
+      console.log('Failed to Upload File...');
     }
-    console.log('Upload failed!');
-    throw new Error(res?.body);
   });
+
+  return {
+    uploadFileMutation
+  };
 };

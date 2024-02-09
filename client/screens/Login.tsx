@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, Alert } from 'react-native';
-import { logIn } from '../services/auth/login';
-import { signUp } from '../services/auth/signup';
 import { useNavigation } from '@react-navigation/native';
 import { AppStackNavigation } from '../navigation/AppNavigation';
 import { onAuthStateChanged } from '@firebase/auth';
 import { auth } from '../firebase.config';
+import { useAuth } from '../services/auth';
 
-const LoginPage: React.FC = () => {
+export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { logInMutation, signUpMutation } = useAuth();
 
   const navigation = useNavigation<AppStackNavigation>();
 
@@ -27,12 +27,8 @@ const LoginPage: React.FC = () => {
       Alert.alert('Error', 'Email and password are required');
       return;
     }
-    const result = await logIn(email, password);
-    if (typeof result === 'string') {
-      Alert.alert('Login Failed', result.substring(5).replaceAll('-', ' '));
-    } else {
-      Alert.alert('Login Success', 'Welcome back!');
-    }
+
+    logInMutation({ email, password });
   };
 
   const handleSignUp = async () => {
@@ -40,12 +36,8 @@ const LoginPage: React.FC = () => {
       Alert.alert('Error', 'Email and password are required');
       return;
     }
-    const result = await signUp(email, password);
-    if (typeof result === 'string') {
-      Alert.alert('Signup Failed', result.substring(5).replaceAll('-', ' '));
-    } else {
-      Alert.alert('Signup Success', 'Welcome to the app!');
-    }
+
+    signUpMutation({ email, password });
   };
 
   return (
@@ -68,6 +60,4 @@ const LoginPage: React.FC = () => {
       <Button title="Sign Up" onPress={handleSignUp} />
     </View>
   );
-};
-
-export default LoginPage;
+}

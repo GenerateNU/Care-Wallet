@@ -24,7 +24,7 @@ export default function CareWalletProvider({ children }: { children: any }) {
       setUser(signedInUser);
 
       setGroup({
-        groupID: -1,
+        groupID: 999,
         role: 'TEMP - REPLACE WITH ACTUAL'
       });
     });
