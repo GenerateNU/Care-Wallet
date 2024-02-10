@@ -1,11 +1,11 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
 import { View, Text, Button, TouchableOpacity } from 'react-native';
 import { months } from './constants';
 import { generateMatrix, moderateScale } from './utils';
 
 export default function Calendar() {
-  const [activeDate, setActiveDate] = React.useState(new Date());
+  const [activeDate, setActiveDate] = useState(new Date());
 
   const _onPress = (item: number) => {
     if (typeof item !== 'string' && item != -1) {
@@ -70,7 +70,7 @@ function generateRows({
             'h-10 w-10 justify-center align-middle',
             item == activeDate.getDate()
               ? 'bg-green-400 rounded-3xl'
-              : 'bg-white'
+              : 'bg-grey-300'
           )}
         >
           <Text
