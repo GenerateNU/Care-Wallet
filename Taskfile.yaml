@@ -7,16 +7,22 @@ tasks:
       npm install
       cd ../backend
       go mod tidy
-      go install .
 
   format:
     - |
+      echo -e "Frontend Formatting..."
       cd client
       npm run format
+      echo -e "\nBackend Formatting...\n"
       cd ../backend
-      go fmt
-      go vet
+      go fmt ./...
+      go vet ./...
       swag f
+
+  start-dev:
+    - |
+      echo -e "Starting Backend Live-Reload..."
+      nodemon -e go --ignore 'backend/docs/**' --signal SIGTERM --exec "task start-backend"
 
   start-backend:
     - |
@@ -48,5 +54,6 @@ tasks:
 
   pre-commit:
     - |
-      pre-commit install
+      pre-commit clean
+      pre-commit install --hook-type commit-msg --hook-type pre-push --hook-type pre-commit
       pre-commit run --all-files

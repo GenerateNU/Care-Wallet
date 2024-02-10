@@ -15,6 +15,35 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/files/upload": {
+            "post": {
+                "description": "Upload a file to database and S3 bucket",
+                "tags": [
+                    "file"
+                ],
+                "summary": "Upload a file",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "Body with file zip",
+                        "name": "file_data",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.File"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    }
+                }
+            }
+        },
         "/medications": {
             "get": {
                 "description": "get all user medications",
@@ -37,6 +66,32 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "models.File": {
+            "type": "object",
+            "properties": {
+                "file_id": {
+                    "type": "integer"
+                },
+                "file_name": {
+                    "type": "string"
+                },
+                "file_size": {
+                    "type": "integer"
+                },
+                "group_id": {
+                    "type": "integer"
+                },
+                "task_id": {
+                    "type": "integer"
+                },
+                "upload_by": {
+                    "type": "integer"
+                },
+                "upload_date": {
+                    "type": "string"
+                }
+            }
+        },
         "models.Medication": {
             "type": "object",
             "properties": {

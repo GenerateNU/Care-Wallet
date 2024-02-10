@@ -4,6 +4,7 @@ import (
 	"carewallet/configuration"
 	"carewallet/db"
 	_ "carewallet/docs"
+	"carewallet/schema/files"
 	"carewallet/schema/medication"
 	"fmt"
 	"os"
@@ -20,6 +21,7 @@ import (
 //	@description	This is an API for the Care-Wallet App.
 //	@BasePath		/
 func main() {
+	enviroment := configuration.GetEnviroment()
 	config, err := configuration.GetConfiguration()
 
 	if err != nil {
@@ -36,9 +38,13 @@ func main() {
 	v1 := r.Group("/")
 	{
 		medication.GetMedicationGroup(v1, &medication.PgModel{Conn: conn})
+		files.GetFileGroup(v1, &files.PgModel{Conn: conn})
 	}
 
-	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	if enviroment == configuration.EnvironmentLocal {
+		r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	}
+
 	err = r.Run(":8080")
 
 	if err != nil {
