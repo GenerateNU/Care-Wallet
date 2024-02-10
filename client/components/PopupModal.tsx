@@ -1,5 +1,5 @@
-import { styled } from 'nativewind';
 import React from 'react';
+import { styled } from 'nativewind';
 import { Modal, Portal } from 'react-native-paper';
 
 interface PopupModalProps {
@@ -8,14 +8,13 @@ interface PopupModalProps {
   children?: JSX.Element[] | JSX.Element;
 }
 
-// rnp requires contentcontainerstyle to style the component, this will integrate native-wind into that
 const StyledModal = styled(Modal, {
   props: {
     contentContainerStyle: true
   }
 });
 
-export default function PopupModal({
+export function PopupModal({
   children,
   isVisible,
   setVisible

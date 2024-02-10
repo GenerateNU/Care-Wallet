@@ -121,4 +121,34 @@ VALUES
   (2, 'Medication B'),
   (3, 'Medication C'),
   (4, 'Medication D'),
-  (5, 'Medication E')
+  (5, 'Medication E');
+
+INSERT INTO
+    care_group (group_id, group_name, date_created)
+VALUES
+    (999, 'GROUP DE MATT', '2024-02-08 06:36:00');
+
+INSERT INTO
+    users (
+        user_id,
+        first_name,
+        last_name,
+        email,
+        phone,
+        address,
+        pfp_s3_url,
+        device_id,
+        push_notification_enabled
+    )
+VALUES
+    (
+        'fIoFY26mJnYWH8sNdfuVoxpnVnr1',
+        'Matt',
+        'McCoy',
+        '',
+        '',
+        '',
+        '',
+        '',
+        FALSE
+    );

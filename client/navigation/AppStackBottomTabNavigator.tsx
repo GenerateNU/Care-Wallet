@@ -1,12 +1,13 @@
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
-import MedList from '../screens/Medication';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Text } from 'react-native';
+
+import MedicationList from '../screens/MedicationList';
 import Home from '../assets/home.svg';
 
 const AppStackBottomTab = createBottomTabNavigator();
 
-export default function AppStackBottomTabNavigator() {
+export function AppStackBottomTabNavigator() {
   return (
     <AppStackBottomTab.Navigator>
       <AppStackBottomTab.Screen
@@ -16,7 +17,7 @@ export default function AppStackBottomTabNavigator() {
           tabBarIcon: () => <Home color={'gray'} />,
           tabBarLabel: () => <Text>Landing</Text>
         }}
-        component={MedList}
+        component={MedicationList}
       />
     </AppStackBottomTab.Navigator>
   );

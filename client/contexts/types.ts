@@ -4,6 +4,6 @@ export interface User {
 }
 
 export interface Group {
-  groupID: string;
+  groupID: number;
   role: string; // TODO: update to enum
 }
