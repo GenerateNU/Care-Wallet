@@ -17,9 +17,11 @@ export default function Calendar() {
   let rows = generateRows({ activeDate, _onPress });
 
   const changeMonth = (n: number) => {
-    const newDate = new Date(activeDate.setMonth(activeDate.getMonth() + n));
-    console.log(newDate);
-    setActiveDate(newDate);
+    const newMonthDate = new Date(
+      activeDate.setMonth(activeDate.getMonth() + n)
+    );
+    newMonthDate.setDate(1);
+    setActiveDate(newMonthDate);
   };
 
   return (

@@ -5,7 +5,14 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginPage from '../screens/Login';
 import { AppStackBottomTabNavigator } from './AppStackBottomTabNavigator';
 
-export type AppScreenNames = ['MainNavScreens', 'Landing', 'Login', 'Calendar'];
+export type AppScreenNames = [
+  'MainNavScreens',
+  'Landing',
+  'Login',
+  'Calendar',
+  'Calendar 2.0',
+  'Calendar -1.0'
+];
 export type AppStackNavigation = NavigationProp<AppStackParamList>;
 type AppStackParamList = Record<AppScreenNames[number], any>;
 
