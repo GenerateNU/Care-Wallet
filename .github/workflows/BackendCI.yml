@@ -1,9 +1,13 @@
-name: CI (Formatting/Linting, Testing, Building)
+name: Backend CI
 
 on:
   push:
+    paths:
+      - 'backend/**'
     branches: ['main']
   pull_request:
+    paths:
+      - 'backend/**'
     branches: ['main']
 
 jobs:
@@ -23,25 +27,8 @@ jobs:
         with:
           go-version: ${{ matrix.go-version }}
 
-      - name: Set up Node
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node-version }}
-
-      - name: Install Task
-        uses: arduino/setup-task@v1
-        with:
-          version: 3.x
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Format Frontend
-        run: |
-          task build
-          cd client
-          npm run check
       - name: Format Backend
         run: |
-          task build
           cd backend
           be_format_output=$(go fmt ./...)
           if [[ -n "$be_format_output" ]]; then
@@ -51,7 +38,6 @@ jobs:
           fi
       - name: Lint Backend
         run: |
-          task build
           cd backend
           be_lint_output=$(go vet ./...)
           if [[ -n "$be_lint_output" ]]; then
@@ -99,16 +85,11 @@ jobs:
         with:
           go-version: ${{ matrix.go-version }}
 
-      - name: Install Task
-        uses: arduino/setup-task@v1
-        with:
-          version: 3.x
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Run Go tests
         run: |
-          task build
-          task test-all
+          cd backend
+          go mod tidy
+          go test -count=1 carewallet/...
 
   build:
     name: Build
@@ -126,17 +107,7 @@ jobs:
         with:
           go-version: ${{ matrix.go-version }}
 
-      - name: Set up Node
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node-version }}
-
-      - name: Install Task
-        uses: arduino/setup-task@v1
-        with:
-          version: 3.x
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build app
+      - name: Build App
         run: |
-          task build
+          cd backend
+          go mod tidy
