@@ -3,8 +3,8 @@ import React from 'react';
 import { NavigationProp } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import { AppStackBottomTabNavigator } from './AppStackBottomTabNavigator';
 import LoginPage from '../screens/LoginPage';
+import { AppStackBottomTabNavigator } from './AppStackBottomTabNavigator';
 
 export type AppStackParamList = {
   Main: undefined;

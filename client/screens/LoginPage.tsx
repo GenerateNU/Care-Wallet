@@ -43,16 +43,16 @@ export default function LoginPage() {
   };
 
   return (
-    <View className="flex-1 justify-center items-center px-5">
+    <View className="flex-1 items-center justify-center px-5">
       <TextInput
-        className="w-full my-2.5 py-2 px-3 border border-gray-300 rounded"
+        className="my-2.5 w-full rounded border border-gray-300 px-3 py-2"
         value={email}
         onChangeText={setEmail}
         placeholder="Email"
         keyboardType="email-address"
       />
       <TextInput
-        className="w-full my-2.5 py-2 px-3 border border-gray-300 rounded"
+        className="my-2.5 w-full rounded border border-gray-300 px-3 py-2"
         value={password}
         onChangeText={setPassword}
         placeholder="Password"

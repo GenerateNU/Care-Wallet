@@ -27,20 +27,20 @@ export default function MedicationList() {
 
   if (medicationsIsLoading)
     return (
-      <View className="text-3xl flex-1 items-center w-[100vw] justify-center bg-white">
+      <View className="w-[100vw] flex-1 items-center justify-center bg-white text-3xl">
         <Text className="text-3xl">Loading...</Text>
       </View>
     );
 
   if (!medications)
     return (
-      <View className="text-3xl flex-1 items-center w-[100vw] justify-center bg-white">
+      <View className="w-[100vw] flex-1 items-center justify-center bg-white text-3xl">
         <Text className="text-xl">Could Not Load Medications List</Text>
       </View>
     );
 
   return (
-    <View className="flex-1 items-center w-[100vw] justify-center bg-white">
+    <View className="w-[100vw] flex-1 items-center justify-center bg-white">
       <PopupModal isVisible={medVisible} setVisible={setMedVisible}>
         <Text className="self-center text-3xl">
           {selectedMed?.medication_name}
@@ -48,18 +48,18 @@ export default function MedicationList() {
         <Text className="self-center">ID: {selectedMed?.medication_id}</Text>
       </PopupModal>
       <PopupModal isVisible={newMedVisible} setVisible={setNewMedVisible}>
-        <View className="items-center flex flex-row self-center space-x-2">
+        <View className="flex flex-row items-center space-x-2 self-center">
           <Text>ID:</Text>
           <TextInput
-            className="self-center w-[50vw] border border-gray-300 text-3xl mb-3"
+            className="mb-3 w-[50vw] self-center border border-gray-300 text-3xl"
             onChangeText={(val) => setNewMedState({ ...newMedState, id: val })}
             value={newMedState.id}
           />
         </View>
-        <View className="items-center flex flex-row self-center space-x-2">
+        <View className="flex flex-row items-center space-x-2 self-center">
           <Text>Name:</Text>
           <TextInput
-            className="self-center w-[50vw] border border-gray-300 text-3xl mr-6"
+            className="mr-6 w-[50vw] self-center border border-gray-300 text-3xl"
             onChangeText={(val) =>
               setNewMedState({ ...newMedState, name: val })
             }
@@ -67,7 +67,7 @@ export default function MedicationList() {
           />
         </View>
         <Pressable
-          className="pt-5 self-center"
+          className="self-center pt-5"
           onPress={() => {
             addMedicationMutation({
               medication_id: parseInt(newMedState.id),
@@ -82,7 +82,7 @@ export default function MedicationList() {
       <View className="flex flex-row items-center">
         <DocPickerButton />
         <Pressable
-          className="border-l pl-2 border-gray-300"
+          className="border-l border-gray-300 pl-2"
           onPress={() => setNewMedVisible(true)}
         >
           <Text className="text-lg text-blue-600">Add Medication</Text>

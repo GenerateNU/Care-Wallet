@@ -2,11 +2,11 @@ import { Alert } from 'react-native';
 
 import { useMutation } from '@tanstack/react-query';
 import {
-  User,
-  UserCredential,
   createUserWithEmailAndPassword,
   onAuthStateChanged as firebaseOnAuthStateChanged,
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword,
+  User,
+  UserCredential
 } from 'firebase/auth';
 
 import { auth } from '../firebase.config';
