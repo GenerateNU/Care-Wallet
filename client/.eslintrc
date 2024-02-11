@@ -23,13 +23,7 @@
     "plugin:prettier/recommended"
   ],
   "rules": {
-    "import/no-unresolved": "error",
-    "react/jsx-no-bind": [
-      "error",
-      {
-        "allowArrowFunctions": true
-      }
-    ],
+    // Enforces function for components
     "react/function-component-definition": [
       "error",
       {
@@ -37,6 +31,7 @@
         "unnamedComponents": "arrow-function"
       }
     ],
+    // Enforces no * imports
     "no-restricted-syntax": [
       "error",
       {
@@ -44,17 +39,20 @@
         "message": "Import/export only modules you need"
       }
     ],
+    // Enforces no default export
     "import/no-default-export": "error",
-    "arrow-body-style": ["error", "as-needed"],
+    // Enforces react not being added to files where it isnt needed
     "react/jsx-uses-react": "error",
+    // Enforces const, if a variable isnt reassigned
     "prefer-const": "error",
-    "react/jsx-no-useless-fragment": "error",
-    "react/jsx-uses-vars": "error"
+    // enforces preventing <><div></div></>
+    "react/jsx-no-useless-fragment": "error"
   },
   "overrides": [
     {
       "files": ["screens/**/*", "App.tsx", "declaration.d.ts"],
       "rules": {
+        // Allows default exports for the above files
         "import/no-default-export": "off"
       }
     }
