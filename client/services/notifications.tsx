@@ -4,7 +4,13 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import * as Device from 'expo-device';
 import * as Notification from 'expo-notifications';
 import Constants from 'expo-constants';
-
+import {
+  DailyTriggerInput,
+  NotificationTriggerInput,
+  scheduleNotificationAsync,
+  YearlyTriggerInput
+} from 'expo-notifications';
+import { WeeklyTriggerInput } from 'expo-notifications/build/NotificationScheduler.types';
 export async function registerForPushNotificationsAsync() {
   // checks that this is a physical device
   if (!Device.isDevice) {
@@ -46,32 +52,84 @@ export async function registerForPushNotificationsAsync() {
   return token;
 }
 
-export async function schedulePushNotification(
+// // scheduled push notification
+// export async function schedulePushNotification(
+//   title: string,
+//   body: string,
+//   repeat: boolean,
+//   date: Date
+// ) {
+//   // let timeObject = new Date();
+//   //const milliseconds = 5 * 1000; // 10 seconds = 10000 milliseconds
+//   // timeObject = new Date(timeObject.getTime() + milliseconds);
+//   // schedules notification for each weekday selected
+//   const id = await Notification.scheduleNotificationAsync({
+//     content: {
+//       title: title,
+//       body: body,
+//       data: {}
+//     },
+//     trigger: {
+//       // WeeklyTriggerInput
+//       date: Date * //new Date().setUTCSeconds(date.getUTCSeconds() + 5),
+// 	  repeats: repeat
+//     }
+//   });
+
+// }
+
+// use this fucntion to schedule push notifications
+
+export async function scheduleCalendarPushNotification(
   title: string,
   body: string,
   repeat: boolean,
-  date: Date
+  date: Date,
+  typeOfTrigger: string
 ) {
-  let timeObject = new Date();
-  const milliseconds = 5 * 1000; // 10 seconds = 10000 milliseconds
-  timeObject = new Date(timeObject.getTime() + milliseconds);
-  // schedules notification for each weekday selected
-  const id = await Notification.scheduleNotificationAsync({
-    content: {
-      title: title,
-      body: body,
-      data: {}
-    },
-    trigger: {
-      // WeeklyTriggerInput
-      date: new Date().setUTCSeconds(date.getUTCSeconds() + 5)
-    }
-  });
+  try {
+    const trigger = new Date(date); // a new Date object is created based on given date
 
-  console.log('Notification scheduled for: ', timeObject);
-  console.log('Notification id: ', id);
+    // default will be daily
+    const Trigger: DailyTriggerInput = {
+      repeats: true,
+      hour: trigger.getUTCHours(),
+      minute: trigger.getUTCMinutes()
+    };
+
+    if ((typeOfTrigger = 'year')) {
+      const Trigger: YearlyTriggerInput = {
+        repeats: true,
+        month: trigger.getUTCMonth(), // Month index (0-11)
+        day: trigger.getUTCDate(), // Day of the month
+        hour: trigger.getUTCHours(),
+        minute: trigger.getUTCMinutes()
+      };
+    } else if ((typeOfTrigger = 'week')) {
+      const Trigger: WeeklyTriggerInput = {
+        weekday: trigger.getUTCDay() === 0 ? 7 : trigger.getUTCDay(),
+        hour: trigger.getUTCHours(),
+        minute: trigger.getUTCMinutes(),
+        type: 'weekly'
+      };
+    }
+
+    Notification.scheduleNotificationAsync({
+      content: {
+        title: title,
+        body: body
+      },
+      trigger: Trigger
+    });
+
+    console.log('Notification scheduled successfully');
+  } catch (error) {
+    console.error('Error scheduling notification:', error);
+  }
 }
 
+// INSTANT push notification - whe this function is called with intended title and body,
+// a notificaiton will be sent to the user right away (in 1 second)
 export async function scheduleInstantPushNotification(
   title: string,
   body: string
@@ -84,7 +142,9 @@ export async function scheduleInstantPushNotification(
       data: {}
     },
     trigger: {
-      seconds: 2
+      seconds: 1
     }
   });
 }
+
+// types: WeeklyTriggerInput,
