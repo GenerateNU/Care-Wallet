@@ -37,7 +37,7 @@ const uploadFile = async ({
   return await uploadResumable.uploadAsync();
 };
 
-export function useFile() {
+export const useFile = () => {
   const { mutate: uploadFileMutation } = useMutation({
     mutationFn: (fileUploadProps: UploadFileProps) =>
       uploadFile(fileUploadProps),
@@ -56,4 +56,4 @@ export function useFile() {
   return {
     uploadFileMutation
   };
-}
+};
