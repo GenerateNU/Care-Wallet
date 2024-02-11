@@ -54,7 +54,7 @@ jobs:
         run: |
           cd client
           npm install
-          eslint --ext .ts,.tsx .
+          npm run lint
 
   build:
     name: Build
