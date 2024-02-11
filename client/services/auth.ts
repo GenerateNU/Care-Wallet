@@ -26,7 +26,7 @@ const signUp = async ({
   await createUserWithEmailAndPassword(auth, email, password);
 
 // TODO: update to use a toast instead of an alert
-export function useAuth() {
+export const useAuth = () => {
   const { mutate: logInMutation } = useMutation({
     mutationFn: (authProps: AuthProps) => logIn(authProps),
     onSuccess: () => {
@@ -51,7 +51,7 @@ export function useAuth() {
     logInMutation,
     signUpMutation
   };
-}
+};
 
 export const onAuthStateChanged = (
   callback: (user: User | null) => void
