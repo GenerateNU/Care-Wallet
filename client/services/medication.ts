@@ -1,8 +1,8 @@
-import axios, { HttpStatusCode } from 'axios';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import axios, { HttpStatusCode } from 'axios';
 
-import { Medication } from '../types/medication';
 import { api_url } from './api-links';
+import { Medication } from '../types/medication';
 
 const getAllMedications = async (): Promise<Medication[]> => {
   await new Promise((r) => setTimeout(r, 2000)); // this is just to show is loading (DONT ADD ANYWHERE ELSE)

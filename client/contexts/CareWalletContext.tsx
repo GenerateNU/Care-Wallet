@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
+
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 import { Group, User } from './types';
@@ -10,7 +11,11 @@ type CareWalletContextData = {
 
 const CareWalletContext = createContext({} as CareWalletContextData);
 
-export function CareWalletProvider({ children }: { children: any }) {
+export function CareWalletProvider({
+  children
+}: {
+  children: JSX.Element | JSX.Element[];
+}) {
   const [user, setUser] = useState({} as User);
   const [group, setGroup] = useState({} as Group);
   const auth = getAuth();

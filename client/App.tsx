@@ -1,10 +1,11 @@
-import * as React from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { PaperProvider } from 'react-native-paper';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import React from 'react';
 
-import { Router } from './navigation/Router';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { PaperProvider } from 'react-native-paper';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 import { CareWalletProvider } from './contexts/CareWalletContext';
+import { Router } from './navigation/Router';
 
 export default function App() {
   const queryClient = new QueryClient();

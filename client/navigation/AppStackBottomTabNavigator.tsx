@@ -1,9 +1,10 @@
 import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Text } from 'react-native';
 
-import MedicationList from '../screens/MedicationList';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
 import Home from '../assets/home.svg';
+import MedicationList from '../screens/MedicationList';
 
 const AppStackBottomTab = createBottomTabNavigator();
 

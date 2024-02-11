@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, Button } from 'react-native';
-import * as DocumentPicker from 'expo-document-picker';
+import { Button, View } from 'react-native';
+
+import { getDocumentAsync } from 'expo-document-picker';
 
 import { useCareWalletContext } from '../contexts/CareWalletContext';
 import { useFile } from '../services/file';
@@ -11,7 +12,7 @@ export function DocPickerButton() {
 
   const pickDocument = async () => {
     try {
-      await DocumentPicker.getDocumentAsync({
+      await getDocumentAsync({
         type: '*/*',
         copyToCacheDirectory: false
       }).then((res) => {

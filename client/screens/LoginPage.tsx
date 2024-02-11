@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Alert } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { onAuthStateChanged } from '@firebase/auth';
+import { Alert, Button, TextInput, View } from 'react-native';
 
-import { AppStackNavigation } from '../navigation/AppNavigation';
+import { onAuthStateChanged } from '@firebase/auth';
+import { useNavigation } from '@react-navigation/native';
+
 import { auth } from '../firebase.config';
+import { AppStackNavigation } from '../navigation/AppNavigation';
 import { useAuth } from '../services/auth';
 
 export default function LoginPage() {
@@ -16,7 +17,7 @@ export default function LoginPage() {
 
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      navigation.navigate('MainNavScreens');
+      navigation.navigate('Main');
       return;
     }
 

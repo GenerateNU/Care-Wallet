@@ -1,12 +1,13 @@
+import { Alert } from 'react-native';
+
 import { useMutation } from '@tanstack/react-query';
 import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
   User,
+  UserCredential,
+  createUserWithEmailAndPassword,
   onAuthStateChanged as firebaseOnAuthStateChanged,
-  UserCredential
+  signInWithEmailAndPassword
 } from 'firebase/auth';
-import { Alert } from 'react-native';
 
 import { auth } from '../firebase.config';
 
@@ -25,7 +26,7 @@ const signUp = async ({
   await createUserWithEmailAndPassword(auth, email, password);
 
 // TODO: update to use a toast instead of an alert
-export const useAuth = () => {
+export function useAuth() {
   const { mutate: logInMutation } = useMutation({
     mutationFn: (authProps: AuthProps) => logIn(authProps),
     onSuccess: () => {
@@ -50,7 +51,7 @@ export const useAuth = () => {
     logInMutation,
     signUpMutation
   };
-};
+}
 
 export const onAuthStateChanged = (
   callback: (user: User | null) => void

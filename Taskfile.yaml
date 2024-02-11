@@ -13,11 +13,14 @@ tasks:
       echo -e "Frontend Formatting..."
       cd client
       npm run format
+      echo -e "\nFrontend Linting...\n"
+      npm run lint:fix
       echo -e "\nBackend Formatting...\n"
       cd ../backend
       go fmt ./...
-      go vet ./...
       swag f
+      echo -e "\nBackend Linting...\n"
+      go vet ./...
 
   start-dev:
     - |

@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { styled } from 'nativewind';
 import { Modal, Portal } from 'react-native-paper';
 
