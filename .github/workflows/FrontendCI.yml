@@ -3,14 +3,14 @@ name: Frontend CI
 on:
   push:
     paths:
-      - 'client/**'
-      - '.github/**'
-    branches: ['main']
+      - "client/**"
+      - ".github/**"
+    branches: ["main"]
   pull_request:
     paths:
-      - 'client/**'
-      - '.github/**'
-    branches: ['main']
+      - "client/**"
+      - ".github/**"
+    branches: ["main"]
 
 jobs:
   format:
@@ -53,8 +53,8 @@ jobs:
       - name: Lint Frontend
         run: |
           cd client
-          npm install prettier
-          npx prettier --check .
+          npm install
+          eslint --ext .ts,.tsx .
 
   build:
     name: Build
