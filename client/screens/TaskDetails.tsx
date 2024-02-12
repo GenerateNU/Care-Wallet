@@ -1,8 +1,25 @@
 import React from 'react';
-import { View, Text } from 'react-native';
-import { Task } from '../types/task';
+import { Text, View } from 'react-native';
 
-const TaskDetails: React.FC<{ route: any }> = ({ route }) => {
+interface TaskDetailsProps {
+  route: {
+    params: {
+      task: {
+        task_id: number;
+        group_id: number;
+        created_by: string;
+        start_date: string;
+        end_date: string;
+        notes: string;
+        task_status: string;
+        task_type: string;
+      };
+    };
+  };
+}
+
+// Define TaskDetails as a named function
+function TaskDetails({ route }: TaskDetailsProps) {
   const { task } = route.params;
 
   // Display task details here
@@ -19,6 +36,6 @@ const TaskDetails: React.FC<{ route: any }> = ({ route }) => {
       <Text>Task Type: {task.task_type}</Text>
     </View>
   );
-};
+}
 
 export default TaskDetails;

@@ -1,47 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  View,
+  ActivityIndicator,
   FlatList,
   Text,
-  ActivityIndicator,
-  TouchableOpacity
+  TouchableOpacity,
+  View
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { api_url } from '../services/api-links';
-import { onAuthStateChanged } from '../services/auth/authState';
-import { Task } from '../types/task';
-import { AddNewTaskButton } from '../components/AddNewTaskButton';
 
-const Tasks: React.FC = () => {
+import { api_url } from '../services/api-links';
+import { onAuthStateChanged } from '../services/auth';
+import { Task } from '../types/task';
+
+function Tasks() {
   const [loading, setLoading] = useState(true);
-  const navigation = useNavigation();
-  const [tasks, setTasks] = useState<Task[]>([
-    // Hardcoded tasks for testing
-    {
-      task_id: 1,
-      group_id: 1,
-      created_by: 'John Doe',
-      start_date: '2024-02-01',
-      end_date: '2024-02-15',
-      notes: 'Task 1: Complete project report',
-      task_status: 'Pending',
-      task_type: 'Project'
-    },
-    {
-      task_id: 2,
-      group_id: 1,
-      created_by: 'Jane Smith',
-      start_date: '2024-02-10',
-      end_date: '2024-02-20',
-      notes: 'Task 2: Review code changes',
-      task_status: 'In Progress',
-      task_type: 'Code Review'
-    }
-    // Add more tasks as needed
-  ]);
+  const [tasks, setTasks] = useState<Task[]>([]);
 
   useEffect(() => {
-    const fetchTasks = async (filterQuery: any) => {
+    const fetchTasks = async (filterQuery: Record<string, string>) => {
       try {
         const queryParams = new URLSearchParams(filterQuery).toString();
         const response = await fetch(
@@ -56,27 +31,23 @@ const Tasks: React.FC = () => {
       }
     };
 
-    // Construct filter query object
     const filterQuery = {
       groupID: 'someGroupID', // Example: replace with actual filter criteria
       taskStatus: 'pending' // Example: replace with actual filter criteria
       // Add more filter criteria as needed...
     };
 
-    // Use onAuthStateChanged to get the current user's ID
     onAuthStateChanged((user) => {
       if (user) {
-        const userId = user.uid; // Assuming the user ID is stored in the 'uid' property
-        fetchTasks({ ...filterQuery, userId }); // Include userId in the filter query
+        const userId = user.uid;
+        fetchTasks({ ...filterQuery, userId });
       } else {
         // Handle the case where the user is not authenticated
       }
     });
   }, []);
 
-  // Handle task item click
   const handleTaskPress = (task: Task) => {
-    //navigation.navigate('TaskDetailsScreen', { task });
     console.log('Task clicked:', task);
   };
 
@@ -110,6 +81,6 @@ const Tasks: React.FC = () => {
       )}
     </View>
   );
-};
+}
 
 export default Tasks;

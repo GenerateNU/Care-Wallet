@@ -1,9 +1,13 @@
-// AddNewTaskButton.tsx
 import React from 'react';
-import { TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+
 import { useNavigation } from '@react-navigation/native';
 
-const AddNewTaskButton: React.FC = () => {
+// interface AddNewTaskButtonProps {
+//   // Define any props if needed
+// }
+
+export function AddNewTaskButton() {
   const navigation = useNavigation();
 
   const handlePress = () => {
@@ -16,7 +20,7 @@ const AddNewTaskButton: React.FC = () => {
       <Text style={styles.buttonText}>Add New Task</Text>
     </TouchableOpacity>
   );
-};
+}
 
 const styles = StyleSheet.create({
   button: {
@@ -30,5 +34,3 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   }
 });
-
-export default AddNewTaskButton;
