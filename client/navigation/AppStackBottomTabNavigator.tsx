@@ -8,6 +8,8 @@ import CalendarIcon from '../assets/calendar.svg';
 import Calendar from '../screens/Calendar';
 import Calendar1 from '../screens/Calendar-1.0';
 import TimelineCalendarScreen from '../screens/Calendar2.0';
+import CalendarScreen from '../screens/Calendar10';
+import PlaygroundScreen from '../screens/Calendar10';
 
 const AppStackBottomTab = createBottomTabNavigator();
 
@@ -49,6 +51,15 @@ export function AppStackBottomTabNavigator() {
           tabBarLabel: () => <Text>Calendar 2.0</Text>
         }}
         component={TimelineCalendarScreen}
+      />
+      <AppStackBottomTab.Screen
+        name="Calendar 10"
+        options={{
+          headerShown: true,
+          tabBarIcon: () => <CalendarIcon color={'gray'} />,
+          tabBarLabel: () => <Text>Calendar 10</Text>
+        }}
+        component={PlaygroundScreen}
       />
     </AppStackBottomTab.Navigator>
   );
