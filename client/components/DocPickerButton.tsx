@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, View } from 'react-native';
+import { Pressable, Text } from 'react-native';
 
 import { getDocumentAsync } from 'expo-document-picker';
 
@@ -30,8 +30,13 @@ export function DocPickerButton() {
   };
 
   return (
-    <View>
-      <Button title="Pick Document" onPress={pickDocument} />
-    </View>
+    <Pressable
+      onPress={pickDocument}
+      className="mb-2 mt-2 w-40 self-center rounded-md border border-carewallet-gray "
+    >
+      <Text className="self-center text-lg text-carewallet-black">
+        Pick Document
+      </Text>
+    </Pressable>
   );
 }

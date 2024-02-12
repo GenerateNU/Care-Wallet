@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert, Button, TextInput, View } from 'react-native';
+import { Alert, Pressable, Text, TextInput, View } from 'react-native';
 
 import { onAuthStateChanged } from '@firebase/auth';
 import { useNavigation } from '@react-navigation/native';
@@ -45,21 +45,33 @@ export default function LoginPage() {
   return (
     <View className="flex-1 items-center justify-center px-5">
       <TextInput
-        className="my-2.5 w-full rounded border border-gray-300 px-3 py-2"
+        className="my-2.5 w-full rounded border border-carewallet-lightgray px-3 py-2"
         value={email}
         onChangeText={setEmail}
         placeholder="Email"
         keyboardType="email-address"
       />
       <TextInput
-        className="my-2.5 w-full rounded border border-gray-300 px-3 py-2"
+        className="my-2.5 w-full rounded border border-carewallet-lightgray px-3 py-2"
         value={password}
         onChangeText={setPassword}
         placeholder="Password"
         secureTextEntry
       />
-      <Button title="Login" onPress={handleLogin} />
-      <Button title="Sign Up" onPress={handleSignUp} />
+      <Pressable
+        onPress={handleLogin}
+        className="mb-2 w-20 self-center rounded-md border border-carewallet-gray"
+      >
+        <Text className="self-center text-lg text-carewallet-gray">Log In</Text>
+      </Pressable>
+      <Pressable
+        onPress={handleSignUp}
+        className="w-20 self-center rounded-md border border-carewallet-gray"
+      >
+        <Text className="self-center text-lg text-carewallet-gray">
+          Sign Up
+        </Text>
+      </Pressable>
     </View>
   );
 }

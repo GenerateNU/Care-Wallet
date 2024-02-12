@@ -25,7 +25,7 @@ export function PopupModal({
       <StyledModal
         visible={isVisible}
         onDismiss={() => setVisible(false)}
-        contentContainerStyle="border-10 rounded-3xl border-white w-[90%] h-[60%] self-center bg-white"
+        contentContainerStyle="border-10 rounded-3xl w-[90%] h-[60%] self-center bg-carewallet-white"
       >
         {children}
       </StyledModal>

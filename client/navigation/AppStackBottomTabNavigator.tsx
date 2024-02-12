@@ -15,7 +15,7 @@ export function AppStackBottomTabNavigator() {
         name="Landing"
         options={{
           headerShown: true,
-          tabBarIcon: () => <Home color={'gray'} />,
+          tabBarIcon: () => <Home color="gray" />,
           tabBarLabel: () => <Text>Landing</Text>
         }}
         component={MedicationList}

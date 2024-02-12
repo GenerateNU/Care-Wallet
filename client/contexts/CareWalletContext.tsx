@@ -31,7 +31,7 @@ export function CareWalletProvider({
 
       setGroup({
         groupID: 999,
-        role: 'TEMP - REPLACE WITH ACTUAL'
+        role: 'TEMP'
       });
     });
   }, []);
