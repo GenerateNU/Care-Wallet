@@ -38,6 +38,8 @@ export const useFile = () => {
     mutationFn: (fileUploadProps: UploadFileProps) =>
       uploadFile(fileUploadProps),
     onSuccess: (result) => {
+      // This is needed for file upload since it seems to use fetch instead of axios
+      // axios results in error if the status is 400+
       if (result && result.status === HttpStatusCode.Ok) {
         console.log('File Uploaded...');
         return;

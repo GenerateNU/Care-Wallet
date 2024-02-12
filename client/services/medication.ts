@@ -1,4 +1,4 @@
-import axios, { HttpStatusCode } from 'axios';
+import axios from 'axios';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { Medication } from '../types/medication';
@@ -32,18 +32,36 @@ export const useMedication = () => {
 
   const { mutate: addMedicationMutation } = useMutation({
     mutationFn: (med: Medication) => addMedication(med),
-    onSuccess: (status) => {
-      if (status === HttpStatusCode.Ok) {
-        queryClient.invalidateQueries({
-          queryKey: ['medList'] // mark medlist as stale so it refetches
-        });
-        return;
-      }
+    //Optimistically update the medlist so it looks like the mutation has been completed
+    onMutate: async (newMed) => {
+      // Cancel any outgoing refetches
+      // (so they don't overwrite the optimistic update)
+      await queryClient.cancelQueries({
+        queryKey: ['medList', newMed.medication_id]
+      });
 
-      console.log('Failed to Add Medication...');
+      // Snapshot the previous value
+      const previousMedication = queryClient.getQueryData(['medList']);
+
+      // Optimistically update to the new value
+      queryClient.setQueryData(['medList'], (old: Medication[]) => [
+        ...old,
+        newMed
+      ]);
+
+      // Return a context with the previous and new todo
+      return { previousMedication };
     },
-    onError: (error) => {
-      console.log('Server Error: ', error.message);
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['medList'] // mark medlist as stale so it refetches
+      });
+      return;
+    },
+    // If the mutation fails, use the context we returned above to return to the previous state
+    onError: (err, newMed, context) => {
+      console.log('ERROR: Failed to Add Medication...');
+      queryClient.setQueryData(['medList'], context?.previousMedication);
     }
   });
 
