@@ -1,12 +1,16 @@
-import * as DocumentPicker from 'expo-document-picker';
-import * as FileSystem from 'expo-file-system';
 import { useMutation } from '@tanstack/react-query';
 import { HttpStatusCode } from 'axios';
+import { DocumentPickerAsset } from 'expo-document-picker';
+import {
+  createUploadTask,
+  FileSystemUploadResult,
+  FileSystemUploadType
+} from 'expo-file-system';
 
 import { api_url } from './api-links';
 
 interface UploadFileProps {
-  file: DocumentPicker.DocumentPickerAsset;
+  file: DocumentPickerAsset;
   userId: string;
   groupId: number;
 }
@@ -15,13 +19,13 @@ const uploadFile = async ({
   file,
   userId,
   groupId
-}: UploadFileProps): Promise<FileSystem.FileSystemUploadResult | undefined> => {
-  const uploadResumable = FileSystem.createUploadTask(
+}: UploadFileProps): Promise<FileSystemUploadResult | undefined> => {
+  const uploadResumable = createUploadTask(
     `${api_url}/files/upload`,
     file.uri,
     {
       httpMethod: 'POST',
-      uploadType: FileSystem.FileSystemUploadType.MULTIPART,
+      uploadType: FileSystemUploadType.MULTIPART,
       fieldName: 'file_data',
       parameters: {
         upload_by: userId,

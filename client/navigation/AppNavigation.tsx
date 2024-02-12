@@ -1,13 +1,18 @@
 import React from 'react';
+
 import { NavigationProp } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import LoginPage from '../screens/Login';
+import LoginPage from '../screens/LoginPage';
 import { AppStackBottomTabNavigator } from './AppStackBottomTabNavigator';
 
-export type AppScreenNames = ['MainNavScreens', 'Landing', 'Login'];
+export type AppStackParamList = {
+  Main: undefined;
+  Home: undefined;
+  Login: undefined;
+};
+
 export type AppStackNavigation = NavigationProp<AppStackParamList>;
-type AppStackParamList = Record<AppScreenNames[number], any>;
 
 const AppStack = createNativeStackNavigator<AppStackParamList>();
 
@@ -20,7 +25,7 @@ export function AppNavigation() {
         component={LoginPage}
       />
       <AppStack.Screen
-        name="MainNavScreens"
+        name="Main"
         options={{ headerShown: false }}
         component={AppStackBottomTabNavigator}
       />
