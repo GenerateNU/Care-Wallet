@@ -10,6 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 import { api_url } from '../services/api-links';
 import { onAuthStateChanged } from '../services/auth/authState';
 import { Task } from '../types/task';
+import { AddNewTaskButton } from '../components/AddNewTaskButton';
 
 const Tasks: React.FC = () => {
   const [loading, setLoading] = useState(true);
