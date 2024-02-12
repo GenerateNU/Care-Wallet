@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
+
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
+
 import { Group, User } from './types';
 
 type CareWalletContextData = {
@@ -9,7 +11,11 @@ type CareWalletContextData = {
 
 const CareWalletContext = createContext({} as CareWalletContextData);
 
-export default function CareWalletProvider({ children }: { children: any }) {
+export function CareWalletProvider({
+  children
+}: {
+  children: JSX.Element | JSX.Element[];
+}) {
   const [user, setUser] = useState({} as User);
   const [group, setGroup] = useState({} as Group);
   const auth = getAuth();
@@ -20,11 +26,13 @@ export default function CareWalletProvider({ children }: { children: any }) {
         userID: user?.uid ?? '',
         userEmail: user?.email ?? ''
       };
+
       setUser(signedInUser);
-    });
-    setGroup({
-      groupID: 'TEMP - REPLACE WITH ACTUAL',
-      role: 'TEMP - REPLACE WITH ACTUAL'
+
+      setGroup({
+        groupID: 999,
+        role: 'TEMP'
+      });
     });
   }, []);
 
