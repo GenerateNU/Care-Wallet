@@ -129,7 +129,8 @@ VALUES
   ('Smith Family', NOW()),
   ('Johnson Support Network', NOW()),
   ('Williams Care Team', NOW()),
-  ('Brown Medical Group', NOW())
+  ('Brown Medical Group', NOW()),
+  ('Care-Wallet Group', NOW()),
 ;
 
 INSERT INTO users (user_id, first_name, last_name, email, phone, address)
@@ -137,7 +138,8 @@ VALUES
   ('user1', 'John', 'Smith', 'john.smith@example.com', '123-456-7890', '123 Main St'),
   ('user2', 'Jane', 'Doe', 'jane.doe@example.com', '987-654-3210', '456 Elm St'),
   ('user3', 'Bob', 'Johnson', 'bob.johnson@example.com', NULL, NULL),
-  ('user4', 'Emily', 'Garcia', 'emily.garcia@example.com', '555-1212', '789 Oak Ave')
+  ('user4', 'Emily', 'Garcia', 'emily.garcia@example.com', '555-1212', '789 Oak Ave'),
+  ('fIoFY26mJnYWH8sNdfuVoxpnVnr1', 'Matt', 'McCoy', '', '', '');
 ;
 
 INSERT INTO group_roles (group_id, user_id, role)
@@ -148,7 +150,8 @@ VALUES
   (2, 'user4', 'SECONDARY'),
   (3, 'user4', 'PATIENT'),
   (4, 'user1', 'SECONDARY'),
-  (4, 'user3', 'SECONDARY')
+  (4, 'user3', 'SECONDARY'),
+  (5, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', 'PRIMARY')
 ;
 
 INSERT INTO task (group_id, created_by, created_date, start_date, end_date, notes, task_status, task_type)

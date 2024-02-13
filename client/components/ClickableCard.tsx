@@ -14,7 +14,7 @@ export function ClickableCard({
   children
 }: ClickableCardProps) {
   return (
-    <Card className="bg-blue-300 m-10 w-64" onPress={onPress}>
+    <Card className="m-10 w-64 bg-carewallet-lightgray" onPress={onPress}>
       <Card.Title className="mb-5" title={title} />
       <Card.Content>{children}</Card.Content>
     </Card>

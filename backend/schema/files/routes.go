@@ -17,34 +17,27 @@ func FileGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 
 	files := v1.Group("files")
 	{
-		files.POST("/upload", c.UploadFileRoute)
+		files.POST("/upload", c.UploadFile)
 	}
 
 	return files
 }
 
-// GetFiles godoc
+// UploadFile godoc
 //
 //	@summary		Upload a file
 //	@description	Upload a file to database and S3 bucket
 //	@tags			file
+//
 //	@param			file_data	formData	file	true	"Body with file zip"
+//	@param			upload_by	formData	string	true	"The userId of the uploader"
+//	@param			group_id	formData	int		true	"The groupId of the uploader"
 //
 //	@success		200			{object}	models.File
-//	@failure		400
+//	@failure		400			{object}	string
 //	@router			/files/upload [post]
-func (pg *PgModel) UploadFileRoute(c *gin.Context) {
-	// TODO: Ensure Swagger Knows about the bad request returns!!!
+func (pg *PgModel) UploadFile(c *gin.Context) {
 	var file models.File
-
-	if err := c.Bind(&file); err != nil {
-		c.JSON(http.StatusBadRequest, "Failed to process the request")
-		return
-	}
-	userID := c.GetHeader("user_id")
-	groupID := c.GetHeader("group_id")
-	file.UploadBy, _ = strconv.Atoi(userID)
-	file.GroupID, _ = strconv.Atoi(groupID)
 
 	form, err := c.MultipartForm()
 	if err != nil {
@@ -53,6 +46,14 @@ func (pg *PgModel) UploadFileRoute(c *gin.Context) {
 	}
 
 	fileResponse := form.File["file_data"][0]
+	file.UploadBy = form.Value["upload_by"][0]
+	file.GroupID, err = strconv.Atoi(form.Value["group_id"][0])
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, "Failed to parse groupid")
+		return
+	}
+
 	fileData, err := fileResponse.Open()
 	if err != nil {
 		c.JSON(http.StatusBadRequest, "Failed to open file")

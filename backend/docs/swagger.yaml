@@ -22,7 +22,7 @@ definitions:
       task_id:
         type: integer
       upload_by:
-        type: integer
+        type: string
       upload_date:
         type: string
     type: object
@@ -110,6 +110,16 @@ paths:
         name: file_data
         required: true
         type: file
+      - description: The userId of the uploader
+        in: formData
+        name: upload_by
+        required: true
+        type: string
+      - description: The groupId of the uploader
+        in: formData
+        name: group_id
+        required: true
+        type: integer
       responses:
         "200":
           description: OK
@@ -117,6 +127,8 @@ paths:
             $ref: '#/definitions/models.File'
         "400":
           description: Bad Request
+          schema:
+            type: string
       summary: Upload a file
       tags:
       - file
@@ -179,6 +191,27 @@ paths:
               $ref: '#/definitions/models.Medication'
             type: array
       summary: Get All Meds
+      tags:
+      - medications
+    post:
+      description: add a medication to a users medlist
+      parameters:
+      - description: a medication
+        in: body
+        name: _
+        required: true
+        schema:
+          $ref: '#/definitions/models.Medication'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Medication'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: add a medication
       tags:
       - medications
   /tasks/{tid}/assign:
