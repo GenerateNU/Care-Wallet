@@ -94,8 +94,8 @@ CREATE TABLE IF NOT EXISTS task_assignees (
     group_id integer NOT NULL,
     label_name varchar NOT NULL,
     PRIMARY KEY (task_id, label_name),
-    FOREIGN KEY (task_id) REFERENCES task (task_id),
-    FOREIGN KEY (group_id, label_name) REFERENCES label (group_id, label_name) -- NOTE: unsure about label/task_labels table constraints, uncommenting this line is err
+    FOREIGN KEY (task_id) REFERENCES task (task_id) ON UPDATE CASCADE,
+    FOREIGN KEY (group_id, label_name) REFERENCES label (group_id, label_name) ON UPDATE CASCADE -- NOTE: unsure about label/task_labels table constraints, uncommenting this line is err
 );
 
 CREATE TABLE IF NOT EXISTS files (

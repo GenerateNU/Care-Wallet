@@ -18,12 +18,13 @@ func LabelGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 	{
 		labels.POST("/new", c.CreateNewLabel)
 		labels.DELETE("/delete/:gid/:lname", c.DeleteLabel)
+		labels.PATCH("/edit/:gid/:lname", c.EditLabel)
 	}
 
 	return labels
 }
 
-type LabelCreation struct {
+type LabelData struct {
 	GroupID    int    `json:"group_id"`
 	LabelName  string `json:"label_name"`
 	LabelColor string `json:"label_color"`
@@ -35,13 +36,13 @@ type LabelCreation struct {
 //	@description	create a new label for a group
 //	@tags			labels
 //
-//	@param			_	body		LabelCreation	true	"Label creation data"
+//	@param			_	body		LabelData	true	"Label creation data"
 //
 //	@success		200	{object}	models.Label
 //	@failure		400	{object}	string
 //	@router			/labels/new [post]
 func (pg *PgModel) CreateNewLabel(c *gin.Context) {
-	var requestBody LabelCreation
+	var requestBody LabelData
 
 	if err := c.BindJSON(&requestBody); err != nil {
 		fmt.Println("Error binding JSON: ", err.Error())
@@ -81,4 +82,37 @@ func (pg *PgModel) DeleteLabel(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, nil)
+}
+
+// EditLabel godoc
+//
+//	@summary		Edit A Label
+//	@description	edit a label
+//	@tags			labels
+//
+//	@param			:gid	path		string		true	"Group of label to edit"
+//	@param			:lname	path		string		true	"Name of label to edit"
+//	@param			_		body		LabelData	true	"Label edit data"
+//
+//	@success		200		{object}	models.Label
+//	@failure		400		{object}	string
+//	@router			/labels/edit/{:gid}/{:lname} [PATCH]
+func (pg *PgModel) EditLabel(c *gin.Context) {
+	group_id := c.Param("gid")
+	label_name := c.Param("lname")
+
+	var requestBody LabelData
+
+	if err := c.BindJSON(&requestBody); err != nil {
+		c.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	label, err := EditLabelInDB(pg.Conn, group_id, label_name, requestBody)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, label)
 }

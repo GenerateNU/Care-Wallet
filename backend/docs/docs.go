@@ -100,6 +100,54 @@ const docTemplate = `{
                 }
             }
         },
+        "/labels/edit/{:gid}/{:lname}": {
+            "patch": {
+                "description": "edit a label",
+                "tags": [
+                    "labels"
+                ],
+                "summary": "Edit A Label",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Group of label to edit",
+                        "name": ":gid",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Name of label to edit",
+                        "name": ":lname",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Label edit data",
+                        "name": "_",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/labels.LabelData"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Label"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/labels/new": {
             "post": {
                 "description": "create a new label for a group",
@@ -114,7 +162,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/labels.LabelCreation"
+                            "$ref": "#/definitions/labels.LabelData"
                         }
                     }
                 ],
@@ -371,7 +419,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "labels.LabelCreation": {
+        "labels.LabelData": {
             "type": "object",
             "properties": {
                 "group_id": {

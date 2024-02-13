@@ -1,6 +1,6 @@
 basePath: /
 definitions:
-  labels.LabelCreation:
+  labels.LabelData:
     properties:
       group_id:
         type: integer
@@ -158,6 +158,38 @@ paths:
       summary: Delete A Label
       tags:
       - labels
+  /labels/edit/{:gid}/{:lname}:
+    patch:
+      description: edit a label
+      parameters:
+      - description: Group of label to edit
+        in: path
+        name: :gid
+        required: true
+        type: string
+      - description: Name of label to edit
+        in: path
+        name: :lname
+        required: true
+        type: string
+      - description: Label edit data
+        in: body
+        name: _
+        required: true
+        schema:
+          $ref: '#/definitions/labels.LabelData'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Label'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Edit A Label
+      tags:
+      - labels
   /labels/new:
     post:
       description: create a new label for a group
@@ -167,7 +199,7 @@ paths:
         name: _
         required: true
         schema:
-          $ref: '#/definitions/labels.LabelCreation'
+          $ref: '#/definitions/labels.LabelData'
       responses:
         "200":
           description: OK

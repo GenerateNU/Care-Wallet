@@ -38,7 +38,7 @@ func TestLabelGroup(t *testing.T) {
 	}
 
 	t.Run("TestCreateNewLabel", func(t *testing.T) {
-		postRequest := LabelCreation{
+		postRequest := LabelData{
 			GroupID:    1,
 			LabelName:  "Office",
 			LabelColor: "Orange",
@@ -82,6 +82,44 @@ func TestLabelGroup(t *testing.T) {
 
 		if http.StatusOK != w.Code {
 			t.Error("Failed to delete label.")
+		}
+	})
+
+	t.Run("TestEditLabel", func(t *testing.T) {
+		postRequest := LabelData{
+			GroupID:    4,
+			LabelName:  "Family",
+			LabelColor: "Yellow",
+		}
+
+		requestJSON, err := json.Marshal(postRequest)
+		if err != nil {
+			t.Error("Failed to marshal remove request to JSON")
+		}
+
+		w := httptest.NewRecorder()
+		req, _ := http.NewRequest("PATCH", "/labels/edit/4/Household", bytes.NewBuffer(requestJSON))
+		router.ServeHTTP(w, req)
+
+		if http.StatusOK != w.Code {
+			t.Error("Failed to edit label.")
+		}
+
+		var postResponse models.Label
+		err = json.Unmarshal(w.Body.Bytes(), &postResponse)
+
+		if err != nil {
+			t.Error("Failed to unmarshal json")
+		}
+
+		expectedResponse := models.Label{
+			GroupID:    4,
+			LabelName:  "Family",
+			LabelColor: "Yellow",
+		}
+
+		if !reflect.DeepEqual(expectedResponse, postResponse) {
+			t.Error("Result was not correct")
 		}
 	})
 }
