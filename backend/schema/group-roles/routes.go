@@ -23,15 +23,15 @@ func GetGroupRolesGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 
 // GetGroupIDByUID godoc
 //
-// @summary Retrieve a group id given a user id
-// @description get the group id from the user id
-// @tags group
+//	@summary		Retrieve a group id given a user id
+//	@description	get the group id from the user id
+//	@tags			group
 //
-// @param uid path string true "user id"
+//	@param			uid	path		string	true	"user id"
 //
-// @success 200 {object} string
-// @failure 400 {object} string
-// @router /group-roles/get-group/{uid} [get]
+//	@success		200	{object}	string
+//	@failure		400	{object}	string
+//	@router			/group-roles/get-group/{uid} [get]
 func (pg *PgModel) GetGroupIDByUID(c *gin.Context) {
 	uid := c.Param("uid")
 	groupID, err := GetGroupIDByUIDFromDB(pg.Conn, uid)

@@ -75,15 +75,15 @@ func (pg *PgModel) AddUserCareGroup(c *gin.Context, userId string, groupId strin
 
 // GetGroupMembers godoc
 //
-// @summary Get all members from a group
-// @description retrieve all users in given group id
-// @tags groups
+//	@summary		Get all members from a group
+//	@description	retrieve all users in given group id
+//	@tags			groups
 //
-// @param groupId path string true "group id"
+//	@param			groupId	path		string	true	"group id"
 //
-// @success 200 {array} string
-// @failure 400 {object} string
-// @router /care-groups/get-members/{groupId} [get]
+//	@success		200		{array}		string
+//	@failure		400		{object}	string
+//	@router			/care-groups/get-members/{groupId} [get]
 func (pg *PgModel) GetGroupMembers(c *gin.Context) {
 	groupId := c.Param("groupId")
 	members, err := GetGroupMembersFromDB(pg.Conn, groupId)

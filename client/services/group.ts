@@ -1,10 +1,14 @@
 import axios from 'axios';
+
 import { api_url } from './api-links';
 
 // Create a care group
 export const createCareGroup = async (groupName: string): Promise<number> => {
   try {
-    const response = await axios.post(`${api_url}/care-groups/${groupName}`, {});
+    const response = await axios.post(
+      `${api_url}/care-groups/${groupName}`,
+      {}
+    );
     console.log('response:', response);
     return response.data;
   } catch (error) {
@@ -14,9 +18,16 @@ export const createCareGroup = async (groupName: string): Promise<number> => {
 };
 
 // Add a user to a care group
-export const addUserToCareGroup = async (userId: string, groupId: string, role: string): Promise<number> => {
+export const addUserToCareGroup = async (
+  userId: string,
+  groupId: string,
+  role: string
+): Promise<number> => {
   try {
-    const response = await axios.post(`${api_url}/care-groups/addUser/${userId}/${groupId}/${role}`, {});
+    const response = await axios.post(
+      `${api_url}/care-groups/addUser/${userId}/${groupId}/${role}`,
+      {}
+    );
     console.log('response:', response);
     return response.data;
   } catch (error) {
@@ -27,6 +38,8 @@ export const addUserToCareGroup = async (userId: string, groupId: string, role: 
 
 // Get all members of a care group
 export const getGroupMembers = async (groupId: string): Promise<string[]> => {
-  const response = await axios.get(`${api_url}/care-groups/get-members/${groupId}`);
+  const response = await axios.get(
+    `${api_url}/care-groups/get-members/${groupId}`
+  );
   return response.data;
 };

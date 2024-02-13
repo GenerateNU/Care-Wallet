@@ -9,6 +9,23 @@ definitions:
       group_name:
         type: string
     type: object
+  models.File:
+    properties:
+      file_id:
+        type: integer
+      file_name:
+        type: string
+      file_size:
+        type: integer
+      group_id:
+        type: integer
+      task_id:
+        type: integer
+      upload_by:
+        type: string
+      upload_date:
+        type: string
+    type: object
   models.GroupRole:
     properties:
       group_id:
@@ -97,9 +114,31 @@ paths:
   /files/upload:
     post:
       description: Upload a file to database and S3 bucket
+      parameters:
+      - description: Body with file zip
+        in: formData
+        name: file_data
+        required: true
+        type: file
+      - description: The userId of the uploader
+        in: formData
+        name: upload_by
+        required: true
+        type: string
+      - description: The groupId of the uploader
+        in: formData
+        name: group_id
+        required: true
+        type: integer
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/models.File'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
       summary: Upload a file
       tags:
       - file
@@ -148,6 +187,27 @@ paths:
               $ref: '#/definitions/models.Medication'
             type: array
       summary: Get All Meds
+      tags:
+      - medications
+    post:
+      description: add a medication to a users medlist
+      parameters:
+      - description: a medication
+        in: body
+        name: _
+        required: true
+        schema:
+          $ref: '#/definitions/models.Medication'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Medication'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: add a medication
       tags:
       - medications
 swagger: "2.0"

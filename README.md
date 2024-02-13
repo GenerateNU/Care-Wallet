@@ -1,119 +1,89 @@
 <div align="center">
 <h1>Care-Wallet</h1>
-  <div>
-      A fullstack application for the Care-Wallet project
-  </div>
-  <br/>
-  <!-- Github Actions -->
-  <a href="https://github.com/GenerateNU/Care-Wallet/actions/workflows/CI.yml">
-    <img src="https://github.com/GenerateNU/Care-Wallet/actions/workflows/CI.yml/badge.svg"
+  <a href="https://github.com/GenerateNU/Care-Wallet/actions/workflows/BackendCI.yml">
+    <img src="https://github.com/GenerateNU/Care-Wallet/actions/workflows/BackendCI.yml/badge.svg"
+      alt="Workflow Status" />
+  </a>
+    <a href="https://github.com/GenerateNU/Care-Wallet/actions/workflows/FrontendCI.yml">
+    <img src="https://github.com/GenerateNU/Care-Wallet/actions/workflows/FrontendCI.yml/badge.svg"
       alt="Workflow Status" />
   </a>
   <br/>
+  <br/>
+  <div>
+      A fullstack application for the Care-Wallet project
+  </div>
 </div>
 
-## Set Up Your Development Environment
+## Stack
 
-First, understand the tech stack:
+![Go](https://img.shields.io/badge/go-%2300ADD8.svg?style=for-the-badge&logo=go&logoColor=white)
+![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
 
-- The database is [PostGreSQL](https://www.postgresql.org/) and will be
-  containerized using [Docker](https://www.docker.com/).
-- The backend is [Golang](https://go.dev/)
-- The frontend is [TypeScript](https://www.typescriptlang.org/) with
-  [ReactNative](https://reactnative.dev/) and
-  [NativeWind](https://www.nativewind.dev) and uses [Expo](https://expo.dev/) as
-  a build tool
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+![React Native](https://img.shields.io/badge/react_native-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
+
+## Tools
+
+![Expo](https://img.shields.io/badge/expo-1C1E24?style=for-the-badge&logo=expo&logoColor=#D04A37)
+![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
+![Swagger](https://img.shields.io/badge/-Swagger-%23Clojure?style=for-the-badge&logo=swagger&logoColor=white)
+
+## Development Enviroment Setup
 
 Before compiling and running our application, we need to install/setup several
 languages, package managers, and various tools. The installation process can
 vary, so follow the instructions for each item below!
 
-- [Go](https://go.dev/doc/install) - our primary backend language
-- [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) - our
-  package manager in the frontend
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/) - useful for
-  running docker
-- [ngrok](https://ngrok.com/docs/getting-started/) - Allows us to easily connect
-  the frontend to backend code
-- [expo-go](https://docs.expo.dev/get-started/expo-go/) - Expo allows mobile
-  devices to scan a QR code and view the code running on a mobile device
+[Go](https://go.dev/doc/install) our primary backend language.
 
-If you wish to simulate a phone from your computer either below will work:
+[Node Package Manager](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+our package manager in the frontend.
 
-- [xcode](https://docs.expo.dev/workflow/ios-simulator/) - A simulator to view
-  the code on an iphone from a laptop
-- [android studio](https://docs.expo.dev/workflow/android-studio-emulator/) - An
-  emulator to view the code on an android device from a laptop
+[Docker](https://www.docker.com/get-started/) and
+[Docker Desktop](https://www.docker.com/products/docker-desktop/) our Postgres
+Database will be containerized in Docker.
 
-If everything was successful, you can now compile and run the project!
+[Ngrok](https://ngrok.com/docs/getting-started/) Allows us to easily connect the
+frontend to backend code.
 
-Next, understand the development tools that will make our lives easier:
+[Swagger](https://github.com/swaggo/swag) visualizing the api and return types
+of requests from the database.
 
-- [Pre-commit](https://pre-commit.com) - standardizing code style and commits
-- [Swagger](https://github.com/swaggo/swag) - visualizing the api and return
-  types of requests from the database
-- [Task](https://taskfile.dev) - speeding up development by running long
-  commands in quick phrases
+[Task](https://taskfile.dev) speeding up development by running long commands in
+quick phrases.
 
-Before committing anything, we need to install several tools. The installation
-process can vary, so follow the instructions for each item below!
-
-- [pre-commit](https://pre-commit.com/#installation) - our development tool to
-  standardize development and ensure every file follows the same styling
-  guidelines.
-- [commitizen](https://commitizen-tools.github.io/commitizen/#installation) -
-  This allows us to organize commits! By typing `cz c` instead of
-  `git commit -m ""`, we can organize each of our commits into one of nine
-  categories:
-  - **fix**: A bug fix. Correlates with PATCH in SemVer
-  - **feat**: A new feature. Correlates with MINOR in SemVer
-  - **docs**: Documentation only changes
-  - **style**: Changes that do not affect the meaning of the code (white-space,
-    formatting, missing semi-colons, etc)
-  - **refactor**: A code change that neither fixes a bug nor adds a feature
-  - **perf**: A code change that improves performance
-  - **test**: Adding missing or correcting existing tests
-  - **build**: Changes that affect the build system or external dependencies
-    (example scopes: pip, docker, npm)
-  - **ci**: Changes to our CI configuration files and scripts (example scopes:
-    GitLabCI)
-- [Task](https://taskfile.dev/installation/) - our development tool to quickly
-  run commands that run, test, and clean files.
-
-## Extra Dependencies
-
-Install these into the backend directory
-
-1. go install github.com/swaggo/swag/cmd/swag@latest
+[Nodemon](https://www.npmjs.com/package/nodemon) a tool that watches code and
+reloads the build if it sees changes.
 
 ## Before Running
 
-1. Create a .env file in the root directory with a single line:
-   `EXPO_PUBLIC_API_DOMAIN=your-ngrok-static-domain-here`
-   - this will be used by the frontend services as well as the task file to
-     launch ngrok!
+Create an .env file in the root directory:
 
-## Running the project
+```
+  EXPO_PUBLIC_API_DOMAIN=your-ngrok-static-domain-here
+  AWS_ACCESS_KEY=your-aws-access-key-here
+  AWS_SECRET_KEY=your-aws-secret-key-here
+```
+
+## Before Contributing
+
+Before contributing to the project, we need to install/setup several various
+tools. The installation process can vary, so follow the instructions for each
+item below!
+
+[Pre-commit](https://pre-commit.com) standardizing code style and commits
+
+[Commitizen](https://commitizen-tools.github.io/commitizen/) organizing our
+commits into categories
+
+## Running The Project
 
 1. Launch Docker Desktop
 2. In the base of the repo: run `task start-docker`
-
-   - This will run `docker-compose down` then `docker-compose up`
-
-3. To build all of the dependencies of the project: run `task build`
-
-   - This will install both frontend and backend dependencies
-
-4. Then, open a new tab to run commands in: run `task start-backend`
-
-   - This will generate the swagger docs as well as start the backend
+3. Then, open a new tab to run commands in: run `task start-backend` or
+   `task start-dev`
    - You can now view swagger: http://localhost:8080/swagger/index.html
-
-5. Next, in a new tab run `task start-ngrok`
-
-6. Finally, open one last new tab: run `task start-frontend`
-
-   - This will start the frontend
-
-7. From here follow the prompt in step 6 to launch the frontend on your device
-   of choice
+4. Next, in a new tab run `task start-ngrok`
+5. Finally, open one last new tab: run `task start-frontend`

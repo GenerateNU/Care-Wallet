@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { View, TextInput, Button, Text, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
+
 import {
-  createCareGroup,
   addUserToCareGroup,
+  createCareGroup,
   getGroupMembers
 } from '../services/group';
 
-const GroupScreen = () => {
+export default function GroupScreen() {
   const [groupName, setGroupName] = useState('');
   const [userId, setUserId] = useState<string>('');
   const [role, setRole] = useState('');
@@ -81,7 +82,7 @@ const GroupScreen = () => {
       </View>
     </View>
   );
-};
+}
 
 // uhhhhh
 const styles = StyleSheet.create({
@@ -97,8 +98,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center'
+  }
 });
-
-export default GroupScreen;

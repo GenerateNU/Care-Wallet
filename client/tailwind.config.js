@@ -1,8 +1,19 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ['./App.{js,jsx,ts,tsx}', './screens/**/*.{js,jsx,ts,tsx}'],
+  content: [
+    './**/*.html',
+    './**/*.js',
+    './**/*.jsx',
+    './**/*.ts',
+    './**/*.tsx'
+  ],
   theme: {
-    extend: {}
+    colors: {
+      'carewallet-white': '#FFFFFF',
+      'carewallet-black': '#000000',
+      'carewallet-gray': '#BEBEBE',
+      'carewallet-lightgray': '#D9D9D9'
+    }
   },
   plugins: []
 };

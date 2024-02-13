@@ -13,11 +13,19 @@ tasks:
       echo -e "Frontend Formatting..."
       cd client
       npm run format
+      echo -e "\nFrontend Linting...\n"
+      npm run lint:fix
       echo -e "\nBackend Formatting...\n"
       cd ../backend
       go fmt ./...
-      go vet ./...
       swag f
+      echo -e "\nBackend Linting...\n"
+      go vet ./...
+
+  start-dev:
+    - |
+      echo -e "Starting Backend Live-Reload..."
+      nodemon -e go --ignore 'backend/docs/**' --signal SIGTERM --exec "task start-backend"
 
   start-backend:
     - |

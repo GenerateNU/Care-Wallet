@@ -34,3 +34,15 @@ func GetAllMedsFromDB(pool *pgx.Conn) ([]models.Medication, error) {
 
 	return results, nil
 }
+
+func AddMedToDB(pool *pgx.Conn, med models.Medication) (models.Medication, error) {
+	err := pool.QueryRow("INSERT INTO medication (medication_id, medication_name) VALUES ($1, $2) RETURNING medication_id;",
+		med.MedicationID, med.MedicationName).Scan(&med.MedicationID)
+
+	if err != nil {
+		print(err.Error())
+		return models.Medication{}, err
+	}
+
+	return med, nil
+}

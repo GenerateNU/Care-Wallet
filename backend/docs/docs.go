@@ -103,9 +103,41 @@ const docTemplate = `{
                     "file"
                 ],
                 "summary": "Upload a file",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "Body with file zip",
+                        "name": "file_data",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "The userId of the uploader",
+                        "name": "upload_by",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "The groupId of the uploader",
+                        "name": "group_id",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.File"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 }
             }
@@ -180,6 +212,38 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "post": {
+                "description": "add a medication to a users medlist",
+                "tags": [
+                    "medications"
+                ],
+                "summary": "add a medication",
+                "parameters": [
+                    {
+                        "description": "a medication",
+                        "name": "_",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Medication"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Medication"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
             }
         }
     },
@@ -194,6 +258,32 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "group_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.File": {
+            "type": "object",
+            "properties": {
+                "file_id": {
+                    "type": "integer"
+                },
+                "file_name": {
+                    "type": "string"
+                },
+                "file_size": {
+                    "type": "integer"
+                },
+                "group_id": {
+                    "type": "integer"
+                },
+                "task_id": {
+                    "type": "integer"
+                },
+                "upload_by": {
+                    "type": "string"
+                },
+                "upload_date": {
                     "type": "string"
                 }
             }
