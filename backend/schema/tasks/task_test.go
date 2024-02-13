@@ -51,12 +51,12 @@ func TestTaskGroup(t *testing.T) {
 
 		w := httptest.NewRecorder()
 		query := url.Values{}
-		query.Set("groupID", getRequest.GroupID)
-		query.Set("createdBy", getRequest.CreatedBy)
-		query.Set("taskStatus", getRequest.TaskStatus)
-		query.Set("taskType", getRequest.TaskType)
-		query.Set("startDate", getRequest.StartDate)
-		query.Set("endDate", getRequest.EndDate)
+		query.Add("groupID", getRequest.GroupID)
+		query.Add("createdBy", getRequest.CreatedBy)
+		query.Add("taskStatus", getRequest.TaskStatus)
+		query.Add("taskType", getRequest.TaskType)
+		query.Add("startDate", getRequest.StartDate)
+		query.Add("endDate", getRequest.EndDate)
 
 		req, _ := http.NewRequest("GET", "/tasks/filtered?"+query.Encode(), nil)
 		router.ServeHTTP(w, req)

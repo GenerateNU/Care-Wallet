@@ -26,12 +26,12 @@ func TaskGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 }
 
 type TaskQuery struct {
-	GroupID    string `query:"groupID"`
-	CreatedBy  string `query:"createdBy"`
-	TaskStatus string `query:"taskStatus"`
-	TaskType   string `query:"taskType"`
-	StartDate  string `query:"startDate"`
-	EndDate    string `query:"endDate"`
+	GroupID    string `form:"groupID"`
+	CreatedBy  string `form:"createdBy"`
+	TaskStatus string `form:"taskStatus"`
+	TaskType   string `form:"taskType"`
+	StartDate  string `form:"startDate"`
+	EndDate    string `form:"endDate"`
 }
 
 // GetFilteredTasks godoc
@@ -46,13 +46,10 @@ type TaskQuery struct {
 //	@failure		400	{object}	string
 //	@router			/tasks/filtered [get]
 func (pg *PgModel) GetFilteredTasks(c *gin.Context) {
-	filterQuery := TaskQuery{
-		GroupID:    c.Query("groupID"),
-		CreatedBy:  c.Query("createdBy"),
-		TaskStatus: c.Query("taskStatus"),
-		TaskType:   c.Query("taskType"),
-		StartDate:  c.Query("startDate"),
-		EndDate:    c.Query("endDate"),
+	var filterQuery TaskQuery
+	if err := c.ShouldBindQuery(&filterQuery); err != nil {
+		c.JSON(http.StatusBadRequest, err.Error())
+		return
 	}
 
 	tasks, err := GetTasksByQueryFromDB(pg.Conn, filterQuery)
