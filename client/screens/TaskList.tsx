@@ -7,13 +7,22 @@ import {
   View
 } from 'react-native';
 
+// import { PopupModal } from '../components/PopupModal';
+// Import necessary components and libraries
 import { api_url } from '../services/api-links';
 import { onAuthStateChanged } from '../services/auth';
+// Example import, replace with actual components
+import { useTask } from '../services/task';
+// Example import, replace with actual services
 import { Task } from '../types/task';
 
-function Tasks() {
+function TaskList() {
+  // Define state variables
   const [loading, setLoading] = useState(true);
   const [tasks, setTasks] = useState<Task[]>([]);
+
+  // Fetch data using custom hooks (e.g., useTask)
+  const { tasksIsLoading } = useTask('test');
 
   useEffect(() => {
     const fetchTasks = async (filterQuery: Record<string, string>) => {
@@ -31,12 +40,14 @@ function Tasks() {
       }
     };
 
+    // Example filterQuery
     const filterQuery = {
       groupID: 'someGroupID', // Example: replace with actual filter criteria
       taskStatus: 'pending' // Example: replace with actual filter criteria
       // Add more filter criteria as needed...
     };
 
+    // Example authentication check
     onAuthStateChanged((user) => {
       if (user) {
         const userId = user.uid;
@@ -70,7 +81,7 @@ function Tasks() {
 
   return (
     <View>
-      {loading ? (
+      {loading || tasksIsLoading ? (
         <ActivityIndicator size="large" />
       ) : (
         <FlatList
@@ -83,4 +94,4 @@ function Tasks() {
   );
 }
 
-export default Tasks;
+export default TaskList;

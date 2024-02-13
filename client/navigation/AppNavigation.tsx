@@ -4,8 +4,8 @@ import { NavigationProp } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import LoginPage from '../screens/LoginPage';
-import TaskDetails from '../screens/TaskDetails';
-import Tasks from '../screens/Tasks';
+// import TaskDetails from '../screens/TaskDetails';
+// import TaskList from '../screens/TaskList';
 import { AppStackBottomTabNavigator } from './AppStackBottomTabNavigator';
 
 export type AppStackParamList = {
@@ -31,16 +31,16 @@ export function AppNavigation() {
         options={{ headerShown: false }}
         component={AppStackBottomTabNavigator}
       />
-      <AppStack.Screen
-        name="Tasks"
+      {/* <AppStack.Screen
+        name="TaskList"
         options={{ headerShown: false }}
-        component={Tasks}
+        component={TaskList}
       />
       <AppStack.Screen
         name="TaskDetails"
         options={{ headerShown: false }}
         component={TaskDetails}
-      />
+      /> */}
     </AppStack.Navigator>
   );
 }
