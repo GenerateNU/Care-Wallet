@@ -50,7 +50,7 @@
   },
   "overrides": [
     {
-      "files": ["screens/**/*", "App.tsx", "declaration.d.ts"],
+      "files": ["screens/**/*", "App.tsx", "nativewind.d.ts"],
       "rules": {
         // Allows default exports for the above files
         "import/no-default-export": "off"
