@@ -130,7 +130,7 @@ VALUES
   ('Johnson Support Network', NOW()),
   ('Williams Care Team', NOW()),
   ('Brown Medical Group', NOW()),
-  ('Care-Wallet Group', NOW()),
+  ('Care-Wallet Group', NOW())
 ;
 
 INSERT INTO users (user_id, first_name, last_name, email, phone, address)
@@ -139,7 +139,7 @@ VALUES
   ('user2', 'Jane', 'Doe', 'jane.doe@example.com', '987-654-3210', '456 Elm St'),
   ('user3', 'Bob', 'Johnson', 'bob.johnson@example.com', NULL, NULL),
   ('user4', 'Emily', 'Garcia', 'emily.garcia@example.com', '555-1212', '789 Oak Ave'),
-  ('fIoFY26mJnYWH8sNdfuVoxpnVnr1', 'Matt', 'McCoy', '', '', '');
+  ('fIoFY26mJnYWH8sNdfuVoxpnVnr1', 'Matt', 'McCoy', '', '', '')
 ;
 
 INSERT INTO group_roles (group_id, user_id, role)

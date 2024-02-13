@@ -39,8 +39,8 @@ func TestLabelGroup(t *testing.T) {
 
 	t.Run("TestCreateNewLabel", func(t *testing.T) {
 		postRequest := LabelCreation{
-			GroupID:    3,
-			LabelName:  "Laundry",
+			GroupID:    1,
+			LabelName:  "Office",
 			LabelColor: "Orange",
 		}
 
@@ -65,8 +65,8 @@ func TestLabelGroup(t *testing.T) {
 		}
 
 		expectedResponse := models.Label{
-			GroupID:    3,
-			LabelName:  "Laundry",
+			GroupID:    1,
+			LabelName:  "Office",
 			LabelColor: "Orange",
 		}
 

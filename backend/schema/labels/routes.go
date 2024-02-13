@@ -1,6 +1,7 @@
 package labels
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -43,6 +44,7 @@ func (pg *PgModel) CreateNewLabel(c *gin.Context) {
 	var requestBody LabelCreation
 
 	if err := c.BindJSON(&requestBody); err != nil {
+		fmt.Println("Error binding JSON: ", err.Error())
 		c.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
