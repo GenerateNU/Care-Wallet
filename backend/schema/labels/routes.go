@@ -65,12 +65,12 @@ func (pg *PgModel) CreateNewLabel(c *gin.Context) {
 //	@description	delete a label
 //	@tags			labels
 //
-//	@param			:gid	path		string	true	"Group to delete label from"
-//	@param			:lname	path		string	true	"Name of label to delete"
+//	@param			gid		path		string	true	"Group to delete label from"
+//	@param			lname	path		string	true	"Name of label to delete"
 //
 //	@success		200		{object}	models.Label
 //	@failure		400		{object}	string
-//	@router			/labels/delete/{:gid}/{:lname} [DELETE]
+//	@router			/labels/delete/{gid}/{lname} [DELETE]
 func (pg *PgModel) DeleteLabel(c *gin.Context) {
 	group_id := c.Param("gid")
 	label_name := c.Param("lname")
@@ -90,13 +90,13 @@ func (pg *PgModel) DeleteLabel(c *gin.Context) {
 //	@description	edit a label
 //	@tags			labels
 //
-//	@param			:gid	path		string		true	"Group of label to edit"
-//	@param			:lname	path		string		true	"Name of label to edit"
+//	@param			gid		path		string		true	"Group of label to edit"
+//	@param			lname	path		string		true	"Name of label to edit"
 //	@param			_		body		LabelData	true	"Label edit data"
 //
 //	@success		200		{object}	models.Label
 //	@failure		400		{object}	string
-//	@router			/labels/edit/{:gid}/{:lname} [PATCH]
+//	@router			/labels/edit/{gid}/{lname} [PATCH]
 func (pg *PgModel) EditLabel(c *gin.Context) {
 	group_id := c.Param("gid")
 	label_name := c.Param("lname")

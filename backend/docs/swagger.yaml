@@ -132,18 +132,18 @@ paths:
       summary: Upload a file
       tags:
       - file
-  /labels/delete/{:gid}/{:lname}:
+  /labels/delete/{gid}/{lname}:
     delete:
       description: delete a label
       parameters:
       - description: Group to delete label from
         in: path
-        name: :gid
+        name: gid
         required: true
         type: string
       - description: Name of label to delete
         in: path
-        name: :lname
+        name: lname
         required: true
         type: string
       responses:
@@ -158,18 +158,18 @@ paths:
       summary: Delete A Label
       tags:
       - labels
-  /labels/edit/{:gid}/{:lname}:
+  /labels/edit/{gid}/{lname}:
     patch:
       description: edit a label
       parameters:
       - description: Group of label to edit
         in: path
-        name: :gid
+        name: gid
         required: true
         type: string
       - description: Name of label to edit
         in: path
-        name: :lname
+        name: lname
         required: true
         type: string
       - description: Label edit data

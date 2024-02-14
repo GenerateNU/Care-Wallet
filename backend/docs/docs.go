@@ -61,7 +61,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/labels/delete/{:gid}/{:lname}": {
+        "/labels/delete/{gid}/{lname}": {
             "delete": {
                 "description": "delete a label",
                 "tags": [
@@ -72,14 +72,14 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "Group to delete label from",
-                        "name": ":gid",
+                        "name": "gid",
                         "in": "path",
                         "required": true
                     },
                     {
                         "type": "string",
                         "description": "Name of label to delete",
-                        "name": ":lname",
+                        "name": "lname",
                         "in": "path",
                         "required": true
                     }
@@ -100,7 +100,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/labels/edit/{:gid}/{:lname}": {
+        "/labels/edit/{gid}/{lname}": {
             "patch": {
                 "description": "edit a label",
                 "tags": [
@@ -111,14 +111,14 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "Group of label to edit",
-                        "name": ":gid",
+                        "name": "gid",
                         "in": "path",
                         "required": true
                     },
                     {
                         "type": "string",
                         "description": "Name of label to edit",
-                        "name": ":lname",
+                        "name": "lname",
                         "in": "path",
                         "required": true
                     },
