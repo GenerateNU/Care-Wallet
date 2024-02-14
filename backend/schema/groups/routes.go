@@ -31,7 +31,7 @@ func CreateCareGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 			role := ctx.Param("role")
 			c.AddUserCareGroup(ctx, userId, groupId, role)
 		})
-		careGroups.GET("/get-members/:groupId", c.GetGroupMembers)
+		careGroups.GET("/:groupid/member", c.GetGroupMembers)
 	}
 
 	return careGroups
@@ -79,13 +79,13 @@ func (pg *PgModel) AddUserCareGroup(c *gin.Context, userId string, groupId strin
 //	@description	retrieve all users in given group id
 //	@tags			groups
 //
-//	@param			groupId	path		string	true	"group id"
+//	@param			groupid	path		string	true	"group id"
 //
 //	@success		200		{array}		string
 //	@failure		400		{object}	string
-//	@router			/care-groups/get-members/{groupId} [get]
+//	@router			/care-groups/{groupid}/member [get]
 func (pg *PgModel) GetGroupMembers(c *gin.Context) {
-	groupId := c.Param("groupId")
+	groupId := c.Param("groupid")
 	members, err := GetGroupMembersFromDB(pg.Conn, groupId)
 
 	if err != nil {

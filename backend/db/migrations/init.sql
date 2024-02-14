@@ -126,19 +126,14 @@ VALUES
 -- Insert sample data into "users" table
 INSERT INTO users (user_id, first_name, last_name, email, phone, address, pfp_s3_url, device_id, push_notification_enabled) VALUES
 ('user123', 'John', 'Doe', 'john.doe@example.com', '123-456-7890', '123 Main St, Anytown, USA', 'https://example.com/pfp/user123.jpg', 'device123', TRUE),
-('user456', 'Jane', 'Smith', 'jane.smith@example.com', '987-654-3210', '456 Elm St, Anytown, USA', 'https://example.com/pfp/user456.jpg', 'device456', TRUE),
-('fIoFY26mJnYWH8sNdfuVoxpnVnr1', 'Matt', 'McCoy', '', '', '', '', '', FALSE),
-;
+('user456', 'Jane', 'Smith', 'jane.smith@example.com', '987-654-3210', '456 Elm St, Anytown, USA', 'https://example.com/pfp/user456.jpg', 'device456', TRUE);
 
 -- Insert sample data into "care_group" table
 INSERT INTO care_group (group_name, date_created)
 VALUES ('Sample Care Group', CURRENT_TIMESTAMP),
-('Care-Wallet Group', NOW())
-;
+('Care-Wallet Group', NOW());
 
 -- Insert sample data into "group_roles" table
 INSERT INTO group_roles (group_id, user_id, role) VALUES
 (1, 'user123', 'PATIENT'),
-(1, 'user456', 'PRIMARY')
-(2, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', 'PRIMARY')
-;
+(1, 'user456', 'PRIMARY');

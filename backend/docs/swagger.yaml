@@ -71,6 +71,29 @@ paths:
       summary: Creates a care group
       tags:
       - groups
+  /care-groups/{groupid}/member:
+    get:
+      description: retrieve all users in given group id
+      parameters:
+      - description: group id
+        in: path
+        name: groupid
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              type: string
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Get all members from a group
+      tags:
+      - groups
   /care-groups/addUser/:userId/:groupId/:role:
     post:
       description: Adds a user to a care group given a userID, groupID, and role
@@ -86,29 +109,6 @@ paths:
           schema:
             type: string
       summary: Adds a user to a care group
-      tags:
-      - groups
-  /care-groups/get-members/{groupId}:
-    get:
-      description: retrieve all users in given group id
-      parameters:
-      - description: group id
-        in: path
-        name: groupId
-        required: true
-        type: string
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              type: string
-            type: array
-        "400":
-          description: Bad Request
-          schema:
-            type: string
-      summary: Get all members from a group
       tags:
       - groups
   /files/upload:

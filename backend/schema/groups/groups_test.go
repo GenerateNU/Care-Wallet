@@ -42,7 +42,7 @@ func TestGetGroupMembers(t *testing.T) {
 
 	t.Run("TestGetGroupMembers", func(t *testing.T) {
 		w := httptest.NewRecorder()
-		req, _ := http.NewRequest("GET", "/care-groups/get-members/1", nil)
+		req, _ := http.NewRequest("GET", "/care-groups/1/member", nil)
 		router.ServeHTTP(w, req)
 
 		// Check for HTTP Status OK (200)

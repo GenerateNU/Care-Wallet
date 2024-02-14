@@ -61,7 +61,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/care-groups/get-members/{groupId}": {
+        "/care-groups/{groupid}/member": {
             "get": {
                 "description": "retrieve all users in given group id",
                 "tags": [
@@ -72,7 +72,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "group id",
-                        "name": "groupId",
+                        "name": "groupid",
                         "in": "path",
                         "required": true
                     }
