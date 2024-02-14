@@ -252,7 +252,7 @@ paths:
       parameters:
       - description: Task ID to assign users to
         in: path
-        name: :tid
+        name: tid
         required: true
         type: string
       - description: Users to assign to task and assignee
@@ -281,7 +281,7 @@ paths:
       parameters:
       - description: Task ID to remove users from
         in: path
-        name: :tid
+        name: tid
         required: true
         type: string
       - description: Users to remove from task

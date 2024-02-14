@@ -340,7 +340,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "Task ID to assign users to",
-                        "name": ":tid",
+                        "name": "tid",
                         "in": "path",
                         "required": true
                     },
@@ -384,7 +384,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "Task ID to remove users from",
-                        "name": ":tid",
+                        "name": "tid",
                         "in": "path",
                         "required": true
                     },
