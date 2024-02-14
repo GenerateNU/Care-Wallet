@@ -52,34 +52,6 @@ export async function registerForPushNotificationsAsync() {
   return token;
 }
 
-// // scheduled push notification
-// export async function schedulePushNotification(
-//   title: string,
-//   body: string,
-//   repeat: boolean,
-//   date: Date
-// ) {
-//   // let timeObject = new Date();
-//   //const milliseconds = 5 * 1000; // 10 seconds = 10000 milliseconds
-//   // timeObject = new Date(timeObject.getTime() + milliseconds);
-//   // schedules notification for each weekday selected
-//   const id = await Notification.scheduleNotificationAsync({
-//     content: {
-//       title: title,
-//       body: body,
-//       data: {}
-//     },
-//     trigger: {
-//       // WeeklyTriggerInput
-//       date: Date * //new Date().setUTCSeconds(date.getUTCSeconds() + 5),
-// 	  repeats: repeat
-//     }
-//   });
-
-// }
-
-// use this fucntion to schedule push notifications
-
 export async function scheduleCalendarPushNotification(
   title: string,
   body: string,
@@ -88,33 +60,45 @@ export async function scheduleCalendarPushNotification(
   typeOfTrigger: string
 ) {
   try {
-    const trigger = new Date(date); // a new Date object is created based on given date
+    const triggerDate = new Date(date);
 
-    // default will be daily
-    const Trigger: DailyTriggerInput = {
-      repeats: true,
-      hour: trigger.getUTCHours(),
-      minute: trigger.getUTCMinutes()
-    };
+    let Trigger;
 
-    if ((typeOfTrigger = 'year')) {
-      const Trigger: YearlyTriggerInput = {
-        repeats: true,
-        month: trigger.getUTCMonth(), // Month index (0-11)
-        day: trigger.getUTCDate(), // Day of the month
-        hour: trigger.getUTCHours(),
-        minute: trigger.getUTCMinutes()
-      };
-    } else if ((typeOfTrigger = 'week')) {
-      const Trigger: WeeklyTriggerInput = {
-        weekday: trigger.getUTCDay() === 0 ? 7 : trigger.getUTCDay(),
-        hour: trigger.getUTCHours(),
-        minute: trigger.getUTCMinutes(),
-        type: 'weekly'
-      };
+    if (repeat) {
+      if (typeOfTrigger === 'yearly') {
+        Trigger = {
+          repeats: true,
+          month: triggerDate.getUTCMonth(),
+          day: triggerDate.getUTCDate(),
+          hour: triggerDate.getUTCHours(),
+          minute: triggerDate.getUTCMinutes()
+        };
+      } else if (typeOfTrigger === 'weekly') {
+        Trigger = {
+          weekday: triggerDate.getUTCDay() === 0 ? 7 : triggerDate.getUTCDay(),
+          hour: triggerDate.getUTCHours(),
+          minute: triggerDate.getUTCMinutes()
+        };
+      } else if (typeOfTrigger === 'daily') {
+        Trigger = {
+          repeats: true,
+          hour: triggerDate.getUTCHours(),
+          minute: triggerDate.getUTCMinutes()
+        };
+      } else {
+        // will default to daily
+        Trigger = {
+          repeats: true,
+          hour: triggerDate.getUTCHours(),
+          minute: triggerDate.getUTCMinutes()
+        };
+      }
+    } else {
+      // One-time notification trigger
+      Trigger = new Date(triggerDate);
     }
 
-    Notification.scheduleNotificationAsync({
+    await Notification.scheduleNotificationAsync({
       content: {
         title: title,
         body: body
