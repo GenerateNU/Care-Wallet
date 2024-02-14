@@ -301,6 +301,11 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "name": "taskID",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "name": "taskStatus",
                         "in": "query"
                     },

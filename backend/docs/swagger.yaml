@@ -345,6 +345,9 @@ paths:
         name: startDate
         type: string
       - in: query
+        name: taskID
+        type: string
+      - in: query
         name: taskStatus
         type: string
       - in: query

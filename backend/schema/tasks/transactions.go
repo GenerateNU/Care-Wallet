@@ -11,6 +11,7 @@ import (
 
 func GetTasksByQueryFromDB(pool *pgx.Conn, filterQuery TaskQuery) ([]models.Task, error) {
 	query_fields := []string{
+		filterQuery.TaskID,
 		filterQuery.GroupID,
 		filterQuery.CreatedBy,
 		filterQuery.TaskStatus,
@@ -18,7 +19,7 @@ func GetTasksByQueryFromDB(pool *pgx.Conn, filterQuery TaskQuery) ([]models.Task
 		filterQuery.StartDate,
 		filterQuery.EndDate}
 
-	field_names := []string{"group_id", "created_by", "task_status", "task_type", "start_date", "end_date"}
+	field_names := []string{"task_id =", "group_id =", "created_by =", "task_status =", "task_type =", "start_date >=", "end_date <="}
 	var query string
 	var args []interface{}
 
@@ -27,12 +28,12 @@ func GetTasksByQueryFromDB(pool *pgx.Conn, filterQuery TaskQuery) ([]models.Task
 			if query != "" {
 				query += " AND "
 			}
-			query += fmt.Sprintf("%s = $%d", field_names[i], len(args)+1)
+			query += fmt.Sprintf("%s $%d", field_names[i], len(args)+1)
 			args = append(args, field)
 		}
 	}
 
-	rows, err := pool.Query("SELECT task_id, group_id, created_by, created_date, task_status, task_type FROM task WHERE "+query, args...)
+	rows, err := pool.Query("SELECT task_id, group_id, created_by, created_date, start_date, end_date, task_status, task_type FROM task WHERE "+query, args...)
 
 	if err != nil {
 		print(err, "error selecting tasks by query")
@@ -45,7 +46,7 @@ func GetTasksByQueryFromDB(pool *pgx.Conn, filterQuery TaskQuery) ([]models.Task
 
 	for rows.Next() {
 		task := models.Task{}
-		err := rows.Scan(&task.TaskID, &task.GroupID, &task.CreatedBy, &task.CreatedDate, &task.TaskStatus, &task.TaskType)
+		err := rows.Scan(&task.TaskID, &task.GroupID, &task.CreatedBy, &task.CreatedDate, &task.StartDate, &task.EndDate, &task.TaskStatus, &task.TaskType)
 
 		if err != nil {
 			print(err, "error scanning tasks by query")
