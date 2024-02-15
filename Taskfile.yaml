@@ -1,5 +1,5 @@
-version: '3'
-dotenv: ['.env']
+version: "3"
+dotenv: [".env"]
 tasks:
   build:
     - |
@@ -31,6 +31,7 @@ tasks:
     - |
       cd backend
       swag i --parseDependency
+      swag f
       go run main.go
 
   start-frontend:
@@ -39,7 +40,7 @@ tasks:
       npm start
 
   start-ngrok:
-    dotenv: ['.env']
+    dotenv: [".env"]
     cmds:
       - |
         cd backend

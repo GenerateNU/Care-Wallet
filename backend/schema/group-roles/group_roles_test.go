@@ -3,9 +3,9 @@ package grouproles
 import (
 	"carewallet/configuration"
 	"carewallet/db"
+	"carewallet/models"
 	"fmt"
 	"os"
-	"strconv"
 	"testing"
 
 	"encoding/json"
@@ -50,19 +50,18 @@ func TestGetGroupRoles(t *testing.T) {
 			t.Error("Failed to retrieve group roles.")
 		}
 
-		var responseGroupID int
+		var responseGroup models.GroupRole
 
 		// Unmarshal the response JSON
-		if err := json.Unmarshal(w.Body.Bytes(), &responseGroupID); err != nil {
+		if err := json.Unmarshal(w.Body.Bytes(), &responseGroup); err != nil {
 			t.Errorf("Failed to unmarshal JSON: %v", err)
 		}
-		responseGroupIDString := strconv.Itoa(responseGroupID)
 
-		// Define the expected group ID
-		expectedGroupID := "1"
+		// Define the expected group
+		expectedGroup := models.GroupRole{GroupID: 1, Role: "PATIENT", UserID: "user123"}
 
-		if expectedGroupID != responseGroupIDString {
-			t.Errorf("Expected group ID: %s, Actual group ID: %s", expectedGroupID, responseGroupIDString)
+		if expectedGroup != responseGroup {
+			t.Errorf("Expected group ID: %+v, Actual group ID: %+v", expectedGroup, responseGroup)
 		}
 	})
 }

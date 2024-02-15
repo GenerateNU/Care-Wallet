@@ -1,5 +1,12 @@
 basePath: /
 definitions:
+  groups.GroupMember:
+    properties:
+      role:
+        $ref: '#/definitions/models.Role'
+      user_id:
+        type: string
+    type: object
   models.CareGroup:
     properties:
       date_created:
@@ -91,7 +98,7 @@ paths:
       - file
   /group/{groupId}:
     get:
-      description: retrieve all users in given group id
+      description: retrieve the information about a group given its group id
       parameters:
       - description: group id
         in: path
@@ -102,47 +109,58 @@ paths:
         "200":
           description: OK
           schema:
-            items:
-              type: string
-            type: array
+            $ref: '#/definitions/models.CareGroup'
         "400":
           description: Bad Request
           schema:
             type: string
-      summary: Get all members from a group
+      summary: Get a group
       tags:
       - group
-  /group/add/{userId}/{groupId}/{role}:
+  /group/{groupId}/add:
     post:
       description: Adds a user to a care group given a userID, groupID, and role
       parameters:
-      - description: user id
-        in: path
-        name: userId
-        required: true
-        type: string
       - description: group id
         in: path
         name: groupId
         required: true
         type: string
-      - description: role
-        in: path
-        name: role
+      - description: The group member to be added
+        in: body
+        name: GroupMember
         required: true
-        type: string
+        schema:
+          $ref: '#/definitions/groups.GroupMember'
       responses:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/models.CareGroup'
-            type: array
+            type: integer
         "400":
           description: Bad Request
           schema:
             type: string
       summary: Adds a user to a care group
+      tags:
+      - group
+  /group/{groupId}/roles:
+    get:
+      description: get all group members for a group given group id from the db
+      parameters:
+      - description: group id
+        in: path
+        name: groupId
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.GroupRole'
+            type: array
+      summary: Get all members of a group
       tags:
       - group
   /group/create/{groupName}:
@@ -158,9 +176,7 @@ paths:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/models.CareGroup'
-            type: array
+            type: integer
       summary: Creates a care group
       tags:
       - group
@@ -183,19 +199,6 @@ paths:
           schema:
             type: string
       summary: Retrieve a group id given a user id
-      tags:
-      - group
-  /group/roles:
-    get:
-      description: get all group roles from the db
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/models.GroupRole'
-            type: array
-      summary: Get all group roles
       tags:
       - group
   /medications:

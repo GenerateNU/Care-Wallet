@@ -2,6 +2,7 @@ package grouproles
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx"
@@ -15,14 +16,14 @@ type PgModel struct {
 func GetGroupRolesGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 	groupRoles := v1.Group("")
 	{
-		groupRoles.GET("/roles", c.GetGroupRoles)
-		groupRoles.GET("/member/:uid", c.GetGroupIDByUID)
+		groupRoles.GET("/:groupId/roles", c.GetGroupRoles)
+		groupRoles.GET("/member/:uid", c.GetGroupByUID)
 	}
 
 	return groupRoles
 }
 
-// GetGroupIDByUID godoc
+// GetGroupByUID godoc
 //
 //	@summary		Retrieve a group id given a user id
 //	@description	get the group id from the user id
@@ -33,31 +34,36 @@ func GetGroupRolesGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 //	@success		200	{object}	string
 //	@failure		400	{object}	string
 //	@router			/group/member/{uid} [get]
-func (pg *PgModel) GetGroupIDByUID(c *gin.Context) {
+func (pg *PgModel) GetGroupByUID(c *gin.Context) {
 	uid := c.Param("uid")
-	groupID, err := GetGroupIDByUIDFromDB(pg.Conn, uid)
+	groupRole, err := GetGroupMemberByUIDFromDB(pg.Conn, uid)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
+		return
 	}
 
-	c.JSON(http.StatusOK, groupID)
+	c.JSON(http.StatusOK, groupRole)
 }
 
 // GetGroupRoles godoc
 //
-//	@summary		Get all group roles
-//	@description	get all group roles from the db
+//	@summary		Get all members of a group
+//	@description	get all group members for a group given group id from the db
 //	@tags			group
 //
-//	@success		200	{array}	models.GroupRole
-//	@router			/group/roles [get]
+//	@param			groupId	path	int	true	"group id"
+//
+//	@success		200		{array}	models.GroupRole
+//	@router			/group/{groupId}/roles [get]
 func (pg *PgModel) GetGroupRoles(c *gin.Context) {
-	careGroups, err := GetAllGroupRolesFromDB(pg.Conn)
+	gid := c.Param("groupId")
+	if gidInt, err := strconv.Atoi(gid); err == nil {
+		if careGroups, err := GetAllGroupRolesFromDB(pg.Conn, gidInt); err == nil {
+			c.JSON(http.StatusOK, careGroups)
+			return
+		}
 
-	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
 	}
-
-	c.JSON(http.StatusOK, careGroups)
 }

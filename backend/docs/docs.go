@@ -61,55 +61,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/group/add/{userId}/{groupId}/{role}": {
-            "post": {
-                "description": "Adds a user to a care group given a userID, groupID, and role",
-                "tags": [
-                    "group"
-                ],
-                "summary": "Adds a user to a care group",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "user id",
-                        "name": "userId",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "group id",
-                        "name": "groupId",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "role",
-                        "name": "role",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/models.CareGroup"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
         "/group/create/{groupName}": {
             "post": {
                 "description": "Creates a new care group with the provided group name.",
@@ -130,10 +81,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/models.CareGroup"
-                            }
+                            "type": "integer"
                         }
                     }
                 }
@@ -171,33 +119,13 @@ const docTemplate = `{
                 }
             }
         },
-        "/group/roles": {
-            "get": {
-                "description": "get all group roles from the db",
-                "tags": [
-                    "group"
-                ],
-                "summary": "Get all group roles",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/models.GroupRole"
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/group/{groupId}": {
             "get": {
-                "description": "retrieve all users in given group id",
+                "description": "retrieve the information about a group given its group id",
                 "tags": [
                     "group"
                 ],
-                "summary": "Get all members from a group",
+                "summary": "Get a group",
                 "parameters": [
                     {
                         "type": "string",
@@ -211,16 +139,83 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/models.CareGroup"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
                             "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/group/{groupId}/add": {
+            "post": {
+                "description": "Adds a user to a care group given a userID, groupID, and role",
+                "tags": [
+                    "group"
+                ],
+                "summary": "Adds a user to a care group",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "group id",
+                        "name": "groupId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "The group member to be added",
+                        "name": "GroupMember",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/groups.GroupMember"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/group/{groupId}/roles": {
+            "get": {
+                "description": "get all group members for a group given group id from the db",
+                "tags": [
+                    "group"
+                ],
+                "summary": "Get all members of a group",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "group id",
+                        "name": "groupId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.GroupRole"
+                            }
                         }
                     }
                 }
@@ -280,6 +275,17 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "groups.GroupMember": {
+            "type": "object",
+            "properties": {
+                "role": {
+                    "$ref": "#/definitions/models.Role"
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
         "models.CareGroup": {
             "type": "object",
             "properties": {

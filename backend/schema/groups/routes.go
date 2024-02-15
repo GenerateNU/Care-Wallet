@@ -1,8 +1,9 @@
 package groups
 
 import (
+	"carewallet/models"
+	"fmt"
 	"net/http"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx"
@@ -12,18 +13,17 @@ type PgModel struct {
 	Conn *pgx.Conn
 }
 
-type CareGroup struct {
-	GroupID     int       `json:"group_id"`
-	GroupName   string    `json:"group_name"`
-	DateCreated time.Time `json:"date_created"`
-}
-
 func GetCareGroups(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 	careGroups := v1.Group("")
 	{
 		careGroups.POST("/create/:groupName", c.CreateCareGroups)
-		careGroups.POST("/add/:userId/:groupId/:role", c.AddUserCareGroup)
-		careGroups.GET("/:groupId", c.GetGroupMembers)
+
+		group := v1.Group("/:groupId")
+		{
+			group.GET("", c.GetGroupByGroupId)
+			group.POST("add", c.AddUserCareGroup)
+		}
+
 	}
 
 	return careGroups
@@ -37,7 +37,7 @@ func GetCareGroups(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 //
 //	@param			groupName	path		string	true	"group name"
 //
-//	@success		200	{array}	models.CareGroup
+//	@success		200			{object}	int
 //	@router			/group/create/{groupName} [post]
 func (pg *PgModel) CreateCareGroups(c *gin.Context) {
 	groupName := c.Param("groupName")
@@ -45,56 +45,69 @@ func (pg *PgModel) CreateCareGroups(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
+		return
 	}
 
 	c.JSON(http.StatusOK, careGroups)
 }
 
-// CreateCareGroup godoc
+type GroupMember struct {
+	UserId string      `json:"user_id"`
+	Role   models.Role `json:"role"`
+}
+
+// AddUserCareGroup godoc
 //
 //	@summary		Adds a user to a care group
 //	@description	Adds a user to a care group given a userID, groupID, and role
 //	@tags			group
 //
-//	@param			userId		path		string	true	"user id"
-//	@param			groupId		path		string	true	"group id"
-//	@param			role		path		string	true	"role"
+//	@param			groupId		path		string		true	"group id"
+//	@param			GroupMember	body		GroupMember	true	"The group member to be added"
 //
-//	@success		200	{array}		models.CareGroup
-//	@failure		400	{object}	string
-//	@router			/group/add/{userId}/{groupId}/{role} [post]
+//	@success		200			{object}	int
+//	@failure		400			{object}	string
+//	@router			/group/{groupId}/add [post]
 func (pg *PgModel) AddUserCareGroup(c *gin.Context) {
-	userId := c.Param("userId")
+	var requestBody GroupMember
 	groupId := c.Param("groupId")
-	role := c.Param("role")
-	user, err := AddUserCareGroupFromDB(pg.Conn, userId, groupId, role)
+
+	if err := c.BindJSON(&requestBody); err != nil {
+		fmt.Println("Error binding JSON: ", err.Error())
+		c.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	id, err := AddUserCareGroupFromDB(pg.Conn, groupId, requestBody)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
+		return
 	}
 
-	c.JSON(http.StatusOK, user)
+	c.JSON(http.StatusOK, id)
 
 }
 
-// GetGroupMembers godoc
+// GetGroupByGroupId godoc
 //
-//	@summary		Get all members from a group
-//	@description	retrieve all users in given group id
+//	@summary		Get a group
+//	@description	retrieve the information about a group given its group id
 //	@tags			group
 //
 //	@param			groupId	path		string	true	"group id"
 //
-//	@success		200		{array}		string
+//	@success		200		{object}	models.CareGroup
 //	@failure		400		{object}	string
 //	@router			/group/{groupId} [get]
-func (pg *PgModel) GetGroupMembers(c *gin.Context) {
+func (pg *PgModel) GetGroupByGroupId(c *gin.Context) {
 	groupId := c.Param("groupId")
-	members, err := GetGroupMembersFromDB(pg.Conn, groupId)
+	group, err := GetGroupFromDB(pg.Conn, groupId)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
+		return
 	}
 
-	c.JSON(http.StatusOK, members)
+	c.JSON(http.StatusOK, group)
 }

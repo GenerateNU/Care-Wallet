@@ -8,21 +8,21 @@ import (
 )
 
 // GetGroupIDByUIDFromDB returns the groupID of a user given their UID
-func GetGroupIDByUIDFromDB(pool *pgx.Conn, uid string) (int, error) {
-	var groupID int
-	err := pool.QueryRow("SELECT group_id FROM group_roles WHERE user_id = $1", uid).Scan(&groupID)
+func GetGroupMemberByUIDFromDB(pool *pgx.Conn, uid string) (models.GroupRole, error) {
+	var groupMember models.GroupRole
+	err := pool.QueryRow("SELECT * FROM group_roles WHERE user_id = $1", uid).Scan(&groupMember.GroupID, &groupMember.UserID, &groupMember.Role)
 
 	if err != nil {
 		fmt.Printf("Error getting group_id from user_id: %v", err)
-		return 0, err
+		return groupMember, err
 	}
 
-	return groupID, nil
+	return groupMember, nil
 }
 
 // Get all group roles from the DB
-func GetAllGroupRolesFromDB(pool *pgx.Conn) ([]models.GroupRole, error) {
-	rows, err := pool.Query("SELECT group_id, user_id, role FROM group_roles;")
+func GetAllGroupRolesFromDB(pool *pgx.Conn, gid int) ([]models.GroupRole, error) {
+	rows, err := pool.Query("SELECT group_id, user_id, role FROM group_roles WHERE group_id = $1;", gid)
 
 	if err != nil {
 		print(err, "from transactions err ")

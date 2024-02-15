@@ -1,12 +1,14 @@
 package groups
 
 import (
+	"bytes"
 	"carewallet/configuration"
 	"carewallet/db"
+	"carewallet/models"
 	"fmt"
 	"os"
-	"slices"
 	"testing"
+	"time"
 
 	"encoding/json"
 	"net/http"
@@ -51,21 +53,21 @@ func TestGroupRoutes(t *testing.T) {
 			t.Error("Failed to retrieve group members.")
 		}
 
-		var responseUsers []string
+		var response models.CareGroup
 
-		if err := json.Unmarshal(w.Body.Bytes(), &responseUsers); err != nil {
+		if err := json.Unmarshal(w.Body.Bytes(), &response); err != nil {
 			t.Errorf("Failed to unmarshal JSON: %v", err)
 		}
 
-		// Define the expected users
-		expectedUsers := []string{
-			"user123",
-			"user456",
+		// Define the expected
+		expected := models.CareGroup{
+			GroupID: 1, GroupName: "Sample Care Group",
+			DateCreated: time.Now(),
 		}
 
-		if !slices.Equal(expectedUsers, responseUsers) {
+		if response.GroupID != expected.GroupID && response.GroupName != expected.GroupName {
 			t.Error("Result was not correct")
-			t.Errorf("Expected users: %s, Actual users: %s", expectedUsers, responseUsers)
+			t.Errorf("Expected users: %v, Actual users: %v", expected, response)
 		}
 	})
 
@@ -97,8 +99,17 @@ func TestGroupRoutes(t *testing.T) {
 
 	// test to add a user to a group
 	t.Run("TestAddUser", func(t *testing.T) {
+		postRequest := GroupMember{
+			UserId: "user123",
+			Role:   "PATIENT",
+		}
+
+		requestJSON, err := json.Marshal(postRequest)
+		if err != nil {
+			t.Error("Failed to marshal remove request to JSON")
+		}
 		w := httptest.NewRecorder()
-		req, _ := http.NewRequest("POST", "/group/add/user123/3/PATIENT", nil)
+		req, _ := http.NewRequest("POST", "/group/3/add", bytes.NewBuffer(requestJSON))
 		router.ServeHTTP(w, req)
 
 		// Check for HTTP Status OK (200)
