@@ -18,20 +18,11 @@ type CareGroup struct {
 	DateCreated time.Time `json:"date_created"`
 }
 
-// groups.go file
 func GetCareGroups(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 	careGroups := v1.Group("")
 	{
-		careGroups.POST("/:groupName", func(ctx *gin.Context) {
-			groupName := ctx.Param("groupName")
-			c.CreateCareGroups(ctx, groupName)
-		})
-		careGroups.POST("/addUser/:userId/:groupId/:role", func(ctx *gin.Context) {
-			userId := ctx.Param("userId")
-			groupId := ctx.Param("groupId")
-			role := ctx.Param("role")
-			c.AddUserCareGroup(ctx, userId, groupId, role)
-		})
+		careGroups.POST("/create/:groupName", c.CreateCareGroups)
+		careGroups.POST("/add/:userId/:groupId/:role", c.AddUserCareGroup)
 		careGroups.GET("/:groupId", c.GetGroupMembers)
 	}
 
@@ -42,10 +33,14 @@ func GetCareGroups(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 //
 //	@summary		Creates a care group
 //	@description	Creates a new care group with the provided group name.
-//	@tags			groups
+//	@tags			group
+//
+//	@param			groupName	path		string	true	"group name"
+//
 //	@success		200	{array}	models.CareGroup
-//	@router			/group/:groupName [post]
-func (pg *PgModel) CreateCareGroups(c *gin.Context, groupName string) {
+//	@router			/group/create/{groupName} [post]
+func (pg *PgModel) CreateCareGroups(c *gin.Context) {
+	groupName := c.Param("groupName")
 	careGroups, err := CreateCareGroupsFromDB(pg.Conn, groupName)
 
 	if err != nil {
@@ -59,11 +54,19 @@ func (pg *PgModel) CreateCareGroups(c *gin.Context, groupName string) {
 //
 //	@summary		Adds a user to a care group
 //	@description	Adds a user to a care group given a userID, groupID, and role
-//	@tags			groups
+//	@tags			group
+//
+//	@param			userId		path		string	true	"user id"
+//	@param			groupId		path		string	true	"group id"
+//	@param			role		path		string	true	"role"
+//
 //	@success		200	{array}		models.CareGroup
 //	@failure		400	{object}	string
-//	@router			/group/addUser/:userId/:groupId/:role [post]
-func (pg *PgModel) AddUserCareGroup(c *gin.Context, userId string, groupId string, role string) {
+//	@router			/group/add/{userId}/{groupId}/{role} [post]
+func (pg *PgModel) AddUserCareGroup(c *gin.Context) {
+	userId := c.Param("userId")
+	groupId := c.Param("groupId")
+	role := c.Param("role")
 	user, err := AddUserCareGroupFromDB(pg.Conn, userId, groupId, role)
 
 	if err != nil {
@@ -78,7 +81,7 @@ func (pg *PgModel) AddUserCareGroup(c *gin.Context, userId string, groupId strin
 //
 //	@summary		Get all members from a group
 //	@description	retrieve all users in given group id
-//	@tags			groups
+//	@tags			group
 //
 //	@param			groupId	path		string	true	"group id"
 //

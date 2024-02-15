@@ -17,7 +17,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
-func TestGetGroupMembers(t *testing.T) {
+func TestGroupRoutes(t *testing.T) {
 	config, err := configuration.GetConfiguration()
 
 	if err != nil {
@@ -40,6 +40,7 @@ func TestGetGroupMembers(t *testing.T) {
 		GetCareGroups(v1, &controller)
 	}
 
+	// test to get group members
 	t.Run("TestGetGroupMembers", func(t *testing.T) {
 		w := httptest.NewRecorder()
 		req, _ := http.NewRequest("GET", "/group/1", nil)
@@ -65,6 +66,58 @@ func TestGetGroupMembers(t *testing.T) {
 		if !slices.Equal(expectedUsers, responseUsers) {
 			t.Error("Result was not correct")
 			t.Errorf("Expected users: %s, Actual users: %s", expectedUsers, responseUsers)
+		}
+	})
+
+	// test to create a group
+	t.Run("TestCreateGroup", func(t *testing.T) {
+		w := httptest.NewRecorder()
+		req, _ := http.NewRequest("POST", "/group/create/testgroup", nil)
+		router.ServeHTTP(w, req)
+
+		// Check for HTTP Status OK (200)
+		if http.StatusOK != w.Code {
+			t.Error("Failed to create group.")
+		}
+
+		var responseGroupID int
+
+		if err := json.Unmarshal(w.Body.Bytes(), &responseGroupID); err != nil {
+			t.Errorf("Failed to unmarshal JSON: %v", err)
+		}
+
+		// Define the expected users
+		expectedGroupID := 3
+
+		if expectedGroupID != responseGroupID {
+			t.Error("Result was not correct")
+			t.Errorf("Expected groupID: %d, Actual groupID: %d", expectedGroupID, responseGroupID)
+		}
+	})
+
+	// test to add a user to a group
+	t.Run("TestAddUser", func(t *testing.T) {
+		w := httptest.NewRecorder()
+		req, _ := http.NewRequest("POST", "/group/add/user123/3/PATIENT", nil)
+		router.ServeHTTP(w, req)
+
+		// Check for HTTP Status OK (200)
+		if http.StatusOK != w.Code {
+			t.Error("Failed to add user.")
+		}
+
+		var responseGroupID int
+
+		if err := json.Unmarshal(w.Body.Bytes(), &responseGroupID); err != nil {
+			t.Errorf("Failed to unmarshal JSON: %v", err)
+		}
+
+		// Define the expected users
+		expectedGroupID := 3
+
+		if expectedGroupID != responseGroupID {
+			t.Error("Result was not correct")
+			t.Errorf("Expected groupID: %d, Actual groupID: %d", expectedGroupID, responseGroupID)
 		}
 	})
 }

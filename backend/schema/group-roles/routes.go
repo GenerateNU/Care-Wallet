@@ -48,7 +48,8 @@ func (pg *PgModel) GetGroupIDByUID(c *gin.Context) {
 //
 //	@summary		Get all group roles
 //	@description	get all group roles from the db
-//	@tags			group-roles
+//	@tags			group
+//
 //	@success		200	{array}	models.GroupRole
 //	@router			/group/roles [get]
 func (pg *PgModel) GetGroupRoles(c *gin.Context) {

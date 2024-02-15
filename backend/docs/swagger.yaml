@@ -89,19 +89,6 @@ paths:
       summary: Upload a file
       tags:
       - file
-  /group/:groupName:
-    post:
-      description: Creates a new care group with the provided group name.
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/models.CareGroup'
-            type: array
-      summary: Creates a care group
-      tags:
-      - groups
   /group/{groupId}:
     get:
       description: retrieve all users in given group id
@@ -124,10 +111,26 @@ paths:
             type: string
       summary: Get all members from a group
       tags:
-      - groups
-  /group/addUser/:userId/:groupId/:role:
+      - group
+  /group/add/{userId}/{groupId}/{role}:
     post:
       description: Adds a user to a care group given a userID, groupID, and role
+      parameters:
+      - description: user id
+        in: path
+        name: userId
+        required: true
+        type: string
+      - description: group id
+        in: path
+        name: groupId
+        required: true
+        type: string
+      - description: role
+        in: path
+        name: role
+        required: true
+        type: string
       responses:
         "200":
           description: OK
@@ -141,7 +144,26 @@ paths:
             type: string
       summary: Adds a user to a care group
       tags:
-      - groups
+      - group
+  /group/create/{groupName}:
+    post:
+      description: Creates a new care group with the provided group name.
+      parameters:
+      - description: group name
+        in: path
+        name: groupName
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.CareGroup'
+            type: array
+      summary: Creates a care group
+      tags:
+      - group
   /group/member/{uid}:
     get:
       description: get the group id from the user id
@@ -175,7 +197,7 @@ paths:
             type: array
       summary: Get all group roles
       tags:
-      - group-roles
+      - group
   /medications:
     get:
       description: get all user medications

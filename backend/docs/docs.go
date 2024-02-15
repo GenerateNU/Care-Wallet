@@ -61,33 +61,36 @@ const docTemplate = `{
                 }
             }
         },
-        "/group/:groupName": {
-            "post": {
-                "description": "Creates a new care group with the provided group name.",
-                "tags": [
-                    "groups"
-                ],
-                "summary": "Creates a care group",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/models.CareGroup"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/group/addUser/:userId/:groupId/:role": {
+        "/group/add/{userId}/{groupId}/{role}": {
             "post": {
                 "description": "Adds a user to a care group given a userID, groupID, and role",
                 "tags": [
-                    "groups"
+                    "group"
                 ],
                 "summary": "Adds a user to a care group",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "user id",
+                        "name": "userId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "group id",
+                        "name": "groupId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "role",
+                        "name": "role",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -102,6 +105,35 @@ const docTemplate = `{
                         "description": "Bad Request",
                         "schema": {
                             "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/group/create/{groupName}": {
+            "post": {
+                "description": "Creates a new care group with the provided group name.",
+                "tags": [
+                    "group"
+                ],
+                "summary": "Creates a care group",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "group name",
+                        "name": "groupName",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.CareGroup"
+                            }
                         }
                     }
                 }
@@ -143,7 +175,7 @@ const docTemplate = `{
             "get": {
                 "description": "get all group roles from the db",
                 "tags": [
-                    "group-roles"
+                    "group"
                 ],
                 "summary": "Get all group roles",
                 "responses": {
@@ -163,7 +195,7 @@ const docTemplate = `{
             "get": {
                 "description": "retrieve all users in given group id",
                 "tags": [
-                    "groups"
+                    "group"
                 ],
                 "summary": "Get all members from a group",
                 "parameters": [
