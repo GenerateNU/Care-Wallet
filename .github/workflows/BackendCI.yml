@@ -78,8 +78,9 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Import DB seed data
-        run: for file in $(ls -1 ./ | sort); do
-          psql -d postgresql://user:pwd@172.17.0.1:5432/carewallet -f "$file"
+        run: |
+          for file in $(ls -1 ./ | sort); do
+            psql -d postgresql://user:pwd@172.17.0.1:5432/carewallet -f "$file"
           done
         working-directory: ./backend/db/migrations
 
