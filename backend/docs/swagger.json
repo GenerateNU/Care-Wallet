@@ -8,87 +8,6 @@
     },
     "basePath": "/",
     "paths": {
-        "/care-groups/:groupName": {
-            "post": {
-                "description": "Creates a new care group with the provided group name.",
-                "tags": [
-                    "groups"
-                ],
-                "summary": "Creates a care group",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/models.CareGroup"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/care-groups/addUser/:userId/:groupId/:role": {
-            "post": {
-                "description": "Adds a user to a care group given a userID, groupID, and role",
-                "tags": [
-                    "groups"
-                ],
-                "summary": "Adds a user to a care group",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/models.CareGroup"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/care-groups/{groupid}/member": {
-            "get": {
-                "description": "retrieve all users in given group id",
-                "tags": [
-                    "groups"
-                ],
-                "summary": "Get all members from a group",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "group id",
-                        "name": "groupid",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "string"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
         "/files/upload": {
             "post": {
                 "description": "Upload a file to database and S3 bucket",
@@ -135,27 +54,53 @@
                 }
             }
         },
-        "/group-roles": {
-            "get": {
-                "description": "get all group roles from the db",
+        "/group/:groupName": {
+            "post": {
+                "description": "Creates a new care group with the provided group name.",
                 "tags": [
-                    "group-roles"
+                    "groups"
                 ],
-                "summary": "Get all group roles",
+                "summary": "Creates a care group",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.GroupRole"
+                                "$ref": "#/definitions/models.CareGroup"
                             }
                         }
                     }
                 }
             }
         },
-        "/group-roles/get-group/{uid}": {
+        "/group/addUser/:userId/:groupId/:role": {
+            "post": {
+                "description": "Adds a user to a care group given a userID, groupID, and role",
+                "tags": [
+                    "groups"
+                ],
+                "summary": "Adds a user to a care group",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.CareGroup"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/group/member/{uid}": {
             "get": {
                 "description": "get the group id from the user id",
                 "tags": [
@@ -176,6 +121,61 @@
                         "description": "OK",
                         "schema": {
                             "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/group/roles": {
+            "get": {
+                "description": "get all group roles from the db",
+                "tags": [
+                    "group-roles"
+                ],
+                "summary": "Get all group roles",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.GroupRole"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/group/{groupId}": {
+            "get": {
+                "description": "retrieve all users in given group id",
+                "tags": [
+                    "groups"
+                ],
+                "summary": "Get all members from a group",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "group id",
+                        "name": "groupId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
                         }
                     },
                     "400": {

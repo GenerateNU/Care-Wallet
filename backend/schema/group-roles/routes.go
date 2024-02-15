@@ -11,11 +11,12 @@ type PgModel struct {
 	Conn *pgx.Conn
 }
 
+// groupRoles.go file
 func GetGroupRolesGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
-	groupRoles := v1.Group("group-roles")
+	groupRoles := v1.Group("")
 	{
-		groupRoles.GET("/get-group/:uid", c.GetGroupIDByUID)
-		groupRoles.GET("", c.GetGroupRoles)
+		groupRoles.GET("/roles", c.GetGroupRoles)
+		groupRoles.GET("/member/:uid", c.GetGroupIDByUID)
 	}
 
 	return groupRoles
@@ -31,7 +32,7 @@ func GetGroupRolesGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 //
 //	@success		200	{object}	string
 //	@failure		400	{object}	string
-//	@router			/group-roles/get-group/{uid} [get]
+//	@router			/group/member/{uid} [get]
 func (pg *PgModel) GetGroupIDByUID(c *gin.Context) {
 	uid := c.Param("uid")
 	groupID, err := GetGroupIDByUIDFromDB(pg.Conn, uid)
@@ -49,7 +50,7 @@ func (pg *PgModel) GetGroupIDByUID(c *gin.Context) {
 //	@description	get all group roles from the db
 //	@tags			group-roles
 //	@success		200	{array}	models.GroupRole
-//	@router			/group-roles [get]
+//	@router			/group/roles [get]
 func (pg *PgModel) GetGroupRoles(c *gin.Context) {
 	careGroups, err := GetAllGroupRolesFromDB(pg.Conn)
 

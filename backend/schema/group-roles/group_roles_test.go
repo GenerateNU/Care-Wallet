@@ -35,14 +35,14 @@ func TestGetGroupRoles(t *testing.T) {
 
 	router.Use(cors.Default())
 
-	v1 := router.Group("/")
+	v1 := router.Group("/group")
 	{
 		GetGroupRolesGroup(v1, &controller)
 	}
 
 	t.Run("TestGetGroupRoles", func(t *testing.T) {
 		w := httptest.NewRecorder()
-		req, _ := http.NewRequest("GET", "/group-roles/get-group/user123", nil)
+		req, _ := http.NewRequest("GET", "/group/member/user123", nil)
 		router.ServeHTTP(w, req)
 
 		// Check for HTTP Status OK (200)

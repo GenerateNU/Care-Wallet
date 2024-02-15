@@ -35,19 +35,19 @@ func TestGetGroupMembers(t *testing.T) {
 
 	router.Use(cors.Default())
 
-	v1 := router.Group("/")
+	v1 := router.Group("/group")
 	{
-		CreateCareGroup(v1, &controller)
+		GetCareGroups(v1, &controller)
 	}
 
 	t.Run("TestGetGroupMembers", func(t *testing.T) {
 		w := httptest.NewRecorder()
-		req, _ := http.NewRequest("GET", "/care-groups/1/member", nil)
+		req, _ := http.NewRequest("GET", "/group/1", nil)
 		router.ServeHTTP(w, req)
 
 		// Check for HTTP Status OK (200)
 		if http.StatusOK != w.Code {
-			t.Error("Failed to retrieve group roles.")
+			t.Error("Failed to retrieve group members.")
 		}
 
 		var responseUsers []string
@@ -64,6 +64,7 @@ func TestGetGroupMembers(t *testing.T) {
 
 		if !slices.Equal(expectedUsers, responseUsers) {
 			t.Error("Result was not correct")
+			t.Errorf("Expected users: %s, Actual users: %s", expectedUsers, responseUsers)
 		}
 	})
 }

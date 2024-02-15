@@ -58,59 +58,6 @@ info:
   title: Care-Wallet API
   version: "1.0"
 paths:
-  /care-groups/:groupName:
-    post:
-      description: Creates a new care group with the provided group name.
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/models.CareGroup'
-            type: array
-      summary: Creates a care group
-      tags:
-      - groups
-  /care-groups/{groupid}/member:
-    get:
-      description: retrieve all users in given group id
-      parameters:
-      - description: group id
-        in: path
-        name: groupid
-        required: true
-        type: string
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              type: string
-            type: array
-        "400":
-          description: Bad Request
-          schema:
-            type: string
-      summary: Get all members from a group
-      tags:
-      - groups
-  /care-groups/addUser/:userId/:groupId/:role:
-    post:
-      description: Adds a user to a care group given a userID, groupID, and role
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/models.CareGroup'
-            type: array
-        "400":
-          description: Bad Request
-          schema:
-            type: string
-      summary: Adds a user to a care group
-      tags:
-      - groups
   /files/upload:
     post:
       description: Upload a file to database and S3 bucket
@@ -142,20 +89,60 @@ paths:
       summary: Upload a file
       tags:
       - file
-  /group-roles:
-    get:
-      description: get all group roles from the db
+  /group/:groupName:
+    post:
+      description: Creates a new care group with the provided group name.
       responses:
         "200":
           description: OK
           schema:
             items:
-              $ref: '#/definitions/models.GroupRole'
+              $ref: '#/definitions/models.CareGroup'
             type: array
-      summary: Get all group roles
+      summary: Creates a care group
       tags:
-      - group-roles
-  /group-roles/get-group/{uid}:
+      - groups
+  /group/{groupId}:
+    get:
+      description: retrieve all users in given group id
+      parameters:
+      - description: group id
+        in: path
+        name: groupId
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              type: string
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Get all members from a group
+      tags:
+      - groups
+  /group/addUser/:userId/:groupId/:role:
+    post:
+      description: Adds a user to a care group given a userID, groupID, and role
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.CareGroup'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Adds a user to a care group
+      tags:
+      - groups
+  /group/member/{uid}:
     get:
       description: get the group id from the user id
       parameters:
@@ -176,6 +163,19 @@ paths:
       summary: Retrieve a group id given a user id
       tags:
       - group
+  /group/roles:
+    get:
+      description: get all group roles from the db
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.GroupRole'
+            type: array
+      summary: Get all group roles
+      tags:
+      - group-roles
   /medications:
     get:
       description: get all user medications
