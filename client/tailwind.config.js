@@ -1,12 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    './**/*.html',
-    './**/*.js',
-    './**/*.jsx',
-    './**/*.ts',
-    './**/*.tsx'
-  ],
+  content: ['./App.tsx', './components/**/*.tsx', './screens/**/*.tsx'],
   theme: {
     colors: {
       'carewallet-white': '#FFFFFF',
