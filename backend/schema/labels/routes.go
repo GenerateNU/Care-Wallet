@@ -96,7 +96,7 @@ func (pg *PgModel) CreateNewLabel(c *gin.Context) {
 //	@param			groupId	path		string	true	"Group to delete label from"
 //	@param			lname	path		string	true	"Name of label to delete"
 //
-//	@success		200		{object}	models.Label
+//	@success		200		{object}	string
 //	@failure		400		{object}	string
 //	@router			/group/{groupId}/labels/{lname} [DELETE]
 func (pg *PgModel) DeleteLabel(c *gin.Context) {

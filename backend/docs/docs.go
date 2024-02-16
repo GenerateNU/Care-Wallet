@@ -293,7 +293,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Label"
+                            "type": "string"
                         }
                     },
                     "400": {
