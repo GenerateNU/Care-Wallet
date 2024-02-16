@@ -14,7 +14,7 @@ type PgModel struct {
 
 func TaskGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 
-	tasks := v1.Group("tasks")
+	tasks := v1.Group("")
 	{
 		tasks.GET("/filtered", c.GetFilteredTasks)
 		tasks.POST("/:tid/assign", c.AssignUsersToTask)

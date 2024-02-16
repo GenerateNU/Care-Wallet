@@ -192,17 +192,17 @@ const docTemplate = `{
                 }
             }
         },
-        "/group/{groupId}/roles": {
+        "/group/{groupId}/labels": {
             "get": {
-                "description": "get all group members for a group given group id from the db",
+                "description": "get all labels for a group given their group id",
                 "tags": [
-                    "group"
+                    "labels"
                 ],
-                "summary": "Get all members of a group",
+                "summary": "get labels for a group",
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "group id",
+                        "description": "the group id to get labels for",
                         "name": "groupId",
                         "in": "path",
                         "required": true
@@ -214,14 +214,59 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.GroupRole"
+                                "$ref": "#/definitions/models.Label"
                             }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "create a new label for a group",
+                "tags": [
+                    "labels"
+                ],
+                "summary": "Create A New Label",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Group to create label for",
+                        "name": "groupId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Label creation data",
+                        "name": "_",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/labels.LabelData"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Label"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 }
             }
         },
-        "/labels/delete/{gid}/{lname}": {
+        "/group/{groupId}/labels/{lname}": {
             "delete": {
                 "description": "delete a label",
                 "tags": [
@@ -232,7 +277,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "Group to delete label from",
-                        "name": "gid",
+                        "name": "groupId",
                         "in": "path",
                         "required": true
                     },
@@ -258,9 +303,7 @@ const docTemplate = `{
                         }
                     }
                 }
-            }
-        },
-        "/labels/edit/{gid}/{lname}": {
+            },
             "patch": {
                 "description": "edit a label",
                 "tags": [
@@ -271,7 +314,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "Group of label to edit",
-                        "name": "gid",
+                        "name": "groupId",
                         "in": "path",
                         "required": true
                     },
@@ -308,35 +351,30 @@ const docTemplate = `{
                 }
             }
         },
-        "/labels/new": {
-            "post": {
-                "description": "create a new label for a group",
+        "/group/{groupId}/roles": {
+            "get": {
+                "description": "get all group members for a group given group id from the db",
                 "tags": [
-                    "labels"
+                    "group"
                 ],
-                "summary": "Create A New Label",
+                "summary": "Get all members of a group",
                 "parameters": [
                     {
-                        "description": "Label creation data",
-                        "name": "_",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/labels.LabelData"
-                        }
+                        "type": "integer",
+                        "description": "group id",
+                        "name": "groupId",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Label"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "type": "string"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.GroupRole"
+                            }
                         }
                     }
                 }
@@ -538,6 +576,119 @@ const docTemplate = `{
                 }
             }
         },
+        "/tasks/{tid}/labels": {
+            "get": {
+                "description": "get a tasks labels given the task id",
+                "tags": [
+                    "task labels"
+                ],
+                "summary": "get a tasks labels",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "the task id to get labels for",
+                        "name": "tid",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Task_Label"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "add a label to a task given the task id, group id, and label name",
+                "tags": [
+                    "task labels"
+                ],
+                "summary": "add a label to a task",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "the task id to add the label to",
+                        "name": "tid",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "The label data to add to the task",
+                        "name": "requestBody",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/task_labels.LabelData"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Task_Label"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "remove a label from a task given the task id, group id, and label name",
+                "tags": [
+                    "task labels"
+                ],
+                "summary": "remove a label from a task",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "the task id to get labels for",
+                        "name": "tid",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "The label data to remove from the task",
+                        "name": "requestBody",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/task_labels.LabelData"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/tasks/{tid}/remove": {
             "delete": {
                 "description": "remove users from task",
@@ -598,9 +749,6 @@ const docTemplate = `{
         "labels.LabelData": {
             "type": "object",
             "properties": {
-                "group_id": {
-                    "type": "integer"
-                },
                 "label_color": {
                     "type": "string"
                 },
@@ -753,6 +901,31 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "userID": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Task_Label": {
+            "type": "object",
+            "properties": {
+                "group_id": {
+                    "type": "integer"
+                },
+                "label_name": {
+                    "type": "string"
+                },
+                "task_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "task_labels.LabelData": {
+            "type": "object",
+            "properties": {
+                "group_id": {
+                    "type": "integer"
+                },
+                "label_name": {
                     "type": "string"
                 }
             }

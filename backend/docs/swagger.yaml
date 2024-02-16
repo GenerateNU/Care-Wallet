@@ -9,8 +9,6 @@ definitions:
     type: object
   labels.LabelData:
     properties:
-      group_id:
-        type: integer
       label_color:
         type: string
       label_name:
@@ -107,11 +105,27 @@ definitions:
       task_type:
         type: string
     type: object
+  models.Task_Label:
+    properties:
+      group_id:
+        type: integer
+      label_name:
+        type: string
+      task_id:
+        type: integer
+    type: object
   models.TaskUser:
     properties:
       taskID:
         type: integer
       userID:
+        type: string
+    type: object
+  task_labels.LabelData:
+    properties:
+      group_id:
+        type: integer
+      label_name:
         type: string
     type: object
   tasks.Assignment:
@@ -215,6 +229,112 @@ paths:
       summary: Adds a user to a care group
       tags:
       - group
+  /group/{groupId}/labels:
+    get:
+      description: get all labels for a group given their group id
+      parameters:
+      - description: the group id to get labels for
+        in: path
+        name: groupId
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Label'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: get labels for a group
+      tags:
+      - labels
+    post:
+      description: create a new label for a group
+      parameters:
+      - description: Group to create label for
+        in: path
+        name: groupId
+        required: true
+        type: string
+      - description: Label creation data
+        in: body
+        name: _
+        required: true
+        schema:
+          $ref: '#/definitions/labels.LabelData'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Label'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Create A New Label
+      tags:
+      - labels
+  /group/{groupId}/labels/{lname}:
+    delete:
+      description: delete a label
+      parameters:
+      - description: Group to delete label from
+        in: path
+        name: groupId
+        required: true
+        type: string
+      - description: Name of label to delete
+        in: path
+        name: lname
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Label'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Delete A Label
+      tags:
+      - labels
+    patch:
+      description: edit a label
+      parameters:
+      - description: Group of label to edit
+        in: path
+        name: groupId
+        required: true
+        type: string
+      - description: Name of label to edit
+        in: path
+        name: lname
+        required: true
+        type: string
+      - description: Label edit data
+        in: body
+        name: _
+        required: true
+        schema:
+          $ref: '#/definitions/labels.LabelData'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Label'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Edit A Label
+      tags:
+      - labels
   /group/{groupId}/roles:
     get:
       description: get all group members for a group given group id from the db
@@ -272,86 +392,6 @@ paths:
       summary: Retrieve a group id given a user id
       tags:
       - group
-  /labels/delete/{gid}/{lname}:
-    delete:
-      description: delete a label
-      parameters:
-      - description: Group to delete label from
-        in: path
-        name: gid
-        required: true
-        type: string
-      - description: Name of label to delete
-        in: path
-        name: lname
-        required: true
-        type: string
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.Label'
-        "400":
-          description: Bad Request
-          schema:
-            type: string
-      summary: Delete A Label
-      tags:
-      - labels
-  /labels/edit/{gid}/{lname}:
-    patch:
-      description: edit a label
-      parameters:
-      - description: Group of label to edit
-        in: path
-        name: gid
-        required: true
-        type: string
-      - description: Name of label to edit
-        in: path
-        name: lname
-        required: true
-        type: string
-      - description: Label edit data
-        in: body
-        name: _
-        required: true
-        schema:
-          $ref: '#/definitions/labels.LabelData'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.Label'
-        "400":
-          description: Bad Request
-          schema:
-            type: string
-      summary: Edit A Label
-      tags:
-      - labels
-  /labels/new:
-    post:
-      description: create a new label for a group
-      parameters:
-      - description: Label creation data
-        in: body
-        name: _
-        required: true
-        schema:
-          $ref: '#/definitions/labels.LabelData'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.Label'
-        "400":
-          description: Bad Request
-          schema:
-            type: string
-      summary: Create A New Label
-      tags:
-      - labels
   /medications:
     get:
       description: get all user medications
@@ -415,6 +455,82 @@ paths:
       summary: Assign Users To Task
       tags:
       - tasks
+  /tasks/{tid}/labels:
+    delete:
+      description: remove a label from a task given the task id, group id, and label
+        name
+      parameters:
+      - description: the task id to get labels for
+        in: path
+        name: tid
+        required: true
+        type: integer
+      - description: The label data to remove from the task
+        in: body
+        name: requestBody
+        required: true
+        schema:
+          $ref: '#/definitions/task_labels.LabelData'
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: remove a label from a task
+      tags:
+      - task labels
+    get:
+      description: get a tasks labels given the task id
+      parameters:
+      - description: the task id to get labels for
+        in: path
+        name: tid
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Task_Label'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: get a tasks labels
+      tags:
+      - task labels
+    post:
+      description: add a label to a task given the task id, group id, and label name
+      parameters:
+      - description: the task id to add the label to
+        in: path
+        name: tid
+        required: true
+        type: integer
+      - description: The label data to add to the task
+        in: body
+        name: requestBody
+        required: true
+        schema:
+          $ref: '#/definitions/task_labels.LabelData'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Task_Label'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: add a label to a task
+      tags:
+      - task labels
   /tasks/{tid}/remove:
     delete:
       description: remove users from task

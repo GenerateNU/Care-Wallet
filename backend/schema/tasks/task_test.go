@@ -34,7 +34,7 @@ func TestTaskGroup(t *testing.T) {
 	router := gin.Default()
 	router.Use(cors.Default())
 
-	v1 := router.Group("/")
+	v1 := router.Group("/tasks")
 	{
 		TaskGroup(v1, &controller)
 	}

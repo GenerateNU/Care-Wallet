@@ -37,12 +37,12 @@ func TestGetGroupRoles(t *testing.T) {
 
 	v1 := router.Group("/group")
 	{
-		GetGroupRolesGroup(v1, &controller)
+		GroupRolesGroup(v1, &controller)
 	}
 
 	t.Run("TestGetGroupRoles", func(t *testing.T) {
 		w := httptest.NewRecorder()
-		req, _ := http.NewRequest("GET", "/group/member/user123", nil)
+		req, _ := http.NewRequest("GET", "/group/member/user1", nil)
 		router.ServeHTTP(w, req)
 
 		// Check for HTTP Status OK (200)
@@ -58,7 +58,7 @@ func TestGetGroupRoles(t *testing.T) {
 		}
 
 		// Define the expected group
-		expectedGroup := models.GroupRole{GroupID: 1, Role: "PATIENT", UserID: "user123"}
+		expectedGroup := models.GroupRole{GroupID: 1, Role: "PATIENT", UserID: "user1"}
 
 		if expectedGroup != responseGroup {
 			t.Errorf("Expected group ID: %+v, Actual group ID: %+v", expectedGroup, responseGroup)

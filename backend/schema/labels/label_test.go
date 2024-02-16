@@ -32,14 +32,49 @@ func TestLabelGroup(t *testing.T) {
 	router := gin.Default()
 	router.Use(cors.Default())
 
-	v1 := router.Group("/")
+	v1 := router.Group("/group")
 	{
 		LabelGroup(v1, &controller)
 	}
 
+	t.Run("TestGetLabelsByGroup", func(t *testing.T) {
+
+		w := httptest.NewRecorder()
+		req, _ := http.NewRequest("GET", "/group/1/labels", nil)
+		router.ServeHTTP(w, req)
+
+		if http.StatusOK != w.Code {
+			t.Error("Failed to get labels by group.")
+		}
+
+		var getResponse []models.Label
+		err = json.Unmarshal(w.Body.Bytes(), &getResponse)
+
+		if err != nil {
+			t.Error("Failed to unmarshal json")
+		}
+
+		expectedResponse := []models.Label{
+			{
+				GroupID:    1,
+				LabelName:  "Medication",
+				LabelColor: "blue",
+			},
+			{
+				GroupID:    1,
+				LabelName:  "Household",
+				LabelColor: "purple",
+			},
+		}
+
+		if !reflect.DeepEqual(expectedResponse, getResponse) {
+			t.Error("Result was not correct")
+		}
+
+	})
+
 	t.Run("TestCreateNewLabel", func(t *testing.T) {
 		postRequest := LabelData{
-			GroupID:    1,
 			LabelName:  "Office",
 			LabelColor: "Orange",
 		}
@@ -50,7 +85,7 @@ func TestLabelGroup(t *testing.T) {
 		}
 
 		w := httptest.NewRecorder()
-		req, _ := http.NewRequest("POST", "/labels/new", bytes.NewBuffer(requestJSON))
+		req, _ := http.NewRequest("POST", "/group/2/labels", bytes.NewBuffer(requestJSON))
 		router.ServeHTTP(w, req)
 
 		if http.StatusOK != w.Code {
@@ -65,7 +100,7 @@ func TestLabelGroup(t *testing.T) {
 		}
 
 		expectedResponse := models.Label{
-			GroupID:    1,
+			GroupID:    2,
 			LabelName:  "Office",
 			LabelColor: "Orange",
 		}
@@ -77,7 +112,7 @@ func TestLabelGroup(t *testing.T) {
 
 	t.Run("TestDeleteLabel", func(t *testing.T) {
 		w := httptest.NewRecorder()
-		req, _ := http.NewRequest("DELETE", "/labels/delete/2/Appointment", nil)
+		req, _ := http.NewRequest("DELETE", "/group/2/labels/Appointment", nil)
 		router.ServeHTTP(w, req)
 
 		if http.StatusOK != w.Code {
@@ -87,7 +122,6 @@ func TestLabelGroup(t *testing.T) {
 
 	t.Run("TestEditLabel", func(t *testing.T) {
 		postRequest := LabelData{
-			GroupID:    4,
 			LabelName:  "Family",
 			LabelColor: "Yellow",
 		}
@@ -98,7 +132,7 @@ func TestLabelGroup(t *testing.T) {
 		}
 
 		w := httptest.NewRecorder()
-		req, _ := http.NewRequest("PATCH", "/labels/edit/4/Household", bytes.NewBuffer(requestJSON))
+		req, _ := http.NewRequest("PATCH", "/group/4/labels/Household", bytes.NewBuffer(requestJSON))
 		router.ServeHTTP(w, req)
 
 		if http.StatusOK != w.Code {

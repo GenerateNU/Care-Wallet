@@ -175,7 +175,8 @@ VALUES
   (1, 'Medication', 'blue'),
   (2, 'Appointments', 'green'),
   (3, 'Financial', 'orange'),
-  (4, 'Household', 'purple')
+  (4, 'Household', 'purple'),
+  (1, 'Household', 'purple')
 ;
 
 INSERT INTO task_labels (task_id, group_id, label_name)
