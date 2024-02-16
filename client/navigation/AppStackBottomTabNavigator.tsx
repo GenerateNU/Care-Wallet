@@ -4,6 +4,7 @@ import { Text } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import Home from '../assets/home.svg';
+import GroupScreen from '../screens/Groups';
 import MedicationList from '../screens/MedicationList';
 
 const AppStackBottomTab = createBottomTabNavigator();
@@ -19,6 +20,15 @@ export function AppStackBottomTabNavigator() {
           tabBarLabel: () => <Text>Landing</Text>
         }}
         component={MedicationList}
+      />
+      <AppStackBottomTab.Screen
+        name="Group"
+        options={{
+          headerShown: true,
+          tabBarIcon: () => <Home color="gray" />,
+          tabBarLabel: () => <Text>Group</Text>
+        }}
+        component={GroupScreen}
       />
     </AppStackBottomTab.Navigator>
   );

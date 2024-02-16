@@ -54,6 +54,166 @@
                 }
             }
         },
+        "/group/create/{groupName}": {
+            "post": {
+                "description": "Creates a new care group with the provided group name.",
+                "tags": [
+                    "group"
+                ],
+                "summary": "Creates a care group",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "group name",
+                        "name": "groupName",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                }
+            }
+        },
+        "/group/member/{uid}": {
+            "get": {
+                "description": "get the group id from the user id",
+                "tags": [
+                    "group"
+                ],
+                "summary": "Retrieve a group id given a user id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "user id",
+                        "name": "uid",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/group/{groupId}": {
+            "get": {
+                "description": "retrieve the information about a group given its group id",
+                "tags": [
+                    "group"
+                ],
+                "summary": "Get a group",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "group id",
+                        "name": "groupId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.CareGroup"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/group/{groupId}/add": {
+            "post": {
+                "description": "Adds a user to a care group given a userID, groupID, and role",
+                "tags": [
+                    "group"
+                ],
+                "summary": "Adds a user to a care group",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "group id",
+                        "name": "groupId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "The group member to be added",
+                        "name": "GroupMember",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/groups.GroupMember"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/group/{groupId}/roles": {
+            "get": {
+                "description": "get all group members for a group given group id from the db",
+                "tags": [
+                    "group"
+                ],
+                "summary": "Get all members of a group",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "group id",
+                        "name": "groupId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.GroupRole"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/labels/delete/{gid}/{lname}": {
             "delete": {
                 "description": "delete a label",
@@ -417,6 +577,17 @@
         }
     },
     "definitions": {
+        "groups.GroupMember": {
+            "type": "object",
+            "properties": {
+                "role": {
+                    "$ref": "#/definitions/models.Role"
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
         "labels.LabelData": {
             "type": "object",
             "properties": {
@@ -427,6 +598,20 @@
                     "type": "string"
                 },
                 "label_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.CareGroup": {
+            "type": "object",
+            "properties": {
+                "date_created": {
+                    "type": "string"
+                },
+                "group_id": {
+                    "type": "integer"
+                },
+                "group_name": {
                     "type": "string"
                 }
             }
@@ -457,6 +642,20 @@
                 }
             }
         },
+        "models.GroupRole": {
+            "type": "object",
+            "properties": {
+                "group_id": {
+                    "type": "integer"
+                },
+                "role": {
+                    "$ref": "#/definitions/models.Role"
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
         "models.Label": {
             "type": "object",
             "properties": {
@@ -481,6 +680,19 @@
                     "type": "string"
                 }
             }
+        },
+        "models.Role": {
+            "type": "string",
+            "enum": [
+                "PATIENT",
+                "PRIMARY",
+                "SECONDARY"
+            ],
+            "x-enum-varnames": [
+                "RolePatient",
+                "RolePrimary",
+                "RoleSecondary"
+            ]
         },
         "models.Task": {
             "type": "object",

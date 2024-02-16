@@ -5,6 +5,8 @@ import (
 	"carewallet/db"
 	_ "carewallet/docs"
 	"carewallet/schema/files"
+	groupRoles "carewallet/schema/group-roles"
+	"carewallet/schema/groups"
 	"carewallet/schema/labels"
 	"carewallet/schema/medication"
 	"carewallet/schema/tasks"
@@ -41,6 +43,11 @@ func main() {
 	{
 		medication.GetMedicationGroup(v1, &medication.PgModel{Conn: conn})
 		files.FileGroup(v1, &files.PgModel{Conn: conn})
+		group := v1.Group("group")
+		{
+			groups.GetCareGroups(group, &groups.PgModel{Conn: conn})
+			groupRoles.GetGroupRolesGroup(group, &groupRoles.PgModel{Conn: conn})
+		}
 		tasks.TaskGroup(v1, &tasks.PgModel{Conn: conn})
 		labels.LabelGroup(v1, &labels.PgModel{Conn: conn})
 	}

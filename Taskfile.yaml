@@ -31,6 +31,7 @@ tasks:
     - |
       cd backend
       swag i --parseDependency
+      swag f
       go run main.go
 
   start-frontend:
