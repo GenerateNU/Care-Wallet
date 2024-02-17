@@ -50,3 +50,37 @@ func GetGroupFromDB(conn *pgx.Conn, groupId string) (models.CareGroup, error) {
 
 	return caregroup, nil
 }
+
+// Remove a user from a group (using group_id and user_id)
+func RemoveUserFromGroupFromDB(conn *pgx.Conn, groupId int, userId int) (models.GroupRole, error) {
+
+	var grouprole models.GroupRole
+
+	err := conn.QueryRow("DELETE FROM group_roles WHERE group_id = $1 and user_id = $2 RETURNING group_id, user_id", groupId, userId).Scan(&grouprole.GroupID, &grouprole.UserID)
+
+	if err != nil {
+		print(err, "from transactions err ")
+
+		return models.GroupRole{}, err
+	}
+
+	return grouprole, nil
+
+}
+
+// Remove a user from a group (using group_id and user_id)
+func ChangeUserGroupRoleInDB(conn *pgx.Conn, groupId int, userId int, newgroupId int) (models.GroupRole, error) {
+
+	var grouprole models.GroupRole
+
+	err := conn.QueryRow("UPDATE group_roles SET group_id = $2 WHERE user_id = $3 AND group_id = $1; RETURNING group_id, user_id", groupId, newgroupId, userId).Scan(&grouprole.GroupID, &grouprole.UserID)
+
+	if err != nil {
+		print(err, "from transactions err ")
+
+		return models.GroupRole{}, err
+	}
+
+	return grouprole, nil
+
+}

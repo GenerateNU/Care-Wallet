@@ -4,6 +4,7 @@ import (
 	"carewallet/models"
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx"
@@ -22,8 +23,10 @@ func GetCareGroups(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 		{
 			group.GET("", c.GetGroupByGroupId)
 			group.POST("add", c.AddUserCareGroup)
-		}
+			group.DELETE("remove/:uid", c.RemoveUserFromGroup)
+			group.POST("change/:uid/:newGroupId", c.ChangeUserGroupRole)
 
+		}
 	}
 
 	return careGroups
@@ -110,4 +113,43 @@ func (pg *PgModel) GetGroupByGroupId(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, group)
+}
+
+func (pg *PgModel) RemoveUserFromGroup(c *gin.Context) {
+	groupId := c.Param("groupId")
+	uid := c.Param("uid")
+
+	// not sure how to handle these errors
+	groupIDint, err := strconv.Atoi(groupId)
+	uidint, err := strconv.Atoi(uid)
+
+	id, err := RemoveUserFromGroupFromDB(pg.Conn, groupIDint, uidint)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, id)
+
+}
+
+func (pg *PgModel) ChangeUserGroupRole(c *gin.Context) {
+	groupId := c.Param("groupId")
+	uid := c.Param("uid")
+	newGroupId := c.Param("newGroupId")
+
+	groupIDint, err := strconv.Atoi(groupId)
+	uidint, err := strconv.Atoi(uid)
+	newGroupIdint, err := strconv.Atoi(newGroupId)
+
+	id, err := ChangeUserGroupRoleInDB(pg.Conn, groupIDint, uidint, newGroupIdint)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, id)
+
 }
