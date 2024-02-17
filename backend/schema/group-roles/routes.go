@@ -13,7 +13,7 @@ type PgModel struct {
 }
 
 // groupRoles.go file
-func GetGroupRolesGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
+func GroupRolesGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 	groupRoles := v1.Group("")
 	{
 		groupRoles.GET("/:groupId/roles", c.GetGroupRoles)

@@ -13,7 +13,7 @@ type PgModel struct {
 	Conn *pgx.Conn
 }
 
-func GetCareGroups(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
+func CareGroups(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 	careGroups := v1.Group("")
 	{
 		careGroups.POST("/create/:groupName", c.CreateCareGroups)
