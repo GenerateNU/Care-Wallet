@@ -8,7 +8,6 @@ DROP TABLE IF EXISTS label;
 DROP TABLE IF EXISTS task_labels;
 DROP TABLE IF EXISTS files;
 
-
 CREATE TYPE role AS ENUM ('PATIENT', 'PRIMARY', 'SECONDARY');
 CREATE TYPE task_assignment_status AS ENUM ('ACCEPTED', 'DECLINED', 'NOTIFIED');
 CREATE TYPE task_status AS ENUM ('INCOMPLETE', 'COMPLETE', 'PARTIAL');
@@ -58,7 +57,7 @@ CREATE TABLE IF NOT EXISTS task (
     start_date timestamp,
     end_date timestamp,
     notes varchar,
-    repeating BOOLEAN,
+    repeating BOOLEAN DEFAULT FALSE,
     repeating_interval varchar,
     repeating_end_date timestamp,
     task_status task_status NOT NULL,
@@ -95,8 +94,8 @@ CREATE TABLE IF NOT EXISTS task_assignees (
     group_id integer NOT NULL,
     label_name varchar NOT NULL,
     PRIMARY KEY (task_id, label_name),
-    FOREIGN KEY (task_id) REFERENCES task (task_id),
-    FOREIGN KEY (group_id, label_name) REFERENCES label (group_id, label_name) -- NOTE: unsure about label/task_labels table constraints, uncommenting this line is err
+    FOREIGN KEY (task_id) REFERENCES task (task_id) ON UPDATE CASCADE,
+    FOREIGN KEY (group_id, label_name) REFERENCES label (group_id, label_name) ON UPDATE CASCADE -- NOTE: unsure about label/task_labels table constraints, uncommenting this line is err
 );
 
 CREATE TABLE IF NOT EXISTS files (
@@ -113,6 +112,7 @@ CREATE TABLE IF NOT EXISTS files (
     FOREIGN KEY (task_id) REFERENCES task (task_id)
 );
 
+----------------- SAMPLE DATA :) -----------------------
 
 -- Insert sample data into "medication" table
 INSERT INTO medication (medication_id, medication_name)
@@ -121,19 +121,75 @@ VALUES
   (2, 'Medication B'),
   (3, 'Medication C'),
   (4, 'Medication D'),
-  (5, 'Medication E');
+  (5, 'Medication E')
+;
 
--- Insert sample data into "users" table
-INSERT INTO users (user_id, first_name, last_name, email, phone, address, pfp_s3_url, device_id, push_notification_enabled) VALUES
-('user123', 'John', 'Doe', 'john.doe@example.com', '123-456-7890', '123 Main St, Anytown, USA', 'https://example.com/pfp/user123.jpg', 'device123', TRUE),
-('user456', 'Jane', 'Smith', 'jane.smith@example.com', '987-654-3210', '456 Elm St, Anytown, USA', 'https://example.com/pfp/user456.jpg', 'device456', TRUE);
-
--- Insert sample data into "care_group" table
 INSERT INTO care_group (group_name, date_created)
-VALUES ('Sample Care Group', CURRENT_TIMESTAMP),
-('Care-Wallet Group', NOW());
+VALUES
+  ('Smith Family', NOW()),
+  ('Johnson Support Network', NOW()),
+  ('Williams Care Team', NOW()),
+  ('Brown Medical Group', NOW()),
+  ('Care-Wallet Group', NOW())
+;
 
--- Insert sample data into "group_roles" table
-INSERT INTO group_roles (group_id, user_id, role) VALUES
-(1, 'user123', 'PATIENT'),
-(1, 'user456', 'PRIMARY');
+INSERT INTO users (user_id, first_name, last_name, email, phone, address)
+VALUES
+  ('user1', 'John', 'Smith', 'john.smith@example.com', '123-456-7890', '123 Main St'),
+  ('user2', 'Jane', 'Doe', 'jane.doe@example.com', '987-654-3210', '456 Elm St'),
+  ('user3', 'Bob', 'Johnson', 'bob.johnson@example.com', NULL, NULL),
+  ('user4', 'Emily', 'Garcia', 'emily.garcia@example.com', '555-1212', '789 Oak Ave'),
+  ('fIoFY26mJnYWH8sNdfuVoxpnVnr1', 'Matt', 'McCoy', '', '', '')
+;
+
+INSERT INTO group_roles (group_id, user_id, role)
+VALUES
+  (1, 'user1', 'PATIENT'),
+  (1, 'user2', 'PRIMARY'),
+  (2, 'user3', 'PRIMARY'),
+  (2, 'user4', 'SECONDARY'),
+  (3, 'user4', 'PATIENT'),
+  (4, 'user1', 'SECONDARY'),
+  (4, 'user3', 'SECONDARY'),
+  (5, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', 'PRIMARY')
+;
+
+INSERT INTO task (group_id, created_by, created_date, start_date, end_date, notes, task_status, task_type)
+VALUES
+  (1, 'user2', '2024-02-03 10:45:00', '2024-02-05 10:00:00', '2024-02-05 11:00:00', 'Pick up medication from pharmacy', 'INCOMPLETE', 'med_mgmt'),
+  (2, 'user3', '2024-02-20 23:59:59', '2024-02-10 14:30:00', NULL, 'Schedule doctor appointment', 'INCOMPLETE', 'other'),
+  (3, 'user4', '2020-02-05 11:00:00', NULL, '2024-02-20 23:59:59', 'Submit insurance claim', 'PARTIAL', 'financial'),
+  (4, 'user1', '2006-01-02 15:04:05', NULL, NULL, 'Refill water pitcher', 'COMPLETE', 'other')
+;
+
+INSERT INTO task_assignees (task_id, user_id, assignment_status, assigned_by, assigned_date)
+VALUES
+  (1, 'user1', 'ACCEPTED', 'user2', NOW()),
+  (2, 'user3', 'NOTIFIED', 'user3', NOW()),
+  (3, 'user4', 'DECLINED', 'user4', NOW()),
+  (4, 'user2', 'DECLINED', 'user1', NOW())
+;
+
+INSERT INTO label (group_id, label_name, label_color)
+VALUES
+  (1, 'Medication', 'blue'),
+  (2, 'Appointments', 'green'),
+  (3, 'Financial', 'orange'),
+  (4, 'Household', 'purple'),
+  (1, 'Household', 'purple')
+;
+
+INSERT INTO task_labels (task_id, group_id, label_name)
+VALUES
+  (1, 1, 'Medication'),
+  (2, 2, 'Appointments'),
+  (3, 3, 'Financial'),
+  (4, 4, 'Household')
+;
+
+INSERT INTO files (file_id, file_name, group_id, upload_by, upload_date, file_size, task_id)
+VALUES
+  (1, 'Medication list.pdf', 1, 'user2', NOW(), 123456, 1),
+  (2, 'Insurance form.docx', 3, 'user4', NOW(), 456789, 3),
+  (3, 'Water pitcher instructions.txt', 4, 'user1', NOW(), 1234, 4)
+;

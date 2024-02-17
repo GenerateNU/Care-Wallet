@@ -39,7 +39,7 @@ func TestGroupRoutes(t *testing.T) {
 
 	v1 := router.Group("/group")
 	{
-		GetCareGroups(v1, &controller)
+		CareGroups(v1, &controller)
 	}
 
 	// test to get group members
@@ -89,7 +89,7 @@ func TestGroupRoutes(t *testing.T) {
 		}
 
 		// Define the expected users
-		expectedGroupID := 3
+		expectedGroupID := 6
 
 		if expectedGroupID != responseGroupID {
 			t.Error("Result was not correct")
@@ -100,7 +100,7 @@ func TestGroupRoutes(t *testing.T) {
 	// test to add a user to a group
 	t.Run("TestAddUser", func(t *testing.T) {
 		postRequest := GroupMember{
-			UserId: "user123",
+			UserId: "user3",
 			Role:   "PATIENT",
 		}
 
