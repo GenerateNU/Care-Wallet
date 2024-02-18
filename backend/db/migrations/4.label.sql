@@ -17,3 +17,21 @@ CREATE TABLE If NOT EXISTS task_labels (
     FOREIGN KEY (task_id) REFERENCES task (task_id),
     FOREIGN KEY (group_id, label_name) REFERENCES label (group_id, label_name) -- NOTE: unsure about label/task_labels table constraints, uncommenting this line is err
 );
+
+
+INSERT INTO label (group_id, label_name, label_color)
+VALUES
+  (1, 'Medication', 'blue'),
+  (2, 'Appointments', 'green'),
+  (3, 'Financial', 'orange'),
+  (4, 'Household', 'purple'),
+  (1, 'Household', 'purple')
+;
+
+INSERT INTO task_labels (task_id, group_id, label_name)
+VALUES
+  (1, 1, 'Medication'),
+  (2, 2, 'Appointments'),
+  (3, 3, 'Financial'),
+  (4, 4, 'Household')
+;

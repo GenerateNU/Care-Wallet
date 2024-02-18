@@ -22,12 +22,24 @@ CREATE TABLE IF NOT EXISTS group_roles (
 INSERT INTO
     care_group (group_id, group_name, date_created)
 VALUES
+    ('Smith Family', NOW()),
+    ('Johnson Support Network', NOW()),
+    ('Williams Care Team', NOW()),
+    ('Brown Medical Group', NOW()),
     (999, 'WE <3 OLD PEOPLE', NOW())
 ;
 
 INSERT INTO
     group_roles (group_id, user_id, role)
 VALUES
+    (1, 'user1', 'PATIENT'),
+    (1, 'user2', 'PRIMARY'),
+    (2, 'user3', 'PRIMARY'),
+    (2, 'user4', 'SECONDARY'),
+    (3, 'user4', 'PATIENT'),
+    (4, 'user1', 'SECONDARY'),
+    (4, 'user3', 'SECONDARY'),
+    (5, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', 'PRIMARY')
     (999, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', 'PRIMARY'),
     (999, 'BLq3MXk4rVg4RKuYiMd7aEmMhsz1', 'SECONDARY'),
     (999, 'mPeo3d3MiXfnpPJADWgFD9ZcB2M2', 'SECONDARY'),
