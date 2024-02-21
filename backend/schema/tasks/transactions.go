@@ -157,12 +157,12 @@ func GetTasksByAssignedFromDB(pool *pgx.Conn, userIDs []string) ([]models.Task, 
 }
 
 // CreateTaskInDB creates a new task in the database and returns its ID
-func (pg *PgModel) CreateTaskInDB(newTask models.Task) (int, error) {
+func CreateTaskInDB(pool *pgx.Conn, newTask models.Task) (int, error) {
 	query := `
         INSERT INTO task (group_id, created_by, created_date, start_date, end_date, notes, repeating, repeating_interval, repeating_end_date, task_status, task_type, task_info) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING task_id`
 
 	var newTaskID int
-	err := pg.Conn.QueryRow(
+	err := pool.QueryRow(
 		query,
 		newTask.GroupID,
 		newTask.CreatedBy,
@@ -182,30 +182,30 @@ func (pg *PgModel) CreateTaskInDB(newTask models.Task) (int, error) {
 }
 
 // DeleteTaskInDB deletes a task from the database by ID
-func (pg *PgModel) DeleteTaskInDB(taskID int) error {
+func DeleteTaskInDB(pool *pgx.Conn, taskID int) error {
 	// Assuming "task" table structure, adjust the query based on your schema
 	query := "DELETE FROM task WHERE task_id = $1"
 
-	_, err := pg.Conn.Exec(query, taskID)
+	_, err := pool.Exec(query, taskID)
 	return err
 }
 
 // UpdateTaskInfoInDB updates the task_info field in the database
-func (pg *PgModel) UpdateTaskInfoInDB(taskID int, taskInfo json.RawMessage) error {
+func UpdateTaskInfoInDB(pool *pgx.Conn, taskID int, taskInfo json.RawMessage) error {
 	// Assuming "task" table structure, adjust the query based on your schema
 	query := "UPDATE task SET task_info = $1 WHERE task_id = $2"
 
-	_, err := pg.Conn.Exec(query, taskInfo, taskID)
+	_, err := pool.Exec(query, taskInfo, taskID)
 	return err
 }
 
 // GetTaskByID fetches a task from the database by its ID
-func (pg *PgModel) GetTaskByID(taskID int) (models.Task, error) {
+func GetTaskByID(pool *pgx.Conn, taskID int) (models.Task, error) {
 	query := `
         SELECT task_id, group_id, created_by, created_date, start_date, end_date, notes, repeating, repeating_interval, repeating_end_date, task_status, task_type, task_info FROM task WHERE task_id = $1`
 
 	var task models.Task
-	err := pg.Conn.QueryRow(query, taskID).Scan(
+	err := pool.QueryRow(query, taskID).Scan(
 		&task.TaskID,
 		&task.GroupID,
 		&task.CreatedBy,

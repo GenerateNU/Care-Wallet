@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx"
@@ -17,18 +18,48 @@ type PgModel struct {
 }
 
 func TaskGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
-	tasks := v1.Group("tasks")
+	tasks := v1.Group("")
 	{
 		tasks.GET("/filtered", c.GetFilteredTasks)
-		tasks.POST("/:tid/assign", c.AssignUsersToTask)
-		tasks.DELETE("/:tid/remove", c.RemoveUsersFromTask)
 		tasks.GET("/assigned", c.GetTasksByAssignedUsers)
 		tasks.POST("", c.CreateTask)
-		tasks.DELETE("/:tid", c.DeleteTask)
-		tasks.PUT("/:tid/info", c.UpdateTaskInfo)
-		tasks.GET("/:tid/assigned-users", c.GetUsersAssignedToTask)
+
+		byId := tasks.Group("/:tid")
+		{
+			byId.GET("", c.GetTaskByID)
+			byId.DELETE("", c.DeleteTask)
+			byId.PUT("", c.UpdateTaskInfo)
+			byId.GET("/assigned", c.GetUsersAssignedToTask)
+			byId.POST("/assign", c.AssignUsersToTask)
+			byId.DELETE("/remove", c.RemoveUsersFromTask)
+		}
 	}
 	return tasks
+}
+
+// GetTaskByID godoc
+//
+//	@summary		get task by id
+//	@description	get a task given its id
+//	@tags			tasks
+//
+//	@param			tid	path		int	true	"the id of the task"
+//
+//	@success		200	{object}	models.Task
+//	@failure		400	{object}	string
+//	@router			/tasks/{tid} [GET]
+func (pg *PgModel) GetTaskByID(c *gin.Context) {
+	taskID, err := strconv.Atoi(c.Param("tid"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
+	task, err := GetTaskByID(pg.Conn, taskID)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
+	c.JSON(http.StatusOK, task)
 }
 
 type TaskQuery struct {
@@ -155,12 +186,29 @@ func (pg *PgModel) GetTasksByAssignedUsers(c *gin.Context) {
 	c.JSON(http.StatusOK, tasks)
 }
 
+type TaskBody struct {
+	GroupID           int        `json:"group_id"`
+	CreatedBy         string     `json:"created_by"` // User ID
+	CreatedDate       time.Time  `json:"created_date"`
+	StartDate         *time.Time `json:"start_date"`
+	EndDate           *time.Time `json:"end_date"`
+	Notes             *string    `json:"notes"`
+	Repeating         bool       `json:"repeating"`
+	RepeatingInterval *string    `json:"repeating_interval"`
+	RepeatingEndDate  *time.Time `json:"repeating_end_date"`
+	TaskStatus        string     `json:"task_status"`
+	TaskType          string     `json:"task_type"`
+	TaskInfo          *string    `json:"task_info"`
+}
+
 // CreateTask godoc
 //
 //	@summary		Create a New Task
 //	@description	Create a new task
 //	@tags			tasks
-//	@param			request_body	body		models.Task	true	"Create Task Request"
+//
+//	@param			request_body	body		TaskBody	true	"Create Task Request"
+//
 //	@success		201				{object}	models.Task	"Created Task"
 //	@router			/tasks [post]
 func (pg *PgModel) CreateTask(c *gin.Context) {
@@ -173,7 +221,7 @@ func (pg *PgModel) CreateTask(c *gin.Context) {
 	}
 
 	// Create the new task in the database
-	newTaskID, err := pg.CreateTaskInDB(requestBody)
+	newTaskID, err := CreateTaskInDB(pg.Conn, requestBody)
 	if err != nil {
 		fmt.Println("error creating task in the database:", err)
 		c.JSON(http.StatusBadRequest, err.Error())
@@ -181,7 +229,7 @@ func (pg *PgModel) CreateTask(c *gin.Context) {
 	}
 
 	// Fetch the created task from the database
-	createdTask, err := pg.GetTaskByID(newTaskID)
+	createdTask, err := GetTaskByID(pg.Conn, newTaskID)
 	if err != nil {
 		fmt.Println("error fetching created task from the database:", err)
 		c.JSON(http.StatusBadRequest, err.Error())
@@ -208,13 +256,13 @@ func (pg *PgModel) DeleteTask(c *gin.Context) {
 	}
 
 	// Check if the task exists before attempting to delete
-	if _, err := pg.GetTaskByID(taskID); err != nil {
+	if _, err := GetTaskByID(pg.Conn, taskID); err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
 
 	// Delete the task from the database
-	if err := pg.DeleteTaskInDB(taskID); err != nil {
+	if err := DeleteTaskInDB(pg.Conn, taskID); err != nil {
 		fmt.Println("error deleting task from the database:", err)
 		c.JSON(http.StatusBadRequest, err.Error())
 		return
@@ -229,9 +277,9 @@ func (pg *PgModel) DeleteTask(c *gin.Context) {
 //	@description	Update the task_info field of a task by ID
 //	@tags			tasks
 //	@param			tid				path		int			true	"Task ID"
-//	@param			request_body	body		models.Task	true	"Update Task Info Request"
+//	@param			request_body	body		TaskBody	true	"Update Task Info Request"
 //	@success		200				{object}	models.Task	"Updated Task"
-//	@router			/tasks/{tid}/info [put]
+//	@router			/tasks/{tid} [put]
 func (pg *PgModel) UpdateTaskInfo(c *gin.Context) {
 	// Extract task ID from the path parameter
 	taskID, err := strconv.Atoi(c.Param("tid"))
@@ -258,14 +306,14 @@ func (pg *PgModel) UpdateTaskInfo(c *gin.Context) {
 	}
 
 	// Update the task_info field in the database
-	if err := pg.UpdateTaskInfoInDB(taskID, taskInfoRaw); err != nil {
+	if err := UpdateTaskInfoInDB(pg.Conn, taskID, taskInfoRaw); err != nil {
 		fmt.Println("error updating task info in the database:", err)
 		c.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
 
 	// Fetch the updated task from the database
-	updatedTask, err := pg.GetTaskByID(taskID)
+	updatedTask, err := GetTaskByID(pg.Conn, taskID)
 	if err != nil {
 		fmt.Println("error fetching updated task from the database:", err)
 		c.JSON(http.StatusBadRequest, err.Error())
@@ -288,20 +336,20 @@ type TaskUser struct {
 //	@param			tid	path		int		true	"Task ID"
 //	@success		200	{array}		string	"List of user IDs assigned to the task"
 //	@failure		400	{object}	string
-//	@router			/tasks/{tid}/assigned-users [get]
+//	@router			/tasks/{tid}/assigned [get]
 func (pg *PgModel) GetUsersAssignedToTask(c *gin.Context) {
 	// Extract task ID from the path parameter
 	taskIDStr := c.Param("tid")
 	taskID, err := strconv.Atoi(taskIDStr)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid task ID"})
+		c.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
 
 	// Get list of users assigned to the task
 	userIDs, err := GetUsersAssignedToTaskFromDB(pg.Conn, taskID)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to fetch users assigned to the task"})
+		c.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
 

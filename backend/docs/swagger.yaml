@@ -144,6 +144,34 @@ definitions:
           type: string
         type: array
     type: object
+  tasks.TaskBody:
+    properties:
+      created_by:
+        description: User ID
+        type: string
+      created_date:
+        type: string
+      end_date:
+        type: string
+      group_id:
+        type: integer
+      notes:
+        type: string
+      repeating:
+        type: boolean
+      repeating_end_date:
+        type: string
+      repeating_interval:
+        type: string
+      start_date:
+        type: string
+      task_info:
+        type: string
+      task_status:
+        type: string
+      task_type:
+        type: string
+    type: object
 info:
   contact: {}
   description: This is an API for the Care-Wallet App.
@@ -435,7 +463,7 @@ paths:
         name: request_body
         required: true
         schema:
-          $ref: '#/definitions/models.Task'
+          $ref: '#/definitions/tasks.TaskBody'
       responses:
         "201":
           description: Created Task
@@ -457,6 +485,48 @@ paths:
         "204":
           description: No Content
       summary: Delete a Task
+      tags:
+      - tasks
+    get:
+      description: get a task given its id
+      parameters:
+      - description: the id of the task
+        in: path
+        name: tid
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Task'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: get task by id
+      tags:
+      - tasks
+    put:
+      description: Update the task_info field of a task by ID
+      parameters:
+      - description: Task ID
+        in: path
+        name: tid
+        required: true
+        type: integer
+      - description: Update Task Info Request
+        in: body
+        name: request_body
+        required: true
+        schema:
+          $ref: '#/definitions/tasks.TaskBody'
+      responses:
+        "200":
+          description: Updated Task
+          schema:
+            $ref: '#/definitions/models.Task'
+      summary: Update Task Info
       tags:
       - tasks
   /tasks/{tid}/assign:
@@ -488,7 +558,7 @@ paths:
       summary: Assign Users To Task
       tags:
       - tasks
-  /tasks/{tid}/assigned-users:
+  /tasks/{tid}/assigned:
     get:
       description: Get list of users assigned to a task by task ID
       parameters:
@@ -509,29 +579,6 @@ paths:
           schema:
             type: string
       summary: Get list of users assigned to a task
-      tags:
-      - tasks
-  /tasks/{tid}/info:
-    put:
-      description: Update the task_info field of a task by ID
-      parameters:
-      - description: Task ID
-        in: path
-        name: tid
-        required: true
-        type: integer
-      - description: Update Task Info Request
-        in: body
-        name: request_body
-        required: true
-        schema:
-          $ref: '#/definitions/models.Task'
-      responses:
-        "200":
-          description: Updated Task
-          schema:
-            $ref: '#/definitions/models.Task'
-      summary: Update Task Info
       tags:
       - tasks
   /tasks/{tid}/labels:

@@ -446,7 +446,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Task"
+                            "$ref": "#/definitions/tasks.TaskBody"
                         }
                     }
                 ],
@@ -561,6 +561,69 @@ const docTemplate = `{
             }
         },
         "/tasks/{tid}": {
+            "get": {
+                "description": "get a task given its id",
+                "tags": [
+                    "tasks"
+                ],
+                "summary": "get task by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "the id of the task",
+                        "name": "tid",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Task"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update the task_info field of a task by ID",
+                "tags": [
+                    "tasks"
+                ],
+                "summary": "Update Task Info",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Task ID",
+                        "name": "tid",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Update Task Info Request",
+                        "name": "request_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/tasks.TaskBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Updated Task",
+                        "schema": {
+                            "$ref": "#/definitions/models.Task"
+                        }
+                    }
+                }
+            },
             "delete": {
                 "description": "Delete a task by ID",
                 "tags": [
@@ -627,7 +690,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/tasks/{tid}/assigned-users": {
+        "/tasks/{tid}/assigned": {
             "get": {
                 "description": "Get list of users assigned to a task by task ID",
                 "tags": [
@@ -657,41 +720,6 @@ const docTemplate = `{
                         "description": "Bad Request",
                         "schema": {
                             "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/tasks/{tid}/info": {
-            "put": {
-                "description": "Update the task_info field of a task by ID",
-                "tags": [
-                    "tasks"
-                ],
-                "summary": "Update Task Info",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Task ID",
-                        "name": "tid",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "Update Task Info Request",
-                        "name": "request_body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.Task"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Updated Task",
-                        "schema": {
-                            "$ref": "#/definitions/models.Task"
                         }
                     }
                 }
@@ -1073,6 +1101,48 @@ const docTemplate = `{
                     "items": {
                         "type": "string"
                     }
+                }
+            }
+        },
+        "tasks.TaskBody": {
+            "type": "object",
+            "properties": {
+                "created_by": {
+                    "description": "User ID",
+                    "type": "string"
+                },
+                "created_date": {
+                    "type": "string"
+                },
+                "end_date": {
+                    "type": "string"
+                },
+                "group_id": {
+                    "type": "integer"
+                },
+                "notes": {
+                    "type": "string"
+                },
+                "repeating": {
+                    "type": "boolean"
+                },
+                "repeating_end_date": {
+                    "type": "string"
+                },
+                "repeating_interval": {
+                    "type": "string"
+                },
+                "start_date": {
+                    "type": "string"
+                },
+                "task_info": {
+                    "type": "string"
+                },
+                "task_status": {
+                    "type": "string"
+                },
+                "task_type": {
+                    "type": "string"
                 }
             }
         }

@@ -244,22 +244,31 @@ func TestTaskGroup(t *testing.T) {
 	})
 
 	t.Run("TestCreateTask_Success", func(t *testing.T) {
-		// Prepare a new task request body
-		taskData := map[string]interface{}{
-			"group_id":           1,
-			"created_by":         "user1",
-			"start_date":         time.Now().Format(time.RFC3339),
-			"end_date":           time.Now().Add(time.Hour).Format(time.RFC3339),
-			"notes":              "Test task",
-			"repeating":          false,
-			"repeating_interval": "",
-			"repeating_end_date": time.Now().Add(2 * time.Hour).Format(time.RFC3339),
-			"task_status":        "INCOMPLETE",
-			"task_type":          "other",
-			"task_info": map[string]interface{}{
-				"details": "Test details",
-			},
+		// Creating a Task instance
+		startDate := time.Now().UTC()
+		endDate := time.Now().Add(24 * time.Hour).UTC()
+		notes := "This is a sample task"
+		repeating := true
+		repeatingInterval := "Weekly"
+		repeatingEndDate := time.Now().Add(7 * 24 * time.Hour).UTC()
+		taskInfo := `{"info": "Additional information about the task"}`
+
+		taskData := models.Task{
+			TaskID:            1,
+			GroupID:           1,
+			CreatedBy:         "user1",
+			CreatedDate:       time.Now().UTC(),
+			StartDate:         &startDate,
+			EndDate:           &endDate,
+			Notes:             &notes,
+			Repeating:         repeating,
+			RepeatingInterval: &repeatingInterval,
+			RepeatingEndDate:  &repeatingEndDate,
+			TaskStatus:        "INCOMPLETE",
+			TaskType:          "med_mgmt",
+			TaskInfo:          &taskInfo,
 		}
+
 		taskJSON, err := json.Marshal(taskData)
 		if err != nil {
 			t.Error("Failed to marshal task data to JSON:", err)
@@ -283,17 +292,17 @@ func TestTaskGroup(t *testing.T) {
 		}
 
 		// Validate the response body
-		var createdTask map[string]interface{}
+		var createdTask models.Task
 		err = json.Unmarshal(w.Body.Bytes(), &createdTask)
 		if err != nil {
 			t.Error("Failed to unmarshal JSON:", err)
 		}
 
 		// Add more specific assertions based on the expected response
-		if createdTask["task_id"] == nil {
+		if createdTask.TaskID == -1 {
 			t.Error("Expected task ID to be present")
 		}
-		if createdTask["created_by"] != "user1" {
+		if createdTask.CreatedBy != "user1" {
 			t.Error("Unexpected created_by value")
 		}
 		// Add more assertions as needed
@@ -360,99 +369,38 @@ func TestTaskGroup(t *testing.T) {
 	})
 
 	t.Run("TestUpdateTaskInfo", func(t *testing.T) {
-		// Mock the successful update of task info in the database
-		var updateTaskInfoInDBFunc func(taskID int, taskInfoRaw json.RawMessage) error
+		// Creating a Task instance
+		startDate := time.Now().UTC()
+		endDate := time.Now().Add(24 * time.Hour).UTC()
+		notes := "This is a sample task"
+		repeating := true
+		repeatingInterval := "Weekly"
+		repeatingEndDate := time.Now().Add(7 * 24 * time.Hour).UTC()
+		taskInfo := `{"info": "Additional information about the task"}`
 
-		// Mock the successful retrieval of the task by ID
-		var getTaskByIDFunc func(taskID int) (models.Task, error)
-
-		// Create a new Gin router
-		router := gin.Default()
-
-		// Attach the UpdateTaskInfo route to the router
-		router.PUT("/tasks/:tid/info", func(c *gin.Context) {
-			// Extract task ID from the path parameter
-			taskIDStr := c.Param("tid")
-			taskID, err := strconv.Atoi(taskIDStr)
-			if err != nil {
-				c.JSON(http.StatusBadRequest, err.Error())
-				return
-			}
-
-			// Bind the request body to the UpdateTaskInfoRequest struct
-			var requestBody struct {
-				GroupID           int                    `json:"group_id"`
-				CreatedBy         string                 `json:"created_by"`
-				StartDate         time.Time              `json:"start_date"`
-				EndDate           time.Time              `json:"end_date"`
-				Notes             string                 `json:"notes"`
-				Repeating         bool                   `json:"repeating"`
-				RepeatingInterval string                 `json:"repeating_interval"`
-				RepeatingEndDate  time.Time              `json:"repeating_end_date"`
-				TaskStatus        string                 `json:"task_status"`
-				TaskType          string                 `json:"task_type"`
-				TaskInfo          map[string]interface{} `json:"task_info"`
-			}
-			if err := c.BindJSON(&requestBody); err != nil {
-				c.JSON(http.StatusBadRequest, err.Error())
-				return
-			}
-
-			// Convert TaskInfo to json.RawMessage
-			taskInfoRaw, err := json.Marshal(requestBody.TaskInfo)
-			if err != nil {
-				c.JSON(http.StatusBadRequest, err.Error())
-				return
-			}
-
-			// Mock the successful update of task info in the database
-			if updateTaskInfoInDBFunc != nil {
-				if err := updateTaskInfoInDBFunc(taskID, taskInfoRaw); err != nil {
-					c.JSON(http.StatusBadRequest, err.Error())
-					return
-				}
-			}
-
-			// Mock the successful retrieval of the task by ID
-			if getTaskByIDFunc != nil {
-				task, err := getTaskByIDFunc(taskID)
-				if err != nil {
-					c.JSON(http.StatusBadRequest, err.Error())
-					return
-				}
-
-				// Fetch the updated task from the database
-				c.JSON(http.StatusOK, task)
-				return
-			}
-
-			c.Status(http.StatusOK)
-		})
-
-		// Prepare a request body with task data
-		requestBody := map[string]interface{}{
-			"group_id":           1,
-			"created_by":         "user1",
-			"start_date":         time.Now().Format(time.RFC3339),
-			"end_date":           time.Now().Add(time.Hour).Format(time.RFC3339),
-			"notes":              "Test task",
-			"repeating":          false,
-			"repeating_interval": "",
-			"repeating_end_date": time.Now().Add(2 * time.Hour).Format(time.RFC3339),
-			"task_status":        "INCOMPLETE",
-			"task_type":          "other",
-			"task_info": map[string]interface{}{
-				"details": "Test details",
-			},
+		taskData := models.Task{
+			TaskID:            1,
+			GroupID:           1,
+			CreatedBy:         "user1",
+			CreatedDate:       time.Now().UTC(),
+			StartDate:         &startDate,
+			EndDate:           &endDate,
+			Notes:             &notes,
+			Repeating:         repeating,
+			RepeatingInterval: &repeatingInterval,
+			RepeatingEndDate:  &repeatingEndDate,
+			TaskStatus:        "INCOMPLETE",
+			TaskType:          "med_mgmt",
+			TaskInfo:          &taskInfo,
 		}
-		requestBodyJSON, err := json.Marshal(requestBody)
+		requestBodyJSON, err := json.Marshal(taskData)
 		if err != nil {
 			t.Fatal("Failed to marshal task data to JSON:", err)
 			return
 		}
 
 		// Perform a PUT request to the /tasks/:tid/info endpoint
-		req, err := http.NewRequest("PUT", "/tasks/1/info", bytes.NewBuffer(requestBodyJSON))
+		req, err := http.NewRequest("PUT", "/tasks/1", bytes.NewBuffer(requestBodyJSON))
 		if err != nil {
 			t.Fatal("Failed to create HTTP request:", err)
 			return
@@ -474,7 +422,7 @@ func TestTaskGroup(t *testing.T) {
 	t.Run("TestGetUsersAssignedToTask", func(t *testing.T) {
 		// Create a new recorder and request
 		w := httptest.NewRecorder()
-		req, _ := http.NewRequest("GET", "/tasks/1/assigned-users", nil)
+		req, _ := http.NewRequest("GET", "/tasks/2/assigned", nil)
 
 		// Serve the request using the router
 		router.ServeHTTP(w, req)
@@ -493,7 +441,7 @@ func TestTaskGroup(t *testing.T) {
 			t.Error("Failed to unmarshal JSON")
 		}
 
-		expectedUsers := []string{"user1"}
+		expectedUsers := []string{"user3", "user4"}
 		if !reflect.DeepEqual(expectedUsers, responseUsers) {
 			t.Error("Result was not correct")
 		}
