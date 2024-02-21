@@ -35,7 +35,7 @@ func TestTaskGroup(t *testing.T) {
 	router := gin.Default()
 	router.Use(cors.Default())
 
-	v1 := router.Group("/")
+	v1 := router.Group("/tasks")
 	{
 		TaskGroup(v1, &controller)
 	}
@@ -72,13 +72,14 @@ func TestTaskGroup(t *testing.T) {
 		if err != nil {
 			t.Error("Failed to unmarshal json")
 		}
-
+		start_date_1 := time.Date(2024, 2, 10, 14, 30, 0, 0, time.UTC)
 		expectedTasks := []models.Task{
 			{
 				TaskID:      2,
 				GroupID:     2,
 				CreatedBy:   "user3",
 				CreatedDate: time.Date(2024, 2, 20, 23, 59, 59, 0, time.UTC),
+				StartDate:   &start_date_1,
 				TaskStatus:  "INCOMPLETE",
 				TaskType:    "other",
 			},

@@ -32,6 +32,7 @@ func TaskGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 }
 
 type TaskQuery struct {
+	TaskID     string `form:"taskID"`
 	GroupID    string `form:"groupID"`
 	CreatedBy  string `form:"createdBy"`
 	TaskStatus string `form:"taskStatus"`

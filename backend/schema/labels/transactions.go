@@ -7,8 +7,36 @@ import (
 	"github.com/jackc/pgx"
 )
 
-func CreateNewLabelInDB(pool *pgx.Conn, requestBody LabelData) (models.Label, error) {
-	groupID := requestBody.GroupID
+func GetLabelsByGroupFromDB(pool *pgx.Conn, groupID string) ([]models.Label, error) {
+	groupIDInt, err := strconv.Atoi(groupID)
+	if err != nil {
+		return nil, err
+	}
+
+	rows, err := pool.Query("SELECT label_name, label_color FROM label WHERE group_id = $1", groupIDInt)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	var results []models.Label
+
+	for rows.Next() {
+		label := models.Label{}
+		err := rows.Scan(&label.LabelName, &label.LabelColor)
+		if err != nil {
+			return nil, err
+		}
+		label.GroupID = groupIDInt
+		results = append(results, label)
+	}
+
+	return results, nil
+
+}
+
+func CreateNewLabelInDB(pool *pgx.Conn, groupID int, requestBody LabelData) (models.Label, error) {
 	labelName := requestBody.LabelName
 	labelColor := requestBody.LabelColor
 

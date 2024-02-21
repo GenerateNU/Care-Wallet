@@ -1,12 +1,26 @@
 basePath: /
 definitions:
+  groups.GroupMember:
+    properties:
+      role:
+        $ref: '#/definitions/models.Role'
+      user_id:
+        type: string
+    type: object
   labels.LabelData:
     properties:
-      group_id:
-        type: integer
       label_color:
         type: string
       label_name:
+        type: string
+    type: object
+  models.CareGroup:
+    properties:
+      date_created:
+        type: string
+      group_id:
+        type: integer
+      group_name:
         type: string
     type: object
   models.File:
@@ -26,6 +40,15 @@ definitions:
       upload_date:
         type: string
     type: object
+  models.GroupRole:
+    properties:
+      group_id:
+        type: integer
+      role:
+        $ref: '#/definitions/models.Role'
+      user_id:
+        type: string
+    type: object
   models.Label:
     properties:
       group_id:
@@ -42,6 +65,16 @@ definitions:
       medication_name:
         type: string
     type: object
+  models.Role:
+    enum:
+    - PATIENT
+    - PRIMARY
+    - SECONDARY
+    type: string
+    x-enum-varnames:
+    - RolePatient
+    - RolePrimary
+    - RoleSecondary
   models.Task:
     properties:
       created_by:
@@ -72,11 +105,27 @@ definitions:
       task_type:
         type: string
     type: object
+  models.Task_Label:
+    properties:
+      group_id:
+        type: integer
+      label_name:
+        type: string
+      task_id:
+        type: integer
+    type: object
   models.TaskUser:
     properties:
       taskID:
         type: integer
       userID:
+        type: string
+    type: object
+  task_labels.LabelData:
+    properties:
+      group_id:
+        type: integer
+      label_name:
         type: string
     type: object
   tasks.Assignment:
@@ -132,13 +181,110 @@ paths:
       summary: Upload a file
       tags:
       - file
-  /labels/delete/{gid}/{lname}:
+  /group/{groupId}:
+    get:
+      description: retrieve the information about a group given its group id
+      parameters:
+      - description: group id
+        in: path
+        name: groupId
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CareGroup'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Get a group
+      tags:
+      - group
+  /group/{groupId}/add:
+    post:
+      description: Adds a user to a care group given a userID, groupID, and role
+      parameters:
+      - description: group id
+        in: path
+        name: groupId
+        required: true
+        type: string
+      - description: The group member to be added
+        in: body
+        name: GroupMember
+        required: true
+        schema:
+          $ref: '#/definitions/groups.GroupMember'
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Adds a user to a care group
+      tags:
+      - group
+  /group/{groupId}/labels:
+    get:
+      description: get all labels for a group given their group id
+      parameters:
+      - description: the group id to get labels for
+        in: path
+        name: groupId
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Label'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: get labels for a group
+      tags:
+      - labels
+    post:
+      description: create a new label for a group
+      parameters:
+      - description: Group to create label for
+        in: path
+        name: groupId
+        required: true
+        type: string
+      - description: Label creation data
+        in: body
+        name: _
+        required: true
+        schema:
+          $ref: '#/definitions/labels.LabelData'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Label'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Create A New Label
+      tags:
+      - labels
+  /group/{groupId}/labels/{lname}:
     delete:
       description: delete a label
       parameters:
       - description: Group to delete label from
         in: path
-        name: gid
+        name: groupId
         required: true
         type: string
       - description: Name of label to delete
@@ -150,7 +296,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.Label'
+            type: string
         "400":
           description: Bad Request
           schema:
@@ -158,13 +304,12 @@ paths:
       summary: Delete A Label
       tags:
       - labels
-  /labels/edit/{gid}/{lname}:
     patch:
       description: edit a label
       parameters:
       - description: Group of label to edit
         in: path
-        name: gid
+        name: groupId
         required: true
         type: string
       - description: Name of label to edit
@@ -190,28 +335,63 @@ paths:
       summary: Edit A Label
       tags:
       - labels
-  /labels/new:
-    post:
-      description: create a new label for a group
+  /group/{groupId}/roles:
+    get:
+      description: get all group members for a group given group id from the db
       parameters:
-      - description: Label creation data
-        in: body
-        name: _
+      - description: group id
+        in: path
+        name: groupId
         required: true
-        schema:
-          $ref: '#/definitions/labels.LabelData'
+        type: integer
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.Label'
+            items:
+              $ref: '#/definitions/models.GroupRole'
+            type: array
+      summary: Get all members of a group
+      tags:
+      - group
+  /group/create/{groupName}:
+    post:
+      description: Creates a new care group with the provided group name.
+      parameters:
+      - description: group name
+        in: path
+        name: groupName
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+      summary: Creates a care group
+      tags:
+      - group
+  /group/member/{uid}:
+    get:
+      description: get the group id from the user id
+      parameters:
+      - description: user id
+        in: path
+        name: uid
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
         "400":
           description: Bad Request
           schema:
             type: string
-      summary: Create A New Label
+      summary: Retrieve a group id given a user id
       tags:
-      - labels
+      - group
   /medications:
     get:
       description: get all user medications
@@ -275,6 +455,82 @@ paths:
       summary: Assign Users To Task
       tags:
       - tasks
+  /tasks/{tid}/labels:
+    delete:
+      description: remove a label from a task given the task id, group id, and label
+        name
+      parameters:
+      - description: the task id to get labels for
+        in: path
+        name: tid
+        required: true
+        type: integer
+      - description: The label data to remove from the task
+        in: body
+        name: requestBody
+        required: true
+        schema:
+          $ref: '#/definitions/task_labels.LabelData'
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: remove a label from a task
+      tags:
+      - task labels
+    get:
+      description: get a tasks labels given the task id
+      parameters:
+      - description: the task id to get labels for
+        in: path
+        name: tid
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Task_Label'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: get a tasks labels
+      tags:
+      - task labels
+    post:
+      description: add a label to a task given the task id, group id, and label name
+      parameters:
+      - description: the task id to add the label to
+        in: path
+        name: tid
+        required: true
+        type: integer
+      - description: The label data to add to the task
+        in: body
+        name: requestBody
+        required: true
+        schema:
+          $ref: '#/definitions/task_labels.LabelData'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Task_Label'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: add a label to a task
+      tags:
+      - task labels
   /tasks/{tid}/remove:
     delete:
       description: remove users from task
@@ -343,6 +599,9 @@ paths:
         type: string
       - in: query
         name: startDate
+        type: string
+      - in: query
+        name: taskID
         type: string
       - in: query
         name: taskStatus
