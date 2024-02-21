@@ -156,23 +156,8 @@ func GetTasksByAssignedFromDB(pool *pgx.Conn, userIDs []string) ([]models.Task, 
 	return tasks, nil
 }
 
-// CreateTaskRequest represents the request body for creating a new task
-type CreateTaskRequest struct {
-	GroupID           int                    `json:"group_id"`
-	CreatedBy         string                 `json:"created_by"`
-	StartDate         time.Time              `json:"start_date"`
-	EndDate           time.Time              `json:"end_date"`
-	Notes             string                 `json:"notes"`
-	Repeating         bool                   `json:"repeating"`
-	RepeatingInterval string                 `json:"repeating_interval"`
-	RepeatingEndDate  time.Time              `json:"repeating_end_date"`
-	TaskStatus        string                 `json:"task_status"`
-	TaskType          string                 `json:"task_type"`
-	TaskInfo          map[string]interface{} `json:"task_info"`
-}
-
 // CreateTaskInDB creates a new task in the database and returns its ID
-func (pg *PgModel) CreateTaskInDB(newTask CreateTaskRequest) (int, error) {
+func (pg *PgModel) CreateTaskInDB(newTask models.Task) (int, error) {
 	query := `
         INSERT INTO task (group_id, created_by, created_date, start_date, end_date, notes, repeating, repeating_interval, repeating_end_date, task_status, task_type, task_info) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING task_id`
 

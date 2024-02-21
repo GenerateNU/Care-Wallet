@@ -425,6 +425,34 @@
                 }
             }
         },
+        "/tasks": {
+            "post": {
+                "description": "Create a new task",
+                "tags": [
+                    "tasks"
+                ],
+                "summary": "Create a New Task",
+                "parameters": [
+                    {
+                        "description": "Create Task Request",
+                        "name": "request_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Task"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created Task",
+                        "schema": {
+                            "$ref": "#/definitions/models.Task"
+                        }
+                    }
+                }
+            }
+        },
         "/tasks/assigned": {
             "get": {
                 "description": "get tasks assigned to given users",
@@ -525,6 +553,29 @@
                 }
             }
         },
+        "/tasks/{tid}": {
+            "delete": {
+                "description": "Delete a task by ID",
+                "tags": [
+                    "tasks"
+                ],
+                "summary": "Delete a Task",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Task ID",
+                        "name": "tid",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    }
+                }
+            }
+        },
         "/tasks/{tid}/assign": {
             "post": {
                 "description": "assign users to task",
@@ -564,6 +615,76 @@
                         "description": "Bad Request",
                         "schema": {
                             "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/tasks/{tid}/assigned-users": {
+            "get": {
+                "description": "Get list of users assigned to a task by task ID",
+                "tags": [
+                    "tasks"
+                ],
+                "summary": "Get list of users assigned to a task",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Task ID",
+                        "name": "tid",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of user IDs assigned to the task",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/tasks/{tid}/info": {
+            "put": {
+                "description": "Update the task_info field of a task by ID",
+                "tags": [
+                    "tasks"
+                ],
+                "summary": "Update Task Info",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Task ID",
+                        "name": "tid",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Update Task Info Request",
+                        "name": "request_body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Task"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Updated Task",
+                        "schema": {
+                            "$ref": "#/definitions/models.Task"
                         }
                     }
                 }

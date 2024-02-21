@@ -426,6 +426,39 @@ paths:
       summary: add a medication
       tags:
       - medications
+  /tasks:
+    post:
+      description: Create a new task
+      parameters:
+      - description: Create Task Request
+        in: body
+        name: request_body
+        required: true
+        schema:
+          $ref: '#/definitions/models.Task'
+      responses:
+        "201":
+          description: Created Task
+          schema:
+            $ref: '#/definitions/models.Task'
+      summary: Create a New Task
+      tags:
+      - tasks
+  /tasks/{tid}:
+    delete:
+      description: Delete a task by ID
+      parameters:
+      - description: Task ID
+        in: path
+        name: tid
+        required: true
+        type: integer
+      responses:
+        "204":
+          description: No Content
+      summary: Delete a Task
+      tags:
+      - tasks
   /tasks/{tid}/assign:
     post:
       description: assign users to task
@@ -453,6 +486,52 @@ paths:
           schema:
             type: string
       summary: Assign Users To Task
+      tags:
+      - tasks
+  /tasks/{tid}/assigned-users:
+    get:
+      description: Get list of users assigned to a task by task ID
+      parameters:
+      - description: Task ID
+        in: path
+        name: tid
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: List of user IDs assigned to the task
+          schema:
+            items:
+              type: string
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Get list of users assigned to a task
+      tags:
+      - tasks
+  /tasks/{tid}/info:
+    put:
+      description: Update the task_info field of a task by ID
+      parameters:
+      - description: Task ID
+        in: path
+        name: tid
+        required: true
+        type: integer
+      - description: Update Task Info Request
+        in: body
+        name: request_body
+        required: true
+        schema:
+          $ref: '#/definitions/models.Task'
+      responses:
+        "200":
+          description: Updated Task
+          schema:
+            $ref: '#/definitions/models.Task'
+      summary: Update Task Info
       tags:
       - tasks
   /tasks/{tid}/labels:

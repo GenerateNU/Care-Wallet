@@ -1,12 +1,12 @@
 package tasks
 
 import (
+	"carewallet/models"
 	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx"
@@ -157,27 +157,15 @@ func (pg *PgModel) GetTasksByAssignedUsers(c *gin.Context) {
 
 // CreateTask godoc
 //
-// @summary     Create a New Task
-// @description Create a new task
-// @tags        tasks
-// @param       request_body body requestBody true "Create Task Request"
-// @success     201 {object} models.Task "Created Task"
-// @router      /tasks [post]
+//	@summary		Create a New Task
+//	@description	Create a new task
+//	@tags			tasks
+//	@param			request_body	body		models.Task	true	"Create Task Request"
+//	@success		201				{object}	models.Task	"Created Task"
+//	@router			/tasks [post]
 func (pg *PgModel) CreateTask(c *gin.Context) {
 	// Bind the request body to the CreateTaskRequest struct
-	var requestBody struct {
-		GroupID           int                    `json:"group_id"`
-		CreatedBy         string                 `json:"created_by"`
-		StartDate         time.Time              `json:"start_date"`
-		EndDate           time.Time              `json:"end_date"`
-		Notes             string                 `json:"notes"`
-		Repeating         bool                   `json:"repeating"`
-		RepeatingInterval string                 `json:"repeating_interval"`
-		RepeatingEndDate  time.Time              `json:"repeating_end_date"`
-		TaskStatus        string                 `json:"task_status"`
-		TaskType          string                 `json:"task_type"`
-		TaskInfo          map[string]interface{} `json:"task_info"`
-	}
+	var requestBody models.Task
 	if err := c.BindJSON(&requestBody); err != nil {
 		fmt.Println("error binding to request body: ", err)
 		c.JSON(http.StatusBadRequest, err.Error())
@@ -205,12 +193,12 @@ func (pg *PgModel) CreateTask(c *gin.Context) {
 
 // DeleteTask godoc
 //
-// @summary     Delete a Task
-// @description Delete a task by ID
-// @tags        tasks
-// @param       tid path int true "Task ID"
-// @success     204 "No Content"
-// @router      /tasks/{tid} [delete]
+//	@summary		Delete a Task
+//	@description	Delete a task by ID
+//	@tags			tasks
+//	@param			tid	path	int	true	"Task ID"
+//	@success		204	"No Content"
+//	@router			/tasks/{tid} [delete]
 func (pg *PgModel) DeleteTask(c *gin.Context) {
 	// Extract task ID from the path parameter
 	taskID, err := strconv.Atoi(c.Param("tid"))
@@ -237,13 +225,13 @@ func (pg *PgModel) DeleteTask(c *gin.Context) {
 
 // UpdateTaskInfo godoc
 //
-// @summary     Update Task Info
-// @description Update the task_info field of a task by ID
-// @tags        tasks
-// @param       tid path int true "Task ID"
-// @param       request_body body requestBody true "Update Task Info Request"
-// @success     200 {object} models.Task "Updated Task"
-// @router      /tasks/{tid}/info [put]
+//	@summary		Update Task Info
+//	@description	Update the task_info field of a task by ID
+//	@tags			tasks
+//	@param			tid				path		int			true	"Task ID"
+//	@param			request_body	body		models.Task	true	"Update Task Info Request"
+//	@success		200				{object}	models.Task	"Updated Task"
+//	@router			/tasks/{tid}/info [put]
 func (pg *PgModel) UpdateTaskInfo(c *gin.Context) {
 	// Extract task ID from the path parameter
 	taskID, err := strconv.Atoi(c.Param("tid"))
@@ -253,19 +241,8 @@ func (pg *PgModel) UpdateTaskInfo(c *gin.Context) {
 	}
 
 	// Bind the request body to the UpdateTaskInfoRequest struct
-	var requestBody struct {
-		GroupID           int                    `json:"group_id"`
-		CreatedBy         string                 `json:"created_by"`
-		StartDate         time.Time              `json:"start_date"`
-		EndDate           time.Time              `json:"end_date"`
-		Notes             string                 `json:"notes"`
-		Repeating         bool                   `json:"repeating"`
-		RepeatingInterval string                 `json:"repeating_interval"`
-		RepeatingEndDate  time.Time              `json:"repeating_end_date"`
-		TaskStatus        string                 `json:"task_status"`
-		TaskType          string                 `json:"task_type"`
-		TaskInfo          map[string]interface{} `json:"task_info"`
-	}
+	var requestBody models.Task
+
 	if err := c.BindJSON(&requestBody); err != nil {
 		fmt.Println("error binding to request body: ", err)
 		c.JSON(http.StatusBadRequest, err.Error())
@@ -304,13 +281,14 @@ type TaskUser struct {
 }
 
 // GetUsersAssignedToTask godoc
-// @summary Get list of users assigned to a task
-// @description Get list of users assigned to a task by task ID
-// @tags tasks
-// @param tid path int true "Task ID"
-// @success 200 {array} string "List of user IDs assigned to the task"
-// @failure 400 {object} string
-// @router /tasks/{tid}/assigned-users [get]
+//
+//	@summary		Get list of users assigned to a task
+//	@description	Get list of users assigned to a task by task ID
+//	@tags			tasks
+//	@param			tid	path		int		true	"Task ID"
+//	@success		200	{array}		string	"List of user IDs assigned to the task"
+//	@failure		400	{object}	string
+//	@router			/tasks/{tid}/assigned-users [get]
 func (pg *PgModel) GetUsersAssignedToTask(c *gin.Context) {
 	// Extract task ID from the path parameter
 	taskIDStr := c.Param("tid")
