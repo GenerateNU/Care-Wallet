@@ -23,6 +23,10 @@ func TaskGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 		tasks.POST("/:tid/assign", c.AssignUsersToTask)
 		tasks.DELETE("/:tid/remove", c.RemoveUsersFromTask)
 		tasks.GET("/assigned", c.GetTasksByAssignedUsers)
+		tasks.POST("", c.CreateTask)
+		tasks.DELETE("/:tid", c.DeleteTask)
+		tasks.PUT("/:tid/info", c.UpdateTaskInfo)
+		tasks.GET("/:tid/assigned-users", c.GetUsersAssignedToTask)
 	}
 	return tasks
 }
