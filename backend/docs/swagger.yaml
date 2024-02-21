@@ -657,6 +657,32 @@ paths:
       summary: Get Filtered Tasks
       tags:
       - tasks
+  /user:
+    get:
+      description: gets the information about multiple users given their user id
+      parameters:
+      - collectionFormat: csv
+        description: User IDs
+        in: query
+        items:
+          type: string
+        name: userIDs
+        required: true
+        type: array
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.User'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: gets the information about multiple users
+      tags:
+      - user
   /user/{uid}:
     get:
       description: gets the information about a user given their user id

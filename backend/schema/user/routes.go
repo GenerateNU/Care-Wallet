@@ -1,7 +1,9 @@
 package user
 
 import (
+	"carewallet/models"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx"
@@ -15,6 +17,7 @@ func UserGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 	userGroup := v1.Group("user")
 	{
 		userGroup.GET("/:uid", c.GetUser)
+		userGroup.GET("", c.GetUsers)
 		userGroup.POST("/:uid", c.CreateUser)
 		userGroup.PUT("/:uid", c.UpdateUser)
 	}
@@ -80,6 +83,42 @@ func (pg *PgModel) GetUser(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, user)
+}
+
+type UsersQuery struct {
+	UserIDs []string `form:"userIDs"`
+}
+
+// GetUsers godoc
+//
+//	@summary		gets the information about multiple users
+//	@description	gets the information about multiple users given their user id
+//	@tags			user
+//
+//	@param			userIDs	query		[]string	true	"User IDs"
+//
+//	@success		200		{array}		models.User
+//	@failure		400		{object}	string
+//	@router			/user [GET]
+func (pg *PgModel) GetUsers(c *gin.Context) {
+
+	userIDs := c.Query("userIDs")
+	userQuery := UsersQuery{
+		UserIDs: strings.Split(userIDs, ","),
+	}
+
+	var users []models.User
+
+	for _, element := range userQuery.UserIDs {
+		user, err := GetUserInDB(pg.Conn, element)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, err.Error())
+			return
+		}
+		users = append(users, user)
+	}
+
+	c.JSON(http.StatusOK, users)
 }
 
 // UpdateUser godoc

@@ -9,6 +9,14 @@ const getUser = async (userId: string): Promise<User> => {
   return data;
 };
 
+const getUsers = async (userIds: string[]): Promise<User[]> => {
+  const { data } = await axios.get(`${api_url}/user`, {
+    params: { userIDs: userIds.join(',') }
+  });
+
+  return data;
+};
+
 const updateUser = async (user: User): Promise<User> => {
   const { data } = await axios.put(`${api_url}/user/${user.user_id}`, user);
   return data;
@@ -43,4 +51,14 @@ export const useUser = (userId: string) => {
   });
 
   return { user, userIsLoading, updateUserMutation, addUserMutation };
+};
+
+export const useUsers = (userIds: string[]) => {
+  const { data: users, isLoading: usersAreLoading } = useQuery<User[]>({
+    queryKey: ['users', userIds],
+    queryFn: () => getUsers(userIds),
+    refetchInterval: 20000
+  });
+
+  return { users, usersAreLoading };
 };

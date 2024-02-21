@@ -726,6 +726,45 @@
                 }
             }
         },
+        "/user": {
+            "get": {
+                "description": "gets the information about multiple users given their user id",
+                "tags": [
+                    "user"
+                ],
+                "summary": "gets the information about multiple users",
+                "parameters": [
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "User IDs",
+                        "name": "userIDs",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.User"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/user/{uid}": {
             "get": {
                 "description": "gets the information about a user given their user id",

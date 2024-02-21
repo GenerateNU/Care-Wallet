@@ -3,10 +3,10 @@ import { Text } from 'react-native';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import Bell from '../assets/bottomNav/bell.svg';
-import Calendar from '../assets/bottomNav/calendar.svg';
-import Home from '../assets/bottomNav/home.svg';
-import User from '../assets/bottomNav/user.svg';
+import Bell from '../assets/bottom-nav/bell.svg';
+import Calendar from '../assets/bottom-nav/calendar.svg';
+import Home from '../assets/bottom-nav/home.svg';
+import User from '../assets/bottom-nav/user.svg';
 import MedicationList from '../screens/MedicationList';
 import Profile from '../screens/Profile';
 
