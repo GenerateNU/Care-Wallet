@@ -7,10 +7,11 @@ const TaskInfoComponent = ({ name, label, category, type }:
   { name: string, label: string, category: string, type: string }) => {
     return (
         <View style={styles.container}>
-            <Text style={styles.name}>{name}</Text>
-            <Text style={styles.label}>{label}</Text>
-            <Text>{`Category: ${category}`}</Text>
-            <Text>{`Type: ${type}`}</Text>
+            <View style={styles.header}>
+                <Text style={styles.taskNumber}>{`Task #${name}`}</Text>
+                <Text style={styles.label}>{label}</Text>
+            </View>
+            <Text style={styles.categoryType}>{`${category} - ${type}`}</Text>
         </View>
     );
 };
@@ -22,14 +23,22 @@ const styles = StyleSheet.create({
       borderColor: '#000000',
       padding: 10,
       margin: 10,
-      backgroundColor: '#D9D9D9',
+      backgroundColor: '#FFFFFF',
     },
-    name: {
+    header: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginBottom: 10,
+    },
+    taskNumber: {
       fontWeight: 'bold',
       alignSelf: 'flex-end',
     },
     label: {
       alignSelf: 'flex-start',
+    },
+    categoryType: {
+      marginTop: 10,
     },
   });
   
