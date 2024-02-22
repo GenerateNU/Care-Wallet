@@ -14,12 +14,17 @@ const AppStackBottomTab = createBottomTabNavigator();
 
 export function AppStackBottomTabNavigator() {
   return (
-    <AppStackBottomTab.Navigator>
+    <AppStackBottomTab.Navigator
+      screenOptions={{
+        tabBarActiveTintColor: 'black',
+        tabBarInactiveTintColor: 'gray'
+      }}
+    >
       <AppStackBottomTab.Screen
         name="Landing"
         options={{
           headerShown: true,
-          tabBarIcon: () => <Home color="gray" />,
+          tabBarIcon: ({ color }) => <Home color={color} />,
           tabBarLabel: () => <Text></Text>
         }}
         component={MedicationList}
@@ -28,7 +33,7 @@ export function AppStackBottomTabNavigator() {
         name="Calendar"
         options={{
           headerShown: true,
-          tabBarIcon: () => <Calendar color="gray" />,
+          tabBarIcon: ({ color }) => <Calendar color={color} />,
           tabBarLabel: () => <Text></Text>
         }}
         component={MedicationList}
@@ -37,7 +42,7 @@ export function AppStackBottomTabNavigator() {
         name="Notifications"
         options={{
           headerShown: true,
-          tabBarIcon: () => <Bell color="gray" />,
+          tabBarIcon: ({ color }) => <Bell color={color} />,
           tabBarLabel: () => <Text></Text>
         }}
         component={MedicationList}
@@ -46,7 +51,7 @@ export function AppStackBottomTabNavigator() {
         name="Profile"
         options={{
           headerShown: false,
-          tabBarIcon: () => <User color="gray" />,
+          tabBarIcon: ({ color }) => <User color={color} />,
           tabBarLabel: () => <Text></Text>
         }}
         component={Profile}
