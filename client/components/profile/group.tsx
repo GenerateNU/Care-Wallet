@@ -2,13 +2,16 @@ import React from 'react';
 import { ActivityIndicator, FlatList, Text, View } from 'react-native';
 
 import { useCareWalletContext } from '../../contexts/CareWalletContext';
-import { useGroup } from '../../services/group';
 import { useUsers } from '../../services/user';
+import { GroupRole, Role } from '../../types/group';
 
-export function Group() {
-  const { group: carewalletGroup } = useCareWalletContext();
+interface GroupProps {
+  roles: GroupRole[];
+  rolesAreLoading: boolean;
+}
 
-  const { roles, rolesAreLoading } = useGroup(carewalletGroup.groupID);
+export function Group({ roles, rolesAreLoading }: GroupProps) {
+  const { user: signedInUser } = useCareWalletContext();
 
   const { users, usersAreLoading } = useUsers(
     roles?.map((role) => role.user_id) || []
@@ -36,7 +39,12 @@ export function Group() {
       className="h-fit max-h-fit flex-grow-0"
       horizontal
       showsHorizontalScrollIndicator={false}
-      data={users}
+      data={users.filter(
+        (user) =>
+          user.user_id !== signedInUser.userID &&
+          user.user_id !==
+            (roles.find((role) => role.role === Role.PATIENT)?.user_id ?? '')
+      )}
       renderItem={({ item }) => (
         <View className="items-center px-2">
           <View className="z-10 h-20 w-20 rounded-full border border-carewallet-black bg-carewallet-white" />

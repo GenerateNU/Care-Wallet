@@ -9,20 +9,21 @@ import { User } from '../../types/user';
 
 const StyledEllipse = styled(Ellipse);
 
+// TODO: Separate the header into a separate component used across the profile screens
 export function Header({ user }: { user: User }) {
   const { group } = useCareWalletContext();
   return (
     <>
       <View className="z-10 h-fit max-h-fit min-h-fit flex-grow-0 items-center bg-carewallet-black">
         <View className="justify-center align-middle">
-          <Text className="items-center justify-center pt-14 text-center text-3xl text-carewallet-white">
+          <Text className="items-center justify-center pt-14 text-center text-3xl font-extrabold text-carewallet-white">
             {user.first_name} {user.last_name}
           </Text>
           <Text className="items-center justify-center text-center text-xl  text-carewallet-white">
             {`${group.role.charAt(0)}${group.role.slice(1).toLowerCase()} Caregiver`}
           </Text>
           <Text className="items-center justify-center text-center text-lg  text-carewallet-white">
-            {user.phone ? user.phone : 'No phone number'}
+            {user.phone ? user.phone : user.email}
           </Text>
         </View>
       </View>

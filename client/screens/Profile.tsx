@@ -1,14 +1,20 @@
 import React from 'react';
 import { ActivityIndicator, Text, View } from 'react-native';
 
-import { Group } from '../components/profile/group';
-import { Header } from '../components/profile/header';
+import { CircleCard } from '../components/profile/CircleCard';
+import { Group } from '../components/profile/Group';
+import { Header } from '../components/profile/Header';
 import { useCareWalletContext } from '../contexts/CareWalletContext';
+import { useAuth } from '../services/auth';
+import { useGroup } from '../services/group';
 import { useUser } from '../services/user';
 
 export default function Profile() {
-  const { user: carewalletUser } = useCareWalletContext();
+  const { user: carewalletUser, group } = useCareWalletContext();
   const { user, userIsLoading } = useUser(carewalletUser.userID);
+  const { roles, rolesAreLoading } = useGroup(group.groupID);
+
+  const { signOutMutation } = useAuth();
 
   if (userIsLoading) {
     return (
@@ -27,10 +33,29 @@ export default function Profile() {
     );
   }
 
+  // TODO: Connext with task screen
+  // TODO: Get task number from backend
+  // TODO: Connext with patient information screen
+  // TODO: Add ability to change user view if I click on another user?
   return (
     <View className="flex flex-1 flex-col">
       <Header user={user} />
-      <Group />
+      <Group roles={roles ?? []} rolesAreLoading={rolesAreLoading} />
+      <View className="mt-5 flex items-center pb-10">
+        <View className="h-20 w-80 items-center justify-center rounded-xl border border-carewallet-black">
+          <Text className="text-md">Your Tasks</Text>
+          <Text className="text-2xl">4</Text>
+        </View>
+      </View>
+      <View className="mb-2 items-center">
+        <CircleCard ButtonText="View Patient Information" />
+      </View>
+      <View className="mb-auto flex-1 items-center">
+        <CircleCard ButtonText="Settings" />
+      </View>
+      <View className="mb-auto flex-1 items-center">
+        <CircleCard ButtonText="Log Out" onTouchEnd={() => signOutMutation()} />
+      </View>
     </View>
   );
 }
