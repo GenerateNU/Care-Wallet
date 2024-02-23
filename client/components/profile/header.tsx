@@ -1,24 +1,33 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 
+import { useNavigation } from '@react-navigation/native';
 import { styled } from 'nativewind';
 
 import Ellipse from '../../assets/profile/ellipse.svg';
 import { useCareWalletContext } from '../../contexts/CareWalletContext';
+import { AppStackNavigation } from '../../navigation/AppNavigation';
 import { User } from '../../types/user';
+import { ProfileTopHeader } from './ProfileTopHeader';
 
 const StyledEllipse = styled(Ellipse);
 
-// TODO: Separate the header into a separate component used across the profile screens
 export function Header({ user }: { user: User }) {
   const { group } = useCareWalletContext();
+  const navigate = useNavigation<AppStackNavigation>();
+
+  if (!user || !group) return null;
+
   return (
     <>
       <View className="z-10 h-fit max-h-fit min-h-fit flex-grow-0 items-center bg-carewallet-black">
-        <View className="justify-center align-middle">
-          <Text className="items-center justify-center pt-14 text-center text-3xl font-extrabold text-carewallet-white">
-            {user.first_name} {user.last_name}
-          </Text>
+        <View className="w-full justify-center align-middle">
+          <ProfileTopHeader
+            user={user}
+            onTouchEndLeft={navigate.goBack}
+            leftButtonText="Back"
+            rightButtonText="Edit"
+          />
           <Text className="items-center justify-center text-center text-xl  text-carewallet-white">
             {`${group.role.charAt(0)}${group.role.slice(1).toLowerCase()} Caregiver`}
           </Text>

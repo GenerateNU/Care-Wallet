@@ -41,19 +41,19 @@ export default function Profile() {
     <View className="flex flex-1 flex-col">
       <Header user={user} />
       <Group roles={roles ?? []} rolesAreLoading={rolesAreLoading} />
-      <View className="mt-5 flex items-center pb-10">
+      <View className="mt-5 flex items-center pb-5">
         <View className="h-20 w-80 items-center justify-center rounded-xl border border-carewallet-black">
           <Text className="text-md">Your Tasks</Text>
           <Text className="text-2xl">4</Text>
         </View>
       </View>
-      <View className="mb-2 items-center">
+      <View className="mb-5 items-center">
         <CircleCard ButtonText="View Patient Information" />
       </View>
       <View className="mb-auto flex-1 items-center">
         <CircleCard ButtonText="Settings" />
       </View>
-      <View className="mb-auto flex-1 items-center">
+      <View className="items-center pb-5">
         <CircleCard ButtonText="Log Out" onTouchEnd={() => signOutMutation()} />
       </View>
     </View>
