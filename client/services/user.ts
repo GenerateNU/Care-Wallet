@@ -10,7 +10,6 @@ const getUser = async (userId: string): Promise<User> => {
 };
 
 const getUsers = async (userIds: string[]): Promise<User[]> => {
-  if (userIds.length < 1) return [];
   const { data } = await axios.get(`${api_url}/user`, {
     params: { userIDs: userIds.join(',') }
   });
@@ -57,7 +56,7 @@ export const useUsers = (userIds: string[]) => {
   const { data: users, isLoading: usersAreLoading } = useQuery<User[]>({
     queryKey: ['users', userIds],
     queryFn: () => getUsers(userIds),
-    refetchInterval: 20000
+    enabled: userIds.length > 0
   });
 
   return { users, usersAreLoading };

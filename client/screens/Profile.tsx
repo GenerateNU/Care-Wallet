@@ -18,7 +18,7 @@ export default function Profile() {
 
   if (userIsLoading) {
     return (
-      <View className="w-[100vw] flex-1 items-center justify-center bg-carewallet-white text-3xl">
+      <View className="w-full flex-1 items-center justify-center bg-carewallet-white text-3xl">
         <ActivityIndicator size="large" />
         <Text>Loading...</Text>
       </View>
@@ -27,7 +27,7 @@ export default function Profile() {
 
   if (!user) {
     return (
-      <View className="w-[100vw] flex-1 items-center justify-center bg-carewallet-white text-3xl">
+      <View className="w-full flex-1 items-center justify-center bg-carewallet-white text-3xl">
         <Text className="text-xl">Could Not Load Profile...</Text>
       </View>
     );

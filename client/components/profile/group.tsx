@@ -14,7 +14,9 @@ export function Group({ roles, rolesAreLoading }: GroupProps) {
   const { user: signedInUser } = useCareWalletContext();
 
   const { users, usersAreLoading } = useUsers(
-    roles?.map((role) => role.user_id) || []
+    roles
+      ?.map((role) => role.user_id)
+      .filter((u) => u !== signedInUser.userID) || []
   );
 
   if (rolesAreLoading || usersAreLoading) {
