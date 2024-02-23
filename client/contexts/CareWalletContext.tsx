@@ -30,7 +30,7 @@ export function CareWalletProvider({
       setUser(signedInUser);
 
       setGroup({
-        groupID: 999,
+        groupID: 5,
         role: 'TEMP'
       });
     });
