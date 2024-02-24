@@ -34,7 +34,8 @@ func (pg *PgModel) GetMedications(c *gin.Context) {
 	med, err := GetAllMedsFromDB(pg.Conn)
 
 	if err != nil {
-		panic(err)
+		c.JSON(http.StatusBadRequest, err.Error())
+		return
 	}
 
 	c.JSON(http.StatusOK, med)

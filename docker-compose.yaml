@@ -1,9 +1,9 @@
 services:
   db:
     image: postgres:14.1-alpine
-    restart: always
+    restart: unless-stopped
     healthcheck:
-      test: ['CMD', 'pg_isready', '-q', '-d', 'postgres', '-U', 'user']
+      test: ["CMD", "pg_isready", "-q", "-d", "postgres", "-U", "user"]
       timeout: 45s
       interval: 10s
       retries: 10
@@ -12,7 +12,7 @@ services:
       - POSTGRES_DB=carewallet
       - POSTGRES_PASSWORD=pwd
     ports:
-      - '5434:5432'
+      - "5434:5432"
     volumes:
       - ./backend/db/migrations:/docker-entrypoint-initdb.d/
 volumes:
