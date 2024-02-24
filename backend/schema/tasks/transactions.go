@@ -2,6 +2,7 @@ package tasks
 
 import (
 	"carewallet/models"
+	"encoding/json"
 	"fmt"
 	"strconv"
 	"time"
@@ -153,4 +154,98 @@ func GetTasksByAssignedFromDB(pool *pgx.Conn, userIDs []string) ([]models.Task, 
 	}
 
 	return tasks, nil
+}
+
+// CreateTaskInDB creates a new task in the database and returns its ID
+func CreateTaskInDB(pool *pgx.Conn, newTask models.Task) (int, error) {
+	query := `
+        INSERT INTO task (group_id, created_by, created_date, start_date, end_date, notes, repeating, repeating_interval, repeating_end_date, task_status, task_type, task_info) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING task_id`
+
+	var newTaskID int
+	err := pool.QueryRow(
+		query,
+		newTask.GroupID,
+		newTask.CreatedBy,
+		time.Now(), // Assuming created_date should be the current timestamp
+		newTask.StartDate,
+		newTask.EndDate,
+		newTask.Notes,
+		newTask.Repeating,
+		newTask.RepeatingInterval,
+		newTask.RepeatingEndDate,
+		newTask.TaskStatus,
+		newTask.TaskType,
+		newTask.TaskInfo,
+	).Scan(&newTaskID)
+
+	return newTaskID, err
+}
+
+// DeleteTaskInDB deletes a task from the database by ID
+func DeleteTaskInDB(pool *pgx.Conn, taskID int) error {
+	// Assuming "task" table structure, adjust the query based on your schema
+	query := "DELETE FROM task WHERE task_id = $1"
+
+	_, err := pool.Exec(query, taskID)
+	return err
+}
+
+// UpdateTaskInfoInDB updates the task_info field in the database
+func UpdateTaskInfoInDB(pool *pgx.Conn, taskID int, taskInfo json.RawMessage) error {
+	// Assuming "task" table structure, adjust the query based on your schema
+	query := "UPDATE task SET task_info = $1 WHERE task_id = $2"
+
+	_, err := pool.Exec(query, taskInfo, taskID)
+	return err
+}
+
+// GetTaskByID fetches a task from the database by its ID
+func GetTaskByID(pool *pgx.Conn, taskID int) (models.Task, error) {
+	query := `
+        SELECT task_id, group_id, created_by, created_date, start_date, end_date, notes, repeating, repeating_interval, repeating_end_date, task_status, task_type, task_info FROM task WHERE task_id = $1`
+
+	var task models.Task
+	err := pool.QueryRow(query, taskID).Scan(
+		&task.TaskID,
+		&task.GroupID,
+		&task.CreatedBy,
+		&task.CreatedDate,
+		&task.StartDate,
+		&task.EndDate,
+		&task.Notes,
+		&task.Repeating,
+		&task.RepeatingInterval,
+		&task.RepeatingEndDate,
+		&task.TaskStatus,
+		&task.TaskType,
+		&task.TaskInfo,
+	)
+	return task, err
+}
+
+func GetUsersAssignedToTaskFromDB(pool *pgx.Conn, taskID int) ([]string, error) {
+	var userIDs []string
+
+	// Get all user IDs assigned to the task
+	rows, err := pool.Query("SELECT user_id FROM task_assignees WHERE task_id = $1;", taskID)
+	if err != nil {
+		fmt.Println(err, "error selecting user assignees")
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var userID string
+
+		err := rows.Scan(&userID)
+		if err != nil {
+			fmt.Println(err, "error scanning user ID")
+			return nil, err
+		}
+
+		fmt.Println(userID)
+		userIDs = append(userIDs, userID)
+	}
+
+	return userIDs, nil
 }
