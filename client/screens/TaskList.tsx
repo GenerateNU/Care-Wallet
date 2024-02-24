@@ -10,6 +10,7 @@ import {
 
 import TaskInfoComponent from '../components/TaskInfoCard';
 import { useFilteredTasks } from '../services/task';
+import { Task } from '../types/task';
 
 export default function TaskListScreen() {
   const [queryParams, setQueryParams] = useState({
@@ -17,6 +18,34 @@ export default function TaskListScreen() {
   });
 
   const { tasks, tasksIsLoading } = useFilteredTasks(queryParams);
+
+  // Filter tasks based on categories
+  // const pastDueTasks = tasks?.filter((task) => /* your condition for past due tasks */);
+  // const inProgressTasks = tasks?.filter((task) => /* your condition for in-progress tasks */);
+  // const inFutureTasks = tasks?.filter((task) => /* your condition for in-future tasks */);
+  const completeTasks = tasks?.filter((task) => task?.task_status === 'COMPLETE');
+  const incompleteTasks = tasks?.filter((task) => task?.task_status === 'INCOMPLETE');
+
+  const renderSection = (tasks: Task[], title: string) => {
+    return (
+      <View>
+        <Text className="text-lg text-carewallet-black">
+          {title}
+        </Text>
+        {tasks.map((task, index) => {
+          return (
+            <TaskInfoComponent
+              key={index}
+              name={task?.task_id?.toString() || 'N/A'}
+              label={`Label: ${task?.notes || 'N/A'}`}
+              category={`Category: ${task?.notes || 'N/A'}`}
+              type={`Task Status: ${task?.task_status || 'N/A'}`}
+            />
+          );
+        })}
+      </View>
+    )
+  }
 
   return (
     <View style={styles.container}>
@@ -40,23 +69,8 @@ export default function TaskListScreen() {
       <Text className="text-xl font-bold text-carewallet-black">
         Task List (all tasks of all time)
       </Text>
-      {tasksIsLoading ? (
-        <Text>Loading...</Text>
-      ) : (
-        // Inside the tasks?.map(...) block
-        tasks?.map((task, index) => {
-          console.log('Task Object:', task);
-          return (
-            <TaskInfoComponent
-              key={index}
-              name={task?.task_id?.toString() || 'N/A'}
-              label={`Label: ${task?.notes || 'N/A'}`}
-              category={`Category: ${task?.notes || 'N/A'}`}
-              type={`Task Status: ${task?.task_status || 'N/A'}`}
-            />
-          );
-        })
-      )}
+      {renderSection(completeTasks || [], "Done")}
+      {renderSection(incompleteTasks || [], 'Marked as Incomplete')}
     </View>
   );
 }
