@@ -6,7 +6,7 @@ import { User } from '../../types/user';
 interface ProfileTopHeaderProps {
   user: User;
   onTouchEndLeft?: () => void;
-  leftButtonText?: string;
+  leftButtonText?: JSX.Element | string;
   onTouchEndRight?: () => void;
   rightButtonText?: string;
 }
@@ -22,7 +22,7 @@ export function ProfileTopHeader({
     <View className="flex w-full flex-row items-center justify-center">
       <Pressable className="ml-5 mr-auto" onTouchEnd={onTouchEndLeft}>
         <View className="mt-14 h-7 w-14 items-center justify-center self-start rounded-lg bg-carewallet-white">
-          <Text className="text-md">{leftButtonText}</Text>
+          {leftButtonText}
         </View>
       </Pressable>
       <Text className="mt-14 self-center text-center text-3xl font-extrabold text-carewallet-white">

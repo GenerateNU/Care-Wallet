@@ -4,6 +4,7 @@ import { Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { styled } from 'nativewind';
 
+import ArrowLeft from '../../assets/arrow-left.svg';
 import Ellipse from '../../assets/profile/ellipse.svg';
 import { AppStackNavigation } from '../../navigation/AppNavigation';
 import { GroupRole } from '../../types/group';
@@ -29,7 +30,7 @@ export function Header({ user, role }: HeaderProps) {
           <ProfileTopHeader
             user={user}
             onTouchEndLeft={navigate.goBack}
-            leftButtonText="Back"
+            leftButtonText={<ArrowLeft />}
             rightButtonText="Edit"
           />
           <Text className="items-center justify-center text-center text-xl  text-carewallet-white">
