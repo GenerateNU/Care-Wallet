@@ -17,12 +17,14 @@ export default function TaskListScreen() {
     taskType: 'other'
   });
 
+  // TODO: Query and assign tasks to task labels
+
   const { tasks, tasksIsLoading } = useFilteredTasks(queryParams);
 
   // Filter tasks based on categories
-  // const pastDueTasks = tasks?.filter((task) => /* your condition for past due tasks */);
-  // const inProgressTasks = tasks?.filter((task) => /* your condition for in-progress tasks */);
-  // const inFutureTasks = tasks?.filter((task) => /* your condition for in-future tasks */);
+  const pastDueTasks = tasks?.filter((task) => task?.end_date || "" < String(new Date()));
+  const inProgressTasks = tasks?.filter((task) => task?.task_status === 'PARTIAL');
+  const inFutureTasks = tasks?.filter((task) => task?.start_date || "" > String(new Date()));
   const completeTasks = tasks?.filter((task) => task?.task_status === 'COMPLETE');
   const incompleteTasks = tasks?.filter((task) => task?.task_status === 'INCOMPLETE');
 
@@ -69,6 +71,9 @@ export default function TaskListScreen() {
       <Text className="text-xl font-bold text-carewallet-black">
         Task List (all tasks of all time)
       </Text>
+      {renderSection(pastDueTasks || [], 'Past Due')}
+      {renderSection(inProgressTasks || [], 'In Progress')}
+      {renderSection(inFutureTasks || [], 'Future')}
       {renderSection(completeTasks || [], "Done")}
       {renderSection(incompleteTasks || [], 'Marked as Incomplete')}
     </View>
