@@ -1,12 +1,8 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 
 import { Task } from '../types/task';
 import { api_url } from './api-links';
-
-// Const to indicate if a user has any tasks assigned
-// True by default, reassigned to false if grabbing tasks by user returns null
-let userHasTasks = true;
 
 const getTasksByUsers = async (userIDs: string[]): Promise<Task[]> => {
   try {
@@ -17,7 +13,6 @@ const getTasksByUsers = async (userIDs: string[]): Promise<Task[]> => {
 
     // Check if data is null or empty array
     if (data === null || data.length === 0) {
-      userHasTasks = false;
       console.log('userIDs: ', userIDs, 'have no tasks assigned');
       // Return indication that there are no tasks assigned
       return []; // Or you can throw an error if necessary
@@ -30,16 +25,44 @@ const getTasksByUsers = async (userIDs: string[]): Promise<Task[]> => {
   }
 };
 
+const addNewTask = async (newTask: Task): Promise<Task> => {
+  const response = await axios.post(`${api_url}/tasks`, newTask);
+  return response.data;
+};
+
 export const useTask = (userIDs: string[]) => {
+  const queryClient = useQueryClient();
+
   const { data: tasks, isLoading: tasksIsLoading } = useQuery<Task[]>({
-    queryKey: ['taskList'], // if querying with a value add values here ex. ['medList', {id}]
-    queryFn: getTasksByUsers(userIDs),
-    refetchInterval: 20000 // Will refetch the data every 20 seconds
+    queryKey: ['taskList'],
+    queryFn: () => getTasksByUsers(userIDs),
+    refetchInterval: 20000
+  });
+
+  const { mutate: addTaskMutation } = useMutation({
+    mutationFn: (newTask: Task) => addNewTask(newTask),
+    onMutate: async (newTask) => {
+      await queryClient.cancelQueries(['taskList']);
+      const previousTasks = queryClient.getQueryData(['taskList']);
+      queryClient.setQueryData(['taskList'], (old: Task[]) => [
+        ...old,
+        newTask
+      ]);
+      return { previousTasks };
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['taskList']);
+      return;
+    },
+    onError: (err, newTask, context) => {
+      console.error('ERROR: Failed to Add Task...');
+      queryClient.setQueryData(['taskList'], context?.previousTasks);
+    }
   });
 
   return {
     tasks,
     tasksIsLoading,
-    userHasTasks
+    addTaskMutation
   };
 };
