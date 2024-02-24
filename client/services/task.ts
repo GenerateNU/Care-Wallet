@@ -2,6 +2,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 
 import { Task } from '../types/task';
+import { TaskLabel } from '../types/label';
 import { api_url } from './api-links';
 
 type TaskQueryParams = {
@@ -18,6 +19,11 @@ const getFilteredTasks = async (queryParams: TaskQueryParams): Promise<Task[]> =
   const { data } = await axios.get(`${api_url}/tasks/filtered?`, {
     params: queryParams,
   });
+  return data;
+};
+
+export const getTaskLabels = async (taskID: string): Promise<TaskLabel[]> => {
+  const { data } = await axios.get(`${api_url}/tasks/${taskID}/labels`);
   return data;
 };
 

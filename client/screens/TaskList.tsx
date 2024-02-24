@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  Button,
   Pressable,
   StyleSheet,
   Text,
@@ -9,7 +8,7 @@ import {
 } from 'react-native';
 
 import TaskInfoComponent from '../components/TaskInfoCard';
-import { useFilteredTasks } from '../services/task';
+import { useFilteredTasks, getTaskLabels } from '../services/task';
 import { Task } from '../types/task';
 
 export default function TaskListScreen() {
@@ -17,7 +16,30 @@ export default function TaskListScreen() {
     taskType: 'other'
   });
 
+  const [taskLabels, setTaskLabels] = useState<{ [taskId: string]: string[] }>(
+    {}
+  ); // Store task labels in state
+
   // TODO: Query and assign task labels to tasks
+  useEffect(() => {
+    const fetchTaskLabels = async () => {
+      const labels: { [taskId: string]: string[] } = {};
+      if (tasks) {
+        await Promise.all(
+          tasks.map(async (task) => {
+            const labelsForTask = await getTaskLabels(task.task_id.toString());
+            labels[task.task_id.toString()] = labelsForTask.map(
+              (label) => label.label_name
+            );
+          })
+        );
+      }
+      setTaskLabels(labels);
+    };
+    if (tasks) {
+      fetchTaskLabels();
+    }
+  });
 
   const { tasks, tasksIsLoading } = useFilteredTasks(queryParams);
 
@@ -47,7 +69,7 @@ export default function TaskListScreen() {
             <TaskInfoComponent
               key={index}
               name={task?.task_id?.toString() || 'N/A'}
-              label={`Label: ${task?.notes || 'N/A'}`}
+              label={`Label: ${taskLabels[task.task_id.toString()]?.join(', ') || 'N/A'}`}
               category={`Category: ${task?.notes || 'N/A'}`}
               type={`Task Status: ${task?.task_status || 'N/A'}`}
             />
