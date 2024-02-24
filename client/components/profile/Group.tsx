@@ -57,7 +57,13 @@ export function Group({
             (roles.find((role) => role.role === Role.PATIENT)?.user_id ?? '')
       )}
       renderItem={({ item, index }) => (
-        <Pressable key={index} onTouchEnd={() => setActiveUser(item.user_id)}>
+        <Pressable
+          key={index}
+          onTouchEnd={(e) => {
+            e.stopPropagation();
+            setActiveUser(item.user_id);
+          }}
+        >
           <View className="items-center px-2">
             <View className="z-10 h-20 w-20 rounded-full border border-carewallet-black bg-carewallet-white" />
             <Text className="text-center">{item.first_name}</Text>
