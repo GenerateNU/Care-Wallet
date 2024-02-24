@@ -17,23 +17,31 @@ export default function TaskListScreen() {
     taskType: 'other'
   });
 
-  // TODO: Query and assign tasks to task labels
+  // TODO: Query and assign task labels to tasks
 
   const { tasks, tasksIsLoading } = useFilteredTasks(queryParams);
 
   // Filter tasks based on categories
-  const pastDueTasks = tasks?.filter((task) => task?.end_date || "" < String(new Date()));
-  const inProgressTasks = tasks?.filter((task) => task?.task_status === 'PARTIAL');
-  const inFutureTasks = tasks?.filter((task) => task?.start_date || "" > String(new Date()));
-  const completeTasks = tasks?.filter((task) => task?.task_status === 'COMPLETE');
-  const incompleteTasks = tasks?.filter((task) => task?.task_status === 'INCOMPLETE');
+  const pastDueTasks = tasks?.filter(
+    (task) => task?.end_date || '' < String(new Date())
+  );
+  const inProgressTasks = tasks?.filter(
+    (task) => task?.task_status === 'PARTIAL'
+  );
+  const inFutureTasks = tasks?.filter(
+    (task) => task?.start_date || '' > String(new Date())
+  );
+  const completeTasks = tasks?.filter(
+    (task) => task?.task_status === 'COMPLETE'
+  );
+  const incompleteTasks = tasks?.filter(
+    (task) => task?.task_status === 'INCOMPLETE'
+  );
 
   const renderSection = (tasks: Task[], title: string) => {
     return (
       <View>
-        <Text className="text-lg text-carewallet-black">
-          {title}
-        </Text>
+        <Text className="text-lg text-carewallet-black">{title}</Text>
         {tasks.map((task, index) => {
           return (
             <TaskInfoComponent
@@ -46,8 +54,8 @@ export default function TaskListScreen() {
           );
         })}
       </View>
-    )
-  }
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -74,7 +82,7 @@ export default function TaskListScreen() {
       {renderSection(pastDueTasks || [], 'Past Due')}
       {renderSection(inProgressTasks || [], 'In Progress')}
       {renderSection(inFutureTasks || [], 'Future')}
-      {renderSection(completeTasks || [], "Done")}
+      {renderSection(completeTasks || [], 'Done')}
       {renderSection(incompleteTasks || [], 'Marked as Incomplete')}
     </View>
   );
