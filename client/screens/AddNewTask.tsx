@@ -7,14 +7,20 @@ import {
   View
 } from 'react-native';
 
+import { useNavigation } from '@react-navigation/native';
+
 import { PopupModal } from '../components/PopupModal';
-import { useCareWalletContext } from '../contexts/CareWalletContext';
+import { AppStackNavigation } from '../navigation/AppNavigation';
+// import { useCareWalletContext } from '../contexts/CareWalletContext';
 import { useTask } from '../services/task';
 import { Task } from '../types/task';
 
-const currentUserIDs = [useCareWalletContext().user.userID];
+// const currentUserIDs = [useCareWalletContext().user.userID];
+const currentUserIDs = ['0'];
 
-export default function AddMedication() {
+export default function AddNewTask() {
+  const navigation = useNavigation<AppStackNavigation>(); // Initialize navigation
+
   const [newTaskState, setNewTaskState] = useState<Task>({
     task_id: 0,
     group_id: 0,
@@ -25,49 +31,30 @@ export default function AddMedication() {
     task_status: '',
     task_type: ''
   });
-  const [addingMedication, setAddingMedication] = useState(false);
 
-  const { addTaskMutation } = useTask(currentUserIDs);
+  const [addingTask, setAddingTask] = useState(false);
+  console.log(addingTask);
+  const { addTaskMutation: addNewTaskMutation } = useTask(currentUserIDs);
 
-  const handleAddMedication = async () => {
-    setAddingMedication(true);
-    await addTaskMutation({
-      task_id: newTaskState.task_id,
-      group_id: newTaskState.group_id,
-      created_by: newTaskState.created_by,
-      start_date: newTaskState.start_date,
-      end_date: newTaskState.end_date,
-      notes: newTaskState.notes,
-      task_status: newTaskState.task_status,
-      task_type: newTaskState.task_type
-    });
-    setAddingMedication(false);
-    // Optionally, you can navigate to another page or perform any other actions after adding the medication
+  const handleAddTask = async () => {
+    setAddingTask(true);
+    await addNewTaskMutation(newTaskState);
+    setAddingTask(false);
+    navigation.navigate('TaskList'); // Navigate back to TaskList screen
   };
+
+  // State to manage the visibility of the modal
+  const [modalVisible, setModalVisible] = useState(false);
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <PopupModal isVisible={addingMedication}>
+      <PopupModal isVisible={modalVisible} setVisible={setModalVisible}>
         <ActivityIndicator size="large" />
-        <Text>Adding Medication...</Text>
+        <Text>Adding Task...</Text>
       </PopupModal>
-      <Text style={{ fontSize: 24, marginBottom: 10 }}>Add New Medication</Text>
+      <Text style={{ fontSize: 24, marginBottom: 10 }}>Add New Task</Text>
       <View style={{ marginBottom: 10 }}>
-        <Text>ID:</Text>
-        <TextInput
-          style={{
-            borderWidth: 1,
-            borderColor: 'gray',
-            padding: 5,
-            fontSize: 18
-          }}
-          onChangeText={(val) => setNewTaskState({ ...newTaskState, id: val })}
-          value={newTaskState.id}
-          keyboardType="numeric"
-        />
-      </View>
-      <View style={{ marginBottom: 20 }}>
-        <Text>Name:</Text>
+        <Text>Task ID:</Text>
         <TextInput
           style={{
             borderWidth: 1,
@@ -76,13 +63,43 @@ export default function AddMedication() {
             fontSize: 18
           }}
           onChangeText={(val) =>
-            setNewTaskState({ ...newTaskState, name: val })
+            setNewTaskState({ ...newTaskState, task_id: parseInt(val) || 0 })
           }
-          value={newTaskState.name}
+          keyboardType="numeric"
         />
       </View>
+      <View style={{ marginBottom: 10 }}>
+        <Text>Group ID:</Text>
+        <TextInput
+          style={{
+            borderWidth: 1,
+            borderColor: 'gray',
+            padding: 5,
+            fontSize: 18
+          }}
+          onChangeText={(val) =>
+            setNewTaskState({ ...newTaskState, group_id: parseInt(val) || 0 })
+          }
+          keyboardType="numeric"
+        />
+      </View>
+      <View style={{ marginBottom: 10 }}>
+        <Text>Created By:</Text>
+        <TextInput
+          style={{
+            borderWidth: 1,
+            borderColor: 'gray',
+            padding: 5,
+            fontSize: 18
+          }}
+          onChangeText={(val) =>
+            setNewTaskState({ ...newTaskState, created_by: val })
+          }
+        />
+      </View>
+      {/* Add input fields for other task fields (start_date, end_date, notes, task_status, task_type) similarly */}
       <Pressable
-        onPress={handleAddMedication}
+        onPress={handleAddTask}
         style={{
           backgroundColor: '#007bff',
           padding: 10,
@@ -90,7 +107,7 @@ export default function AddMedication() {
           alignItems: 'center'
         }}
       >
-        <Text style={{ color: 'white', fontSize: 18 }}>Add Medication</Text>
+        <Text style={{ color: 'white', fontSize: 18 }}>Add Task</Text>
       </Pressable>
     </View>
   );

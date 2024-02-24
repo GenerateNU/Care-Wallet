@@ -1,8 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 
+// Import your Router component
 import { Task } from '../types/task';
 import { api_url } from './api-links';
+
+// Const to indicate if a user has any tasks assigned
+// True by default, reassigned to false if grabbing tasks by user returns null
+let userHasTasks = true;
 
 const getTasksByUsers = async (userIDs: string[]): Promise<Task[]> => {
   try {
@@ -13,6 +18,7 @@ const getTasksByUsers = async (userIDs: string[]): Promise<Task[]> => {
 
     // Check if data is null or empty array
     if (data === null || data.length === 0) {
+      userHasTasks = false;
       console.log('userIDs: ', userIDs, 'have no tasks assigned');
       // Return indication that there are no tasks assigned
       return []; // Or you can throw an error if necessary
@@ -63,6 +69,7 @@ export const useTask = (userIDs: string[]) => {
   return {
     tasks,
     tasksIsLoading,
+    userHasTasks,
     addTaskMutation
   };
 };

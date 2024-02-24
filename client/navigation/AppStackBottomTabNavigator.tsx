@@ -32,7 +32,7 @@ export function AppStackBottomTabNavigator() {
         component={GroupScreen}
       />
       <AppStackBottomTab.Screen
-        name="Tasks"
+        name="TaskList"
         options={{
           headerShown: true,
           tabBarIcon: () => <Home color="gray" />,
