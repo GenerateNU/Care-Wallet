@@ -25,7 +25,6 @@ func GetAllMedsFromDB(pool *pgx.Conn) ([]models.Medication, error) {
 
 		if err != nil {
 			print(err, "from transactions err2 ")
-
 			return nil, err
 		}
 
