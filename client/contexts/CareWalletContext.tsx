@@ -30,6 +30,7 @@ export function CareWalletProvider({
 
       setUser(signedInUser);
 
+      // TODO: What should happen if a user isnt apart of a group?
       if (user) {
         getUserGroup(user.uid).then((grouprole) => {
           setGroup({ role: grouprole.role, groupID: grouprole.group_id });

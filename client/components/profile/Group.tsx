@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -27,6 +27,8 @@ export function Group({
   setActiveUser,
   activeUser
 }: GroupProps) {
+  const [canPress, setCanPress] = useState(true);
+
   if (rolesAreLoading || usersAreLoading) {
     return (
       <View className="-top-20 w-[100vw] flex-1 items-center text-3xl">
@@ -48,6 +50,8 @@ export function Group({
     <FlatList
       keyboardShouldPersistTaps="always"
       className="h-fit max-h-fit flex-grow-0"
+      onScrollBeginDrag={() => setCanPress(false)}
+      onScrollEndDrag={() => setCanPress(true)}
       horizontal
       showsHorizontalScrollIndicator={false}
       data={users.filter(
@@ -59,9 +63,8 @@ export function Group({
       renderItem={({ item, index }) => (
         <Pressable
           key={index}
-          onTouchEnd={(e) => {
-            e.stopPropagation();
-            setActiveUser(item.user_id);
+          onTouchEnd={() => {
+            if (canPress) setActiveUser(item.user_id);
           }}
         >
           <View className="items-center px-2">
