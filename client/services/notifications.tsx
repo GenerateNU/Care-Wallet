@@ -109,6 +109,7 @@ export async function scheduleCalendarPushNotification(
     console.log('Notification scheduled successfully');
   } catch (error) {
     console.error('Error scheduling notification:', error);
+    alert('Failed to schedule notification. Please try again later.');
   }
 }
 
@@ -118,7 +119,6 @@ export async function scheduleInstantPushNotification(
   title: string,
   body: string
 ) {
-  // schedules notification for each weekday selected
   Notification.scheduleNotificationAsync({
     content: {
       title: title,
