@@ -5,18 +5,22 @@ import { useNavigation } from '@react-navigation/native';
 import { styled } from 'nativewind';
 
 import Ellipse from '../../assets/profile/ellipse.svg';
-import { useCareWalletContext } from '../../contexts/CareWalletContext';
 import { AppStackNavigation } from '../../navigation/AppNavigation';
+import { GroupRole } from '../../types/group';
 import { User } from '../../types/user';
 import { ProfileTopHeader } from './ProfileTopHeader';
 
 const StyledEllipse = styled(Ellipse);
 
-export function Header({ user }: { user: User }) {
-  const { group } = useCareWalletContext();
+interface HeaderProps {
+  user: User | undefined;
+  role: GroupRole | undefined;
+}
+
+export function Header({ user, role }: HeaderProps) {
   const navigate = useNavigation<AppStackNavigation>();
 
-  if (!user || !group) return null;
+  if (!user) return null;
 
   return (
     <>
@@ -29,7 +33,7 @@ export function Header({ user }: { user: User }) {
             rightButtonText="Edit"
           />
           <Text className="items-center justify-center text-center text-xl  text-carewallet-white">
-            {`${group.role.charAt(0)}${group.role.slice(1).toLowerCase()} Caregiver`}
+            {`${role?.role.charAt(0)}${role?.role.slice(1).toLowerCase()} Caregiver`}
           </Text>
           <Text className="items-center justify-center text-center text-lg  text-carewallet-white">
             {user.phone ? user.phone : user.email}

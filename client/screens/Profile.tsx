@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ActivityIndicator, Text, View } from 'react-native';
 
 import { CircleCard } from '../components/profile/CircleCard';
@@ -7,16 +7,19 @@ import { Header } from '../components/profile/Header';
 import { useCareWalletContext } from '../contexts/CareWalletContext';
 import { useAuth } from '../services/auth';
 import { useGroup } from '../services/group';
-import { useUser } from '../services/user';
+import { useUsers } from '../services/user';
 
 export default function Profile() {
-  const { user: carewalletUser, group } = useCareWalletContext();
-  const { user, userIsLoading } = useUser(carewalletUser.userID);
+  const { user: signedInUser, group } = useCareWalletContext();
+  const [activeUser, setActiveUser] = useState(signedInUser.userID);
   const { roles, rolesAreLoading } = useGroup(group.groupID);
+  const { users, usersAreLoading } = useUsers(
+    roles?.map((role) => role.user_id) ?? []
+  );
 
   const { signOutMutation } = useAuth();
 
-  if (userIsLoading) {
+  if (rolesAreLoading || usersAreLoading) {
     return (
       <View className="w-full flex-1 items-center justify-center bg-carewallet-white text-3xl">
         <ActivityIndicator size="large" />
@@ -25,7 +28,7 @@ export default function Profile() {
     );
   }
 
-  if (!user) {
+  if (!roles || !users) {
     return (
       <View className="w-full flex-1 items-center justify-center bg-carewallet-white text-3xl">
         <Text className="text-xl">Could Not Load Profile...</Text>
@@ -39,8 +42,18 @@ export default function Profile() {
   // TODO: Add ability to change user view if I click on another user?
   return (
     <View className="flex flex-1 flex-col">
-      <Header user={user} />
-      <Group roles={roles ?? []} rolesAreLoading={rolesAreLoading} />
+      <Header
+        user={users.find((user) => user.user_id === activeUser)}
+        role={roles.find((role) => role.user_id === activeUser)}
+      />
+      <Group
+        users={users ?? []}
+        usersAreLoading={usersAreLoading}
+        setActiveUser={setActiveUser}
+        activeUser={activeUser}
+        roles={roles ?? []}
+        rolesAreLoading={rolesAreLoading}
+      />
       <View className="mt-5 flex items-center pb-5">
         <View className="h-20 w-80 items-center justify-center rounded-xl border border-carewallet-black">
           <Text className="text-md">Your Tasks</Text>
