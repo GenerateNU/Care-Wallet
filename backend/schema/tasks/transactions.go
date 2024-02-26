@@ -135,7 +135,6 @@ func GetTasksByAssignedFromDB(pool *pgx.Conn, userIDs []string) ([]models.Task, 
 				print(err, "error scanning task ID")
 				return nil, err
 			}
-			fmt.Println(task_id)
 			task_ids = append(task_ids, task_id)
 		}
 	}
