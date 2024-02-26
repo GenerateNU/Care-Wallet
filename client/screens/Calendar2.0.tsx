@@ -133,6 +133,7 @@ export default class TimelineCalendarScreen extends Component {
       { start: 0, end: 6 },
       { start: 22, end: 24 }
     ],
+    onEventPress: (e) => expandEvent(e),
     overlapEventsSpacing: 8,
     rightEdgeSpacing: 24
   };
@@ -149,12 +150,7 @@ export default class TimelineCalendarScreen extends Component {
         disabledOpacity={0.6}
         // numberOfDays={3}
       >
-        <ExpandableCalendar
-          firstDay={1}
-          leftArrowImageSource={require('../assets/calendar.svg')}
-          rightArrowImageSource={require('../assets/calendar.svg')}
-          markedDates={this.marked}
-        />
+        <ExpandableCalendar firstDay={1} markedDates={this.marked} />
         <TimelineList
           events={eventsByDate}
           timelineProps={this.timelineProps}
@@ -166,4 +162,7 @@ export default class TimelineCalendarScreen extends Component {
       </CalendarProvider>
     );
   }
+}
+function expandEvent(e: TimelineEventProps): void {
+  console.log('expand event', e.title);
 }
