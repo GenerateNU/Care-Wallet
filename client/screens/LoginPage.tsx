@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Alert } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { onAuthStateChanged } from '@firebase/auth';
+import { Alert, Pressable, Text, TextInput, View } from 'react-native';
 
-import { AppStackNavigation } from '../navigation/AppNavigation';
+import { onAuthStateChanged } from '@firebase/auth';
+import { useNavigation } from '@react-navigation/native';
+
 import { auth } from '../firebase.config';
+import { AppStackNavigation } from '../navigation/AppNavigation';
 import { useAuth } from '../services/auth';
 
 export default function LoginPage() {
@@ -16,7 +17,7 @@ export default function LoginPage() {
 
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      navigation.navigate('MainNavScreens');
+      navigation.navigate('Main');
       return;
     }
 
@@ -42,23 +43,35 @@ export default function LoginPage() {
   };
 
   return (
-    <View className="flex-1 justify-center items-center px-5">
+    <View className="flex-1 items-center justify-center px-5">
       <TextInput
-        className="w-full my-2.5 py-2 px-3 border border-gray-300 rounded"
+        className="my-2.5 w-full rounded border border-carewallet-lightgray px-3 py-2"
         value={email}
         onChangeText={setEmail}
         placeholder="Email"
         keyboardType="email-address"
       />
       <TextInput
-        className="w-full my-2.5 py-2 px-3 border border-gray-300 rounded"
+        className="my-2.5 w-full rounded border border-carewallet-lightgray px-3 py-2"
         value={password}
         onChangeText={setPassword}
         placeholder="Password"
         secureTextEntry
       />
-      <Button title="Login" onPress={handleLogin} />
-      <Button title="Sign Up" onPress={handleSignUp} />
+      <Pressable
+        onPress={handleLogin}
+        className="mb-2 w-20 self-center rounded-md border border-carewallet-gray"
+      >
+        <Text className="self-center text-lg text-carewallet-gray">Log In</Text>
+      </Pressable>
+      <Pressable
+        onPress={handleSignUp}
+        className="w-20 self-center rounded-md border border-carewallet-gray"
+      >
+        <Text className="self-center text-lg text-carewallet-gray">
+          Sign Up
+        </Text>
+      </Pressable>
     </View>
   );
 }

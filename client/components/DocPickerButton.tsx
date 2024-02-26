@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, Button } from 'react-native';
-import * as DocumentPicker from 'expo-document-picker';
+import { Pressable, Text } from 'react-native';
+
+import { getDocumentAsync } from 'expo-document-picker';
 
 import { useCareWalletContext } from '../contexts/CareWalletContext';
 import { useFile } from '../services/file';
@@ -11,7 +12,7 @@ export function DocPickerButton() {
 
   const pickDocument = async () => {
     try {
-      await DocumentPicker.getDocumentAsync({
+      await getDocumentAsync({
         type: '*/*',
         copyToCacheDirectory: false
       }).then((res) => {
@@ -29,8 +30,13 @@ export function DocPickerButton() {
   };
 
   return (
-    <View>
-      <Button title="Pick Document" onPress={pickDocument} />
-    </View>
+    <Pressable
+      onPress={pickDocument}
+      className="mb-2 mt-2 w-40 self-center rounded-md border border-carewallet-gray "
+    >
+      <Text className="self-center text-lg text-carewallet-black">
+        Pick Document
+      </Text>
+    </Pressable>
   );
 }

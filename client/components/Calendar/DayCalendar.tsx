@@ -1,8 +1,9 @@
-import { addDays, format, getDate, isSameDay, startOfWeek } from 'date-fns';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-const WeekCalendar = () => {
+import { addDays, format, getDate, isSameDay, startOfWeek } from 'date-fns';
+
+export function WeekCalendar() {
   const [date, setDate] = useState(new Date());
   const [week, setWeek] = useState<WeekDay[]>([]);
 
@@ -39,7 +40,7 @@ const WeekCalendar = () => {
       })}
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -104,5 +105,3 @@ export const getWeekDays = (date: Date): WeekDay[] => {
 
   return final;
 };
-
-export default WeekCalendar;

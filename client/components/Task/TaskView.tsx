@@ -1,13 +1,9 @@
-import clsx from 'clsx';
 import React from 'react';
-import { View, Text } from 'react-native';
+import { Text, View } from 'react-native';
 
-interface TaskProps {
-  tasks?: string[];
-}
+import { clsx } from 'clsx';
 
-// TODO: Doesnt matter rn, but we should think about if this should go to the calendar component folder or not... Since there will be a task screen showing tasks and such
-export default function Task({ tasks }: TaskProps) {
+export function TaskView() {
   const taskDates = [
     'task1',
     'task2',
@@ -27,12 +23,12 @@ export default function Task({ tasks }: TaskProps) {
   ];
 
   return (
-    <View className="flex justify-between mt-8 mb-8 flex-1">
+    <View className="mb-8 mt-8 flex flex-1 justify-between">
       {taskDates.map((task, index) => (
         <View
           key={index}
           className={clsx(
-            'p-4 rounded-lg w-40 items-center',
+            'w-40 items-center rounded-lg p-4',
             index % 2 === 0 ? 'bg-blue-300' : 'bg-green-300'
           )}
         >

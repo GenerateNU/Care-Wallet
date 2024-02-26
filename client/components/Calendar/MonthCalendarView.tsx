@@ -1,20 +1,22 @@
 import React, { useState } from 'react';
-import clsx from 'clsx';
-import { View, Text, Button, TouchableOpacity } from 'react-native';
+import { Button, Text, TouchableOpacity, View } from 'react-native';
+
+import { clsx } from 'clsx';
+
 import { months } from './constants';
 import { generateMatrix, moderateScale } from './utils';
 
-export default function Calendar() {
+export function MonthCalendarView() {
   const [activeDate, setActiveDate] = useState(new Date());
 
-  const _onPress = (item: number) => {
+  const _onPress = (item: number | string) => {
     if (typeof item !== 'string' && item != -1) {
       const newDate = new Date(activeDate.setDate(item));
       setActiveDate(newDate);
     }
   };
 
-  let rows = generateRows({ activeDate, _onPress });
+  const rows = generateRows({ activeDate, _onPress });
 
   const changeMonth = (n: number) => {
     const newMonthDate = new Date(
@@ -25,23 +27,23 @@ export default function Calendar() {
   };
 
   return (
-    <View className="p-3 border-b-2 border-gray-300 h-[46vh]">
+    <View className="border-gray-300 h-[46vh] border-b-2 p-3">
       <Text
-        className={`font-bold text-center h-[4vh]`}
+        className={`h-[4vh] text-center font-bold`}
         style={{ fontSize: moderateScale(24) }}
       >
         {`${months[activeDate.getMonth()]} ${activeDate.getFullYear()}`}
       </Text>
       <View className="h-72 uppercase">{rows}</View>
-      <View className="flex-1 flex-row justify-around mt-2">
-        <View className="flex-1 mx-2">
+      <View className="mt-2 flex-1 flex-row justify-around">
+        <View className="mx-2 flex-1">
           <Button
             title="Previous"
             color={'#0abb92'}
             onPress={() => changeMonth(-1)}
           />
         </View>
-        <View className="flex-1 mx-2">
+        <View className="mx-2 flex-1">
           <Button
             title="Next"
             color={'#0abb92'}
@@ -58,12 +60,12 @@ function generateRows({
   _onPress
 }: {
   activeDate: Date;
-  _onPress: (item: any) => void;
+  _onPress: (item: string | number) => void;
 }) {
   const matrix = generateMatrix(activeDate);
 
   return matrix.map((row, rowIndex: number) => {
-    let rowItems = row.map((item: any, colIndex: number) => {
+    const rowItems = row.map((item, colIndex: number) => {
       return (
         <TouchableOpacity
           key={colIndex}

@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
+
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
+import { getUserGroup } from './api';
 import { Group, User } from './types';
 
 type CareWalletContextData = {
@@ -10,7 +12,11 @@ type CareWalletContextData = {
 
 const CareWalletContext = createContext({} as CareWalletContextData);
 
-export function CareWalletProvider({ children }: { children: any }) {
+export function CareWalletProvider({
+  children
+}: {
+  children: JSX.Element | JSX.Element[];
+}) {
   const [user, setUser] = useState({} as User);
   const [group, setGroup] = useState({} as Group);
   const auth = getAuth();
@@ -24,10 +30,12 @@ export function CareWalletProvider({ children }: { children: any }) {
 
       setUser(signedInUser);
 
-      setGroup({
-        groupID: 999,
-        role: 'TEMP - REPLACE WITH ACTUAL'
-      });
+      // TODO: What should happen if a user isnt apart of a group?
+      if (user) {
+        getUserGroup(user.uid).then((grouprole) => {
+          setGroup({ role: grouprole.role, groupID: grouprole.group_id });
+        });
+      }
     });
   }, []);
 

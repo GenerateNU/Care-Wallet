@@ -1,20 +1,22 @@
+import { Dimensions } from 'react-native';
+
 import { weekDays } from './constants';
 
 // TODO: Can this be expanded upon to show every month of the year like apple calendar ???
 export function generateMatrix(currentDate: Date) {
-  let matrix: (number | string)[][] = [];
+  const matrix: (number | string)[][] = [];
 
   // Create header of days
   matrix[0] = weekDays;
 
-  let year = currentDate.getFullYear();
-  let month = currentDate.getMonth();
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth();
 
   // first day of the month
-  let firstDay = new Date(year, month, 1).getDay();
+  const firstDay = new Date(year, month, 1).getDay();
 
   // number of days in a month
-  let maxDays = new Date(year, month + 1, 0).getDate();
+  const maxDays = new Date(year, month + 1, 0).getDate();
 
   let counter = 1;
   for (let row = 1; row < 7; row++) {
@@ -33,8 +35,6 @@ export function generateMatrix(currentDate: Date) {
 
   return matrix;
 }
-
-import { Dimensions } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
 

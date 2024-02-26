@@ -1,19 +1,21 @@
-import groupBy from 'lodash/groupBy';
-import filter from 'lodash/filter';
-import find from 'lodash/find';
-
 import React, { Component } from 'react';
 import { Alert } from 'react-native';
+
+import filter from 'lodash/filter';
+import find from 'lodash/find';
+import groupBy from 'lodash/groupBy';
 import {
+  CalendarProvider,
+  CalendarUtils,
+  DateData,
   ExpandableCalendar,
   TimelineEventProps,
   TimelineList,
-  CalendarProvider,
-  TimelineProps,
-  CalendarUtils
+  TimelineProps
 } from 'react-native-calendars';
+import { UpdateSources } from 'react-native-calendars/src/expandableCalendar/commons';
 
-import { timelineEvents, getDate } from './timelineEvents';
+import { getDate, timelineEvents } from './timelineEvents';
 
 const INITIAL_TIME = { hour: 9, minutes: 0 };
 const EVENTS: TimelineEventProps[] = timelineEvents;
@@ -41,7 +43,7 @@ export default class TimelineCalendarScreen extends Component {
     this.setState({ currentDate: date });
   };
 
-  onMonthChange = (month: any, updateSource: any) => {
+  onMonthChange = (month: DateData, updateSource: UpdateSources) => {
     console.log('TimelineCalendarScreen onMonthChange: ', month, updateSource);
   };
 

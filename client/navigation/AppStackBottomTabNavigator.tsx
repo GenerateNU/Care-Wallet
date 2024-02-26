@@ -1,44 +1,60 @@
 import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Text } from 'react-native';
 
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
+import Bell from '../assets/bottom-nav/bell.svg';
+import Calendar from '../assets/bottom-nav/calendar.svg';
+import Home from '../assets/bottom-nav/home.svg';
+import User from '../assets/bottom-nav/user.svg';
 import MedicationList from '../screens/MedicationList';
-import HomeIcon from '../assets/home.svg';
-import CalendarIcon from '../assets/calendar.svg';
-import Calendar1 from '../screens/Calendar-1.0';
-import TimelineCalendarScreen from '../screens/Calendar2.0';
+import Profile from '../screens/Profile';
 
 const AppStackBottomTab = createBottomTabNavigator();
 
 export function AppStackBottomTabNavigator() {
   return (
-    <AppStackBottomTab.Navigator>
+    <AppStackBottomTab.Navigator
+      screenOptions={{
+        tabBarActiveTintColor: 'black',
+        tabBarInactiveTintColor: 'gray'
+      }}
+    >
       <AppStackBottomTab.Screen
         name="Landing"
         options={{
           headerShown: true,
-          tabBarIcon: () => <HomeIcon color={'gray'} />,
-          tabBarLabel: () => <Text>Landing</Text>
+          tabBarIcon: ({ color }) => <Home color={color} />,
+          tabBarLabel: () => <Text></Text>
         }}
         component={MedicationList}
       />
       <AppStackBottomTab.Screen
-        name="Calendar -1.0"
+        name="Calendar"
         options={{
           headerShown: true,
-          tabBarIcon: () => <CalendarIcon color={'gray'} />,
-          tabBarLabel: () => <Text>Calendar -1.0</Text>
+          tabBarIcon: ({ color }) => <Calendar color={color} />,
+          tabBarLabel: () => <Text></Text>
         }}
-        component={Calendar1}
+        component={MedicationList}
       />
       <AppStackBottomTab.Screen
-        name="Calendar 2.0"
+        name="Notifications"
         options={{
           headerShown: true,
-          tabBarIcon: () => <CalendarIcon color={'gray'} />,
-          tabBarLabel: () => <Text>Calendar 2.0</Text>
+          tabBarIcon: ({ color }) => <Bell color={color} />,
+          tabBarLabel: () => <Text></Text>
         }}
-        component={TimelineCalendarScreen}
+        component={MedicationList}
+      />
+      <AppStackBottomTab.Screen
+        name="Profile"
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ color }) => <User color={color} />,
+          tabBarLabel: () => <Text></Text>
+        }}
+        component={Profile}
       />
     </AppStackBottomTab.Navigator>
   );
