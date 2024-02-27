@@ -36,10 +36,6 @@ export async function registerForPushNotificationsAsync() {
   }
 
   const carewalletProjectId = Constants.easConfig?.projectId;
-  // Constants.default.easConfig?.projectId;
-
-  // const appConfig = require('../app.json');
-  // const projectId = appConfig.expo.extra.eas.projectId;
 
   // gets push notification token
   const token = (
@@ -131,4 +127,8 @@ export async function scheduleInstantPushNotification(
   });
 }
 
-// types: WeeklyTriggerInput,
+export async function cancelScheduleNotificationI(id: string) {
+  Notification.cancelScheduledNotificationAsync(id);
+}
+
+export function scheduleDailyNotification() {}
