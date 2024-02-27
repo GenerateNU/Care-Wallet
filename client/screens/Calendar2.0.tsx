@@ -15,6 +15,7 @@ import {
 } from 'react-native-calendars';
 import { UpdateSources } from 'react-native-calendars/src/expandableCalendar/commons';
 
+import SingleTaskScreen from './SingleTask';
 import { getDate, timelineEvents } from './timelineEvents';
 
 const INITIAL_TIME = { hour: 9, minutes: 0 };
@@ -27,7 +28,8 @@ export default class TimelineCalendarScreen extends Component {
       CalendarUtils.getCalendarDateString(e.start)
     ) as {
       [key: string]: TimelineEventProps[];
-    }
+    },
+    isTask: false
   };
 
   marked = {
@@ -36,6 +38,10 @@ export default class TimelineCalendarScreen extends Component {
     [`${getDate(1)}`]: { marked: true },
     [`${getDate(2)}`]: { marked: true },
     [`${getDate(4)}`]: { marked: true }
+  };
+
+  setTaskView = (bool: boolean) => {
+    this.setState({ isTask: bool });
   };
 
   onDateChanged = (date: string, source: string) => {
@@ -124,6 +130,11 @@ export default class TimelineCalendarScreen extends Component {
     ]);
   };
 
+  onEventPress = (event: TimelineEventProps) => {
+    console.log('TimelineCalendarScreen onEventPress: ', event);
+    this.setTaskView(true);
+  };
+
   private timelineProps: Partial<TimelineProps> = {
     format24h: false,
     onBackgroundLongPress: this.createNewEvent,
@@ -135,13 +146,17 @@ export default class TimelineCalendarScreen extends Component {
       { start: 0, end: 6 },
       { start: 22, end: 24 }
     ],
-    onEventPress: (e) => expandEvent(e),
+    onEventPress: this.onEventPress,
     overlapEventsSpacing: 8,
     rightEdgeSpacing: 24
   };
 
   render() {
-    const { currentDate, eventsByDate } = this.state;
+    const { currentDate, eventsByDate, isTask } = this.state;
+
+    if (isTask) {
+      return <SingleTaskScreen setTaskView={this.setTaskView} />;
+    }
 
     return (
       <CalendarProvider
@@ -164,7 +179,4 @@ export default class TimelineCalendarScreen extends Component {
       </CalendarProvider>
     );
   }
-}
-function expandEvent(e: TimelineEventProps): void {
-  console.log('expand event', e.title);
 }

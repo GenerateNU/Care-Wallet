@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@tanstack/react-query": "^5.24.1",
+    "react-native-dropdown-picker": "^5.4.6"
+  }
+}
