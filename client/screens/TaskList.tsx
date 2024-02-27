@@ -24,30 +24,30 @@ export default function TaskListScreen() {
   // TODO: Query and assign tasks to state
   const { user, group } = useCareWalletContext();
 
-  const [taskLabels, setTaskLabels] = useState<{ [taskId: string]: string[] }>(
-    {}
-  ); // Store task labels in state
+  // const [taskLabels, setTaskLabels] = useState<{ [taskId: string]: string[] }>(
+  //   {}
+  // ); // Store task labels in state
 
   // Query and assign labels to tasks -> 2D array list containg labels at task id
-  useEffect(() => {
-    const fetchTaskLabels = async () => {
-      const labels: { [taskId: string]: string[] } = {};
-      if (tasks) {
-        await Promise.all(
-          tasks.map(async (task) => {
-            const labelsForTask = await getTaskLabels(task.task_id.toString());
-            labels[task.task_id.toString()] = labelsForTask.map(
-              (label) => label.label_name
-            );
-          })
-        );
-      }
-      setTaskLabels(labels);
-    };
-    if (tasks) {
-      fetchTaskLabels();
-    }
-  });
+  // useEffect(() => {
+  //   const fetchTaskLabels = async () => {
+  //     const labels: { [taskId: string]: string[] } = {};
+  //     if (tasks) {
+  //       await Promise.all(
+  //         tasks.map(async (task) => {
+  //           const labelsForTask = await getTaskLabels(task.task_id.toString());
+  //           labels[task.task_id.toString()] = labelsForTask.map(
+  //             (label) => label.label_name
+  //           );
+  //         })
+  //       );
+  //     }
+  //     setTaskLabels(labels);
+  //   };
+  //   if (tasks) {
+  //     fetchTaskLabels();
+  //   }
+  // });
 
   const { tasks, tasksIsLoading } = useFilteredTasks(queryParams);
 
@@ -65,11 +65,11 @@ export default function TaskListScreen() {
         .includes(searchQuery.toLowerCase())
     );
 
-    const labelMatch = taskLabels[task?.task_id?.toString()]?.some((label) =>
-      label.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    // const labelMatch = taskLabels[task?.task_id?.toString()]?.some((label) =>
+    //   label.toLowerCase().includes(searchQuery.toLowerCase())
+    // );
 
-    return taskFieldsMatch || labelMatch;
+    return taskFieldsMatch;
   });
 
   // Filter tasks based on categories
@@ -98,7 +98,7 @@ export default function TaskListScreen() {
             <TaskInfoComponent
               key={index}
               name={task?.task_id?.toString() || 'N/A'}
-              label={`Label: ${taskLabels[task.task_id.toString()]?.join(', ') || 'N/A'}`}
+              label={`Label: 'N/A'`}
               category={`Category: ${task?.notes || 'N/A'}`}
               type={`Task Status: ${task?.task_status || 'N/A'}`}
             />
