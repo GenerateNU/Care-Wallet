@@ -27,12 +27,6 @@ export function AppNavigation() {
         options={{ headerShown: true }}
         component={LoginPage}
       />
-       {/* Placeholder to test task screen */}
-       <AppStack.Screen
-        name="Home"
-        options={{ headerShown: true }}
-        component={TaskListScreen}
-      />
       <AppStack.Screen
         name="Main"
         options={{ headerShown: false }}

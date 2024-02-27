@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -8,22 +9,26 @@ import {
 } from 'react-native';
 
 import TaskInfoComponent from '../components/TaskInfoCard';
-import { useFilteredTasks, getTaskLabels } from '../services/task';
-import { Task } from '../types/task';
 import { useCareWalletContext } from '../contexts/CareWalletContext';
+import { getTaskLabels, useFilteredTasks } from '../services/task';
+import { Task } from '../types/task';
 
 export default function TaskListScreen() {
+  // Store query parameters in state
   const [queryParams, setQueryParams] = useState({
     taskType: 'other'
   });
+  // Store search query in state
+  const [searchQuery, setSearchQuery] = useState('');
 
+  // TODO: Query and assign tasks to state
   const { user, group } = useCareWalletContext();
 
   const [taskLabels, setTaskLabels] = useState<{ [taskId: string]: string[] }>(
     {}
   ); // Store task labels in state
 
-  // TODO: Query and assign task labels to tasks
+  // Query and assign labels to tasks -> 2D array list containg labels at task id
   useEffect(() => {
     const fetchTaskLabels = async () => {
       const labels: { [taskId: string]: string[] } = {};
@@ -45,6 +50,27 @@ export default function TaskListScreen() {
   });
 
   const { tasks, tasksIsLoading } = useFilteredTasks(queryParams);
+
+  // Filter tasks based on search query in multiple fields and labels
+  const filteredTasks = tasks?.filter((task) => {
+    const taskFieldsMatch = [
+      'task_id',
+      'task_status',
+      'task_type',
+      'notes'
+    ].some((field) =>
+      task?.[field]
+        ?.toString()
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase())
+    );
+
+    const labelMatch = taskLabels[task?.task_id?.toString()]?.some((label) =>
+      label.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    return taskFieldsMatch || labelMatch;
+  });
 
   // Filter tasks based on categories
   const pastDueTasks = tasks?.filter(
@@ -83,13 +109,13 @@ export default function TaskListScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
           placeholder="Search..."
           onChangeText={(text) => {
-            // no impl
+            setSearchQuery(text);
           }}
         />
         <Pressable
@@ -104,12 +130,13 @@ export default function TaskListScreen() {
       <Text className="text-xl font-bold text-carewallet-black">
         Task List (all tasks of all time)
       </Text>
+      {renderSection(filteredTasks || [], 'All Tasks')}
       {renderSection(pastDueTasks || [], 'Past Due')}
       {renderSection(inProgressTasks || [], 'In Progress')}
       {renderSection(inFutureTasks || [], 'Future')}
       {renderSection(completeTasks || [], 'Done')}
       {renderSection(incompleteTasks || [], 'Marked as Incomplete')}
-    </View>
+    </ScrollView>
   );
 }
 
@@ -127,8 +154,10 @@ const styles = StyleSheet.create({
     height: 40,
     borderColor: 'gray',
     borderWidth: 1,
+    borderRadius: 20,
     marginRight: 10,
-    padding: 8
+    padding: 8,
+    overflow: 'hidden'
   },
   filterButton: {
     backgroundColor: 'gray',
