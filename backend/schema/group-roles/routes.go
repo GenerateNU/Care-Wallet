@@ -58,12 +58,19 @@ func (pg *PgModel) GetGroupByUID(c *gin.Context) {
 //	@router			/group/{groupId}/roles [get]
 func (pg *PgModel) GetGroupRoles(c *gin.Context) {
 	gid := c.Param("groupId")
-	if gidInt, err := strconv.Atoi(gid); err == nil {
-		if careGroups, err := GetAllGroupRolesFromDB(pg.Conn, gidInt); err == nil {
-			c.JSON(http.StatusOK, careGroups)
-			return
-		}
+	gidInt, err := strconv.Atoi(gid)
 
+	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
+		return
 	}
+
+	careGroups, err := GetAllGroupRolesFromDB(pg.Conn, gidInt)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, careGroups)
 }

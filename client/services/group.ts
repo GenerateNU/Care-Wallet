@@ -1,45 +1,33 @@
+import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
+import { GroupRole } from '../types/group';
 import { api_url } from './api-links';
 
-// Create a care group
-export const createCareGroup = async (groupName: string): Promise<number> => {
-  try {
-    const response = await axios.post(
-      `${api_url}/care-groups/${groupName}`,
-      {}
-    );
-    console.log('response:', response);
-    return response.data;
-  } catch (error) {
-    console.error('Error creating care group:', error);
-    throw error;
-  }
+const getUserGroup = async (userId: string): Promise<number> => {
+  const { data } = await axios.get(`${api_url}/group/member/${userId}`);
+  return data;
 };
 
-// Add a user to a care group
-export const addUserToCareGroup = async (
-  userId: string,
-  groupId: string,
-  role: string
-): Promise<number> => {
-  try {
-    const response = await axios.post(
-      `${api_url}/care-groups/addUser/${userId}/${groupId}/${role}`,
-      {}
-    );
-    console.log('response:', response);
-    return response.data;
-  } catch (error) {
-    console.error('Error creating care group:', error);
-    throw error;
-  }
+const getGroupRoles = async (groupId: number): Promise<GroupRole[]> => {
+  const { data } = await axios.get(`${api_url}/group/${groupId}/roles`);
+  return data;
 };
 
-// Get all members of a care group
-export const getGroupMembers = async (groupId: string): Promise<string[]> => {
-  const response = await axios.get(
-    `${api_url}/care-groups/get-members/${groupId}`
-  );
-  return response.data;
+export const useUserGroup = (userId: string) => {
+  const { data: groupId, isLoading: groupIdIsLoading } = useQuery({
+    queryKey: ['groupId', userId],
+    queryFn: () => getUserGroup(userId)
+  });
+
+  return { groupId, groupIdIsLoading };
+};
+
+export const useGroup = (groupId: number) => {
+  const { data: roles, isLoading: rolesAreLoading } = useQuery({
+    queryKey: ['roles', groupId],
+    queryFn: () => getGroupRoles(groupId)
+  });
+
+  return { roles, rolesAreLoading };
 };

@@ -10,6 +10,8 @@ export type AppStackParamList = {
   Main: undefined;
   Home: undefined;
   Login: undefined;
+  Profile: undefined;
+  Task: undefined;
 };
 
 export type AppStackNavigation = NavigationProp<AppStackParamList>;

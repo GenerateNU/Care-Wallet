@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, TextInput, View } from 'react-native';
+import { Pressable, Text, TextInput, View } from 'react-native';
 
 import DropDownPicker from 'react-native-dropdown-picker';
 
@@ -11,7 +11,11 @@ import { TaskInfo } from '../types/taskInfo';
 import { TaskLabel } from '../types/taskLabel';
 import { Category, categoryToTypeMap, TypeOfTask } from '../types/type';
 
-export default function SingleTaskScreen() {
+export default function SingleTaskScreen({
+  setTaskView
+}: {
+  setTaskView: (bool: boolean) => void;
+}) {
   const [taskId] = useState<string>();
 
   const [open, setOpen] = useState(false);
@@ -99,9 +103,12 @@ export default function SingleTaskScreen() {
 
   return (
     <View className="flex flex-col items-start p-4">
-      <View className="flex-row items-center">
+      <Pressable
+        className="flex-row items-center"
+        onTouchEnd={() => setTaskView(false)}
+      >
         <BackButton />
-      </View>
+      </Pressable>
       <View className="absolute right-0 top-4 m-4">
         <DropDownPicker
           // Very light placeholder for the real dropdown picker. Once backend routes are added
