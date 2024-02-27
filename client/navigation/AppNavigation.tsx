@@ -3,7 +3,9 @@ import React from 'react';
 import { NavigationProp } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import App from '../App';
 import LoginPage from '../screens/LoginPage';
+import TaskListScreen from '../screens/TaskList';
 import { AppStackBottomTabNavigator } from './AppStackBottomTabNavigator';
 
 export type AppStackParamList = {
