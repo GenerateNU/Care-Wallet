@@ -1,0 +1,885 @@
+basePath: /
+definitions:
+  groups.GroupMember:
+    properties:
+      role:
+        $ref: '#/definitions/models.Role'
+      user_id:
+        type: string
+    type: object
+  labels.LabelData:
+    properties:
+      label_color:
+        type: string
+      label_name:
+        type: string
+    type: object
+  models.CareGroup:
+    properties:
+      date_created:
+        type: string
+      group_id:
+        type: integer
+      group_name:
+        type: string
+    type: object
+  models.File:
+    properties:
+      file_id:
+        type: integer
+      file_name:
+        type: string
+      file_size:
+        type: integer
+      group_id:
+        type: integer
+      task_id:
+        type: integer
+      upload_by:
+        type: string
+      upload_date:
+        type: string
+    type: object
+  models.GroupRole:
+    properties:
+      group_id:
+        type: integer
+      role:
+        $ref: '#/definitions/models.Role'
+      user_id:
+        type: string
+    type: object
+  models.Label:
+    properties:
+      group_id:
+        type: integer
+      label_color:
+        type: string
+      label_name:
+        type: string
+    type: object
+  models.Medication:
+    properties:
+      medication_id:
+        type: integer
+      medication_name:
+        type: string
+    type: object
+  models.Role:
+    enum:
+    - PATIENT
+    - PRIMARY
+    - SECONDARY
+    type: string
+    x-enum-varnames:
+    - RolePatient
+    - RolePrimary
+    - RoleSecondary
+  models.Task:
+    properties:
+      created_by:
+        description: User ID
+        type: string
+      created_date:
+        type: string
+      end_date:
+        type: string
+      group_id:
+        type: integer
+      notes:
+        type: string
+      repeating:
+        type: boolean
+      repeating_end_date:
+        type: string
+      repeating_interval:
+        type: string
+      start_date:
+        type: string
+      task_id:
+        type: integer
+      task_info:
+        type: string
+      task_status:
+        type: string
+      task_type:
+        type: string
+    type: object
+  models.Task_Label:
+    properties:
+      group_id:
+        type: integer
+      label_name:
+        type: string
+      task_id:
+        type: integer
+    type: object
+  models.TaskUser:
+    properties:
+      taskID:
+        type: integer
+      userID:
+        type: string
+    type: object
+  models.User:
+    properties:
+      address:
+        type: string
+      device_id:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+      pfp_s3_url:
+        type: string
+      phone:
+        type: string
+      push_notification_enabled:
+        type: boolean
+      user_id:
+        type: string
+    type: object
+  task_labels.LabelData:
+    properties:
+      group_id:
+        type: integer
+      label_name:
+        type: string
+    type: object
+  tasks.Assignment:
+    properties:
+      assigner:
+        type: string
+      userIDs:
+        items:
+          type: string
+        type: array
+    type: object
+  tasks.Removal:
+    properties:
+      userIDs:
+        items:
+          type: string
+        type: array
+    type: object
+  tasks.TaskBody:
+    properties:
+      created_by:
+        description: User ID
+        type: string
+      created_date:
+        type: string
+      end_date:
+        type: string
+      group_id:
+        type: integer
+      notes:
+        type: string
+      repeating:
+        type: boolean
+      repeating_end_date:
+        type: string
+      repeating_interval:
+        type: string
+      start_date:
+        type: string
+      task_info:
+        type: string
+      task_status:
+        type: string
+      task_type:
+        type: string
+    type: object
+  user.UserInfoBody:
+    properties:
+      address:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+      phone:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: This is an API for the Care-Wallet App.
+  title: Care-Wallet API
+  version: "1.0"
+paths:
+  /files/upload:
+    post:
+      description: Upload a file to database and S3 bucket
+      parameters:
+      - description: Body with file zip
+        in: formData
+        name: file_data
+        required: true
+        type: file
+      - description: The userId of the uploader
+        in: formData
+        name: upload_by
+        required: true
+        type: string
+      - description: The groupId of the uploader
+        in: formData
+        name: group_id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.File'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Upload a file
+      tags:
+      - file
+  /group/{groupId}:
+    get:
+      description: retrieve the information about a group given its group id
+      parameters:
+      - description: group id
+        in: path
+        name: groupId
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CareGroup'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Get a group
+      tags:
+      - group
+  /group/{groupId}/add:
+    post:
+      description: Adds a user to a care group given a userID, groupID, and role
+      parameters:
+      - description: group id
+        in: path
+        name: groupId
+        required: true
+        type: string
+      - description: The group member to be added
+        in: body
+        name: GroupMember
+        required: true
+        schema:
+          $ref: '#/definitions/groups.GroupMember'
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Adds a user to a care group
+      tags:
+      - group
+  /group/{groupId}/labels:
+    get:
+      description: get all labels for a group given their group id
+      parameters:
+      - description: the group id to get labels for
+        in: path
+        name: groupId
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Label'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: get labels for a group
+      tags:
+      - labels
+    post:
+      description: create a new label for a group
+      parameters:
+      - description: Group to create label for
+        in: path
+        name: groupId
+        required: true
+        type: string
+      - description: Label creation data
+        in: body
+        name: _
+        required: true
+        schema:
+          $ref: '#/definitions/labels.LabelData'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Label'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Create A New Label
+      tags:
+      - labels
+  /group/{groupId}/labels/{lname}:
+    delete:
+      description: delete a label
+      parameters:
+      - description: Group to delete label from
+        in: path
+        name: groupId
+        required: true
+        type: string
+      - description: Name of label to delete
+        in: path
+        name: lname
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Delete A Label
+      tags:
+      - labels
+    patch:
+      description: edit a label
+      parameters:
+      - description: Group of label to edit
+        in: path
+        name: groupId
+        required: true
+        type: string
+      - description: Name of label to edit
+        in: path
+        name: lname
+        required: true
+        type: string
+      - description: Label edit data
+        in: body
+        name: _
+        required: true
+        schema:
+          $ref: '#/definitions/labels.LabelData'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Label'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Edit A Label
+      tags:
+      - labels
+  /group/{groupId}/roles:
+    get:
+      description: get all group members for a group given group id from the db
+      parameters:
+      - description: group id
+        in: path
+        name: groupId
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.GroupRole'
+            type: array
+      summary: Get all members of a group
+      tags:
+      - group
+  /group/create/{groupName}:
+    post:
+      description: Creates a new care group with the provided group name.
+      parameters:
+      - description: group name
+        in: path
+        name: groupName
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+      summary: Creates a care group
+      tags:
+      - group
+  /group/member/{uid}:
+    get:
+      description: get the group id from the user id
+      parameters:
+      - description: user id
+        in: path
+        name: uid
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Retrieve a group id given a user id
+      tags:
+      - group
+  /medications:
+    get:
+      description: get all user medications
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Medication'
+            type: array
+      summary: Get All Meds
+      tags:
+      - medications
+    post:
+      description: add a medication to a users medlist
+      parameters:
+      - description: a medication
+        in: body
+        name: _
+        required: true
+        schema:
+          $ref: '#/definitions/models.Medication'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Medication'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: add a medication
+      tags:
+      - medications
+  /tasks:
+    post:
+      description: Create a new task
+      parameters:
+      - description: Create Task Request
+        in: body
+        name: request_body
+        required: true
+        schema:
+          $ref: '#/definitions/tasks.TaskBody'
+      responses:
+        "201":
+          description: Created Task
+          schema:
+            $ref: '#/definitions/models.Task'
+      summary: Create a New Task
+      tags:
+      - tasks
+  /tasks/{tid}:
+    delete:
+      description: Delete a task by ID
+      parameters:
+      - description: Task ID
+        in: path
+        name: tid
+        required: true
+        type: integer
+      responses:
+        "204":
+          description: No Content
+      summary: Delete a Task
+      tags:
+      - tasks
+    get:
+      description: get a task given its id
+      parameters:
+      - description: the id of the task
+        in: path
+        name: tid
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Task'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: get task by id
+      tags:
+      - tasks
+    put:
+      description: Update the task_info field of a task by ID
+      parameters:
+      - description: Task ID
+        in: path
+        name: tid
+        required: true
+        type: integer
+      - description: Update Task Info Request
+        in: body
+        name: request_body
+        required: true
+        schema:
+          $ref: '#/definitions/tasks.TaskBody'
+      responses:
+        "200":
+          description: Updated Task
+          schema:
+            $ref: '#/definitions/models.Task'
+      summary: Update Task Info
+      tags:
+      - tasks
+  /tasks/{tid}/assign:
+    post:
+      description: assign users to task
+      parameters:
+      - description: Task ID to assign users to
+        in: path
+        name: tid
+        required: true
+        type: string
+      - description: Users to assign to task and assignee
+        in: body
+        name: _
+        required: true
+        schema:
+          $ref: '#/definitions/tasks.Assignment'
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.TaskUser'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Assign Users To Task
+      tags:
+      - tasks
+  /tasks/{tid}/assigned:
+    get:
+      description: Get list of users assigned to a task by task ID
+      parameters:
+      - description: Task ID
+        in: path
+        name: tid
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: List of user IDs assigned to the task
+          schema:
+            items:
+              type: string
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Get list of users assigned to a task
+      tags:
+      - tasks
+  /tasks/{tid}/labels:
+    delete:
+      description: remove a label from a task given the task id, group id, and label
+        name
+      parameters:
+      - description: the task id to get labels for
+        in: path
+        name: tid
+        required: true
+        type: integer
+      - description: The label data to remove from the task
+        in: body
+        name: requestBody
+        required: true
+        schema:
+          $ref: '#/definitions/task_labels.LabelData'
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: remove a label from a task
+      tags:
+      - task labels
+    get:
+      description: get a tasks labels given the task id
+      parameters:
+      - description: the task id to get labels for
+        in: path
+        name: tid
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Task_Label'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: get a tasks labels
+      tags:
+      - task labels
+    post:
+      description: add a label to a task given the task id, group id, and label name
+      parameters:
+      - description: the task id to add the label to
+        in: path
+        name: tid
+        required: true
+        type: integer
+      - description: The label data to add to the task
+        in: body
+        name: requestBody
+        required: true
+        schema:
+          $ref: '#/definitions/task_labels.LabelData'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Task_Label'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: add a label to a task
+      tags:
+      - task labels
+  /tasks/{tid}/remove:
+    delete:
+      description: remove users from task
+      parameters:
+      - description: Task ID to remove users from
+        in: path
+        name: tid
+        required: true
+        type: string
+      - description: Users to remove from task
+        in: body
+        name: _
+        required: true
+        schema:
+          $ref: '#/definitions/tasks.Removal'
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.TaskUser'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Remove Users From Task
+      tags:
+      - tasks
+  /tasks/assigned:
+    get:
+      description: get tasks assigned to given users
+      parameters:
+      - collectionFormat: csv
+        in: query
+        items:
+          type: string
+        name: userIDs
+        type: array
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Task'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Get Tasks Assigned To Given Users
+      tags:
+      - tasks
+  /tasks/filtered:
+    get:
+      description: get filtered tasks
+      parameters:
+      - in: query
+        name: createdBy
+        type: string
+      - in: query
+        name: endDate
+        type: string
+      - in: query
+        name: groupID
+        type: string
+      - in: query
+        name: startDate
+        type: string
+      - in: query
+        name: taskID
+        type: string
+      - in: query
+        name: taskStatus
+        type: string
+      - in: query
+        name: taskType
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Task'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Get Filtered Tasks
+      tags:
+      - tasks
+  /user:
+    get:
+      description: gets the information about multiple users given their user id
+      parameters:
+      - collectionFormat: csv
+        description: User IDs
+        in: query
+        items:
+          type: string
+        name: userIDs
+        required: true
+        type: array
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.User'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: gets the information about multiple users
+      tags:
+      - user
+  /user/{uid}:
+    get:
+      description: gets the information about a user given their user id
+      parameters:
+      - description: User ID
+        in: path
+        name: uid
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: gets the information about a user
+      tags:
+      - user
+    post:
+      description: Creates a new user with the provided userId.
+      parameters:
+      - description: User ID
+        in: path
+        name: uid
+        required: true
+        type: string
+      - description: User Information
+        in: body
+        name: UserInfo
+        required: true
+        schema:
+          $ref: '#/definitions/user.UserInfoBody'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Creates a user
+      tags:
+      - user
+    put:
+      description: Updates a user with the provided userId given the updated user.
+      parameters:
+      - description: User ID
+        in: path
+        name: uid
+        required: true
+        type: string
+      - description: User Information
+        in: body
+        name: UserInfo
+        required: true
+        schema:
+          $ref: '#/definitions/user.UserInfoBody'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Updates a user
+      tags:
+      - user
+swagger: "2.0"

@@ -1,0 +1,117 @@
+name: Backend CI
+
+on:
+  push:
+    paths:
+      - "backend/**"
+      - ".github/**"
+    branches: ["main"]
+  pull_request:
+    paths:
+      - "backend/**"
+      - ".github/**"
+    branches: ["main"]
+
+jobs:
+  lint:
+    name: Format
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20.x]
+        go-version: [1.21.x]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: ${{ matrix.go-version }}
+
+      - name: Format Backend
+        run: |
+          cd backend
+          be_format_output=$(go fmt ./...)
+          if [[ -n "$be_format_output" ]]; then
+          echo "$be_format_output"
+          echo "::error::Formatting issues found"
+          exit 1
+          fi
+      - name: Lint Backend
+        run: |
+          cd backend
+          be_lint_output=$(go vet ./...)
+          if [[ -n "$be_lint_output" ]]; then
+          echo "$be_lint_output"
+          echo "::error::Linting issues found"
+          exit 1
+          fi
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20.x]
+        go-version: [1.21.x]
+    container: node:latest
+
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_PASSWORD: pwd
+          POSTGRES_USER: user
+          POSTGRES_DB: carewallet
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready --health-interval 10s --health-timeout 5s
+          --health-retries 5
+    steps:
+      - name: Install PostgreSQL client
+        run: |
+          apt-get update
+          apt-get install --yes postgresql-client
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Import DB seed data
+        run: |
+          for file in $(ls -1 ./ | sort); do
+            psql -d postgresql://user:pwd@172.17.0.1:5432/carewallet -f "$file"
+          done
+        working-directory: ./backend/db/migrations
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: ${{ matrix.go-version }}
+
+      - name: Run Go tests
+        run: |
+          cd backend
+          go mod tidy
+          go test -count=1 carewallet/...
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20.x]
+        go-version: [1.21.x]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: ${{ matrix.go-version }}
+
+      - name: Build App
+        run: |
+          cd backend
+          go mod tidy

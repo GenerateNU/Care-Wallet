@@ -1,0 +1,63 @@
+version: "3"
+dotenv: [".env"]
+tasks:
+  build:
+    - |
+      cd client
+      npm install
+      cd ../backend
+      go mod tidy
+
+  format:
+    - |
+      echo -e "Frontend Formatting..."
+      cd client
+      npm run format
+      echo -e "\nFrontend Linting...\n"
+      npm run lint:fix
+      echo -e "\nBackend Formatting...\n"
+      cd ../backend
+      go fmt ./...
+      swag f
+      echo -e "\nBackend Linting...\n"
+      go vet ./...
+
+  start-dev:
+    - |
+      echo -e "Starting Backend Live-Reload..."
+      nodemon -e go --ignore 'backend/docs/**' --signal SIGTERM --exec "task start-backend"
+
+  start-backend:
+    - |
+      cd backend
+      swag i --parseDependency
+      swag f
+      go run main.go
+
+  start-frontend:
+    - |
+      cd client
+      npm start
+
+  start-ngrok:
+    dotenv: [".env"]
+    cmds:
+      - |
+        cd backend
+        ngrok http --domain=$EXPO_PUBLIC_API_DOMAIN 8080
+
+  start-docker:
+    - |
+      docker-compose down
+      docker-compose up
+
+  test-all:
+    - |
+      cd backend
+      go test -count=1 carewallet/...
+
+  pre-commit:
+    - |
+      pre-commit clean
+      pre-commit install --hook-type commit-msg --hook-type pre-push --hook-type pre-commit
+      pre-commit run --all-files

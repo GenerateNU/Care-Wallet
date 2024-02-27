@@ -1,0 +1,30 @@
+default_stages: [commit, push]
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: check-added-large-files
+      - id: check-merge-conflict
+      - id: end-of-file-fixer
+        exclude: 'backend/docs/'
+      - id: trailing-whitespace
+      - id: no-commit-to-branch
+        args: ['--branch', 'main']
+  - repo: local
+    hooks:
+      - id: build
+        language: python
+        name: Parse Swag Docs
+        require_serial: true
+        entry: bash -c 'cd backend && swag i --parseDependency'
+  - repo: local
+    hooks:
+      - id: format
+        language: python
+        name: Run Format
+        require_serial: true
+        entry: bash -c 'task format'
+  - repo: https://github.com/commitizen-tools/commitizen
+    rev: v3.13.0
+    hooks:
+      - id: commitizen
