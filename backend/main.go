@@ -11,6 +11,7 @@ import (
 	"carewallet/schema/medication"
 	"carewallet/schema/task_labels"
 	"carewallet/schema/tasks"
+	"carewallet/schema/user"
 	"fmt"
 	"os"
 
@@ -45,6 +46,8 @@ func main() {
 		medication.GetMedicationGroup(v1, &medication.PgModel{Conn: conn})
 
 		files.FileGroup(v1, &files.PgModel{Conn: conn})
+
+		user.UserGroup(v1, &user.PgModel{Conn: conn})
 
 		group := v1.Group("group")
 		{

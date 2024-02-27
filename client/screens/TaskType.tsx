@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { ScrollView, View } from 'react-native';
 
-import { useNavigation } from '@react-navigation/native';
+//import { useNavigation } from '@react-navigation/native';
 import { Button, Text } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { BackButton } from '../components/BackButton';
-import { AppStackNavigation } from '../navigation/AppNavigation';
+//import { AppStackNavigation } from '../navigation/AppNavigation';
 import { TypeOfTask } from '../types/type';
 
 export function TaskType() {
-  const navigation = useNavigation<AppStackNavigation>();
+  // const navigation = useNavigation<AppStackNavigation>();
 
   // const [open, setOpen] = useState(false);
   // const [selectedCategory, setSelectedCategory] = useState<null | Category>(
@@ -68,7 +68,7 @@ export function TaskType() {
             textColor="black"
             key={type}
             mode="outlined"
-            onPress={() => navigation.navigate('New ' + type)} // TODO other screens should have this name
+            onPress={() => null} // TODO other screens should have this name
           >
             {type}
           </Button>

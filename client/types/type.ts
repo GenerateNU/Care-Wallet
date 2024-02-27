@@ -1,66 +1,52 @@
 export enum TypeOfTask {
-  MEDICATION = 'Medication Management',
-  APPOINTMENT = 'Physician Appointment',
-  // LABS = 'Labs & Outpatient Services',
-  // REHAB = 'Rehab & Home Therapies',
-  // TRANSITIONAL = 'Transitional Care',
-  GROOMING = 'Grooming',
-  CONVERSATIONS = 'Family Conversations',
-  // TRANSPORTATION = 'Transportation',
-  // RESPITE = 'Respite',
-  ERRANDS = 'Groceries, Shopping, & Errands',
-  BILLS = 'Pay Bills',
-  // PRESCRIPTION = 'Prescription Management',
-  // SAFETY = 'Home Safety',
-  DIET = 'Diet & Nutrition',
-  ACTIVITIES = 'Activities',
-  INSURANCE = 'Health Insurance',
-  // FINANCIAL = 'Financial',
-  // LEGAL = 'Legal',
+  MEDICATION_MANAGEMENT = 'Medication Management',
+  PHYSICIAN_APPT = 'Physician Appointment',
+  PRESCRIPTION_MGMT = 'Prescription Management',
+  LABS_OUTPATIENT_SERVICES = 'Labs & Outpatient Services',
+  REHAB_HOME_THERAPIES = 'Rehab/Home Therapies',
+  TRANSITIONAL_CARE_COORD = 'Transitional Care Coordination',
+  FAMILY_CONVERSATIONS = 'Family Conversations',
+  TRANSPORTATION = 'Transportation',
+  RESPITE_CAREGIVER_SUPPORT = 'Respite and Caregiver Support',
+  HOME_SAFETY = 'Home Safety',
+  HEALTH_INSURANCE = 'Health Insurance',
+  MANAGING_EXPENSES_BILL_PAYMENTS = 'Managing Expenses & Bill Payments',
+  LEGAL = 'Legal',
+  FINANCIAL = 'Financial',
   OTHER = 'Other'
 }
 
 export enum Category {
   ALL = '',
-  HEALTH = 'Health & Medical',
+  HEALTH = 'Health & Medication',
   PERSONAL = 'Personal',
   HOME = 'Home & Lifestyle',
-  FINANCIAL = 'Financial & Legal',
-  OTHER = 'Other'
+  FINANCIAL = 'Financial & Legal'
 }
 
 export const categoryToTypeMap: Record<Category, TypeOfTask[]> = {
   [Category.ALL]: [],
   [Category.HEALTH]: [
-    TypeOfTask.MEDICATION,
-    TypeOfTask.APPOINTMENT,
-    // TypeOfTask.LABS,
-    // TypeOfTask.REHAB,
-    // TypeOfTask.TRANSITIONAL,
-    TypeOfTask.GROOMING,
-    // TypeOfTask.PRESCRIPTION,
-    TypeOfTask.DIET
+    TypeOfTask.MEDICATION_MANAGEMENT,
+    TypeOfTask.PHYSICIAN_APPT,
+    TypeOfTask.PRESCRIPTION_MGMT,
+    TypeOfTask.LABS_OUTPATIENT_SERVICES,
+    TypeOfTask.REHAB_HOME_THERAPIES,
+    TypeOfTask.TRANSITIONAL_CARE_COORD,
+    TypeOfTask.HEALTH_INSURANCE
   ],
   [Category.PERSONAL]: [
-    TypeOfTask.GROOMING,
-    TypeOfTask.CONVERSATIONS,
-    // TypeOfTask.TRANSPORTATION,
-    // TypeOfTask.RESPITE,
-    TypeOfTask.ERRANDS,
-    // TypeOfTask.SAFETY,
-    TypeOfTask.BILLS
+    TypeOfTask.FAMILY_CONVERSATIONS,
+    TypeOfTask.RESPITE_CAREGIVER_SUPPORT
   ],
   [Category.HOME]: [
-    // TypeOfTask.REHAB,
-    // TypeOfTask.SAFETY,
-    TypeOfTask.DIET,
-    TypeOfTask.ACTIVITIES
+    TypeOfTask.TRANSPORTATION,
+    TypeOfTask.REHAB_HOME_THERAPIES,
+    TypeOfTask.TRANSITIONAL_CARE_COORD,
+    TypeOfTask.HOME_SAFETY
   ],
   [Category.FINANCIAL]: [
-    TypeOfTask.BILLS,
-    TypeOfTask.INSURANCE
-    // TypeOfTask.FINANCIAL,
-    // TypeOfTask.LEGAL
-  ],
-  [Category.OTHER]: [TypeOfTask.OTHER]
+    TypeOfTask.FINANCIAL,
+    TypeOfTask.MANAGING_EXPENSES_BILL_PAYMENTS
+  ]
 };
