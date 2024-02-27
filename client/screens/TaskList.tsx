@@ -10,11 +10,14 @@ import {
 import TaskInfoComponent from '../components/TaskInfoCard';
 import { useFilteredTasks, getTaskLabels } from '../services/task';
 import { Task } from '../types/task';
+import { useCareWalletContext } from '../contexts/CareWalletContext';
 
 export default function TaskListScreen() {
   const [queryParams, setQueryParams] = useState({
     taskType: 'other'
   });
+
+  const { user, group } = useCareWalletContext();
 
   const [taskLabels, setTaskLabels] = useState<{ [taskId: string]: string[] }>(
     {}

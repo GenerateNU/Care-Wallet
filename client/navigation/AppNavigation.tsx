@@ -21,16 +21,16 @@ const AppStack = createNativeStackNavigator<AppStackParamList>();
 export function AppNavigation() {
   return (
     <AppStack.Navigator>
-      {/* Placeholder to test task screen */}
-      <AppStack.Screen
-        name="Home"
-        options={{ headerShown: true }}
-        component={TaskListScreen}
-      />
       <AppStack.Screen
         name="Login"
         options={{ headerShown: true }}
         component={LoginPage}
+      />
+       {/* Placeholder to test task screen */}
+       <AppStack.Screen
+        name="Home"
+        options={{ headerShown: true }}
+        component={TaskListScreen}
       />
       <AppStack.Screen
         name="Main"
