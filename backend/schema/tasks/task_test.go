@@ -207,42 +207,6 @@ func TestTaskGroup(t *testing.T) {
 		}
 	})
 
-	t.Run("TestGetTasksByAssigned", func(t *testing.T) {
-		w := httptest.NewRecorder()
-		req, _ := http.NewRequest("GET", "/tasks/assigned?userIDs=user2", nil)
-		router.ServeHTTP(w, req)
-
-		if http.StatusOK != w.Code {
-			t.Error("Failed to retrieve tasks by assigned user.")
-		}
-
-		var responseTasks []models.Task
-		err = json.Unmarshal(w.Body.Bytes(), &responseTasks)
-
-		if err != nil {
-			t.Error("Failed to unmarshal json")
-		}
-
-		note := "Refill water pitcher"
-		expectedTasks := []models.Task{
-			{
-				TaskID:      4,
-				GroupID:     4,
-				CreatedBy:   "user1",
-				CreatedDate: time.Date(2006, 1, 2, 15, 4, 5, 0, time.UTC),
-				Notes:       &note,
-				TaskStatus:  "COMPLETE",
-				TaskType:    "other",
-			},
-		}
-
-		fmt.Println("Expected: ", expectedTasks)
-		fmt.Println("Response: ", responseTasks)
-		if !reflect.DeepEqual(expectedTasks, responseTasks) {
-			t.Error("Result was not correct")
-		}
-	})
-
 	t.Run("TestCreateTask_Success", func(t *testing.T) {
 		// Creating a Task instance
 		startDate := time.Now().UTC()

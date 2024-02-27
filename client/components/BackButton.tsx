@@ -1,17 +1,20 @@
 import React from 'react';
 
-import { Button } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
+import { IconButton } from 'react-native-paper';
 
-// TODO style
+import BackArrow from '../assets/back-arrow.svg';
+import { AppStackNavigation } from '../navigation/AppNavigation';
+
 export function BackButton() {
+  const navigation = useNavigation<AppStackNavigation>();
+
   return (
-    <Button
-      className="bg-carewallet-gray"
+    <IconButton
+      className="align-center m-2 flex h-[50px] w-[52px] justify-center rounded-xl bg-carewallet-gray"
       mode="contained"
-      style={{ borderRadius: 8, marginTop: 16 }}
-      contentStyle={{ height: 48 }}
-    >
-      Back
-    </Button>
+      icon={({ color }) => <BackArrow fill={color} />}
+      onPress={() => navigation.goBack()}
+    />
   );
 }

@@ -8,21 +8,19 @@ import {
   View
 } from 'react-native';
 
-import TaskInfoComponent from '../components/TaskInfoCard';
-import { useCareWalletContext } from '../contexts/CareWalletContext';
+import { TaskInfoComponent } from '../components/TaskInfoCard';
 import { getTaskLabels, useFilteredTasks } from '../services/task';
 import { Task } from '../types/task';
 
 export default function TaskListScreen() {
   // Store query parameters in state
-  const [queryParams, setQueryParams] = useState({
+  const [queryParams] = useState({
     taskType: 'other'
   });
   // Store search query in state
   const [searchQuery, setSearchQuery] = useState('');
 
   // TODO: Query and assign tasks to state
-  const { user, group } = useCareWalletContext();
 
   // const [taskLabels, setTaskLabels] = useState<{ [taskId: string]: string[] }>(
   //   {}
@@ -49,7 +47,7 @@ export default function TaskListScreen() {
   //   }
   // });
 
-  const { tasks, tasksIsLoading } = useFilteredTasks(queryParams);
+  const { tasks } = useFilteredTasks(queryParams);
 
   // Filter tasks based on search query in multiple fields and labels
   const filteredTasks = tasks?.filter((task) => {
