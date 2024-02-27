@@ -4,7 +4,7 @@ export enum TypeOfTask {
   // LABS = 'Labs & Outpatient Services',
   // REHAB = 'Rehab & Home Therapies',
   // TRANSITIONAL = 'Transitional Care',
-  GROOMING = 'Grooming (Bathing/Toileting)',
+  GROOMING = 'Grooming',
   CONVERSATIONS = 'Family Conversations',
   // TRANSPORTATION = 'Transportation',
   // RESPITE = 'Respite',
