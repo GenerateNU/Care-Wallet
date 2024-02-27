@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Pressable,
   ScrollView,
@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 
 import { TaskInfoComponent } from '../components/TaskInfoCard';
-import { getTaskLabels, useFilteredTasks } from '../services/task';
+import { useFilteredTasks } from '../services/task';
 import { Task } from '../types/task';
 
 export default function TaskListScreen() {

@@ -24,11 +24,6 @@ export function AppNavigation() {
   return (
     <AppStack.Navigator>
       <AppStack.Screen
-        name="TaskType"
-        options={{ headerShown: false }}
-        component={TaskType}
-      />
-      <AppStack.Screen
         name="Login"
         options={{ headerShown: true }}
         component={LoginPage}
@@ -37,6 +32,11 @@ export function AppNavigation() {
         name="Main"
         options={{ headerShown: false }}
         component={AppStackBottomTabNavigator}
+      />
+      <AppStack.Screen
+        name="TaskType"
+        options={{ headerShown: false }}
+        component={TaskType}
       />
     </AppStack.Navigator>
   );
