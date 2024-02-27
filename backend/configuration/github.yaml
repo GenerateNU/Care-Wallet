@@ -1,7 +1,0 @@
-database:
-  host: '172.17.0.1'
-  port: 5432
-  username: 'user'
-  password: 'pwd'
-  databasename: 'carewallet'
-  requiressl: false
