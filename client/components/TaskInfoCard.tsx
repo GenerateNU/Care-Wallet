@@ -3,17 +3,21 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-const TaskInfoComponent = ({ name, label, category, type }: 
-  { name: string, label: string, category: string, type: string }) => {
-    return (
-        <View style={styles.container}>
-            <View style={styles.header}>
-                <Text style={styles.taskNumber}>{`Task #${name}`}</Text>
-                <Text style={styles.label}>{label}</Text>
-            </View>
-            <Text style={styles.categoryType}>{`${category} - ${type}`}</Text>
-        </View>
-    );
+const TaskInfoComponent = ({ name, label, category, type, date }: 
+  { name: string, label: string, category: string, type: string, date: Date }) => {
+
+  const formattedStartDate = date ? new Date(date).toLocaleDateString() : 'N/A';
+  
+  return (
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.taskNumber}>{`Task #${name}`}</Text>
+        <Text style={styles.label}>{label}</Text>
+      </View>
+      <Text style={styles.categoryType}>{`${category} | ${type}`}</Text>
+      <Text style={styles.categoryType}>{`${formattedStartDate}`}</Text>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({

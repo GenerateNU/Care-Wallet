@@ -14,21 +14,23 @@ import { getTaskLabels, useFilteredTasks } from '../services/task';
 import { Task } from '../types/task';
 
 export default function TaskListScreen() {
+  const { user, group } = useCareWalletContext();
+
   // Store query parameters in state
   const [queryParams, setQueryParams] = useState({
-    taskType: 'other'
+    groupID: group.groupID?.toString() || '1'
   });
+
   // Store search query in state
   const [searchQuery, setSearchQuery] = useState('');
-
-  // TODO: Query and assign tasks to state
-  const { user, group } = useCareWalletContext();
 
   const [taskLabels, setTaskLabels] = useState<{ [taskId: string]: string[] }>(
     {}
   ); // Store task labels in state
 
-  // Query and assign labels to tasks -> 2D array list containg labels at task id
+  const { tasks, tasksIsLoading } = useFilteredTasks(queryParams);
+
+  // Fetch task labels for each task (2d array list)
   useEffect(() => {
     const fetchTaskLabels = async () => {
       const labels: { [taskId: string]: string[] } = {};
@@ -44,12 +46,11 @@ export default function TaskListScreen() {
       }
       setTaskLabels(labels);
     };
+
     if (tasks) {
       fetchTaskLabels();
     }
-  });
-
-  const { tasks, tasksIsLoading } = useFilteredTasks(queryParams);
+  }, [tasks]);
 
   // Filter tasks based on search query in multiple fields and labels
   const filteredTasks = tasks?.filter((task) => {
@@ -99,8 +100,9 @@ export default function TaskListScreen() {
               key={index}
               name={task?.task_id?.toString() || 'N/A'}
               label={`Label: ${taskLabels[task.task_id.toString()]?.join(', ') || 'N/A'}`}
-              category={`Category: ${task?.notes || 'N/A'}`}
+              category={`Category: ${task?.task_type || 'N/A'}`}
               type={`Task Status: ${task?.task_status || 'N/A'}`}
+              date={task?.start_date ? new Date(task.start_date) : new Date()}
             />
           );
         })}
