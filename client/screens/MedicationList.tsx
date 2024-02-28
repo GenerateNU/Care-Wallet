@@ -8,6 +8,7 @@ import {
   View
 } from 'react-native';
 
+import { useNavigation } from '@react-navigation/native';
 import { clsx } from 'clsx';
 import { Divider } from 'react-native-paper';
 
@@ -15,11 +16,13 @@ import { ClickableCard } from '../components/ClickableCard';
 import { DocPickerButton } from '../components/DocPickerButton';
 import { PopupModal } from '../components/PopupModal';
 import { useCareWalletContext } from '../contexts/CareWalletContext';
+import { AppStackNavigation } from '../navigation/AppNavigation';
 import { useAuth } from '../services/auth';
 import { useMedication } from '../services/medication';
 import { Medication } from '../types/medication';
 
 export default function MedicationList() {
+  const navigator = useNavigation<AppStackNavigation>();
   const [selectedMed, setSelectedMed] = useState<Medication>();
 
   const [newMedState, setNewMedState] = useState({ id: '', name: '' });
@@ -95,11 +98,11 @@ export default function MedicationList() {
       <View className="flex flex-row items-center">
         <DocPickerButton />
         <Pressable
-          onPress={() => setNewMedVisible(true)}
+          onPress={() => navigator.navigate('TaskType')}
           className="mb-2 ml-2 mt-2 self-center rounded-md border border-carewallet-gray pl-1 pr-1"
         >
           <Text className="self-center text-lg text-carewallet-black">
-            Add New Medication
+            Add New Task
           </Text>
         </Pressable>
       </View>
