@@ -12,23 +12,19 @@ import TaskInfoComponent from '../components/TaskInfoCard';
 import { useCareWalletContext } from '../contexts/CareWalletContext';
 import { getTaskLabels, useFilteredTasks } from '../services/task';
 import { Task } from '../types/task';
+import FilterModal from '../components/FilterModal';
 
 export default function TaskListScreen() {
   const { user, group } = useCareWalletContext();
-
-  // Store query parameters in state
   const [queryParams, setQueryParams] = useState({
     groupID: group.groupID?.toString() || '1'
   });
-
-  // Store search query in state
   const [searchQuery, setSearchQuery] = useState('');
-
   const [taskLabels, setTaskLabels] = useState<{ [taskId: string]: string[] }>(
     {}
-  ); // Store task labels in state
-
+  );
   const { tasks, tasksIsLoading } = useFilteredTasks(queryParams);
+  const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
 
   // Fetch task labels for each task (2d array list)
   useEffect(() => {
@@ -120,11 +116,10 @@ export default function TaskListScreen() {
             setSearchQuery(text);
           }}
         />
+           {/* Use the FilterButton component */}
         <Pressable
           style={styles.filterButton}
-          onPress={() => {
-            // no impl
-          }}
+          onPress={() => setIsFilterModalVisible(true)}
         >
           <Text style={styles.filterButtonText}>Filter</Text>
         </Pressable>
@@ -138,6 +133,10 @@ export default function TaskListScreen() {
       {renderSection(inFutureTasks || [], 'Future')}
       {renderSection(completeTasks || [], 'Done')}
       {renderSection(incompleteTasks || [], 'Marked as Incomplete')}
+      <FilterModal
+        isVisible={isFilterModalVisible}
+        onClose={() => setIsFilterModalVisible(false)}
+      />
     </ScrollView>
   );
 }
