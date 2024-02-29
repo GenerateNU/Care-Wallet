@@ -3,8 +3,8 @@ import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { IconButton } from 'react-native-paper';
 
-import BackArrow from '../assets/back-arrow.svg';
-import { AppStackNavigation } from '../navigation/AppNavigation';
+import BackArrow from '../../assets/back-arrow.svg';
+import { AppStackNavigation } from '../../navigation/AppNavigation';
 
 export function BackButton() {
   const navigation = useNavigation<AppStackNavigation>();
