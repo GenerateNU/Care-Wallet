@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Text, TextInput, View } from 'react-native';
 
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -6,13 +6,12 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import CheckMark from '../assets/checkmark.svg';
 import Reject from '../assets/reject.svg';
 import { BackButton } from '../components/BackButton';
-import { getTaskId, getTaskLabel, getTaskType } from '../services/task';
+import { useGetTaskLabel } from '../services/task';
 import { TaskInfo } from '../types/taskInfo';
-import { TaskLabel } from '../types/taskLabel';
 import { Category, categoryToTypeMap, TypeOfTask } from '../types/type';
 
 export default function SingleTaskScreen() {
-  const [taskId] = useState<string>();
+  const [taskId] = useState<string>('1');
 
   const [open, setOpen] = useState(false);
 
@@ -20,8 +19,10 @@ export default function SingleTaskScreen() {
     TypeOfTask.MEDICATION_MANAGEMENT
   );
 
+  const label = useGetTaskLabel(taskId);
+
   // Would extract real information in future and not display default, placeholder info
-  const [taskInfo, setTaskInfo] = useState({
+  const [taskInfo] = useState({
     created_date: '8:00AM',
     task_id: 1,
     task_info: { title: 'Doctors Appointment' },
@@ -29,43 +30,7 @@ export default function SingleTaskScreen() {
       'Description here. Description here. Description here. Description here. Description here. Description here. Description here. Description here. Description here. Description here. Description here.'
   });
 
-  const [taskLabel, setTaskLabel] = useState<TaskLabel>();
-
-  useEffect(() => {
-    if (taskId) {
-      getTaskId(taskId)
-        .then((data) => {
-          const { created_date, task_id, task_type, notes } = data;
-          // Handle cases where task_info and notes might be null or undefined
-          const updatedTaskInfo = {
-            created_date,
-            task_id,
-            task_info: { title: '' },
-            task_type,
-            notes: notes ?? ''
-          };
-          setTaskInfo(updatedTaskInfo);
-        })
-        .catch((error) => console.error('Error fetching task info:', error));
-    }
-  }, [taskId]);
-
-  useEffect(() => {
-    if (taskId) {
-      getTaskLabel(taskId)
-        .then((data) => setTaskLabel(data))
-        .catch((error) => console.error('Error fetching task label:', error));
-    }
-  }, [taskId]);
-
-  useEffect(() => {
-    if (taskId) {
-      getTaskType(taskId)
-        .then((data) => setTaskType(data))
-        .catch((error) => console.error('Error fetching task type:', error));
-    }
-  }, [taskId]);
-
+  // Gets category based on Task Type
   const getCategoryFromTaskType = (
     taskType: TypeOfTask | undefined
   ): Category => {
@@ -120,10 +85,7 @@ export default function SingleTaskScreen() {
         />
       </View>
       <View className="mt-4">
-        <Text className="text-base ">
-          {' '}
-          {taskLabel?.label_name || 'Label Here'}
-        </Text>
+        <Text className="text-base ">{label || 'Label Here'}</Text>
       </View>
       <View className="mt-4">
         <Text className="text-base ">

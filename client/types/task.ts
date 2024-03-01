@@ -1,3 +1,5 @@
+import { TypeOfTask } from './type';
+
 export interface Task {
   task_id: number;
   group_id: number;
@@ -10,6 +12,6 @@ export interface Task {
   repeating_interval?: string | null;
   repeating_end_date?: string | null;
   task_status: string;
-  task_type: string;
+  task_type: TypeOfTask;
   task_info?: JSON | null;
 }
