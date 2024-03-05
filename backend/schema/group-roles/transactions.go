@@ -39,7 +39,7 @@ func GetAllGroupRolesFromDB(pool *pgx.Conn, gid int) ([]models.GroupRole, error)
 		err := rows.Scan(&gr.GroupID, &gr.UserID, &gr.Role)
 
 		if err != nil {
-			print(err, "from transactions err2 ")
+			print(err.Error(), "from transactions err2 ")
 
 			return nil, err
 		}

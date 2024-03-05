@@ -22,6 +22,7 @@ VALUES
 
   -- Care-Wallet Team
   ('fIoFY26mJnYWH8sNdfuVoxpnVnr1', 'Matt', 'McCoy', 'mattcmccoy01@gmail.com', '', ''),
+  ('JamnX6TZf0dt6juozMRzNG5LMQd2', 'Andy', 'Cap', 'caplan.and@northeastern.edu', '', ''),
   ('BLq3MXk4rVg4RKuYiMd7aEmMhsz1', 'Ansh', 'Patel', 'anshrpatel22@gmail.com', '', ''),
   ('mPeo3d3MiXfnpPJADWgFD9ZcB2M2', 'Olivia', 'Sedarski', 'olivia@gmail.com', '', ''),
   ('onrQs8HVGBVMPNz4Fk1uE94bSxg1', 'Danny', 'Rollo', 'dannyrollo4@gmail.com', '', ''),

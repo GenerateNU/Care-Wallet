@@ -13,6 +13,7 @@ export type AppStackParamList = {
   Login: undefined;
   AddNewTask: undefined;
   TaskList: undefined;
+  Profile: undefined;
 };
 
 export type AppStackNavigation = NavigationProp<AppStackParamList>;
