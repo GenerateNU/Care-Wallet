@@ -61,7 +61,7 @@ export const useTask = (userIDs: string[]) => {
       return;
     },
     onError: (err, newTask, context) => {
-      console.error('ERROR: Failed to Add Task...');
+      console.error('ERROR: Failed to Add Task. Code:', err);
       queryClient.setQueryData(['taskList'], context?.previousTasks);
     }
   });

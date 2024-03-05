@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 // Import useNavigation hook
 import {
   ActivityIndicator,
-  FlatList,
   Pressable,
+  ScrollView,
   Text,
   TouchableOpacity,
   View
@@ -65,7 +65,7 @@ export default function TaskList() {
   // Task list
   return (
     <View>
-      <View className="flex flex-row items-center">
+      <View className="flex-column flex items-center">
         <Pressable
           onPress={() => navigation.navigate('AddNewTask')} // Navigate to AddNewTask screen
           className="mb-2 ml-2 mt-2 self-center rounded-md border border-carewallet-gray pl-1 pr-1"
@@ -75,10 +75,9 @@ export default function TaskList() {
           </Text>
         </Pressable>
       </View>
-      <FlatList
-        data={tasks}
-        renderItem={({ item }) => (
-          <TouchableOpacity>
+      <ScrollView style={{ maxHeight: 300 }}>
+        {tasks.map((item) => (
+          <TouchableOpacity key={item.task_id}>
             <View
               style={{
                 padding: 15,
@@ -95,9 +94,8 @@ export default function TaskList() {
               <Text>Task Type: {item.task_type}</Text>
             </View>
           </TouchableOpacity>
-        )}
-        keyExtractor={(item) => item.task_id.toString()}
-      />
+        ))}
+      </ScrollView>
     </View>
   );
 }

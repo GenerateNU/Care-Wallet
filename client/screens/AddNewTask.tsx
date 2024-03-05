@@ -47,68 +47,83 @@ export default function AddNewTask() {
   const [modalVisible, setModalVisible] = useState(false);
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <PopupModal isVisible={modalVisible} setVisible={setModalVisible}>
-        <ActivityIndicator size="large" />
-        <Text>Adding Task...</Text>
-      </PopupModal>
-      <Text style={{ fontSize: 24, marginBottom: 10 }}>Add New Task</Text>
-      <View style={{ marginBottom: 10 }}>
-        <Text>Task ID:</Text>
-        <TextInput
+    <View style={{ flex: 1, position: 'relative' }}>
+      <View style={{ position: 'absolute', top: '10%', left: 0, right: 0 }}>
+        <PopupModal isVisible={modalVisible} setVisible={setModalVisible}>
+          <ActivityIndicator size="large" />
+          <Text>Adding Task...</Text>
+        </PopupModal>
+        <Text
           style={{
-            borderWidth: 1,
-            borderColor: 'gray',
-            padding: 5,
-            fontSize: 18
+            color: '#000',
+            textAlign: 'center',
+            fontFamily: 'Inter',
+            fontSize: 24,
+            fontStyle: 'normal',
+            fontWeight: '700',
+            lineHeight: 'normal'
           }}
-          onChangeText={(val) =>
-            setNewTaskState({ ...newTaskState, task_id: parseInt(val) || 0 })
-          }
-          keyboardType="numeric"
-        />
-      </View>
-      <View style={{ marginBottom: 10 }}>
-        <Text>Group ID:</Text>
-        <TextInput
+        >
+          Add New Task
+        </Text>
+
+        <View style={{ marginBottom: 10 }}>
+          <Text>Task ID:</Text>
+          <TextInput
+            style={{
+              borderWidth: 1,
+              borderColor: 'gray',
+              padding: 5,
+              fontSize: 18
+            }}
+            onChangeText={(val) =>
+              setNewTaskState({ ...newTaskState, task_id: parseInt(val) || 0 })
+            }
+            keyboardType="numeric"
+          />
+        </View>
+        <View style={{ marginBottom: 10 }}>
+          <Text>Group ID:</Text>
+          <TextInput
+            style={{
+              borderWidth: 1,
+              borderColor: 'gray',
+              padding: 5,
+              fontSize: 18
+            }}
+            onChangeText={(val) =>
+              setNewTaskState({ ...newTaskState, group_id: parseInt(val) || 0 })
+            }
+            keyboardType="numeric"
+          />
+        </View>
+        <View style={{ marginBottom: 10 }}>
+          <Text>Created By:</Text>
+          <TextInput
+            style={{
+              borderWidth: 1,
+              borderColor: 'gray',
+              padding: 5,
+              fontSize: 18
+            }}
+            onChangeText={(val) =>
+              setNewTaskState({ ...newTaskState, created_by: val })
+            }
+          />
+        </View>
+        {/* Add input fields for other task fields (start_date, end_date, notes, task_status, task_type) similarly */}
+        <Pressable
+          onPress={handleAddTask}
           style={{
-            borderWidth: 1,
-            borderColor: 'gray',
-            padding: 5,
-            fontSize: 18
+            backgroundColor: '#007bff',
+            padding: 10,
+            borderRadius: 5,
+            alignItems: 'center'
           }}
-          onChangeText={(val) =>
-            setNewTaskState({ ...newTaskState, group_id: parseInt(val) || 0 })
-          }
-          keyboardType="numeric"
-        />
+        >
+          <Text style={{ color: 'white', fontSize: 18 }}>Add Task</Text>
+        </Pressable>
       </View>
-      <View style={{ marginBottom: 10 }}>
-        <Text>Created By:</Text>
-        <TextInput
-          style={{
-            borderWidth: 1,
-            borderColor: 'gray',
-            padding: 5,
-            fontSize: 18
-          }}
-          onChangeText={(val) =>
-            setNewTaskState({ ...newTaskState, created_by: val })
-          }
-        />
-      </View>
-      {/* Add input fields for other task fields (start_date, end_date, notes, task_status, task_type) similarly */}
-      <Pressable
-        onPress={handleAddTask}
-        style={{
-          backgroundColor: '#007bff',
-          padding: 10,
-          borderRadius: 5,
-          alignItems: 'center'
-        }}
-      >
-        <Text style={{ color: 'white', fontSize: 18 }}>Add Task</Text>
-      </Pressable>
     </View>
   );
 }
