@@ -23,6 +23,7 @@ func TaskGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 		tasks.GET("/filtered", c.GetFilteredTasks)
 		tasks.GET("/assigned", c.GetTasksByAssignedUsers)
 		tasks.POST("", c.CreateTask)
+<<<<<<< Updated upstream
 
 		byId := tasks.Group("/:tid")
 		{
@@ -33,6 +34,11 @@ func TaskGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 			byId.POST("/assign", c.AssignUsersToTask)
 			byId.DELETE("/remove", c.RemoveUsersFromTask)
 		}
+=======
+		tasks.DELETE("/:tid", c.DeleteTask)
+		tasks.PUT("/:tid/info", c.UpdateTaskInfo)
+		tasks.GET("/:tid/assigned-users", c.GetUsersAssignedToTask)
+>>>>>>> Stashed changes
 	}
 	return tasks
 }

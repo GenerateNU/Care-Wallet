@@ -29,5 +29,8 @@ VALUES
   ('8Sy7xBkGiGQv4ZKphcQfY8PxAqw1', 'Narayan', 'Sharma', 'sharma.na@northeastern.edu', '', ''),
   ('iL7PnjS4axQffmlPceobjUUZ9DF2', 'Caitlin', 'Flynn', 'flynn.ca@northeastern.edu', '', ''),
   ('5JgN2PQxCRM9VoCiiFPlQPNqkL32', 'Linwood', 'Blaisdell', 'blaisdell.l@northeastern.edu', '', '')
+  ('9rIMSUo6qNf8ToTABkCfNqnByRv1', 'Haley', 'Martin', 'martin.hal@northeastern.edu', '', '')
+
+
   -- End Care-Wallet Team
 ;

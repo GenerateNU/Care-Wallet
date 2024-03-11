@@ -19,7 +19,7 @@ import { getDate, timelineEvents } from './timelineEvents';
 
 const INITIAL_TIME = { hour: 9, minutes: 0 };
 const EVENTS: TimelineEventProps[] = timelineEvents;
-export default class TimelineCalendarScreen extends Component {
+export default function TimelineCalendarScreen {
   state = {
     currentDate: getDate(),
     events: EVENTS,
@@ -36,7 +36,9 @@ export default class TimelineCalendarScreen extends Component {
     [`${getDate(1)}`]: { marked: true },
     [`${getDate(2)}`]: { marked: true },
     [`${getDate(4)}`]: { marked: true }
-  };
+  }; // what dates have event under them and which ones do not
+    // could be a useeffect... extract date from a task and filter which ones have tasks...
+
 
   onDateChanged = (date: string, source: string) => {
     console.log('TimelineCalendarScreen onDateChanged: ', date, source);
@@ -146,7 +148,7 @@ export default class TimelineCalendarScreen extends Component {
     return (
       <CalendarProvider
         date={currentDate}
-        onDateChanged={this.onDateChanged}
+        onDateChanged={onDateChanged}
         onMonthChange={this.onMonthChange}
         showTodayButton
         disabledOpacity={0.6}
