@@ -8,11 +8,11 @@ import {
   View
 } from 'react-native';
 
+import FilterModal from '../components/FilterModal';
 import TaskInfoComponent from '../components/TaskInfoCard';
 import { useCareWalletContext } from '../contexts/CareWalletContext';
 import { getTaskLabels, useFilteredTasks } from '../services/task';
 import { Task } from '../types/task';
-import FilterModal from '../components/FilterModal';
 
 export default function TaskListScreen() {
   const { user, group } = useCareWalletContext();
@@ -86,6 +86,7 @@ export default function TaskListScreen() {
     (task) => task?.task_status === 'INCOMPLETE'
   );
 
+  // Abstraction to render each section
   const renderSection = (tasks: Task[], title: string) => {
     return (
       <View>
@@ -116,7 +117,6 @@ export default function TaskListScreen() {
             setSearchQuery(text);
           }}
         />
-           {/* Use the FilterButton component */}
         <Pressable
           style={styles.filterButton}
           onPress={() => setIsFilterModalVisible(true)}
@@ -141,6 +141,7 @@ export default function TaskListScreen() {
   );
 }
 
+// TODO: Migrate this to tailwind
 const styles = StyleSheet.create({
   container: {
     padding: 20
