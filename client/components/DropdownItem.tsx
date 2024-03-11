@@ -6,7 +6,6 @@ const DropdownItem = ({ label }: { label: string }) => {
     return (
         <View style={styles.container}>
             <Text style={styles.dropdownLabel}>{label}</Text>
-            <View style={styles.line}></View>
         </View>
     );
 };
