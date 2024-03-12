@@ -10,6 +10,7 @@ import User from '../assets/bottom-nav/user.svg';
 import MedicationList from '../screens/MedicationList';
 import Profile from '../screens/Profile';
 import TaskList from '../screens/TaskList';
+import { TaskType } from '../screens/TaskType';
 
 const AppStackBottomTab = createBottomTabNavigator();
 
@@ -46,7 +47,7 @@ export function AppStackBottomTabNavigator() {
           tabBarIcon: ({ color }) => <Bell color={color} />,
           tabBarLabel: () => <Text></Text>
         }}
-        component={MedicationList}
+        component={TaskType}
       />
       <AppStackBottomTab.Screen
         name="Profile"

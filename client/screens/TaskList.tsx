@@ -1,4 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
 import {
   Pressable,
   ScrollView,
@@ -8,8 +14,15 @@ import {
   View
 } from 'react-native';
 
-import FilterModal from '../components/FilterModal';
+// Modal imports
+import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
+import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
+import DropDownPicker from 'react-native-dropdown-picker';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { Button } from 'react-native-paper';
+
 import TaskInfoComponent from '../components/TaskInfoCard';
+import { CloseButton } from '../components/TaskType/CloseButton';
 import { useCareWalletContext } from '../contexts/CareWalletContext';
 import { getTaskLabels, useFilteredTasks } from '../services/task';
 import { Task } from '../types/task';
@@ -24,7 +37,33 @@ export default function TaskListScreen() {
     {}
   );
   const { tasks, tasksIsLoading } = useFilteredTasks(queryParams);
-  const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
+
+  // Filter button (olivia goated)
+  const snapToIndex = (index: number) =>
+    bottomSheetRef.current?.snapToIndex(index);
+  const [open, setOpen] = useState(false);
+  const [selectedLabel, setSelectedLabel] = useState<null | string>('Test');
+  const filters = Object.values(taskLabels || {}).map((filter) => ({
+    label: filter[0],
+    value: filter[0]
+  }));
+  const snapPoints = useMemo(() => ['60%'], []);
+  const bottomSheetRef = useRef<BottomSheet>(null);
+  const closeBottomSheet = () => {
+    if (bottomSheetRef.current) {
+      bottomSheetRef.current.close(); // Close the BottomSheet
+    }
+  };
+  const renderBackdrop = useCallback(
+    (props: BottomSheetDefaultBackdropProps) => (
+      <BottomSheetBackdrop
+        appearsOnIndex={0}
+        disappearsOnIndex={-1}
+        {...props}
+      />
+    ),
+    []
+  );
 
   // Fetch task labels for each task (2d array list)
   useEffect(() => {
@@ -97,8 +136,8 @@ export default function TaskListScreen() {
               key={index}
               name={task?.task_id?.toString() || 'N/A'}
               label={`Label: ${taskLabels[task.task_id.toString()]?.join(', ') || 'N/A'}`}
-              category={`Category: ${task?.task_type || 'N/A'}`}
-              type={`Task Status: ${task?.task_status || 'N/A'}`}
+              category={`Category: ${task?.task_type || ''}`}
+              type={`Task Status: ${task?.task_status || ''}`}
               date={task?.start_date ? new Date(task.start_date) : new Date()}
             />
           );
@@ -108,36 +147,69 @@ export default function TaskListScreen() {
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.searchContainer}>
-        <TextInput
-          style={styles.searchInput}
-          placeholder="Search..."
-          onChangeText={(text) => {
-            setSearchQuery(text);
-          }}
-        />
-        <Pressable
-          style={styles.filterButton}
-          onPress={() => setIsFilterModalVisible(true)}
+    <GestureHandlerRootView>
+      <ScrollView style={styles.container}>
+        <View style={styles.searchContainer}>
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Search..."
+            onChangeText={(text) => {
+              setSearchQuery(text);
+            }}
+          />
+          <View className="mr-2 flex flex-row justify-end">
+            <Button
+              className="h-[40px] items-center justify-center rounded-xl text-sm"
+              textColor="black"
+              mode="outlined"
+              onPress={() => snapToIndex(0)}
+            >
+              Filter
+            </Button>
+          </View>
+        </View>
+        <Text className="text-xl font-bold text-carewallet-black">
+          Task List (all tasks of all time)
+        </Text>
+        {renderSection(filteredTasks || [], 'All Tasks')}
+        {renderSection(pastDueTasks || [], 'Past Due')}
+        {renderSection(inProgressTasks || [], 'In Progress')}
+        {renderSection(inFutureTasks || [], 'Future')}
+        {renderSection(completeTasks || [], 'Done')}
+        {renderSection(incompleteTasks || [], 'Marked as Incomplete')}
+        <BottomSheet
+          ref={bottomSheetRef}
+          index={0}
+          snapPoints={snapPoints}
+          enablePanDownToClose={true}
+          backdropComponent={renderBackdrop}
         >
-          <Text style={styles.filterButtonText}>Filter</Text>
-        </Pressable>
-      </View>
-      <Text className="text-xl font-bold text-carewallet-black">
-        Task List (all tasks of all time)
-      </Text>
-      {renderSection(filteredTasks || [], 'All Tasks')}
-      {renderSection(pastDueTasks || [], 'Past Due')}
-      {renderSection(inProgressTasks || [], 'In Progress')}
-      {renderSection(inFutureTasks || [], 'Future')}
-      {renderSection(completeTasks || [], 'Done')}
-      {renderSection(incompleteTasks || [], 'Marked as Incomplete')}
-      <FilterModal
-        isVisible={isFilterModalVisible}
-        onClose={() => setIsFilterModalVisible(false)}
-      />
-    </ScrollView>
+          <View>
+            <View className="flex flex-row justify-between">
+              <Text className="m-5 text-2xl font-bold">Filter</Text>
+              <CloseButton onPress={closeBottomSheet} />
+            </View>
+
+            <DropDownPicker
+              open={open}
+              value={selectedLabel}
+              items={filters}
+              setOpen={setOpen}
+              setValue={setSelectedLabel}
+              placeholder="Labels"
+              style={{
+                width: '95%',
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                borderRadius: 0,
+                borderColor: 'transparent',
+                borderBottomColor: 'black'
+              }}
+            />
+          </View>
+        </BottomSheet>
+      </ScrollView>
+    </GestureHandlerRootView>
   );
 }
 

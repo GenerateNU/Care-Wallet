@@ -99,7 +99,7 @@ export function TaskType() {
               className="m-2 h-[50px] items-center justify-center rounded-xl"
               textColor="black"
               mode="outlined"
-              onPress={() => navigation.navigate('New ' + item + 'Task')}
+              // onPress={() => navigation.navigate('New')}
             >
               {item}
             </Button>
