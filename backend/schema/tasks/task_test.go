@@ -236,8 +236,6 @@ func TestTaskGroup(t *testing.T) {
 			},
 		}
 
-		fmt.Println("Expected: ", expectedTasks)
-		fmt.Println("Response: ", responseTasks)
 		if !reflect.DeepEqual(expectedTasks, responseTasks) {
 			t.Error("Result was not correct")
 		}
