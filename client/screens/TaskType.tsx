@@ -16,9 +16,9 @@ import { Button, Text } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { BackButton } from '../components/TaskType/BackButton';
+import { CloseButton } from '../components/TaskType/CloseButton';
 import { AppStackNavigation } from '../navigation/AppNavigation';
 import { Category, categoryToTypeMap, TypeOfTask } from '../types/type';
-import { CloseButton } from '../components/TaskType/CloseButton';
 
 export function TaskType() {
   const navigation = useNavigation<AppStackNavigation>();
@@ -49,9 +49,9 @@ export function TaskType() {
   const bottomSheetRef = useRef<BottomSheet>(null);
 
   const closeBottomSheet = () => {
-      if (bottomSheetRef.current) {
-          bottomSheetRef.current.close(); // Close the BottomSheet
-      }
+    if (bottomSheetRef.current) {
+      bottomSheetRef.current.close(); // Close the BottomSheet
+    }
   };
 
   const snapToIndex = (index: number) =>
@@ -91,23 +91,21 @@ export function TaskType() {
           </Button>
         </View>
 
-          <FlatList
-            className="h-full"
-            data={selectedTypes}
-            renderItem={
-              ({ item }) => (
-                <Button
-                  className="m-2 h-[50px] items-center justify-center rounded-xl"
-                  textColor="black"
-                  mode="outlined"
-                  onPress={() => navigation.navigate('New ' + item + "Task")}
-                >
-                  {item}
-                </Button>
-              )
-            }
-          />
-        
+        <FlatList
+          className="h-full"
+          data={selectedTypes}
+          renderItem={({ item }) => (
+            <Button
+              className="m-2 h-[50px] items-center justify-center rounded-xl"
+              textColor="black"
+              mode="outlined"
+              onPress={() => navigation.navigate('New ' + item + 'Task')}
+            >
+              {item}
+            </Button>
+          )}
+        />
+
         <BottomSheet
           ref={bottomSheetRef}
           index={0}
@@ -118,9 +116,9 @@ export function TaskType() {
           <View>
             <View className="flex flex-row justify-between">
               <Text className="m-5 text-2xl font-bold">Filter</Text>
-              <CloseButton onPress={closeBottomSheet}/>
+              <CloseButton onPress={closeBottomSheet} />
             </View>
-            
+
             <DropDownPicker
               open={open}
               value={selectedCategory}
