@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState
 } from 'react';
-import { ScrollView, View } from 'react-native';
+import { FlatList, View } from 'react-native';
 
 import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
 import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
@@ -18,6 +18,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { BackButton } from '../components/TaskType/BackButton';
 import { AppStackNavigation } from '../navigation/AppNavigation';
 import { Category, categoryToTypeMap, TypeOfTask } from '../types/type';
+import { CloseButton } from '../components/TaskType/CloseButton';
 
 export function TaskType() {
   const navigation = useNavigation<AppStackNavigation>();
@@ -43,9 +44,15 @@ export function TaskType() {
     value: filter
   }));
 
-  const snapPoints = useMemo(() => ['50%'], []);
+  const snapPoints = useMemo(() => ['60%'], []);
 
   const bottomSheetRef = useRef<BottomSheet>(null);
+
+  const closeBottomSheet = () => {
+      if (bottomSheetRef.current) {
+          bottomSheetRef.current.close(); // Close the BottomSheet
+      }
+  };
 
   const snapToIndex = (index: number) =>
     bottomSheetRef.current?.snapToIndex(index);
@@ -84,19 +91,23 @@ export function TaskType() {
           </Button>
         </View>
 
-        <ScrollView style={{ height: 850 }}>
-          {selectedTypes.map((type) => (
-            <Button
-              className="m-2 h-[50px] items-center justify-center rounded-xl"
-              textColor="black"
-              key={type}
-              mode="outlined"
-              onPress={() => navigation.navigate('New ' + type)} // TODO other screens should have this name
-            >
-              {type}
-            </Button>
-          ))}
-        </ScrollView>
+          <FlatList
+            className="h-full"
+            data={selectedTypes}
+            renderItem={
+              ({ item }) => (
+                <Button
+                  className="m-2 h-[50px] items-center justify-center rounded-xl"
+                  textColor="black"
+                  mode="outlined"
+                  onPress={() => navigation.navigate('New ' + item + "Task")}
+                >
+                  {item}
+                </Button>
+              )
+            }
+          />
+        
         <BottomSheet
           ref={bottomSheetRef}
           index={0}
@@ -105,7 +116,11 @@ export function TaskType() {
           backdropComponent={renderBackdrop}
         >
           <View>
-            <Text className="m-5 text-2xl font-bold">Filter</Text>
+            <View className="flex flex-row justify-between">
+              <Text className="m-5 text-2xl font-bold">Filter</Text>
+              <CloseButton onPress={closeBottomSheet}/>
+            </View>
+            
             <DropDownPicker
               open={open}
               value={selectedCategory}
