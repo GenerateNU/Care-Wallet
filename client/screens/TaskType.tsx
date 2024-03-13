@@ -5,9 +5,12 @@ import React, {
   useRef,
   useState
 } from 'react';
-import { FlatList, View } from 'react-native';
+import { FlatList, Pressable, View } from 'react-native';
 
-import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
+import BottomSheet, {
+  BottomSheetBackdrop,
+  TouchableOpacity
+} from '@gorhom/bottom-sheet';
 import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
 import { useNavigation } from '@react-navigation/native';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -95,20 +98,24 @@ export function TaskType() {
           className="h-full"
           data={selectedTypes}
           renderItem={({ item }) => (
-            <Button
-              className="m-2 h-[50px] items-center justify-center rounded-xl"
-              textColor="black"
-              mode="outlined"
-              onPress={() => navigation.navigate('New ' + item + 'Task')}
+            <TouchableOpacity
+              className="m-2 h-[50px] overflow-hidden rounded-xl"
+              onPress={() => navigation.navigate('New ' + item + ' Task')}
             >
-              {item}
-            </Button>
+              <Button
+                className="m-2 h-[50px] items-center justify-center rounded-xl"
+                textColor="black"
+                mode="outlined"
+              >
+                {item}
+              </Button>
+            </TouchableOpacity>
           )}
         />
 
         <BottomSheet
           ref={bottomSheetRef}
-          index={0}
+          index={-1}
           snapPoints={snapPoints}
           enablePanDownToClose={true}
           backdropComponent={renderBackdrop}
