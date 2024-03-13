@@ -6,9 +6,7 @@ import React, {
   useState
 } from 'react';
 import {
-  Pressable,
   ScrollView,
-  StyleSheet,
   Text,
   TextInput,
   View
@@ -28,15 +26,15 @@ import { getTaskLabels, useFilteredTasks } from '../services/task';
 import { Task } from '../types/task';
 
 export default function TaskListScreen() {
-  const { user, group } = useCareWalletContext();
-  const [queryParams, setQueryParams] = useState({
+  const { group } = useCareWalletContext();
+  const [queryParams ] = useState({
     groupID: group.groupID?.toString() || '1'
   });
   const [searchQuery, setSearchQuery] = useState('');
   const [taskLabels, setTaskLabels] = useState<{ [taskId: string]: string[] }>(
     {}
   );
-  const { tasks, tasksIsLoading } = useFilteredTasks(queryParams);
+  const { tasks } = useFilteredTasks(queryParams);
 
   // Filter button (olivia goated)
   const snapToIndex = (index: number) =>
@@ -148,10 +146,10 @@ export default function TaskListScreen() {
 
   return (
     <GestureHandlerRootView>
-      <ScrollView style={styles.container}>
-        <View style={styles.searchContainer}>
+      <ScrollView className="flex w-[100vw] pt-4 pr-2 pl-2">
+        <View className="flex-row items-center mb-5">
           <TextInput
-            style={styles.searchInput}
+            className="flex-1 h-10 border-carewallet-gray border-2 rounded-full mr-4 px-2 overflow-hidden"
             placeholder="Search..."
             onChangeText={(text) => {
               setSearchQuery(text);
@@ -177,7 +175,8 @@ export default function TaskListScreen() {
         {renderSection(inFutureTasks || [], 'Future')}
         {renderSection(completeTasks || [], 'Done')}
         {renderSection(incompleteTasks || [], 'Marked as Incomplete')}
-        <BottomSheet
+      </ScrollView>
+      <BottomSheet
           ref={bottomSheetRef}
           index={0}
           snapPoints={snapPoints}
@@ -208,37 +207,6 @@ export default function TaskListScreen() {
             />
           </View>
         </BottomSheet>
-      </ScrollView>
     </GestureHandlerRootView>
   );
 }
-
-// TODO: Migrate this to tailwind
-const styles = StyleSheet.create({
-  container: {
-    padding: 20
-  },
-  searchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10
-  },
-  searchInput: {
-    flex: 1,
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    borderRadius: 20,
-    marginRight: 10,
-    padding: 8,
-    overflow: 'hidden'
-  },
-  filterButton: {
-    backgroundColor: 'gray',
-    borderRadius: 5,
-    padding: 8
-  },
-  filterButtonText: {
-    color: 'white'
-  }
-});
