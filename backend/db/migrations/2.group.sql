@@ -49,6 +49,7 @@ VALUES
   (5, 'mPeo3d3MiXfnpPJADWgFD9ZcB2M2', 'SECONDARY'),
   (5, 'onrQs8HVGBVMPNz4Fk1uE94bSxg1', 'SECONDARY'),
   (5, '8Sy7xBkGiGQv4ZKphcQfY8PxAqw1', 'SECONDARY'),
-  (5, 'iL7PnjS4axQffmlPceobjUUZ9DF2', 'SECONDARY')
+  (5, 'iL7PnjS4axQffmlPceobjUUZ9DF2', 'SECONDARY'),
+  (5, 'P03ggWcw63N0RSY7ltbkeBoR6bd2', 'SECONDARY')
   -- End Care-Wallet Team
 ;
