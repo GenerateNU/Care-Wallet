@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState
 } from 'react';
-import { FlatList, Pressable, View } from 'react-native';
+import { FlatList, View } from 'react-native';
 
 import BottomSheet, {
   BottomSheetBackdrop,
@@ -14,9 +14,8 @@ import BottomSheet, {
 import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
 import { useNavigation } from '@react-navigation/native';
 import DropDownPicker from 'react-native-dropdown-picker';
-import { Gesture, GestureHandlerRootView } from 'react-native-gesture-handler';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Button, Text } from 'react-native-paper';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { BackButton } from '../components/TaskType/BackButton';
 import { CloseButton } from '../components/TaskType/CloseButton';
