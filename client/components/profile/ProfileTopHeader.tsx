@@ -1,11 +1,15 @@
 import React from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
+import { useNavigation } from '@react-navigation/native';
+import { IconButton } from 'react-native-paper';
+
+import { AppStackNavigation } from '../../navigation/AppNavigation';
 import { User } from '../../types/user';
 
 interface ProfileTopHeaderProps {
   user: User;
-  onTouchEndLeft?: () => void;
+  onTouchEndLeft?: AppStackNavigation;
   leftButtonText?: JSX.Element | string;
   onTouchEndRight?: () => void;
   rightButtonText?: JSX.Element | string;
@@ -13,27 +17,29 @@ interface ProfileTopHeaderProps {
 
 export function ProfileTopHeader({
   user,
-  onTouchEndLeft,
   leftButtonText,
-  onTouchEndRight,
   rightButtonText
 }: ProfileTopHeaderProps) {
+  const navigation = useNavigation<AppStackNavigation>();
   return (
-    <View className="flex w-full flex-row items-center justify-center">
-      <Pressable className="ml-5 mr-auto" onTouchEnd={() => onTouchEndLeft}>
-        <View className="my-auto mt-14 h-10 w-10 items-center justify-center self-start rounded-lg bg-carewallet-white">
-          {leftButtonText}
-        </View>
-      </Pressable>
-      <Text className="mt-14 w-full flex-wrap text-center text-3xl font-semibold text-carewallet-white">
+    <View className="flex flex-row">
+      {leftButtonText && (
+        <IconButton
+          className="absolute mt-14 flex h-[40px] self-start rounded-xl bg-carewallet-gray"
+          mode="contained"
+          icon={() => leftButtonText}
+          onPress={() => navigation.goBack()}
+        />
+      )}
+      <Text className="mx-auto mt-14 flex-wrap self-center text-center text-3xl font-semibold text-carewallet-white">
         {user.first_name} {user.last_name}
       </Text>
       {rightButtonText && (
-        <Pressable className="ml-auto mr-5" onTouchEnd={onTouchEndRight}>
-          <View className="mt-14 h-10 w-10 items-center justify-center self-start rounded-lg bg-carewallet-white">
-            {rightButtonText}
-          </View>
-        </Pressable>
+        <IconButton
+          className="absolute right-0 mr-2 mt-14 flex h-[40px] self-start rounded-xl bg-carewallet-gray"
+          mode="contained"
+          icon={() => rightButtonText}
+        />
       )}
     </View>
   );

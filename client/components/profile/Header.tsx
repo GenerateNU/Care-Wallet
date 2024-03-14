@@ -34,16 +34,11 @@ export function Header({ user, role }: HeaderProps) {
           signedInUser.userID !== user.user_id ? (
             <ProfileTopHeader
               user={user}
-              onTouchEndLeft={navigate.goBack}
+              onTouchEndLeft={navigate}
               leftButtonText={<ArrowLeft />}
             />
           ) : (
-            <ProfileTopHeader
-              user={user}
-              onTouchEndLeft={navigate.goBack}
-              leftButtonText={<ArrowLeft />}
-              rightButtonText={<Edit />}
-            />
+            <ProfileTopHeader user={user} rightButtonText={<Edit />} />
           )}
           <Text className="items-center justify-center text-center text-xl  text-carewallet-white">
             {`${role?.role.charAt(0)}${role?.role.slice(1).toLowerCase()} ${role?.role !== Role.PATIENT ? 'Caretaker' : ''}`}

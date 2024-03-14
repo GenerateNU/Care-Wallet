@@ -2,7 +2,6 @@ import React from 'react';
 import { Text } from 'react-native';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import Bell from '../assets/bottom-nav/bell.svg';
 import Calendar from '../assets/bottom-nav/calendar.svg';
@@ -11,9 +10,9 @@ import User from '../assets/bottom-nav/user.svg';
 import MedicationList from '../screens/MedicationList';
 import PatientView from '../screens/Profile/PatientView';
 import Profile from '../screens/Profile/Profile';
-import { AppStackParamList } from './AppNavigation';
+import { AppStack, AppStackParamList } from './AppNavigation';
 
-const AppStackBottomTab = createBottomTabNavigator();
+const AppStackBottomTab = createBottomTabNavigator<AppStackParamList>();
 
 export function AppStackBottomTabNavigator() {
   return (
@@ -22,7 +21,6 @@ export function AppStackBottomTabNavigator() {
         tabBarActiveTintColor: 'black',
         tabBarInactiveTintColor: 'gray'
       }}
-      backBehavior="history"
     >
       <AppStackBottomTab.Screen
         name="Landing"
@@ -63,8 +61,6 @@ export function AppStackBottomTabNavigator() {
     </AppStackBottomTab.Navigator>
   );
 }
-
-const AppStack = createNativeStackNavigator<AppStackParamList>();
 
 export function AppNavigation() {
   return (

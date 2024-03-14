@@ -12,11 +12,15 @@ export type AppStackParamList = {
   Login: undefined;
   Profile: undefined;
   PatientView: undefined;
+  ProfileScreens: undefined;
+  Landing: undefined;
+  Calendar: undefined;
+  Notifications: undefined;
 };
 
 export type AppStackNavigation = NavigationProp<AppStackParamList>;
 
-const AppStack = createNativeStackNavigator<AppStackParamList>();
+export const AppStack = createNativeStackNavigator<AppStackParamList>();
 
 export function AppNavigation() {
   return (
