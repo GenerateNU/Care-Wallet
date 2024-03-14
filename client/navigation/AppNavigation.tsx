@@ -11,6 +11,7 @@ export type AppStackParamList = {
   Home: undefined;
   Login: undefined;
   Profile: undefined;
+  PatientView: undefined;
 };
 
 export type AppStackNavigation = NavigationProp<AppStackParamList>;

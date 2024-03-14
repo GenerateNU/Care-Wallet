@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
 import { ActivityIndicator, Text, View } from 'react-native';
 
-import { CircleCard } from '../components/profile/CircleCard';
-import { Group } from '../components/profile/Group';
-import { Header } from '../components/profile/Header';
-import { useCareWalletContext } from '../contexts/CareWalletContext';
-import { useAuth } from '../services/auth';
-import { useGroup } from '../services/group';
-import { useUsers } from '../services/user';
+import { useNavigation } from '@react-navigation/native';
+
+import { CircleCard } from '../../components/profile/CircleCard';
+import { Group } from '../../components/profile/Group';
+import { Header } from '../../components/profile/Header';
+import { useCareWalletContext } from '../../contexts/CareWalletContext';
+import { AppStackNavigation } from '../../navigation/AppNavigation';
+import { useAuth } from '../../services/auth';
+import { useGroup } from '../../services/group';
+import { useUsers } from '../../services/user';
 
 export default function Profile() {
+  const navigation = useNavigation<AppStackNavigation>();
   const { user: signedInUser, group } = useCareWalletContext();
   const [activeUser, setActiveUser] = useState(signedInUser.userID);
   const { roles, rolesAreLoading } = useGroup(group.groupID);
@@ -61,7 +65,10 @@ export default function Profile() {
         </View>
       </View>
       <View className="mb-5 items-center">
-        <CircleCard ButtonText="View Patient Information" />
+        <CircleCard
+          ButtonText="View Patient Information"
+          onTouchEnd={() => navigation.navigate('PatientView')}
+        />
       </View>
       <View className="mb-auto flex-1 items-center">
         <CircleCard ButtonText="Settings" />

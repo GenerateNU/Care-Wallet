@@ -2,13 +2,16 @@ import React from 'react';
 import { Text } from 'react-native';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import Bell from '../assets/bottom-nav/bell.svg';
 import Calendar from '../assets/bottom-nav/calendar.svg';
 import Home from '../assets/bottom-nav/home.svg';
 import User from '../assets/bottom-nav/user.svg';
 import MedicationList from '../screens/MedicationList';
-import Profile from '../screens/Profile';
+import PatientView from '../screens/Profile/PatientView';
+import Profile from '../screens/Profile/Profile';
+import { AppStackParamList } from './AppNavigation';
 
 const AppStackBottomTab = createBottomTabNavigator();
 
@@ -19,6 +22,7 @@ export function AppStackBottomTabNavigator() {
         tabBarActiveTintColor: 'black',
         tabBarInactiveTintColor: 'gray'
       }}
+      backBehavior="history"
     >
       <AppStackBottomTab.Screen
         name="Landing"
@@ -48,14 +52,33 @@ export function AppStackBottomTabNavigator() {
         component={MedicationList}
       />
       <AppStackBottomTab.Screen
-        name="Profile"
+        name="ProfileScreens"
         options={{
           headerShown: false,
           tabBarIcon: ({ color }) => <User color={color} />,
           tabBarLabel: () => <Text></Text>
         }}
-        component={Profile}
+        component={AppNavigation}
       />
     </AppStackBottomTab.Navigator>
+  );
+}
+
+const AppStack = createNativeStackNavigator<AppStackParamList>();
+
+export function AppNavigation() {
+  return (
+    <AppStack.Navigator>
+      <AppStack.Screen
+        name="Profile"
+        options={{ headerShown: false }}
+        component={Profile}
+      />
+      <AppStack.Screen
+        name="PatientView"
+        options={{ headerShown: false }}
+        component={PatientView}
+      />
+    </AppStack.Navigator>
   );
 }
