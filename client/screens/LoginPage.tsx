@@ -11,6 +11,8 @@ import Constants from 'expo-constants';
 import {
   registerForPushNotificationsAsync,
 } from '../services/notifications';
+import { AppStackNavigation } from '../navigation/AppNavigation';
+import { useAuth } from '../services/auth';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -26,6 +28,9 @@ export default function LoginPage() {
     registerForPushNotificationsAsync().then((token) =>
       setExpoPushToken(token!)
     );, []);
+
+
+  const navigation = useNavigation<AppStackNavigation>();
 
   onAuthStateChanged(auth, (user) => {
     if (user) {

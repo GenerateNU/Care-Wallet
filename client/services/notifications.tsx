@@ -1,9 +1,10 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Platform } from 'react-native';
+
 import { useNavigation, useRoute } from '@react-navigation/native';
+import Constants from 'expo-constants';
 import * as Device from 'expo-device';
 import * as Notification from 'expo-notifications';
-import Constants from 'expo-constants';
 import {
   DailyTriggerInput,
   NotificationTriggerInput,
@@ -11,6 +12,7 @@ import {
   YearlyTriggerInput
 } from 'expo-notifications';
 import { WeeklyTriggerInput } from 'expo-notifications/build/NotificationScheduler.types';
+
 export async function registerForPushNotificationsAsync() {
   // checks that this is a physical device
   if (!Device.isDevice) {

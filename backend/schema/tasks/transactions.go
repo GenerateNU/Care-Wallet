@@ -13,7 +13,6 @@ import (
 func GetTasksByQueryFromDB(pool *pgx.Conn, filterQuery TaskQuery) ([]models.Task, error) {
 	query_fields := []string{
 		filterQuery.TaskID,
-		filterQuery.TaskTitle,
 		filterQuery.GroupID,
 		filterQuery.CreatedBy,
 		filterQuery.TaskStatus,
@@ -21,7 +20,7 @@ func GetTasksByQueryFromDB(pool *pgx.Conn, filterQuery TaskQuery) ([]models.Task
 		filterQuery.StartDate,
 		filterQuery.EndDate}
 
-	field_names := []string{"task_id =", "task_title =", "group_id =", "created_by =", "task_status =", "task_type =", "start_date >=", "end_date <="}
+	field_names := []string{"task_id =", "group_id =", "created_by =", "task_status =", "task_type =", "start_date >=", "end_date <="}
 	var query string
 	var args []interface{}
 
@@ -35,7 +34,7 @@ func GetTasksByQueryFromDB(pool *pgx.Conn, filterQuery TaskQuery) ([]models.Task
 		}
 	}
 
-	rows, err := pool.Query("SELECT * FROM task WHERE "+query, args...)
+	rows, err := pool.Query("SELECT task_id, group_id, created_by, created_date, start_date, end_date, task_status, task_type FROM task WHERE "+query, args...)
 
 	if err != nil {
 		print(err, "error selecting tasks by query")
@@ -48,10 +47,10 @@ func GetTasksByQueryFromDB(pool *pgx.Conn, filterQuery TaskQuery) ([]models.Task
 
 	for rows.Next() {
 		task := models.Task{}
-		err := rows.Scan(&task.TaskID, &task.TaskTitle, &task.GroupID, &task.CreatedBy, &task.CreatedDate, &task.StartDate, &task.EndDate, &task.Notes, &task.Repeating, &task.RepeatingInterval, &task.RepeatingEndDate, &task.TaskStatus, &task.TaskType, &task.TaskInfo)
+		err := rows.Scan(&task.TaskID, &task.GroupID, &task.CreatedBy, &task.CreatedDate, &task.StartDate, &task.EndDate, &task.TaskStatus, &task.TaskType)
 
 		if err != nil {
-			print(err.Error(), "error scanning tasks by query")
+			print(err, "error scanning tasks by query")
 			return nil, err
 		}
 
@@ -137,6 +136,7 @@ func GetTasksByAssignedFromDB(pool *pgx.Conn, userIDs []string) ([]models.Task, 
 				print(err, "error scanning task ID")
 				return nil, err
 			}
+			fmt.Println(task_id)
 			task_ids = append(task_ids, task_id)
 		}
 	}
@@ -144,7 +144,7 @@ func GetTasksByAssignedFromDB(pool *pgx.Conn, userIDs []string) ([]models.Task, 
 	// Get all tasks by task ID
 	var task models.Task
 	for _, task_id := range task_ids {
-		err := pool.QueryRow("SELECT * FROM task WHERE task_id = $1;", task_id).Scan(&task.TaskID, &task.TaskTitle, &task.GroupID, &task.CreatedBy, &task.CreatedDate, &task.StartDate, &task.EndDate, &task.Notes, &task.Repeating, &task.RepeatingInterval, &task.RepeatingEndDate, &task.TaskStatus, &task.TaskType, &task.TaskInfo)
+		err := pool.QueryRow("SELECT * FROM task WHERE task_id = $1;", task_id).Scan(&task.TaskID, &task.GroupID, &task.CreatedBy, &task.CreatedDate, &task.StartDate, &task.EndDate, &task.Notes, &task.Repeating, &task.RepeatingInterval, &task.RepeatingEndDate, &task.TaskStatus, &task.TaskType, &task.TaskInfo)
 		if err != nil {
 			print(err, "error querying task by ID")
 			return nil, err
@@ -159,7 +159,7 @@ func GetTasksByAssignedFromDB(pool *pgx.Conn, userIDs []string) ([]models.Task, 
 // CreateTaskInDB creates a new task in the database and returns its ID
 func CreateTaskInDB(pool *pgx.Conn, newTask models.Task) (int, error) {
 	query := `
-        INSERT INTO task (group_id, created_by, created_date, start_date, end_date, notes, repeating, repeating_interval, repeating_end_date, task_status, task_type, task_info, task_title) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING task_id`
+        INSERT INTO task (group_id, created_by, created_date, start_date, end_date, notes, repeating, repeating_interval, repeating_end_date, task_status, task_type, task_info) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING task_id`
 
 	var newTaskID int
 	err := pool.QueryRow(
@@ -176,7 +176,6 @@ func CreateTaskInDB(pool *pgx.Conn, newTask models.Task) (int, error) {
 		newTask.TaskStatus,
 		newTask.TaskType,
 		newTask.TaskInfo,
-		newTask.TaskTitle,
 	).Scan(&newTaskID)
 
 	return newTaskID, err
@@ -202,11 +201,24 @@ func UpdateTaskInfoInDB(pool *pgx.Conn, taskID int, taskInfo json.RawMessage) er
 
 // GetTaskByID fetches a task from the database by its ID
 func GetTaskByID(pool *pgx.Conn, taskID int) (models.Task, error) {
-	query := `SELECT * FROM task WHERE task_id = $1`
+	query := `
+        SELECT task_id, group_id, created_by, created_date, start_date, end_date, notes, repeating, repeating_interval, repeating_end_date, task_status, task_type, task_info FROM task WHERE task_id = $1`
 
 	var task models.Task
 	err := pool.QueryRow(query, taskID).Scan(
-		&task.TaskID, &task.TaskTitle, &task.GroupID, &task.CreatedBy, &task.CreatedDate, &task.StartDate, &task.EndDate, &task.Notes, &task.Repeating, &task.RepeatingInterval, &task.RepeatingEndDate, &task.TaskStatus, &task.TaskType, &task.TaskInfo,
+		&task.TaskID,
+		&task.GroupID,
+		&task.CreatedBy,
+		&task.CreatedDate,
+		&task.StartDate,
+		&task.EndDate,
+		&task.Notes,
+		&task.Repeating,
+		&task.RepeatingInterval,
+		&task.RepeatingEndDate,
+		&task.TaskStatus,
+		&task.TaskType,
+		&task.TaskInfo,
 	)
 	return task, err
 }

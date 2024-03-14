@@ -6,7 +6,6 @@ import (
 
 type Task struct {
 	TaskID            int        `json:"task_id"`
-	TaskTitle         string     `json:"task_title"`
 	GroupID           int        `json:"group_id"`
 	CreatedBy         string     `json:"created_by"` // User ID
 	CreatedDate       time.Time  `json:"created_date"`

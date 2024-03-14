@@ -5,11 +5,9 @@ import { useNavigation } from '@react-navigation/native';
 import { styled } from 'nativewind';
 
 import ArrowLeft from '../../assets/arrow-left.svg';
-import Edit from '../../assets/profile/edit.svg';
 import Ellipse from '../../assets/profile/ellipse.svg';
-import { useCareWalletContext } from '../../contexts/CareWalletContext';
 import { AppStackNavigation } from '../../navigation/AppNavigation';
-import { GroupRole, Role } from '../../types/group';
+import { GroupRole } from '../../types/group';
 import { User } from '../../types/user';
 import { ProfileTopHeader } from './ProfileTopHeader';
 
@@ -21,7 +19,6 @@ interface HeaderProps {
 }
 
 export function Header({ user, role }: HeaderProps) {
-  const { user: signedInUser } = useCareWalletContext();
   const navigate = useNavigation<AppStackNavigation>();
 
   if (!user) return null;
@@ -30,18 +27,14 @@ export function Header({ user, role }: HeaderProps) {
     <>
       <View className="z-10 h-fit max-h-fit min-h-fit flex-grow-0 items-center bg-carewallet-black">
         <View className="w-full justify-center align-middle">
-          {role?.role === Role.PATIENT ||
-          signedInUser.userID !== user.user_id ? (
-            <ProfileTopHeader
-              user={user}
-              onTouchEndLeft={navigate}
-              leftButtonText={<ArrowLeft />}
-            />
-          ) : (
-            <ProfileTopHeader user={user} rightButtonText={<Edit />} />
-          )}
+          <ProfileTopHeader
+            user={user}
+            onTouchEndLeft={navigate.goBack}
+            leftButtonText={<ArrowLeft />}
+            rightButtonText="Edit"
+          />
           <Text className="items-center justify-center text-center text-xl  text-carewallet-white">
-            {`${role?.role.charAt(0)}${role?.role.slice(1).toLowerCase()} ${role?.role !== Role.PATIENT ? 'Caretaker' : ''}`}
+            {`${role?.role.charAt(0)}${role?.role.slice(1).toLowerCase()} Caregiver`}
           </Text>
           <Text className="items-center justify-center text-center text-lg  text-carewallet-white">
             {user.phone ? user.phone : user.email}
