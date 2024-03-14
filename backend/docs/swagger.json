@@ -515,6 +515,11 @@
                     },
                     {
                         "type": "string",
+                        "name": "quickTask",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "name": "startDate",
                         "in": "query"
                     },
@@ -1159,6 +1164,9 @@
                 "notes": {
                     "type": "string"
                 },
+                "quick_task": {
+                    "type": "boolean"
+                },
                 "repeating": {
                     "type": "boolean"
                 },
@@ -1296,6 +1304,9 @@
                 },
                 "notes": {
                     "type": "string"
+                },
+                "quick_task": {
+                    "type": "boolean"
                 },
                 "repeating": {
                     "type": "boolean"

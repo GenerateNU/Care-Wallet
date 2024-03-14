@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS task (
     created_date timestamp NOT NULL, -- add default val with current timestamp?
     start_date timestamp,
     end_date timestamp,
+    quick_task BOOLEAN DEFAULT FALSE,
     notes varchar,
     repeating BOOLEAN DEFAULT FALSE,
     repeating_interval varchar,
@@ -38,12 +39,15 @@ CREATE TABLE IF NOT EXISTS task_assignees (
     FOREIGN KEY (assigned_by) REFERENCES users (user_id)
 );
 
-INSERT INTO task (group_id, created_by, created_date, start_date, end_date, notes, task_status, task_type)
+INSERT INTO task (group_id, created_by, created_date, start_date, end_date, notes, task_status, task_type, quick_task)
 VALUES
-  (1, 'user2', '2024-02-03 10:45:00', '2024-02-05 10:00:00', '2024-02-05 11:00:00', 'Pick up medication from pharmacy', 'INCOMPLETE', 'med_mgmt'),
-  (2, 'user3', '2024-02-20 23:59:59', '2024-02-10 14:30:00', NULL, 'Schedule doctor appointment', 'INCOMPLETE', 'other'),
-  (3, 'user4', '2020-02-05 11:00:00', NULL, '2024-02-20 23:59:59', 'Submit insurance claim', 'PARTIAL', 'financial'),
-  (4, 'user1', '2006-01-02 15:04:05', NULL, NULL, 'Refill water pitcher', 'COMPLETE', 'other')
+  (1, 'user2', '2024-02-03 10:45:00', '2024-02-05 10:00:00', '2024-02-05 11:00:00', 'Pick up medication from pharmacy', 'INCOMPLETE', 'med_mgmt', FALSE),
+  (2, 'user3', '2024-02-20 23:59:59', '2024-02-10 14:30:00', NULL, 'Schedule doctor appointment', 'INCOMPLETE', 'other', FALSE),
+  (3, 'user4', '2020-02-05 11:00:00', NULL, '2024-02-20 23:59:59', 'Submit insurance claim', 'PARTIAL', 'financial', FALSE),
+  (4, 'user1', '2006-01-02 15:04:05', NULL, NULL, 'Refill water pitcher', 'COMPLETE', 'other', TRUE),
+  (5, 'user1', '2024-02-05 11:00:00', '2024-02-05 11:00:00', '2024-02-05 11:00:00', 'Get medications', 'INCOMPLETE', 'dr_appt', TRUE),
+  (5, 'user2', '2024-02-05 11:00:00', '2024-02-05 11:00:00', '2024-02-05 11:00:00', 'File Papers', 'INCOMPLETE', 'med_mgmt', TRUE),
+  (5, 'user3', '2024-02-05 11:00:00', '2024-02-05 11:00:00', '2024-02-05 11:00:00', 'Send check to Drs', 'INCOMPLETE', 'financial', TRUE)
 ;
 
 INSERT INTO task_assignees (task_id, user_id, assignment_status, assigned_by, assigned_date)

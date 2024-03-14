@@ -70,6 +70,7 @@ type TaskQuery struct {
 	TaskType   string `form:"taskType"`
 	StartDate  string `form:"startDate"`
 	EndDate    string `form:"endDate"`
+	QuickTask  string `form:"quickTask"`
 }
 
 // GetFilteredTasks godoc
@@ -192,6 +193,7 @@ type TaskBody struct {
 	CreatedDate       time.Time  `json:"created_date"`
 	StartDate         *time.Time `json:"start_date"`
 	EndDate           *time.Time `json:"end_date"`
+	QuickTask         bool       `json:"quick_task"`
 	Notes             *string    `json:"notes"`
 	Repeating         bool       `json:"repeating"`
 	RepeatingInterval *string    `json:"repeating_interval"`

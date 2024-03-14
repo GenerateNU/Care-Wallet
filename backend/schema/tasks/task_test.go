@@ -48,6 +48,7 @@ func TestTaskGroup(t *testing.T) {
 			TaskType:   "other",
 			StartDate:  "",
 			EndDate:    "",
+			QuickTask:  "",
 		}
 
 		w := httptest.NewRecorder()
@@ -58,6 +59,7 @@ func TestTaskGroup(t *testing.T) {
 		query.Set("taskType", getRequest.TaskType)
 		query.Set("startDate", getRequest.StartDate)
 		query.Set("endDate", getRequest.EndDate)
+		query.Set("quickTask", getRequest.QuickTask)
 
 		req, _ := http.NewRequest("GET", "/tasks/filtered?"+query.Encode(), nil)
 		router.ServeHTTP(w, req)
@@ -73,23 +75,41 @@ func TestTaskGroup(t *testing.T) {
 			t.Error("Failed to unmarshal json")
 		}
 		start_date_1 := time.Date(2024, 2, 10, 14, 30, 0, 0, time.UTC)
-		expectedTasks := []models.Task{
+		notes_1 := "Schedule doctor appointment"
+		notes_2 := "Refill water pitcher"
+		
+		 expectedTasks := []models.Task{
 			{
-				TaskID:      2,
-				GroupID:     2,
-				CreatedBy:   "user3",
-				CreatedDate: time.Date(2024, 2, 20, 23, 59, 59, 0, time.UTC),
-				StartDate:   &start_date_1,
-				TaskStatus:  "INCOMPLETE",
-				TaskType:    "other",
+				TaskID:            2,
+				GroupID:           2,
+				CreatedBy:         "user3",
+				CreatedDate:       time.Date(2024, 2, 20, 23, 59, 59, 0, time.UTC),
+				StartDate:         &start_date_1,
+				EndDate:           nil,
+				QuickTask:         false,
+				Notes:             &notes_1,
+				Repeating:         false,
+				RepeatingInterval: nil,
+				RepeatingEndDate:  nil,
+				TaskStatus:        "INCOMPLETE",
+				TaskType:          "other",
+				TaskInfo:          nil,
 			},
 			{
-				TaskID:      4,
-				GroupID:     4,
-				CreatedBy:   "user1",
-				CreatedDate: time.Date(2006, 1, 2, 15, 4, 5, 0, time.UTC),
-				TaskStatus:  "COMPLETE",
-				TaskType:    "other",
+				TaskID:            4,
+				GroupID:           4,
+				CreatedBy:         "user1",
+				CreatedDate:       time.Date(2006, 1, 2, 15, 4, 5, 0, time.UTC),
+				StartDate:         nil,
+				EndDate:           nil,
+				QuickTask:         true,
+				Notes:             &notes_2,
+				Repeating:         false,
+				RepeatingInterval: nil,
+				RepeatingEndDate:  nil,
+				TaskStatus:        "COMPLETE",
+				TaskType:          "other",
+				TaskInfo:          nil,
 			},
 		}
 
@@ -192,13 +212,20 @@ func TestTaskGroup(t *testing.T) {
 		note := "Refill water pitcher"
 		expectedTasks := []models.Task{
 			{
-				TaskID:      4,
-				GroupID:     4,
-				CreatedBy:   "user1",
-				CreatedDate: time.Date(2006, 1, 2, 15, 4, 5, 0, time.UTC),
-				Notes:       &note,
-				TaskStatus:  "COMPLETE",
-				TaskType:    "other",
+				TaskID:            4,
+				GroupID:           4,
+				CreatedBy:         "user1",
+				CreatedDate:       time.Date(2006, 1, 2, 15, 4, 5, 0, time.UTC),
+				StartDate:         nil,
+				EndDate:           nil,
+				QuickTask:         true,
+				Notes:             &note,
+				Repeating:         false,
+				RepeatingInterval: nil,
+				RepeatingEndDate:  nil,
+				TaskStatus:        "COMPLETE",
+				TaskType:          "other",
+				TaskInfo:          nil,
 			},
 		}
 
@@ -257,10 +284,10 @@ func TestTaskGroup(t *testing.T) {
 			TaskID:            1,
 			GroupID:           1,
 			CreatedBy:         "user1",
-			CreatedDate:       time.Now().UTC(),
 			StartDate:         &startDate,
 			EndDate:           &endDate,
 			Notes:             &notes,
+			QuickTask: 	       false,
 			Repeating:         repeating,
 			RepeatingInterval: &repeatingInterval,
 			RepeatingEndDate:  &repeatingEndDate,

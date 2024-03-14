@@ -5,8 +5,8 @@ export const QuickTaskCard = ({
   name,
   label
 }: {
-  name: String;
-  label: String;
+  name: string;
+  label: string;
 }): JSX.Element => {
   return (
     <View className="border-black h-[82px] w-[346px] self-center overflow-hidden rounded-[20px] border border-solid">

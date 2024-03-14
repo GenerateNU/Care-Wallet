@@ -7,24 +7,29 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Button } from 'react-native-paper';
 
 import { QuickTaskCard } from '../components/QuickTaskCard';
-
-// import { fetchTasks } from '../services/taskService';
+import { useCareWalletContext } from '../contexts/CareWalletContext';
+import { useFilteredTasks } from '../services/task';
 
 export default function QuickTasks() {
-  const tasks = [
-    { id: '1', name: 'Take out the trash', label: 'Home' },
-    { id: '2', name: 'Do the laundry', label: 'Laundry' },
-    { id: '3', name: 'Wash the dishes', label: 'Kitchen' }
-  ];
+  // const tasksEx = [
+  //   { task_id: 1, notes: 'Take out the trash', task_type: 'Home' },
+  //   { task_id: 2, notes: 'Do the laundry', task_type: 'Laundry' },
+  //   { task_id: 3, notes: 'Wash the dishes', task_type: 'Kitchen' }
+  // ];
 
-  //   if (isLoading) {
-  //     return <Text>Loading...</Text>;
-  //   }
+  const { user: signedInUser, group } = useCareWalletContext();
+  const { tasks, tasksIsLoading } = useFilteredTasks({
+    groupID: group.groupID.toString(),
+    quickTask: true
+  });
 
   const snapPoints = useMemo(() => ['70%'], []);
   const bottomSheetRef = useRef<BottomSheet>(null);
 
-  const handleOpenPress = () => bottomSheetRef.current?.expand();
+  const handleOpenPress = () => {
+    bottomSheetRef.current?.expand();
+    console.log(tasks);
+  };
   const handleClosePress = () => bottomSheetRef.current?.close();
 
   const renderBackdrop = useCallback(
@@ -38,11 +43,16 @@ export default function QuickTasks() {
     ),
     []
   );
+
+  if (tasksIsLoading) {
+    return <Text>Loading...</Text>;
+  }
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Button onPress={handleOpenPress}>Open</Button>
       <Button onPress={handleClosePress}>Close</Button>
       <BottomSheet
+        index={-1}
         snapPoints={snapPoints}
         ref={bottomSheetRef}
         enablePanDownToClose={true}
@@ -55,9 +65,9 @@ export default function QuickTasks() {
           data={tasks}
           className="w-full align-middle"
           ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item.task_id.toString()}
           renderItem={({ item }) => (
-            <QuickTaskCard name={item.name} label={item.label} />
+            <QuickTaskCard name={item.notes} label={item.task_type} />
           )}
         />
       </BottomSheet>

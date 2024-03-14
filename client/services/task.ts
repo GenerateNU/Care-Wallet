@@ -13,12 +13,13 @@ type TaskQueryParams = {
   taskType?: string;
   startDate?: string;
   endDate?: string;
+  quickTask?: boolean;
 };
 
 const getFilteredTasks = async (
   queryParams: TaskQueryParams
 ): Promise<Task[]> => {
-  const { data } = await axios.get(`${api_url}/tasks/filtered?`, {
+  const { data } = await axios.get(`${api_url}/tasks/filtered`, {
     params: queryParams
   });
   return data;
