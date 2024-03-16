@@ -3,6 +3,10 @@ module.exports = function (api) {
 
   return {
     presets: ['babel-preset-expo'],
-    plugins: ['react-native-paper/babel', 'nativewind/babel']
+    plugins: [
+      'react-native-paper/babel',
+      'nativewind/babel',
+      'react-native-reanimated/plugin'
+    ]
   };
 };
