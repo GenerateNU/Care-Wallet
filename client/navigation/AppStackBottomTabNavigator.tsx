@@ -3,33 +3,59 @@ import { Text } from 'react-native';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import Home from '../assets/home.svg';
-import GroupScreen from '../screens/Groups';
+import Bell from '../assets/bottom-nav/bell.svg';
+import Calendar from '../assets/bottom-nav/calendar.svg';
+import Home from '../assets/bottom-nav/home.svg';
+import User from '../assets/bottom-nav/user.svg';
 import MedicationList from '../screens/MedicationList';
+import Profile from '../screens/Profile';
 import SingleTaskScreen from '../screens/SingleTask';
 
 const AppStackBottomTab = createBottomTabNavigator();
 
 export function AppStackBottomTabNavigator() {
   return (
-    <AppStackBottomTab.Navigator>
+    <AppStackBottomTab.Navigator
+      screenOptions={{
+        tabBarActiveTintColor: 'black',
+        tabBarInactiveTintColor: 'gray'
+      }}
+    >
       <AppStackBottomTab.Screen
         name="Landing"
         options={{
           headerShown: true,
-          tabBarIcon: () => <Home color="gray" />,
-          tabBarLabel: () => <Text>Landing</Text>
+          tabBarIcon: ({ color }) => <Home color={color} />,
+          tabBarLabel: () => <Text></Text>
         }}
         component={MedicationList}
       />
       <AppStackBottomTab.Screen
-        name="Group"
+        name="Calendar"
         options={{
           headerShown: true,
-          tabBarIcon: () => <Home color="gray" />,
-          tabBarLabel: () => <Text>Group</Text>
+          tabBarIcon: ({ color }) => <Calendar color={color} />,
+          tabBarLabel: () => <Text></Text>
         }}
-        component={GroupScreen}
+        component={MedicationList}
+      />
+      <AppStackBottomTab.Screen
+        name="Notifications"
+        options={{
+          headerShown: true,
+          tabBarIcon: ({ color }) => <Bell color={color} />,
+          tabBarLabel: () => <Text></Text>
+        }}
+        component={MedicationList}
+      />
+      <AppStackBottomTab.Screen
+        name="Profile"
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ color }) => <User color={color} />,
+          tabBarLabel: () => <Text></Text>
+        }}
+        component={Profile}
       />
       <AppStackBottomTab.Screen
         name="Task"
