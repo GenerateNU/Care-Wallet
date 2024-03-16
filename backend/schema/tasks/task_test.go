@@ -91,10 +91,19 @@ func TestTaskGroup(t *testing.T) {
 				TaskStatus:  "COMPLETE",
 				TaskType:    "other",
 			},
+			{
+				TaskID:      6,
+				GroupID:     5,
+				CreatedBy:   "P03ggWcw63N0RSY7ltbkeBoR6bd2",
+				CreatedDate: time.Date(2024, 2, 20, 23, 59, 59, 0, time.UTC),
+				StartDate:   &start_date_1,
+				TaskStatus:  "INCOMPLETE",
+				TaskType:    "other",
+			},
 		}
 
 		if !reflect.DeepEqual(expectedTasks, responseTasks) {
-			t.Error("Result was not correct")
+			t.Error("Result was not correct", responseTasks, expectedTasks)
 		}
 	})
 
