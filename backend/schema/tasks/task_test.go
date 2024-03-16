@@ -77,8 +77,8 @@ func TestTaskGroup(t *testing.T) {
 		start_date_1 := time.Date(2024, 2, 10, 14, 30, 0, 0, time.UTC)
 		notes_1 := "Schedule doctor appointment"
 		notes_2 := "Refill water pitcher"
-		
-		 expectedTasks := []models.Task{
+
+		expectedTasks := []models.Task{
 			{
 				TaskID:            2,
 				GroupID:           2,
@@ -288,7 +288,7 @@ func TestTaskGroup(t *testing.T) {
 			StartDate:         &startDate,
 			EndDate:           &endDate,
 			Notes:             &notes,
-			QuickTask: 	       false,
+			QuickTask:         false,
 			Repeating:         repeating,
 			RepeatingInterval: &repeatingInterval,
 			RepeatingEndDate:  &repeatingEndDate,

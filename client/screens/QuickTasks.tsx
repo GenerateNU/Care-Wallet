@@ -1,7 +1,8 @@
 // components/TasksPopup.tsx
 import React, { useCallback, useMemo, useRef } from 'react';
-import { FlatList, Text, View } from 'react-native';
+import { ActivityIndicator, FlatList, Text, View } from 'react-native';
 
+import { BottomSheetBackdropProps } from '@gorhom/bottom-sheet';
 import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet/';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Button } from 'react-native-paper';
@@ -11,12 +12,6 @@ import { useCareWalletContext } from '../contexts/CareWalletContext';
 import { useFilteredTasks } from '../services/task';
 
 function QuickTasks(): JSX.Element {
-  // const tasksEx = [
-  //   { task_id: 1, notes: 'Take out the trash', task_type: 'Home' },
-  //   { task_id: 2, notes: 'Do the laundry', task_type: 'Laundry' },
-  //   { task_id: 3, notes: 'Wash the dishes', task_type: 'Kitchen' }
-  // ];
-
   const { group } = useCareWalletContext();
   const { tasks, tasksIsLoading } = useFilteredTasks({
     groupID: group.groupID.toString(),
@@ -33,20 +28,33 @@ function QuickTasks(): JSX.Element {
   const handleClosePress = () => bottomSheetRef.current?.close();
 
   const renderBackdrop = useCallback(
-    (props: any) => (
+    (props: BottomSheetBackdropProps) => (
       <BottomSheetBackdrop
+        {...props}
         appearsOnIndex={0}
         disappearsOnIndex={-1}
-        {...props}
         opacity={0.3}
       />
     ),
     []
   );
 
+  const taskTypeDescriptions: Record<string, string> = {
+    med_mgmt: 'Medication Management',
+    dr_appt: 'Doctor Appointment',
+    financial: 'Financial Task',
+    other: 'Other Task'
+  };
+
   if (tasksIsLoading) {
-    return <Text>Loading...</Text>;
+    return (
+      <View className="w-[100vw] flex-1 items-center justify-center bg-carewallet-white text-3xl">
+        <ActivityIndicator size="large" />
+        <Text>Loading Tasks...</Text>
+      </View>
+    );
   }
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Button onPress={handleOpenPress}>Open</Button>
@@ -67,7 +75,10 @@ function QuickTasks(): JSX.Element {
           ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
           keyExtractor={(item) => item.task_id.toString()}
           renderItem={({ item }) => (
-            <QuickTaskCard name={item.notes} label={item.task_type} />
+            <QuickTaskCard
+              name={item.notes}
+              label={taskTypeDescriptions[item.task_type]}
+            />
           )}
         />
       </BottomSheet>
