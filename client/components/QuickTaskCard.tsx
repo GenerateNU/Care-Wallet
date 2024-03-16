@@ -1,13 +1,12 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 
-export const QuickTaskCard = ({
-  name,
-  label
-}: {
+interface QuickTaskCardProps {
   name: string;
   label: string;
-}): JSX.Element => {
+}
+
+function QuickTaskCard({ name, label }: QuickTaskCardProps): JSX.Element {
   return (
     <View className="border-black h-[82px] w-[346px] self-center overflow-hidden rounded-[20px] border border-solid">
       <View className="relative left-[19px] top-[17px] h-[48px] w-[295px]">
@@ -22,4 +21,6 @@ export const QuickTaskCard = ({
       </View>
     </View>
   );
-};
+}
+
+export { QuickTaskCard };

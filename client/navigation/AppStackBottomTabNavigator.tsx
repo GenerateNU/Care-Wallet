@@ -9,7 +9,7 @@ import Home from '../assets/bottom-nav/home.svg';
 import User from '../assets/bottom-nav/user.svg';
 import MedicationList from '../screens/MedicationList';
 import Profile from '../screens/Profile';
-import QuickTasks from '../screens/QuickTasks';
+import { QuickTasks } from '../screens/QuickTasks';
 
 const AppStackBottomTab = createBottomTabNavigator();
 

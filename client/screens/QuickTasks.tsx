@@ -10,14 +10,14 @@ import { QuickTaskCard } from '../components/QuickTaskCard';
 import { useCareWalletContext } from '../contexts/CareWalletContext';
 import { useFilteredTasks } from '../services/task';
 
-export default function QuickTasks() {
+function QuickTasks(): JSX.Element {
   // const tasksEx = [
   //   { task_id: 1, notes: 'Take out the trash', task_type: 'Home' },
   //   { task_id: 2, notes: 'Do the laundry', task_type: 'Laundry' },
   //   { task_id: 3, notes: 'Wash the dishes', task_type: 'Kitchen' }
   // ];
 
-  const { user: signedInUser, group } = useCareWalletContext();
+  const { group } = useCareWalletContext();
   const { tasks, tasksIsLoading } = useFilteredTasks({
     groupID: group.groupID.toString(),
     quickTask: true
@@ -59,7 +59,7 @@ export default function QuickTasks() {
         backdropComponent={renderBackdrop}
         handleIndicatorStyle={{ backgroundColor: 'white' }}
       >
-        <Text className="ml-6 text-lg font-bold">Today's Quick Tasks</Text>
+        <Text className="ml-6 text-lg font-bold">Today&apos;s Quick Tasks</Text>
         <View style={{ height: 10 }} />
         <FlatList
           data={tasks}
@@ -74,3 +74,5 @@ export default function QuickTasks() {
     </GestureHandlerRootView>
   );
 }
+
+export { QuickTasks };
