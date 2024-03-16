@@ -46,7 +46,7 @@ export function TaskType() {
     value: filter
   }));
 
-  const snapPoints = useMemo(() => ['60%'], []);
+  const bottomSheetSnapPoints = useMemo(() => ['60%'], []);
 
   const bottomSheetRef = useRef<BottomSheet>(null);
 
@@ -58,6 +58,7 @@ export function TaskType() {
 
   const snapToIndex = (index: number) =>
     bottomSheetRef.current?.snapToIndex(index);
+
   const renderBackdrop = useCallback(
     (props: BottomSheetDefaultBackdropProps) => (
       <BottomSheetBackdrop
@@ -114,7 +115,7 @@ export function TaskType() {
       <BottomSheet
         ref={bottomSheetRef}
         index={-1}
-        snapPoints={snapPoints}
+        snapPoints={bottomSheetSnapPoints}
         enablePanDownToClose={true}
         backdropComponent={renderBackdrop}
       >
@@ -131,6 +132,9 @@ export function TaskType() {
             setOpen={setOpen}
             setValue={setSelectedCategory}
             placeholder="Category"
+            onSelectItem={(item) => {
+              closeBottomSheet();
+            }}
             style={{
               width: '95%',
               marginLeft: 'auto',

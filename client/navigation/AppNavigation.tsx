@@ -8,11 +8,11 @@ import { TaskType } from '../screens/TaskType';
 import { AppStackBottomTabNavigator } from './AppStackBottomTabNavigator';
 
 export type AppStackParamList = {
-  TaskType: undefined;
   Main: undefined;
   Home: undefined;
   Login: undefined;
   Profile: undefined;
+  TaskType: undefined;
 };
 
 export type AppStackNavigation = NavigationProp<AppStackParamList>;
@@ -22,11 +22,7 @@ const AppStack = createNativeStackNavigator<AppStackParamList>();
 export function AppNavigation() {
   return (
     <AppStack.Navigator>
-      <AppStack.Screen
-        name="TaskType"
-        options={{ headerShown: false }}
-        component={TaskType}
-      />
+      
       <AppStack.Screen
         name="Login"
         options={{ headerShown: true }}
@@ -36,6 +32,11 @@ export function AppNavigation() {
         name="Main"
         options={{ headerShown: false }}
         component={AppStackBottomTabNavigator}
+      />
+      <AppStack.Screen
+        name="TaskType"
+        options={{ headerShown: false }}
+        component={TaskType}
       />
     </AppStack.Navigator>
   );
