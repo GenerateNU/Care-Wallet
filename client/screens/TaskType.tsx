@@ -132,7 +132,7 @@ export function TaskType() {
             setOpen={setOpen}
             setValue={setSelectedCategory}
             placeholder="Category"
-            onSelectItem={(item) => {
+            onSelectItem={() => {
               closeBottomSheet();
             }}
             style={{

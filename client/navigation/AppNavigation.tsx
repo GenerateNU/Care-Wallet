@@ -22,7 +22,6 @@ const AppStack = createNativeStackNavigator<AppStackParamList>();
 export function AppNavigation() {
   return (
     <AppStack.Navigator>
-      
       <AppStack.Screen
         name="Login"
         options={{ headerShown: true }}
