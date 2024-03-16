@@ -15,9 +15,7 @@ export default function SingleTaskScreen() {
 
   const [open, setOpen] = useState(false);
 
-  const [taskType, setTaskType] = useState<TypeOfTask>(
-    TypeOfTask.MEDICATION_MANAGEMENT
-  );
+  const [taskType, setTaskType] = useState<TypeOfTask>(TypeOfTask.ACTIVITIES);
   const label = useGetTaskLabel(taskId);
 
   // Would extract real information in future and not display default, placeholder info
