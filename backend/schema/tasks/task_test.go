@@ -260,6 +260,7 @@ func TestTaskGroup(t *testing.T) {
 				Notes:       &note,
 				TaskStatus:  "COMPLETE",
 				TaskType:    "other",
+				QuickTask:   true,
 			},
 		}
 
