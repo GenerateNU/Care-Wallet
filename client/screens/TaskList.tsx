@@ -13,7 +13,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Button } from 'react-native-paper';
 
-import TaskInfoComponent from '../components/TaskInfoCard';
+import { TaskInfoComponent } from '../components/TaskInfoCard';
 import { CloseButton } from '../components/TaskType/CloseButton';
 import { useCareWalletContext } from '../contexts/CareWalletContext';
 import { getTaskLabels, useFilteredTasks } from '../services/task';
@@ -56,12 +56,12 @@ export default function TaskListScreen() {
     ),
     []
   );
-  // TODO: Implement clearFilters function in dropdown picker
-  const clearFilters = () => {
-    setSearchQuery('');
-    setSelectedLabel(null);
-    closeBottomSheet();
-  };
+  // // TODO: Implement clearFilters function in dropdown picker
+  // const clearFilters = () => {
+  //   setSearchQuery('');
+  //   setSelectedLabel(null);
+  //   closeBottomSheet();
+  // };
 
   // Fetch task labels for each task (2d array list)
   useEffect(() => {

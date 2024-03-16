@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-const TaskInfoComponent = ({
+export function TaskInfoComponent({
   name,
   label,
   category,
@@ -13,7 +13,7 @@ const TaskInfoComponent = ({
   category: string;
   type: string;
   date: Date;
-}) => {
+}) {
   const formattedStartDate = date ? new Date(date).toLocaleDateString() : 'N/A';
 
   return (
@@ -26,7 +26,7 @@ const TaskInfoComponent = ({
       <Text style={styles.categoryType}>{`${formattedStartDate}`}</Text>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -53,5 +53,3 @@ const styles = StyleSheet.create({
     marginTop: 10
   }
 });
-
-export default TaskInfoComponent;

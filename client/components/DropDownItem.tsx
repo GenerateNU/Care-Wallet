@@ -1,13 +1,13 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-const DropdownItem = ({ label }: { label: string }) => {
+function DropdownItem({ label }: { label: string }) {
   return (
     <View style={styles.container}>
       <Text style={styles.dropdownLabel}>{label}</Text>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -27,4 +27,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default DropdownItem;
+export { DropdownItem };
