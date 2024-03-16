@@ -15,7 +15,7 @@ export default function SingleTaskScreen() {
 
   const [open, setOpen] = useState(false);
 
-  const [taskType, setTaskType] = useState<TypeOfTask | undefined>(
+  const [taskType, setTaskType] = useState<TypeOfTask>(
     TypeOfTask.MEDICATION_MANAGEMENT
   );
 
@@ -31,9 +31,7 @@ export default function SingleTaskScreen() {
   });
 
   // Gets category based on Task Type
-  const getCategoryFromTaskType = (
-    taskType: TypeOfTask | undefined
-  ): Category => {
+  const getCategoryFromTaskType = (taskType: TypeOfTask): Category => {
     console.log(taskType);
     if (!taskType) {
       return Category.ALL; // Return a default category if taskType is undefined
@@ -85,19 +83,17 @@ export default function SingleTaskScreen() {
         />
       </View>
       <View className="mt-4">
-        <Text className="text-base ">{label || 'Label Here'}</Text>
-      </View>
-      <View className="mt-4">
-        <Text className="text-base ">
-          {getCategoryFromTaskType(taskType) || 'Category Task'} | {taskType}
-        </Text>
-      </View>
-      <View className="mt-4">
         <Text className="text-black font-inter text-2xl font-bold">
           {getTitleFromTaskInfo(taskInfo.task_info) || 'Doctor’s Appointment'}{' '}
           {'\n'} @ {taskInfo.created_date}
         </Text>
+        <Text className="text-base "> {label || ''}</Text>
+        <Text className="text-base ">
+          {getCategoryFromTaskType(taskType) || 'Category Task'} | {taskType}
+        </Text>
       </View>
+      <View className="mt-4"></View>
+
       <View className="mt-2">
         <Text className="text-black font-inter mb-4 text-base font-normal">
           {taskInfo.notes}
