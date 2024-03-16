@@ -18,7 +18,6 @@ export default function SingleTaskScreen() {
   const [taskType, setTaskType] = useState<TypeOfTask>(
     TypeOfTask.MEDICATION_MANAGEMENT
   );
-
   const label = useGetTaskLabel(taskId);
 
   // Would extract real information in future and not display default, placeholder info
@@ -65,7 +64,7 @@ export default function SingleTaskScreen() {
       <View className="flex-row items-center">
         <BackButton />
       </View>
-      <View className="absolute right-0 top-4 m-4">
+      <View className="absolute right-0 top-4 m-4 ">
         <DropDownPicker
           // Very light placeholder for the real dropdown picker. Once backend routes are added
           // to update a task status, then this can be dynamically rendered
@@ -80,6 +79,7 @@ export default function SingleTaskScreen() {
           setValue={setTaskType}
           placeholder="To-do"
           containerStyle={{ height: 40, marginBottom: 8, width: 100 }}
+          style={{ backgroundColor: 'lightgray', borderColor: 'gray' }}
         />
       </View>
       <View className="mt-4">
@@ -98,9 +98,7 @@ export default function SingleTaskScreen() {
         <Text className="text-black font-inter mb-4 text-base font-normal">
           {taskInfo.notes}
         </Text>
-        <Text className="text-black font-inter text-xl font-bold">
-          Additional Notes{' '}
-        </Text>
+        <Text className="text-black font-inter text-xl">Additional Notes</Text>
         <TextInput className="border-black mb-2 h-32 w-80 rounded-lg border-2" />
       </View>
 

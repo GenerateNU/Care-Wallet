@@ -9,7 +9,7 @@ export const getTaskLabel = async (
   taskID: string | undefined
 ): Promise<string> => {
   const { data } = await axios.get(`${api_url}/tasks/${taskID}/labels`);
-  return data.label_name;
+  return data.label_name ?? '';
 };
 
 export const getTask = async (taskID: string): Promise<Task> => {
