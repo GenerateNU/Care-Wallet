@@ -99,7 +99,11 @@ export function TaskType() {
         renderItem={({ item }) => (
           <TouchableOpacity
             className="m-2 h-[50px] overflow-hidden rounded-xl"
-            onPress={() => navigation.navigate('New ' + item + ' Task')}
+            onPress={() =>
+              navigation.navigate('TaskCreation', {
+                type: JSON.stringify(item)
+              })
+            }
           >
             <Button
               className="m-2 h-[50px] items-center justify-center rounded-xl"

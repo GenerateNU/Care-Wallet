@@ -1,0 +1,20 @@
+{
+  "Medication Management": {
+    "Header": "Medication Management"
+  },
+  "Physician Appointment": {
+    "Header": "Physician Appointment"
+  },
+  "Grooming": {
+    "Header": "Grooming"
+  },
+  "Family Conversations": {
+    "Header": "Family Conversations"
+  },
+  "Groceries, Shopping, & Errands": {},
+  "Pay Bills": {},
+  "Diet & Nutrition": {},
+  "Activities": {},
+  "Health Insurance": {},
+  "Other": {}
+}

@@ -4,15 +4,17 @@ import { NavigationProp } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import LoginPage from '../screens/LoginPage';
+import { TaskCreation } from '../screens/TaskCreation';
 import { TaskType } from '../screens/TaskType';
 import { AppStackBottomTabNavigator } from './AppStackBottomTabNavigator';
 
 export type AppStackParamList = {
+  TaskType: undefined;
   Main: undefined;
   Home: undefined;
   Login: undefined;
   Profile: undefined;
-  TaskType: undefined;
+  TaskCreation: { type: string };
 };
 
 export type AppStackNavigation = NavigationProp<AppStackParamList>;
@@ -23,6 +25,11 @@ export function AppNavigation() {
   return (
     <AppStack.Navigator>
       <AppStack.Screen
+        name="TaskType"
+        options={{ headerShown: false }}
+        component={TaskType}
+      />
+      <AppStack.Screen
         name="Login"
         options={{ headerShown: true }}
         component={LoginPage}
@@ -32,10 +39,11 @@ export function AppNavigation() {
         options={{ headerShown: false }}
         component={AppStackBottomTabNavigator}
       />
+
       <AppStack.Screen
-        name="TaskType"
+        name="TaskCreation"
         options={{ headerShown: false }}
-        component={TaskType}
+        component={TaskCreation}
       />
     </AppStack.Navigator>
   );
