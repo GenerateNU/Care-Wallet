@@ -2,8 +2,10 @@
 import React, { useCallback, useMemo, useRef } from 'react';
 import { ActivityIndicator, FlatList, Text, View } from 'react-native';
 
-import { BottomSheetBackdropProps } from '@gorhom/bottom-sheet';
-import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet/';
+import BottomSheet, {
+  BottomSheetBackdrop,
+  BottomSheetBackdropProps
+} from '@gorhom/bottom-sheet/';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Button } from 'react-native-paper';
 
@@ -39,6 +41,7 @@ function QuickTasks(): JSX.Element {
     []
   );
 
+  // Todo: Look into if there is a change for this
   const taskTypeDescriptions: Record<string, string> = {
     med_mgmt: 'Medication Management',
     dr_appt: 'Doctor Appointment',
