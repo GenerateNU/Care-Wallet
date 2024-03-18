@@ -56,12 +56,6 @@ export default function TaskListScreen() {
     ),
     []
   );
-  // // TODO: Implement clearFilters function in dropdown picker
-  // const clearFilters = () => {
-  //   setSearchQuery('');
-  //   setSelectedLabel(null);
-  //   closeBottomSheet();
-  // };
 
   // Fetch task labels for each task (2d array list)
   useEffect(() => {
@@ -127,6 +121,10 @@ export default function TaskListScreen() {
 
   // Abstraction to render each section
   const renderSection = (tasks: Task[], title: string) => {
+    // Don't render the section if there are no tasks
+    if (tasks.length === 0) {
+      return null;
+    }
     return (
       <View>
         <Text className="text-lg text-carewallet-black">{title}</Text>
@@ -148,7 +146,7 @@ export default function TaskListScreen() {
 
   return (
     <GestureHandlerRootView>
-      <ScrollView className="flex w-[100vw] pl-2 pr-2 pt-4">
+      <ScrollView className="mb-0 flex w-[100vw] pl-2 pr-2 pt-4">
         <View className="mb-5 flex-row items-center">
           <TextInput
             className="mr-4 h-10 flex-1 overflow-hidden rounded-full border-2 border-carewallet-gray px-2"
