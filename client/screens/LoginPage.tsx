@@ -5,7 +5,7 @@ import { onAuthStateChanged } from '@firebase/auth';
 import { useNavigation } from '@react-navigation/native';
 
 import { auth } from '../firebase.config';
-import { AppStackNavigation } from '../navigation/AppNavigation';
+import { AppStackNavigation } from '../navigation/types';
 import { useAuth } from '../services/auth';
 
 export default function LoginPage() {
