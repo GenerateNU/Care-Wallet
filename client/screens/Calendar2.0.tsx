@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Alert } from 'react-native';
+
 import _ from 'lodash';
 import {
   CalendarProvider,
@@ -8,24 +9,27 @@ import {
   ExpandableCalendar,
   TimelineEventProps,
   TimelineList,
-  TimelineProps,
+  TimelineProps
 } from 'react-native-calendars';
-import { getDate, timelineEvents } from './timelineEvents';
+import { UpdateSources } from 'react-native-calendars/src/expandableCalendar/commons';
 
+import { getDate, timelineEvents } from './timelineEvents';
 
 const INITIAL_TIME = { hour: 9, minutes: 0 };
 const EVENTS: TimelineEventProps[] = timelineEvents;
 
-const TimelineCalendarScreen: React.FC = () => {
+export function TimelineCalendarScreen() {
   const [currentDate, setCurrentDate] = useState(getDate());
-  const [eventsByDate, setEventsByDate] = useState(_.groupBy(EVENTS, (e) => CalendarUtils.getCalendarDateString(e.start)));
+  const [eventsByDate, setEventsByDate] = useState(
+    _.groupBy(EVENTS, (e) => CalendarUtils.getCalendarDateString(e.start))
+  );
 
   const marked = {
     [`${getDate(-1)}`]: { marked: true },
     [`${getDate()}`]: { marked: true },
     [`${getDate(1)}`]: { marked: true },
     [`${getDate(2)}`]: { marked: true },
-    [`${getDate(4)}`]: { marked: true },
+    [`${getDate(4)}`]: { marked: true }
   };
 
   const onDateChanged = (date: string, source: string) => {
@@ -33,8 +37,8 @@ const TimelineCalendarScreen: React.FC = () => {
     setCurrentDate(date);
   };
 
-  const onMonthChange = (month: DateData, updateSource: any) => {
-  console.log('TimelineCalendarScreen onMonthChange: ', month, updateSource);
+  const onMonthChange = (month: DateData, updateSource: UpdateSources) => {
+    console.log('TimelineCalendarScreen onMonthChange: ', month, updateSource);
   };
 
   const createNewEvent: TimelineProps['onBackgroundLongPress'] = (
@@ -49,19 +53,22 @@ const TimelineCalendarScreen: React.FC = () => {
       start: `${timeString}`,
       end: `${timeObject.date} ${hourString}:${minutesString}:00`,
       title: 'New Event',
-      color: 'white',
+      color: 'white'
     };
 
     if (timeObject.date) {
       if (eventsByDate[timeObject.date]) {
         setEventsByDate((prevEvents) => ({
           ...prevEvents,
-          [timeObject.date as string]: [...prevEvents[timeObject.date as string], newEvent],
+          [timeObject.date as string]: [
+            ...prevEvents[timeObject.date as string],
+            newEvent
+          ]
         }));
       } else {
         setEventsByDate((prevEvents) => ({
           ...prevEvents,
-          [timeObject.date as string]: [newEvent],
+          [timeObject.date as string]: [newEvent]
         }));
       }
     }
@@ -81,17 +88,17 @@ const TimelineCalendarScreen: React.FC = () => {
               [timeObject.date as string]: _.filter(
                 prevEvents[timeObject.date as string],
                 (e) => e.id !== 'draft'
-              ),
+              )
             }));
           }
-        },
+        }
       },
       {
         text: 'Create',
         onPress: (eventTitle) => {
           if (timeObject.date) {
             const draftEvent = _.find(eventsByDate[timeObject.date], {
-              id: 'draft',
+              id: 'draft'
             });
             if (draftEvent) {
               draftEvent.id = undefined;
@@ -99,12 +106,14 @@ const TimelineCalendarScreen: React.FC = () => {
               draftEvent.color = 'lightgreen';
               setEventsByDate((prevEvents) => ({
                 ...prevEvents,
-                [timeObject.date as string]: [...prevEvents[timeObject.date as string]],
+                [timeObject.date as string]: [
+                  ...prevEvents[timeObject.date as string]
+                ]
               }));
             }
           }
-        },
-      },
+        }
+      }
     ]);
   };
 
@@ -114,11 +123,11 @@ const TimelineCalendarScreen: React.FC = () => {
     onBackgroundLongPressOut: approveNewEvent,
     unavailableHours: [
       { start: 0, end: 6 },
-      { start: 22, end: 24 },
+      { start: 22, end: 24 }
     ],
     onEventPress: (e) => expandEvent(e),
     overlapEventsSpacing: 8,
-    rightEdgeSpacing: 24,
+    rightEdgeSpacing: 24
   };
 
   return (
@@ -139,10 +148,10 @@ const TimelineCalendarScreen: React.FC = () => {
       />
     </CalendarProvider>
   );
-};
+}
 
 function expandEvent(e: TimelineEventProps): void {
   console.log('expand event', e.title);
 }
 
-export default TimelineCalendarScreen;
+// export default TimelineCalendarScreen;
