@@ -13,6 +13,7 @@ export const getTaskLabel = async (
 };
 
 export const getTask = async (taskID: string): Promise<Task> => {
+  console.log(`${api_url}/tasks/${taskID}`);
   const { data } = await axios.get(`${api_url}/tasks/${taskID}`);
   return data;
 };
