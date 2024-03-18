@@ -64,6 +64,7 @@ func (pg *PgModel) GetTaskByID(c *gin.Context) {
 
 type TaskQuery struct {
 	TaskID     string `form:"taskID"`
+	TaskTitle  string `form:"taskTitle"`
 	GroupID    string `form:"groupID"`
 	CreatedBy  string `form:"createdBy"`
 	TaskStatus string `form:"taskStatus"`
@@ -87,6 +88,7 @@ func (pg *PgModel) GetFilteredTasks(c *gin.Context) {
 	var filterQuery TaskQuery
 	if err := c.ShouldBindQuery(&filterQuery); err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
+		fmt.Println("error binding to query: ", err)
 		return
 	}
 	tasks, err := GetTasksByQueryFromDB(pg.Conn, filterQuery)

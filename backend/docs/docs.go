@@ -537,6 +537,11 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "name": "taskTitle",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "name": "taskType",
                         "in": "query"
                     }
@@ -1185,6 +1190,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "task_status": {
+                    "type": "string"
+                },
+                "task_title": {
                     "type": "string"
                 },
                 "task_type": {
