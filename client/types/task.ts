@@ -1,6 +1,7 @@
 import { TypeOfTask } from './type';
 
 export interface Task {
+  task_title: string;
   task_id: number;
   group_id: number;
   created_by: string;

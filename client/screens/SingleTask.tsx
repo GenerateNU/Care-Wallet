@@ -33,16 +33,9 @@ export default function SingleTaskScreen() {
     const fetchTask = async () => {
       try {
         const task: Task = await getTask(taskId);
-        console.log(JSON.stringify(task));
-        if (task.task_info && task.task_info !== null) {
-          setTitle(task.task_info.title);
-          console.log(task.task_info.title);
-          setCreatedDate(formatTimestampToTime(task.created_date));
-          console.log(title);
-          setNotes(task.notes || '');
-        } else {
-          console.error('task_info is null');
-        }
+        setTitle(task.task_title);
+        setCreatedDate(formatTimestampToTime(task.created_date));
+        setNotes(task.notes || '');
       } catch (error) {
         console.error('Failed to retrieve Task in Screen.', error);
       }
