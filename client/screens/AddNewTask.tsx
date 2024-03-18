@@ -23,8 +23,10 @@ export default function AddNewTask() {
 
   const [newTaskState, setNewTaskState] = useState<Task>({
     task_id: 0,
+    task_title: '',
     group_id: 0,
     created_by: '',
+    created_date: '',
     start_date: '',
     end_date: '',
     notes: '',
@@ -48,33 +50,50 @@ export default function AddNewTask() {
 
   return (
     <View style={{ flex: 1, position: 'relative' }}>
-      <View style={{ position: 'absolute', top: '10%', left: 0, right: 0 }}>
+      <View style={{ position: 'absolute', top: '10%', left: 5, right: 5 }}>
         <PopupModal isVisible={modalVisible} setVisible={setModalVisible}>
           <ActivityIndicator size="large" />
           <Text>Adding Task...</Text>
         </PopupModal>
         <Text
           style={{
-            color: '#000',
-            textAlign: 'center',
-            fontFamily: 'Inter',
+            color: 'black',
             fontSize: 24,
-            fontStyle: 'normal',
-            fontWeight: '700',
-            lineHeight: 'normal'
+            fontWeight: 'bold',
+            fontFamily: 'Inter'
           }}
         >
-          Add New Task
+          Task Details
         </Text>
 
-        <View style={{ marginBottom: 10 }}>
-          <Text>Task ID:</Text>
+        <View
+          style={{
+            width: 346,
+            height: 125,
+            flexDirection: 'column',
+            justifyContent: 'flex-start',
+            alignItems: 'flex-start',
+            marginBottom: 10
+          }}
+        >
+          <Text
+            style={{
+              color: 'black',
+              fontSize: 14,
+              fontWeight: 'normal',
+              fontFamily: 'Inter'
+            }}
+          >
+            Task ID:
+          </Text>
           <TextInput
             style={{
               borderWidth: 1,
               borderColor: 'gray',
               padding: 5,
-              fontSize: 18
+              fontSize: 18,
+              width: '100%', // Stretch the TextInput to the full width
+              marginBottom: 10 // Add marginBottom to match the CSS styling
             }}
             onChangeText={(val) =>
               setNewTaskState({ ...newTaskState, task_id: parseInt(val) || 0 })
@@ -82,35 +101,7 @@ export default function AddNewTask() {
             keyboardType="numeric"
           />
         </View>
-        <View style={{ marginBottom: 10 }}>
-          <Text>Group ID:</Text>
-          <TextInput
-            style={{
-              borderWidth: 1,
-              borderColor: 'gray',
-              padding: 5,
-              fontSize: 18
-            }}
-            onChangeText={(val) =>
-              setNewTaskState({ ...newTaskState, group_id: parseInt(val) || 0 })
-            }
-            keyboardType="numeric"
-          />
-        </View>
-        <View style={{ marginBottom: 10 }}>
-          <Text>Created By:</Text>
-          <TextInput
-            style={{
-              borderWidth: 1,
-              borderColor: 'gray',
-              padding: 5,
-              fontSize: 18
-            }}
-            onChangeText={(val) =>
-              setNewTaskState({ ...newTaskState, created_by: val })
-            }
-          />
-        </View>
+
         {/* Add input fields for other task fields (start_date, end_date, notes, task_status, task_type) similarly */}
         <Pressable
           onPress={handleAddTask}
