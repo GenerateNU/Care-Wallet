@@ -14,9 +14,5 @@ export interface Task {
   repeating_end_date?: string | null;
   task_status: string;
   task_type: TypeOfTask;
-  task_info?: TaskInfo;
-}
-
-export interface TaskInfo {
-  title: string;
+  task_info?: string;
 }
