@@ -1,11 +1,11 @@
 export enum TypeOfTask {
   MEDICATION = 'Medication Management',
-  APPOINTMENT = 'Physician Appointment',
+  APPOINTMENTS = 'Physician Appointments',
   GROOMING = 'Grooming',
   CONVERSATIONS = 'Family Conversations',
-  ERRANDS = 'Groceries, Shopping, & Errands',
+  ERRANDS = 'Shopping & Errands',
   BILLS = 'Pay Bills',
-  DIET = 'Diet & Nutrition',
+  DIET = 'Diet',
   ACTIVITIES = 'Activities',
   INSURANCE = 'Health Insurance',
   OTHER = 'Other'
@@ -24,7 +24,7 @@ export const categoryToTypeMap: Record<Category, TypeOfTask[]> = {
   [Category.ALL]: [],
   [Category.HEALTH]: [
     TypeOfTask.MEDICATION,
-    TypeOfTask.APPOINTMENT,
+    TypeOfTask.APPOINTMENTS,
     TypeOfTask.GROOMING,
     TypeOfTask.DIET
   ],
