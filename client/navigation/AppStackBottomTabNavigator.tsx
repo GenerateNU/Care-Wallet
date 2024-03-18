@@ -10,7 +10,6 @@ import User from '../assets/bottom-nav/user.svg';
 import MedicationList from '../screens/MedicationList';
 import PatientView from '../screens/Profile/PatientView';
 import Profile from '../screens/Profile/Profile';
-import SingleTaskScreen from '../screens/SingleTask';
 import { AppStack } from './types';
 
 const AppStackBottomTab = createBottomTabNavigator();
@@ -58,15 +57,6 @@ export function AppStackBottomTabNavigator() {
           tabBarLabel: () => <Text></Text>
         }}
         component={ProfileNavigation}
-      />
-      <AppStackBottomTab.Screen
-        name="Task"
-        options={{
-          headerShown: true,
-          tabBarIcon: () => <Home color="gray" />,
-          tabBarLabel: () => <Text>Task</Text>
-        }}
-        component={SingleTaskScreen}
       />
     </AppStackBottomTab.Navigator>
   );
