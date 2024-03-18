@@ -56,6 +56,14 @@ export async function scheduleCalendarPushNotification(
   repeat: boolean,
   date: Date,
   typeOfTrigger: string
+  // OPTIONS for typeOfTrigger:
+  // NOTE: IN UTC TIME (Must convert time zone you are in to UTC)
+  // 1. Yearly: { repeats: true, month: [0-11], day: [1-31], hour: [0-23], minute: [0-59] }
+  //    - Repeats annually on the specified month, day, hour, and minute.
+  // 2. Weekly: { weekday: [1-7], hour: [0-23], minute: [0-59] }
+  //    - Repeats weekly on the specified weekday, hour, and minute. (1 for Sunday, 2 for Monday, ..., 7 for Saturday)
+  // 3. Daily: { repeats: true, hour: [0-23], minute: [0-59] }
+  //    - Repeats daily at the specified hour and minute.
 ) {
   try {
     const triggerDate = new Date(date);
@@ -132,5 +140,3 @@ export async function scheduleInstantPushNotification(
 export async function cancelScheduleNotificationI(id: string) {
   Notification.cancelScheduledNotificationAsync(id);
 }
-
-export function scheduleDailyNotification() {}
