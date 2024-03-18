@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Alert, Pressable, Text, TextInput, View } from 'react-native';
 
 import { onAuthStateChanged } from '@firebase/auth';
@@ -29,6 +29,11 @@ export default function LoginPage() {
       setExpoPushToken(token!)
     );, []);
 
+
+  const navigation = useNavigation<AppStackNavigation>();
+
+
+  const { logInMutation, signUpMutation } = useAuth();
 
   const navigation = useNavigation<AppStackNavigation>();
 

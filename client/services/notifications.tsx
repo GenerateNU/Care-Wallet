@@ -119,7 +119,7 @@ export async function scheduleCalendarPushNotification(
   }
 }
 
-// INSTANT push notification - whe this function is called with intended title and body,
+// INSTANT push notification - when this function is called with intended title and body,
 // a notificaiton will be sent to the user right away (in 1 second)
 export async function scheduleInstantPushNotification(
   title: string,
@@ -139,4 +139,30 @@ export async function scheduleInstantPushNotification(
 
 export async function cancelScheduleNotificationI(id: string) {
   Notification.cancelScheduledNotificationAsync(id);
+}
+
+// this function can be used schedule a daily notification
+// takes in title, body, the hour and minute to be repeated at, and date to begin repeating
+export async function scheduleDailyNotification(
+  title: string,
+  body: string,
+  hour: number,
+  minutes: number,
+  dateToStart: Date
+) {
+  // Get the current date
+  const currentDate = dateToStart;
+
+  // Set the time
+  currentDate.setHours(hour);
+  currentDate.setMinutes(minutes);
+
+  // Schedule the daily notification
+  await scheduleCalendarPushNotification(
+    title,
+    body,
+    true, // repeat daily
+    currentDate,
+    'daily' // specify the type of trigger as 'daily'
+  );
 }
