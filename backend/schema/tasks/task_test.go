@@ -42,6 +42,7 @@ func TestTaskGroup(t *testing.T) {
 
 	t.Run("TestGetFilteredTasks", func(t *testing.T) {
 		getRequest := TaskQuery{
+			TaskTitle:  "",
 			GroupID:    "",
 			CreatedBy:  "",
 			TaskStatus: "",
@@ -66,6 +67,7 @@ func TestTaskGroup(t *testing.T) {
 
 		if http.StatusOK != w.Code {
 			t.Error("Failed to retrieve tasks by filter query.")
+			return
 		}
 
 		var responseTasks []models.Task
@@ -73,6 +75,7 @@ func TestTaskGroup(t *testing.T) {
 
 		if err != nil {
 			t.Error("Failed to unmarshal json")
+			return
 		}
 		start_date_1 := time.Date(2024, 2, 10, 14, 30, 0, 0, time.UTC)
 		notes_1 := "Schedule doctor appointment"
@@ -80,41 +83,44 @@ func TestTaskGroup(t *testing.T) {
 
 		expectedTasks := []models.Task{
 			{
-				TaskID:            2,
-				GroupID:           2,
-				CreatedBy:         "user3",
-				CreatedDate:       time.Date(2024, 2, 20, 23, 59, 59, 0, time.UTC),
-				StartDate:         &start_date_1,
+				TaskID:                  2,
+				TaskTitle:         "task 2",
+				GroupID:                 2,
+				CreatedBy:               "user3",
+				CreatedDate:             time.Date(2024, 2, 20, 23, 59, 59, 0, time.UTC),
+				StartDate:               &start_date_1,
 				EndDate:           nil,
 				QuickTask:         false,
 				Notes:             &notes_1,
 				Repeating:         false,
 				RepeatingInterval: nil,
 				RepeatingEndDate:  nil,
-				TaskStatus:        "INCOMPLETE",
-				TaskType:          "other",
+				TaskStatus:              "INCOMPLETE",
+				TaskType:                "other",
 				TaskInfo:          nil,
 			},
 			{
-				TaskID:            4,
-				GroupID:           4,
-				CreatedBy:         "user1",
-				CreatedDate:       time.Date(2006, 1, 2, 15, 4, 5, 0, time.UTC),
+				TaskID:                  4,
+				TaskTitle:         "task 4",
+				GroupID:                 4,
+				CreatedBy:               "user1",
+				CreatedDate:             time.Date(2006, 1, 2, 15, 4, 5, 0, time.UTC),
 				StartDate:         nil,
 				EndDate:           nil,
-				QuickTask:         true,
-				Notes:             &notes_2,
 				Repeating:         false,
 				RepeatingInterval: nil,
 				RepeatingEndDate:  nil,
-				TaskStatus:        "COMPLETE",
-				TaskType:          "other",
+				QuickTask:         true,
+				Notes:             &notes_2,
+				TaskStatus:              "COMPLETE",
+				TaskType:                "other",
 				TaskInfo:          nil,
 			},
 		}
 
 		if !reflect.DeepEqual(expectedTasks, responseTasks) {
 			t.Error("Result was not correct")
+			return
 		}
 	})
 
@@ -212,19 +218,20 @@ func TestTaskGroup(t *testing.T) {
 		note := "Refill water pitcher"
 		expectedTasks := []models.Task{
 			{
-				TaskID:            4,
-				GroupID:           4,
-				CreatedBy:         "user1",
-				CreatedDate:       time.Date(2006, 1, 2, 15, 4, 5, 0, time.UTC),
+				TaskID:                  4,
+				TaskTitle:         "task 4",
+				GroupID:                 4,
+				CreatedBy:               "user1",
+				CreatedDate:             time.Date(2006, 1, 2, 15, 4, 5, 0, time.UTC),
 				StartDate:         nil,
 				EndDate:           nil,
 				QuickTask:         true,
-				Notes:             &note,
+				Notes:                   &note,
 				Repeating:         false,
 				RepeatingInterval: nil,
 				RepeatingEndDate:  nil,
-				TaskStatus:        "COMPLETE",
-				TaskType:          "other",
+				TaskStatus:              "COMPLETE",
+				TaskType:                "other",
 				TaskInfo:          nil,
 			},
 		}
@@ -253,14 +260,21 @@ func TestTaskGroup(t *testing.T) {
 		note := "Refill water pitcher"
 		expectedTasks := []models.Task{
 			{
-				TaskID:      4,
-				GroupID:     4,
-				CreatedBy:   "user1",
-				CreatedDate: time.Date(2006, 1, 2, 15, 4, 5, 0, time.UTC),
-				Notes:       &note,
-				TaskStatus:  "COMPLETE",
-				TaskType:    "other",
+				TaskID:            4,
+				TaskTitle:         "task 4",
+				GroupID:           4,
+				CreatedBy:         "user1",
+				CreatedDate:       time.Date(2006, 1, 2, 15, 4, 5, 0, time.UTC),
+				StartDate:         nil,
+				EndDate:           nil,
+				Notes:             &note,
+				Repeating:         false,
+				RepeatingInterval: nil,
+				RepeatingEndDate:  nil,
+				TaskStatus:        "COMPLETE",
+				TaskType:          "other",
 				QuickTask:   true,
+				TaskInfo:          nil,
 			},
 		}
 

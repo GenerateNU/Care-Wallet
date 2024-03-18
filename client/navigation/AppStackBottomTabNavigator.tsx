@@ -8,8 +8,10 @@ import Calendar from '../assets/bottom-nav/calendar.svg';
 import Home from '../assets/bottom-nav/home.svg';
 import User from '../assets/bottom-nav/user.svg';
 import MedicationList from '../screens/MedicationList';
-import Profile from '../screens/Profile';
+import PatientView from '../screens/Profile/PatientView';
+import Profile from '../screens/Profile/Profile';
 import { QuickTasks } from '../screens/QuickTasks';
+import { AppStack } from './types';
 
 const AppStackBottomTab = createBottomTabNavigator();
 
@@ -49,14 +51,31 @@ export function AppStackBottomTabNavigator() {
         component={MedicationList}
       />
       <AppStackBottomTab.Screen
-        name="Profile"
+        name="ProfileScreens"
         options={{
           headerShown: false,
           tabBarIcon: ({ color }) => <User color={color} />,
           tabBarLabel: () => <Text></Text>
         }}
-        component={Profile}
+        component={ProfileNavigation}
       />
     </AppStackBottomTab.Navigator>
+  );
+}
+
+export function ProfileNavigation() {
+  return (
+    <AppStack.Navigator>
+      <AppStack.Screen
+        name="Profile"
+        options={{ headerShown: false }}
+        component={Profile}
+      />
+      <AppStack.Screen
+        name="PatientView"
+        options={{ headerShown: false }}
+        component={PatientView}
+      />
+    </AppStack.Navigator>
   );
 }

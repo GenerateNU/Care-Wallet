@@ -19,7 +19,7 @@ import { Button, Text } from 'react-native-paper';
 
 import { BackButton } from '../components/TaskType/BackButton';
 import { CloseButton } from '../components/TaskType/CloseButton';
-import { AppStackNavigation } from '../navigation/AppNavigation';
+import { AppStackNavigation } from '../navigation/types';
 import { Category, categoryToTypeMap, TypeOfTask } from '../types/type';
 
 export function TaskType() {
@@ -99,7 +99,7 @@ export function TaskType() {
         renderItem={({ item }) => (
           <TouchableOpacity
             className="m-2 h-[50px] overflow-hidden rounded-xl"
-            onPress={() => navigation.navigate('New ' + item + ' Task')}
+            onPress={() => navigation.navigate('Home')}
           >
             <Button
               className="m-2 h-[50px] items-center justify-center rounded-xl"

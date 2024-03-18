@@ -13,6 +13,7 @@ import (
 	"carewallet/schema/tasks"
 	"carewallet/schema/user"
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -39,7 +40,14 @@ func main() {
 
 	defer conn.Close()
 
-	r := gin.Default()
+	// prepare gin
+	// uncomment below mode if want to get back to release debug mode
+	//gin.SetMode(gin.ReleaseMode)
+
+	// gin with default setup
+	r := gin.New()
+	r.Use(gin.Logger())
+	r.Use(gin.Recovery())
 
 	v1 := r.Group("/")
 	{
@@ -67,10 +75,5 @@ func main() {
 		r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	}
 
-	err = r.Run(":8080")
-
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "%v\n", err)
-		os.Exit(1)
-	}
+	log.Fatalf("%v", r.Run(":8080"))
 }
