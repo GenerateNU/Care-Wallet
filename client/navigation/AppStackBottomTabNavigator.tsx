@@ -10,9 +10,9 @@ import User from '../assets/bottom-nav/user.svg';
 import MedicationList from '../screens/MedicationList';
 import PatientView from '../screens/Profile/PatientView';
 import Profile from '../screens/Profile/Profile';
-import { AppStack, AppStackParamList } from './AppNavigation';
+import { AppStack } from './types';
 
-const AppStackBottomTab = createBottomTabNavigator<AppStackParamList>();
+const AppStackBottomTab = createBottomTabNavigator();
 
 export function AppStackBottomTabNavigator() {
   return (
@@ -56,13 +56,13 @@ export function AppStackBottomTabNavigator() {
           tabBarIcon: ({ color }) => <User color={color} />,
           tabBarLabel: () => <Text></Text>
         }}
-        component={AppNavigation}
+        component={ProfileNavigation}
       />
     </AppStackBottomTab.Navigator>
   );
 }
 
-export function AppNavigation() {
+export function ProfileNavigation() {
   return (
     <AppStack.Navigator>
       <AppStack.Screen

@@ -7,7 +7,7 @@ import { CircleCard } from '../../components/profile/CircleCard';
 import { Group } from '../../components/profile/Group';
 import { Header } from '../../components/profile/Header';
 import { useCareWalletContext } from '../../contexts/CareWalletContext';
-import { AppStackNavigation } from '../../navigation/AppNavigation';
+import { AppStackNavigation } from '../../navigation/types';
 import { useAuth } from '../../services/auth';
 import { useGroup } from '../../services/group';
 import { useUsers } from '../../services/user';
