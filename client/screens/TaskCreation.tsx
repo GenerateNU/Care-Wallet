@@ -4,6 +4,7 @@ import { Text, View } from 'react-native';
 import { RouteProp, useRoute } from '@react-navigation/native';
 
 import { BackButton } from '../components/nav_buttons/BackButton';
+import { AddressComponent } from '../components/task_creation/AddressComponent.tsx';
 import { TaskCreationJson } from '../types/task-creation-json.ts';
 
 type ParamList = {
@@ -33,7 +34,7 @@ export function TaskCreation() {
           Step 1 of 2
         </Text>
       </View>
-
+      <AddressComponent />
       <Text className="text-center text-2xl font-bold">{header}</Text>
     </View>
   );
