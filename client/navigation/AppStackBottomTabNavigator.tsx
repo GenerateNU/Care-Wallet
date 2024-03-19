@@ -7,6 +7,7 @@ import Bell from '../assets/bottom-nav/bell.svg';
 import Calendar from '../assets/bottom-nav/calendar.svg';
 import Home from '../assets/bottom-nav/home.svg';
 import User from '../assets/bottom-nav/user.svg';
+import TimelineCalendarScreen from '../screens/Calendar';
 import MedicationList from '../screens/MedicationList';
 import PatientView from '../screens/Profile/PatientView';
 import Profile from '../screens/Profile/Profile';
@@ -39,7 +40,7 @@ export function AppStackBottomTabNavigator() {
           tabBarIcon: ({ color }) => <Calendar color={color} />,
           tabBarLabel: () => <Text></Text>
         }}
-        component={QuickTasks}
+        component={TimelineCalendarScreen}
       />
       <AppStackBottomTab.Screen
         name="Notifications"
