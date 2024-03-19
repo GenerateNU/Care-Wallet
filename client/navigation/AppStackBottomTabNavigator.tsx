@@ -11,7 +11,6 @@ import TimelineCalendarScreen from '../screens/Calendar';
 import MedicationList from '../screens/MedicationList';
 import PatientView from '../screens/Profile/PatientView';
 import Profile from '../screens/Profile/Profile';
-import { QuickTasks } from '../screens/QuickTasks';
 import { AppStack } from './types';
 
 const AppStackBottomTab = createBottomTabNavigator();
