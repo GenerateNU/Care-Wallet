@@ -4,7 +4,9 @@ import { Text, View } from 'react-native';
 import { RouteProp, useRoute } from '@react-navigation/native';
 
 import { BackButton } from '../components/nav_buttons/BackButton';
-import { AddressComponent } from '../components/task_creation/AddressComponent.tsx';
+import { RadioGroup } from '../components/task_creation/RadioGroup.tsx';
+import { TextInputLine } from '../components/task_creation/TextInputLine.tsx';
+import { TextInputParagraph } from '../components/task_creation/TextInputParagraph.tsx';
 import { TaskCreationJson } from '../types/task-creation-json.ts';
 
 type ParamList = {
@@ -34,8 +36,13 @@ export function TaskCreation() {
           Step 1 of 2
         </Text>
       </View>
-      <AddressComponent />
+
       <Text className="text-center text-2xl font-bold">{header}</Text>
+      <TextInputLine title={'Drug Name'} />
+      <RadioGroup title={'Drug Form'} options={['Pill', 'Liquid', 'Shot']} />
+      <TextInputLine title={'Diagnosis'} />
+      <TextInputLine title={'Prescribing Physician'} />
+      <TextInputParagraph title={'Care Instructions'} />
     </View>
   );
 }
