@@ -18,7 +18,7 @@ import { getDate, timelineEvents } from './timelineEvents';
 const INITIAL_TIME = { hour: 9, minutes: 0 };
 const EVENTS: TimelineEventProps[] = timelineEvents;
 
-export function TimelineCalendarScreen() {
+export default function TimelineCalendarScreen() {
   const [currentDate, setCurrentDate] = useState(getDate());
   const [eventsByDate, setEventsByDate] = useState(
     _.groupBy(EVENTS, (e) => CalendarUtils.getCalendarDateString(e.start))
@@ -153,5 +153,3 @@ export function TimelineCalendarScreen() {
 function expandEvent(e: TimelineEventProps): void {
   console.log('expand event', e.title);
 }
-
-// export default TimelineCalendarScreen;
