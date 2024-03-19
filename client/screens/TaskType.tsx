@@ -17,8 +17,8 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Button, Text } from 'react-native-paper';
 
-import { BackButton } from '../components/TaskType/BackButton';
-import { CloseButton } from '../components/TaskType/CloseButton';
+import { BackButton } from '../components/nav_buttons/BackButton';
+import { CloseButton } from '../components/nav_buttons/CloseButton';
 import { AppStackNavigation } from '../navigation/AppNavigation';
 import { Category, categoryToTypeMap, TypeOfTask } from '../types/type';
 
@@ -101,7 +101,7 @@ export function TaskType() {
             className="m-2 h-[50px] overflow-hidden rounded-xl"
             onPress={() =>
               navigation.navigate('TaskCreation', {
-                type: JSON.stringify(item)
+                taskType: JSON.stringify(item)
               })
             }
           >

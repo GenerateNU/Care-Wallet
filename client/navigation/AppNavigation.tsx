@@ -14,7 +14,7 @@ export type AppStackParamList = {
   Home: undefined;
   Login: undefined;
   Profile: undefined;
-  TaskCreation: { type: string };
+  TaskCreation: { taskType: string };
 };
 
 export type AppStackNavigation = NavigationProp<AppStackParamList>;
