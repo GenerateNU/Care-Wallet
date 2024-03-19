@@ -146,7 +146,7 @@ export default function TaskListScreen() {
 
   return (
     <GestureHandlerRootView>
-      <ScrollView className="mb-0 flex w-[100vw] pl-2 pr-2 pt-4">
+      <ScrollView className="mb-0 flex w-[100vw] pl-4 pr-4 pt-4">
         <View className="mb-5 flex-row items-center">
           <TextInput
             className="mr-4 h-10 flex-1 overflow-hidden rounded-full border-2 border-carewallet-gray px-2"
@@ -182,6 +182,7 @@ export default function TaskListScreen() {
         snapPoints={snapPoints}
         enablePanDownToClose={true}
         backdropComponent={renderBackdrop}
+        style={{ flex: 1, width: '100%' }}
       >
         <View>
           <View className="flex flex-row justify-between">
