@@ -10,6 +10,7 @@ import User from '../assets/bottom-nav/user.svg';
 import MedicationList from '../screens/MedicationList';
 import PatientView from '../screens/Profile/PatientView';
 import Profile from '../screens/Profile/Profile';
+import TaskList from '../screens/TaskList';
 import { AppStack } from './types';
 
 const AppStackBottomTab = createBottomTabNavigator();
