@@ -26,7 +26,7 @@ export default function LoginPage() {
       setExpoPushToken(token!)
     );
 
-    console.log(expoPushToken);
+    console.log(expoPushToken); // this is here until we send to backend
   }, []);
 
   onAuthStateChanged(auth, (user) => {

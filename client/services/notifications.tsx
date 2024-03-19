@@ -53,7 +53,7 @@ export async function scheduleCalendarPushNotification(
   body: string,
   repeat: boolean,
   date: Date,
-  typeOfTrigger: string
+  typeOfTrigger?: string
   // OPTIONS for typeOfTrigger:
   // NOTE: IN UTC TIME (Must convert time zone you are in to UTC)
   // 1. Yearly: { repeats: true, month: [0-11], day: [1-31], hour: [0-23], minute: [0-59] }
@@ -102,7 +102,7 @@ export async function scheduleCalendarPushNotification(
       Trigger = new Date(triggerDate);
     }
 
-    await scheduleNotificationAsync({
+    const notificationID = await scheduleNotificationAsync({
       content: {
         title: title,
         body: body
@@ -110,7 +110,8 @@ export async function scheduleCalendarPushNotification(
       trigger: Trigger
     });
 
-    console.log('Notification scheduled successfully');
+    // notification ID is returned, so you can use it to cancel the notification
+    console.log('Notification scheduled successfully, %s', notificationID);
   } catch (error) {
     console.error('Error scheduling notification:', error);
     alert('Failed to schedule notification. Please try again later.');
@@ -118,7 +119,7 @@ export async function scheduleCalendarPushNotification(
 }
 
 // INSTANT push notification - when this function is called with intended title and body,
-// a notificaiton will be sent to the user right away (in 1 second)
+// a notification will be sent to the user right away (in 1 second)
 export async function scheduleInstantPushNotification(
   title: string,
   body: string
