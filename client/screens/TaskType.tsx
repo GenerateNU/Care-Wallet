@@ -17,8 +17,8 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Button, Text } from 'react-native-paper';
 
-import { BackButton } from '../components/TaskType/BackButton';
-import { CloseButton } from '../components/TaskType/CloseButton';
+import { BackButton } from '../components/task-type/BackButton';
+import { CloseButton } from '../components/task-type/CloseButton';
 import { AppStackNavigation } from '../navigation/types';
 import { Category, categoryToTypeMap, TypeOfTask } from '../types/type';
 
