@@ -3,75 +3,70 @@ export const TaskCreationJson = {
     {
       Header: 'Medication Management',
       Body: [
-        { 'Drug Name': 'Line text input' },
+        { 'Drug Name': 'TextInputLine' },
         {
-          'Drug Form': ['Pills', 'Liquid', 'Shot']
+          'Drug Form': 'RadioGroup: Pills, Liquid, Shot'
         },
-        { Diagnosis: 'Line text input' },
-        { 'Prescribing Physician': 'Line text input' },
-        { 'Care Instructions': 'Paragraph text input' }
+        { Diagnosis: 'TextInputLine' },
+        { 'Prescribing Physician': 'TextInputLine' },
+        { 'Care Instructions': 'TextInputParagraph' }
       ]
     },
     {
       Header: 'Physician Appointments',
       Body: [
-        { 'Physician Name': 'Line text input' },
+        { 'Physician Name': 'TextInputLine' },
         { Address: '' },
-        { 'Hospital Affiliation': 'Line text input' },
-        { Speciality: 'Line text input' }
+        { 'Hospital Affiliation': 'TextInputLine' },
+        { Speciality: 'TextInputLine' }
       ]
     },
     {
       Header: 'Grooming',
       Body: [
-        { 'Grooming Type': ['Bathing', 'Toileting'] },
-        { 'Care Instructions': 'Paragraph text input' }
+        { 'Grooming Type': 'RadioGroup: Bathing, Toileting' },
+        { 'Care Instructions': 'TextInputParagraph' }
       ]
     },
     {
       Header: 'Family Conversations',
-      Body: [{ Topic: 'Line text input' }, { Notes: 'Paragraph text input' }]
+      Body: [{ Topic: 'TextInputLine' }, { Notes: 'TextInputParagraph' }]
     },
     {
       Header: 'Shopping & Errands',
-      Body: [
-        { Store: 'Line text input' },
-        { Instructions: 'Paragraph text input' }
-      ]
+      Body: [{ Store: 'TextInputLine' }, { Instructions: 'TextInputParagraph' }]
     },
     {
       Header: 'Pay Bills',
       Body: [
-        { 'Bill Reveicer Name': 'Line text input' },
+        { 'Bill Reveicer Name': 'TextInputLine' },
         { Address: '' },
-        { 'Proxy Agent': 'Line text input' }
+        { 'Proxy Agent': 'TextInputLine' }
       ]
     },
     {
       Header: 'Diet',
-      Body: {
-        Instructions: 'Paragraph text input'
-      }
+      Body: [{ Instructions: 'TextInputParagraph' }]
     },
     {
       Header: 'Activities',
-      Body: [{ Instructions: 'Paragraph text input' }]
+      Body: [{ Instructions: 'TextInputParagraph' }]
     },
     {
       Header: 'Health Insurance',
       Body: [
-        { 'ID Number': 'Line text input' },
-        { Provider: 'Line text input' },
-        { 'Proxy Agent': 'Line text input' }
+        { 'ID Number': 'TextInputLine' },
+        { Provider: 'TextInputLine' },
+        { 'Proxy Agent': 'TextInputLine' }
       ]
     },
     {
       Header: 'Other',
       Body: [
-        { Purpose: 'Line text input' },
+        { Purpose: 'TextInputLine' },
         { Address: '' },
-        { Website: 'Line text input' },
-        { Notes: 'Paragraph text input' }
+        { Website: 'TextInputLine' },
+        { Notes: 'TextInputParagraph' }
       ]
     }
   ]

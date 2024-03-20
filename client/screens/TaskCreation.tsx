@@ -23,16 +23,25 @@ type ParamList = {
 export function TaskCreation() {
   const route = useRoute<RouteProp<ParamList, 'mt'>>();
   const { taskType } = route.params;
+
   const header = TaskCreationJson.types.find((t) =>
     taskType.includes(t.Header)
   )?.Header;
+
   const body = TaskCreationJson.types.find((t) =>
     taskType.includes(t.Header)
   )?.Body;
-  console.log(body);
+
+  const compList: { key: string; value: string }[] = [];
+
+  body?.forEach((item) => {
+    Object.entries(item).forEach(([key, value]) => {
+      compList.push({ key, value });
+    });
+  });
 
   return (
-    <GestureHandlerRootView className="my-10">
+    <GestureHandlerRootView>
       <ScrollView>
         <View className="flex w-full flex-row items-center justify-center">
           <View className="mr-[95px]">
@@ -44,13 +53,23 @@ export function TaskCreation() {
         </View>
         <Text className="text-center text-2xl font-bold">{header}</Text>
 
-        <TextInputLine title={'Drug Name'} />
-        <RadioGroup title={'Drug Form'} options={['Pill', 'Liquid', 'Shot']} />
-        <TextInputLine title={'Diagnosis'} />
-        <TextInputLine title={'Prescribing Physician'} />
-        <TextInputParagraph title={'Care Instructions'} />
-        <AddressComponent />
-        <AddressComponent />
+        {compList.map((item, index) => (
+          <View key={index}>
+            {item.key === 'Address' && <AddressComponent />}
+            {item.value === 'TextInputLine' && (
+              <TextInputLine title={item.key} />
+            )}
+            {item.value === 'TextInputParagraph' && (
+              <TextInputParagraph title={item.key} />
+            )}
+            {item.value.startsWith('Radio Group') && (
+              <RadioGroup
+                title={item.key}
+                options={item.value.substring(12).split(', ')}
+              />
+            )}
+          </View>
+        ))}
       </ScrollView>
     </GestureHandlerRootView>
   );
