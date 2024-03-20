@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 export function TaskInfoComponent({
   name,
@@ -17,39 +17,13 @@ export function TaskInfoComponent({
   const formattedStartDate = date ? new Date(date).toLocaleDateString() : 'N/A';
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.taskNumber}>{`Task #${name}`}</Text>
-        <Text style={styles.label}>{label}</Text>
+    <View className="border-black bg-white mb-6 rounded-lg border p-4">
+      <View className="mb-2 flex flex-row justify-between">
+        <Text className="self-end font-bold">{`Task #${name}`}</Text>
+        <Text className="self-start">{label}</Text>
       </View>
-      <Text style={styles.categoryType}>{`${category} | ${type}`}</Text>
-      <Text style={styles.categoryType}>{`${formattedStartDate}`}</Text>
+      <Text className="mt-3">{`${category} | ${type}`}</Text>
+      <Text className="mt-3">{`${formattedStartDate}`}</Text>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#000000',
-    padding: 10,
-    marginBottom: 15,
-    backgroundColor: '#FFFFFF'
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 10
-  },
-  taskNumber: {
-    fontWeight: 'bold',
-    alignSelf: 'flex-end'
-  },
-  label: {
-    alignSelf: 'flex-start'
-  },
-  categoryType: {
-    marginTop: 10
-  }
-});
