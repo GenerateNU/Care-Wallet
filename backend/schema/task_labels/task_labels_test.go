@@ -5,6 +5,7 @@ import (
 	"carewallet/configuration"
 	"carewallet/db"
 	"carewallet/models"
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -26,7 +27,7 @@ func TestTaskLabelsGroup(t *testing.T) {
 	}
 
 	conn := db.ConnectPosgresDatabase(config)
-	defer conn.Close()
+	defer conn.Close(context.Background())
 
 	controller := PgModel{Conn: conn}
 	router := gin.Default()

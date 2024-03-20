@@ -10,7 +10,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jackc/pgx"
+	"github.com/jackc/pgx/v4"
 )
 
 type PgModel struct {
@@ -89,10 +89,11 @@ func (pg *PgModel) GetFilteredTasks(c *gin.Context) {
 	var filterQuery TaskQuery
 	if err := c.ShouldBindQuery(&filterQuery); err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
-		fmt.Println("error binding to query: ", err)
 		return
 	}
+
 	tasks, err := GetTasksByQueryFromDB(pg.Conn, filterQuery)
+
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
 		return

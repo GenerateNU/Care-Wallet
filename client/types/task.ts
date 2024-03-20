@@ -1,5 +1,6 @@
 export interface Task {
   task_id: number;
+  task_title: string;
   group_id: number;
   created_by: string;
   created_date: string;

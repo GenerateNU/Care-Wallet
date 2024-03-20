@@ -7,7 +7,7 @@ import { api_url } from './api-links';
 
 type TaskQueryParams = {
   taskID?: string;
-  groupID?: string;
+  groupID?: number;
   createdBy?: string;
   taskStatus?: string;
   taskType?: string;
@@ -22,6 +22,8 @@ const getFilteredTasks = async (
   const { data } = await axios.get(`${api_url}/tasks/filtered`, {
     params: queryParams
   });
+
+  console.log('filtered tasks', data);
   return data;
 };
 
@@ -34,7 +36,7 @@ export const useFilteredTasks = (queryParams: TaskQueryParams) => {
   const { data: tasks, isLoading: tasksIsLoading } = useQuery<Task[]>({
     queryKey: ['filteredTaskList', queryParams],
     queryFn: () => getFilteredTasks(queryParams),
-    refetchInterval: 20000
+    refetchInterval: 5000
   });
   return {
     tasks,

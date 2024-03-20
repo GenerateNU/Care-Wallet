@@ -1,155 +1,225 @@
-import React, { useState } from 'react';
-import { Alert } from 'react-native';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
+import { ActivityIndicator, Text, View } from 'react-native';
 
-import _ from 'lodash';
+import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
+import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
+import _, { Dictionary } from 'lodash';
+import moment from 'moment';
 import {
   CalendarProvider,
   CalendarUtils,
-  DateData,
   ExpandableCalendar,
   TimelineEventProps,
   TimelineList,
   TimelineProps
 } from 'react-native-calendars';
-import { UpdateSources } from 'react-native-calendars/src/expandableCalendar/commons';
+import { Event } from 'react-native-calendars/src/timeline/EventBlock';
+import { MarkedDates } from 'react-native-calendars/src/types';
+import { FlatList, GestureHandlerRootView } from 'react-native-gesture-handler';
 
-import { getDate, timelineEvents } from './timelineEvents';
-
-const INITIAL_TIME = { hour: 9, minutes: 0 };
-const EVENTS: TimelineEventProps[] = timelineEvents;
+import { QuickTaskCard } from '../components/QuickTaskCard';
+import { useCareWalletContext } from '../contexts/CareWalletContext';
+import { useFilteredTasks } from '../services/task';
+import { EVENT_COLOR, getDate } from './timelineEvents';
 
 export default function TimelineCalendarScreen() {
-  const [currentDate, setCurrentDate] = useState(getDate());
-  const [eventsByDate, setEventsByDate] = useState(
-    _.groupBy(EVENTS, (e) => CalendarUtils.getCalendarDateString(e.start))
-  );
+  const { group } = useCareWalletContext();
+  const [currentDate, setCurrentDate] = useState<string>(getDate());
+  const [month, setCurrentMonth] = useState<string>();
 
-  const marked = {
-    [`${getDate(-1)}`]: { marked: true },
-    [`${getDate()}`]: { marked: true },
-    [`${getDate(1)}`]: { marked: true },
-    [`${getDate(2)}`]: { marked: true },
-    [`${getDate(4)}`]: { marked: true }
-  };
+  const { tasks, tasksIsLoading } = useFilteredTasks({
+    startDate: moment(month).subtract(30, 'days').format('YYYY-MM-DD'),
+    endDate: moment(month).add(30, 'days').format('YYYY-MM-DD'),
+    groupID: group.groupID
+  });
 
-  const onDateChanged = (date: string, source: string) => {
-    console.log('TimelineCalendarScreen onDateChanged: ', date, source);
+  const { tasks: currentDayTasks } = useFilteredTasks({
+    startDate: moment(currentDate).format('YYYY-MM-DD'),
+    endDate: moment(currentDate).add(1, 'day').format('YYYY-MM-DD'),
+    groupID: group.groupID
+  });
+
+  const [events, setEvents] = useState<Dictionary<Event[]>>();
+
+  const [quickTasks, setQuickTasks] = useState<string[]>([]);
+
+  const [marked, setMarked] = useState<MarkedDates>({});
+
+  useEffect(() => {
+    setCurrentMonth(moment(currentDate).format('YYYY-MM-DD'));
+  }, []);
+
+  useEffect(() => {
+    console.log(JSON.stringify(tasks, null, 2));
+    setQuickTasks([]);
+    setMarked({});
+    setEvents(
+      _.groupBy(
+        tasks?.map((task) => {
+          if (task.quick_task) {
+            console.log('quick task', JSON.stringify(task, null, 2));
+
+            if (quickTasks.includes(task.start_date ?? '')) {
+              return {} as TimelineEventProps;
+            }
+
+            quickTasks.push(task.start_date ?? '');
+
+            return {
+              id: `Quick Tasks`,
+              start: moment(task.start_date).format('YYYY-MM-DD 08:00:00'),
+              end: moment(task.end_date).format('YYYY-MM-DD 09:00:00'),
+              title: 'Todays Quick Tasks',
+              color: '#4DB8A6',
+              summary: 'Todays Quick Tasks'
+            } as TimelineEventProps;
+          }
+
+          if (task.quick_task) {
+            return {} as Event;
+          }
+
+          return {
+            id: task.task_id.toString(),
+            start: moment(task.start_date).format('YYYY-MM-DD hh:mm:ss'),
+            end: moment(task.end_date).format('YYYY-MM-DD hh:mm:ss'),
+            title: task.task_title,
+            summary: task.task_status,
+            color: EVENT_COLOR
+          };
+        }),
+        (e) => CalendarUtils.getCalendarDateString(e?.start)
+      )
+    );
+    let markedList = {} as MarkedDates;
+
+    tasks?.forEach((task) => {
+      markedList = {
+        ...markedList,
+        [moment(task.start_date).format('YYYY-MM-DD')]: {
+          marked: true
+        }
+      };
+    });
+
+    console.log('markedList', markedList);
+
+    setMarked(markedList);
+  }, [month, tasks]);
+
+  const onDateChanged = (date: string) => {
     setCurrentDate(date);
-  };
-
-  const onMonthChange = (month: DateData, updateSource: UpdateSources) => {
-    console.log('TimelineCalendarScreen onMonthChange: ', month, updateSource);
-  };
-
-  const createNewEvent: TimelineProps['onBackgroundLongPress'] = (
-    timeString,
-    timeObject
-  ) => {
-    const hourString = `${(timeObject.hour + 1).toString().padStart(2, '0')}`;
-    const minutesString = `${timeObject.minutes.toString().padStart(2, '0')}`;
-
-    const newEvent = {
-      id: 'draft',
-      start: `${timeString}`,
-      end: `${timeObject.date} ${hourString}:${minutesString}:00`,
-      title: 'New Event',
-      color: 'white'
-    };
-
-    if (timeObject.date) {
-      if (eventsByDate[timeObject.date]) {
-        setEventsByDate((prevEvents) => ({
-          ...prevEvents,
-          [timeObject.date as string]: [
-            ...prevEvents[timeObject.date as string],
-            newEvent
-          ]
-        }));
-      } else {
-        setEventsByDate((prevEvents) => ({
-          ...prevEvents,
-          [timeObject.date as string]: [newEvent]
-        }));
-      }
+    if (moment(date).format('MM') !== moment(month).format('MM')) {
+      setCurrentMonth(date);
     }
   };
 
-  const approveNewEvent: TimelineProps['onBackgroundLongPressOut'] = (
-    _timeString,
-    timeObject
-  ) => {
-    Alert.prompt('New Event', 'Enter event title', [
-      {
-        text: 'Cancel',
-        onPress: () => {
-          if (timeObject.date) {
-            setEventsByDate((prevEvents) => ({
-              ...prevEvents,
-              [timeObject.date as string]: _.filter(
-                prevEvents[timeObject.date as string],
-                (e) => e.id !== 'draft'
-              )
-            }));
-          }
-        }
-      },
-      {
-        text: 'Create',
-        onPress: (eventTitle) => {
-          if (timeObject.date) {
-            const draftEvent = _.find(eventsByDate[timeObject.date], {
-              id: 'draft'
-            });
-            if (draftEvent) {
-              draftEvent.id = undefined;
-              draftEvent.title = eventTitle ?? 'New Event';
-              draftEvent.color = 'lightgreen';
-              setEventsByDate((prevEvents) => ({
-                ...prevEvents,
-                [timeObject.date as string]: [
-                  ...prevEvents[timeObject.date as string]
-                ]
-              }));
-            }
-          }
-        }
-      }
-    ]);
+  function expandEvent(e: TimelineEventProps): void {
+    console.log('expandEvent', e.title);
+    if (e.id === 'Quick Tasks') {
+      handleOpenPress();
+      return;
+    }
+  }
+
+  const renderBackdrop = useCallback(
+    (props: BottomSheetDefaultBackdropProps) => (
+      <BottomSheetBackdrop
+        appearsOnIndex={0}
+        disappearsOnIndex={-1}
+        {...props}
+      />
+    ),
+    []
+  );
+
+  const snapPoints = useMemo(() => ['70%'], []);
+  const bottomSheetRef = useRef<BottomSheet>(null);
+
+  // Todo: Look into if there is a change for this
+  const taskTypeDescriptions: Record<string, string> = {
+    med_mgmt: 'Medication Management',
+    dr_appt: 'Doctor Appointment',
+    financial: 'Financial Task',
+    other: 'Other Task'
   };
 
   const timelineProps: Partial<TimelineProps> = {
     format24h: false,
-    onBackgroundLongPress: createNewEvent,
-    onBackgroundLongPressOut: approveNewEvent,
     unavailableHours: [
-      { start: 0, end: 6 },
-      { start: 22, end: 24 }
+      // { start: 0, end: 6 },
+      // { start: 22, end: 24 }
     ],
     onEventPress: (e) => expandEvent(e),
     overlapEventsSpacing: 8,
     rightEdgeSpacing: 24
   };
 
-  return (
-    <CalendarProvider
-      date={currentDate}
-      onDateChanged={onDateChanged}
-      onMonthChange={onMonthChange}
-      showTodayButton
-      disabledOpacity={0.6}
-    >
-      <ExpandableCalendar firstDay={1} markedDates={marked} />
-      <TimelineList
-        events={eventsByDate}
-        timelineProps={timelineProps}
-        showNowIndicator
-        scrollToFirst
-        initialTime={INITIAL_TIME}
-      />
-    </CalendarProvider>
-  );
-}
+  const handleOpenPress = () => {
+    bottomSheetRef.current?.expand();
+    console.log(tasks);
+  };
 
-function expandEvent(e: TimelineEventProps): void {
-  console.log('expand event', e.title);
+  if (tasksIsLoading) {
+    return (
+      <View className="w-[100vw] flex-1 items-center justify-center bg-carewallet-white text-3xl">
+        <ActivityIndicator size="large" />
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
+
+  return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <CalendarProvider
+        date={moment(currentDate).format('YYYY-MM-DD')}
+        onDateChanged={onDateChanged}
+        showTodayButton
+        disabledOpacity={0.6}
+      >
+        <View>
+          <ExpandableCalendar firstDay={1} markedDates={marked} />
+          <TimelineList
+            events={events ?? ({} as Dictionary<Event[]>)}
+            timelineProps={timelineProps}
+            showNowIndicator
+            scrollToFirst
+            initialTime={{
+              hour: parseInt(moment(Date.now()).format('hh')),
+              minutes: parseInt(moment(Date.now()).format('mm'))
+            }}
+          />
+        </View>
+      </CalendarProvider>
+
+      <BottomSheet
+        index={-1}
+        snapPoints={snapPoints}
+        ref={bottomSheetRef}
+        enablePanDownToClose={true}
+        backdropComponent={renderBackdrop}
+      >
+        <Text className="ml-6 text-lg font-bold">Today&apos;s Quick Tasks</Text>
+        <View style={{ height: 10 }} />
+        <FlatList
+          data={currentDayTasks?.filter((task) => task.quick_task)}
+          className="w-full align-middle"
+          ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+          keyExtractor={(item) => item.task_id.toString()}
+          renderItem={({ item }) => (
+            <QuickTaskCard
+              name={item.notes}
+              label={taskTypeDescriptions[item.task_type]}
+            />
+          )}
+        />
+      </BottomSheet>
+    </GestureHandlerRootView>
+  );
 }

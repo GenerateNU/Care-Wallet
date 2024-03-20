@@ -4,6 +4,7 @@ import (
 	"carewallet/configuration"
 	"carewallet/db"
 	"carewallet/models"
+	"context"
 	"fmt"
 	"os"
 	"testing"
@@ -27,7 +28,7 @@ func TestGetGroupRoles(t *testing.T) {
 
 	conn := db.ConnectPosgresDatabase(config)
 
-	defer conn.Close()
+	defer conn.Close(context.Background())
 
 	controller := PgModel{Conn: conn}
 

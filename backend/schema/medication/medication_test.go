@@ -4,6 +4,7 @@ import (
 	"carewallet/configuration"
 	"carewallet/db"
 	"carewallet/models"
+	"context"
 	"fmt"
 	"os"
 	"slices"
@@ -28,7 +29,7 @@ func TestGetMedication(t *testing.T) {
 
 	conn := db.ConnectPosgresDatabase(config)
 
-	defer conn.Close()
+	defer conn.Close(context.Background())
 
 	controller := PgModel{Conn: conn}
 
