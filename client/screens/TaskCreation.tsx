@@ -42,7 +42,7 @@ export function TaskCreation() {
 
   return (
     <GestureHandlerRootView>
-      <ScrollView>
+      <ScrollView className="mt-10">
         <View className="flex w-full flex-row items-center justify-center">
           <View className="mr-[95px]">
             <BackButton />
@@ -52,7 +52,6 @@ export function TaskCreation() {
           </Text>
         </View>
         <Text className="text-center text-2xl font-bold">{header}</Text>
-
         {compList.map((item, index) => (
           <View key={index}>
             {item.key === 'Address' && <AddressComponent />}
@@ -62,7 +61,7 @@ export function TaskCreation() {
             {item.value === 'TextInputParagraph' && (
               <TextInputParagraph title={item.key} />
             )}
-            {item.value.startsWith('Radio Group') && (
+            {item.value.startsWith('RadioGroup') && (
               <RadioGroup
                 title={item.key}
                 options={item.value.substring(12).split(', ')}
