@@ -26,6 +26,7 @@ import { FlatList, GestureHandlerRootView } from 'react-native-gesture-handler';
 import { QuickTaskCard } from '../components/QuickTaskCard';
 import { useCareWalletContext } from '../contexts/CareWalletContext';
 import { useFilteredTasks } from '../services/task';
+import { Task } from '../types/task';
 import { EVENT_COLOR, getDate } from './timelineEvents';
 
 export default function TimelineCalendarScreen() {
@@ -39,21 +40,28 @@ export default function TimelineCalendarScreen() {
     groupID: group.groupID
   });
 
-  const { tasks: currentDayTasks } = useFilteredTasks({
-    startDate: moment(currentDate).format('YYYY-MM-DD'),
-    endDate: moment(currentDate).add(1, 'day').format('YYYY-MM-DD'),
-    groupID: group.groupID
-  });
-
   const [events, setEvents] = useState<Dictionary<Event[]>>();
 
   const [quickTasks, setQuickTasks] = useState<string[]>([]);
 
   const [marked, setMarked] = useState<MarkedDates>({});
 
+  const [currentDayTasks, setCurrentDayTasks] = useState<Task[]>();
+
   useEffect(() => {
     setCurrentMonth(moment(currentDate).format('YYYY-MM-DD'));
   }, []);
+
+  useEffect(() => {
+    console.log('currentDate', currentDate);
+    setCurrentDayTasks(
+      tasks?.filter(
+        (task) =>
+          moment(task.start_date).format('YYYY-MM-DD') ===
+          moment(currentDate).format('YYYY-MM-DD')
+      )
+    );
+  }, [currentDate]);
 
   useEffect(() => {
     console.log(JSON.stringify(tasks, null, 2));
@@ -65,16 +73,20 @@ export default function TimelineCalendarScreen() {
           if (task.quick_task) {
             console.log('quick task', JSON.stringify(task, null, 2));
 
-            if (quickTasks.includes(task.start_date ?? '')) {
+            if (
+              quickTasks.includes(
+                moment(task.start_date).format('YYYY-MM-DD') ?? ''
+              )
+            ) {
               return {} as TimelineEventProps;
             }
 
-            quickTasks.push(task.start_date ?? '');
+            quickTasks.push(moment(task.start_date).format('YYYY-MM-DD') ?? '');
 
             return {
               id: `Quick Tasks`,
-              start: moment(task.start_date).format('YYYY-MM-DD 08:00:00'),
-              end: moment(task.end_date).format('YYYY-MM-DD 09:00:00'),
+              start: moment(task.start_date).format('YYYY-MM-DD 00:00:00'),
+              end: moment(task.end_date).format('YYYY-MM-DD 01:00:00'),
               title: 'Todays Quick Tasks',
               color: '#4DB8A6',
               summary: 'Todays Quick Tasks'
@@ -151,7 +163,7 @@ export default function TimelineCalendarScreen() {
   };
 
   const timelineProps: Partial<TimelineProps> = {
-    format24h: false,
+    format24h: true,
     unavailableHours: [
       // { start: 0, end: 6 },
       // { start: 22, end: 24 }
