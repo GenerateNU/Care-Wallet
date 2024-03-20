@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Text, View } from 'react-native';
 
 import { RouteProp, useRoute } from '@react-navigation/native';
@@ -40,6 +40,16 @@ export function TaskCreation() {
     });
   });
 
+  const [values, setValues] = useState<{ [key: string]: string }>({});
+
+  const handleChange = (key: string, value: string) => {
+    setValues((prevValues) => ({
+      ...prevValues,
+      [key]: value
+    }));
+    console.log('Current values:', values);
+  };
+
   return (
     <GestureHandlerRootView>
       <ScrollView className="mt-10">
@@ -56,15 +66,22 @@ export function TaskCreation() {
           <View key={index}>
             {item.key === 'Address' && <AddressComponent />}
             {item.value === 'TextInputLine' && (
-              <TextInputLine title={item.key} />
+              <TextInputLine
+                title={item.key}
+                onChange={(value) => handleChange(item.key, value)}
+              />
             )}
             {item.value === 'TextInputParagraph' && (
-              <TextInputParagraph title={item.key} />
+              <TextInputParagraph
+                title={item.key}
+                onChange={(value) => handleChange(item.key, value)}
+              />
             )}
             {item.value.startsWith('RadioGroup') && (
               <RadioGroup
                 title={item.key}
                 options={item.value.substring(12).split(', ')}
+                onChange={(value) => handleChange(item.key, value)}
               />
             )}
           </View>
