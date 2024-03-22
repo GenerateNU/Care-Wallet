@@ -37,7 +37,7 @@ export function AppStackBottomTabNavigator() {
         component={MedicationList}
       />
       <AppStackBottomTab.Screen
-        name="Calendar"
+        name="CalendarTopNav"
         options={{
           headerShown: false,
           tabBarIcon: ({ color }) => <Calendar color={color} />,
@@ -86,7 +86,7 @@ export function ProfileNavigation() {
 
 function CalendarTopTapNavigator() {
   return (
-    <SafeAreaView style={{ flex: 1 }} className="bg-carewallet-white">
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
       <TopTab.Navigator>
         <TopTab.Screen name="Calendar" component={TimelineCalendarScreen} />
         <TopTab.Screen name="TaskList" component={TaskList} />

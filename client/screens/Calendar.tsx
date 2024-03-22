@@ -195,19 +195,17 @@ export default function TimelineCalendarScreen() {
         showTodayButton
         disabledOpacity={0.6}
       >
-        <View>
-          <ExpandableCalendar firstDay={1} markedDates={marked} />
-          <TimelineList
-            events={events ?? ({} as Dictionary<Event[]>)}
-            timelineProps={timelineProps}
-            showNowIndicator
-            scrollToFirst
-            initialTime={{
-              hour: parseInt(moment(Date.now()).format('hh')),
-              minutes: parseInt(moment(Date.now()).format('mm'))
-            }}
-          />
-        </View>
+        <ExpandableCalendar firstDay={1} markedDates={marked} />
+        <TimelineList
+          events={events ?? ({} as Dictionary<Event[]>)}
+          timelineProps={timelineProps}
+          showNowIndicator
+          scrollToFirst
+          initialTime={{
+            hour: parseInt(moment(Date.now()).format('hh')),
+            minutes: parseInt(moment(Date.now()).format('mm'))
+          }}
+        />
       </CalendarProvider>
 
       <BottomSheet

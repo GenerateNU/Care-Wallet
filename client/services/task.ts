@@ -27,7 +27,7 @@ const getFilteredTasks = async (
   return data;
 };
 
-export const getTaskLabels = async (taskID: string): Promise<TaskLabel[]> => {
+const getTaskLabels = async (taskID: string): Promise<TaskLabel[]> => {
   const { data } = await axios.get(`${api_url}/tasks/${taskID}/labels`);
   return data;
 };
@@ -41,5 +41,19 @@ export const useFilteredTasks = (queryParams: TaskQueryParams) => {
   return {
     tasks,
     tasksIsLoading
+  };
+};
+
+export const useTaskLabels = (taskID: string) => {
+  const { data: taskLabels, isLoading: taskLabelsIsLoading } = useQuery<
+    TaskLabel[]
+  >({
+    queryKey: ['taskLabels', taskID],
+    queryFn: () => getTaskLabels(taskID),
+    refetchInterval: 10000
+  });
+  return {
+    taskLabels,
+    taskLabelsIsLoading
   };
 };

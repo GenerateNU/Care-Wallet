@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState
-} from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { ScrollView, Text, TextInput, View } from 'react-native';
 
 import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
@@ -16,26 +10,19 @@ import { Button } from 'react-native-paper';
 import { TaskInfoComponent } from '../components/TaskInfoCard';
 import { CloseButton } from '../components/TaskType/CloseButton';
 import { useCareWalletContext } from '../contexts/CareWalletContext';
-import { getTaskLabels, useFilteredTasks } from '../services/task';
+import { useFilteredTasks } from '../services/task';
 import { Task } from '../types/task';
 
 export default function TaskListScreen() {
   const { group } = useCareWalletContext();
-  const [queryParams] = useState({
-    groupID: group.groupID ?? -1
-  });
   const [searchQuery, setSearchQuery] = useState('');
-  const [taskLabels, setTaskLabels] = useState<{ [taskId: string]: string[] }>(
-    {}
-  );
-  const { tasks } = useFilteredTasks({ groupID: queryParams.groupID });
+  const { tasks } = useFilteredTasks({ groupID: group.groupID });
 
-  // Filter button (olivia goated)
   const snapToIndex = (index: number) =>
     bottomSheetRef.current?.snapToIndex(index);
   const [open, setOpen] = useState(false);
   const [selectedLabel, setSelectedLabel] = useState<null | string>('Test');
-  const filters = Object.values(taskLabels || {}).map((filter) => ({
+  const filters = Object.values('Temp' || {}).map((filter) => ({
     label: filter[0],
     value: filter[0]
   }));
@@ -57,28 +44,6 @@ export default function TaskListScreen() {
     []
   );
 
-  // Fetch task labels for each task (2d array list)
-  useEffect(() => {
-    const fetchTaskLabels = async () => {
-      const labels: { [taskId: string]: string[] } = {};
-      if (tasks) {
-        await Promise.all(
-          tasks.map(async (task) => {
-            const labelsForTask = await getTaskLabels(task.task_id.toString());
-            labels[task?.task_id.toString()] = (labelsForTask ?? []).map(
-              (label) => label.label_name
-            );
-          })
-        );
-      }
-      setTaskLabels(labels);
-    };
-
-    if (tasks) {
-      fetchTaskLabels();
-    }
-  }, [tasks]);
-
   // Filter tasks based on search query in multiple fields and labels
   const filteredTasks = tasks?.filter((task) => {
     const taskFieldsMatch = [
@@ -93,13 +58,7 @@ export default function TaskListScreen() {
         .includes(searchQuery.toLowerCase())
     );
 
-    const labelMatch =
-      !selectedLabel ||
-      taskLabels[task?.task_id?.toString()]?.some((label) =>
-        label.toLowerCase().includes(selectedLabel.toLowerCase())
-      );
-
-    return taskFieldsMatch && labelMatch;
+    return taskFieldsMatch;
   });
 
   // Filter tasks based on categories
@@ -131,9 +90,8 @@ export default function TaskListScreen() {
         {tasks.map((task, index) => {
           return (
             <TaskInfoComponent
-              key={index + title}
+              key={index + title + task?.task_id?.toString()}
               name={task?.task_id?.toString() || 'N/A'}
-              label={`Label: ${taskLabels[task.task_id.toString()]?.join(', ') || ''}`}
               category={`Category: ${task?.task_type || ''}`}
               type={`Task Status: ${task?.task_status || ''}`}
               date={task?.start_date ? new Date(task.start_date) : new Date()}
@@ -178,7 +136,7 @@ export default function TaskListScreen() {
       </ScrollView>
       <BottomSheet
         ref={bottomSheetRef}
-        index={0}
+        index={-1}
         snapPoints={snapPoints}
         enablePanDownToClose={true}
         backdropComponent={renderBackdrop}
