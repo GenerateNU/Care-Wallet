@@ -5,11 +5,11 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jackc/pgx"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 type PgModel struct {
-	Conn *pgx.Conn
+	Conn *pgxpool.Pool
 }
 
 // groupRoles.go file

@@ -522,6 +522,11 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "name": "quickTask",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "name": "startDate",
                         "in": "query"
                     },
@@ -1171,6 +1176,9 @@ const docTemplate = `{
                 "notes": {
                     "type": "string"
                 },
+                "quick_task": {
+                    "type": "boolean"
+                },
                 "repeating": {
                     "type": "boolean"
                 },
@@ -1311,6 +1319,9 @@ const docTemplate = `{
                 },
                 "notes": {
                     "type": "string"
+                },
+                "quick_task": {
+                    "type": "boolean"
                 },
                 "repeating": {
                     "type": "boolean"

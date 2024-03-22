@@ -49,6 +49,7 @@ func TestTaskGroup(t *testing.T) {
 			TaskType:   "other",
 			StartDate:  "",
 			EndDate:    "",
+			QuickTask:  "",
 		}
 
 		w := httptest.NewRecorder()
@@ -59,6 +60,7 @@ func TestTaskGroup(t *testing.T) {
 		query.Set("taskType", getRequest.TaskType)
 		query.Set("startDate", getRequest.StartDate)
 		query.Set("endDate", getRequest.EndDate)
+		query.Set("quickTask", getRequest.QuickTask)
 
 		req, _ := http.NewRequest("GET", "/tasks/filtered?"+query.Encode(), nil)
 		router.ServeHTTP(w, req)
@@ -76,8 +78,9 @@ func TestTaskGroup(t *testing.T) {
 			return
 		}
 		start_date_1 := time.Date(2024, 2, 10, 14, 30, 0, 0, time.UTC)
-		note := "Schedule doctor appointment"
-		note2 := "Refill water pitcher"
+		notes_1 := "Schedule doctor appointment"
+		notes_2 := "Refill water pitcher"
+
 		expectedTasks := []models.Task{
 			{
 				TaskID:            2,
@@ -87,7 +90,8 @@ func TestTaskGroup(t *testing.T) {
 				CreatedDate:       time.Date(2024, 2, 20, 23, 59, 59, 0, time.UTC),
 				StartDate:         &start_date_1,
 				EndDate:           nil,
-				Notes:             &note,
+				QuickTask:         false,
+				Notes:             &notes_1,
 				Repeating:         false,
 				RepeatingInterval: nil,
 				RepeatingEndDate:  nil,
@@ -103,10 +107,11 @@ func TestTaskGroup(t *testing.T) {
 				CreatedDate:       time.Date(2006, 1, 2, 15, 4, 5, 0, time.UTC),
 				StartDate:         nil,
 				EndDate:           nil,
-				Notes:             &note2,
 				Repeating:         false,
 				RepeatingInterval: nil,
 				RepeatingEndDate:  nil,
+				QuickTask:         true,
+				Notes:             &notes_2,
 				TaskStatus:        "COMPLETE",
 				TaskType:          "other",
 				TaskInfo:          nil,
@@ -220,6 +225,7 @@ func TestTaskGroup(t *testing.T) {
 				CreatedDate:       time.Date(2006, 1, 2, 15, 4, 5, 0, time.UTC),
 				StartDate:         nil,
 				EndDate:           nil,
+				QuickTask:         true,
 				Notes:             &note,
 				Repeating:         false,
 				RepeatingInterval: nil,
@@ -267,6 +273,7 @@ func TestTaskGroup(t *testing.T) {
 				RepeatingEndDate:  nil,
 				TaskStatus:        "COMPLETE",
 				TaskType:          "other",
+				QuickTask:         true,
 				TaskInfo:          nil,
 			},
 		}
@@ -290,10 +297,10 @@ func TestTaskGroup(t *testing.T) {
 			TaskID:            1,
 			GroupID:           1,
 			CreatedBy:         "user1",
-			CreatedDate:       time.Now().UTC(),
 			StartDate:         &startDate,
 			EndDate:           &endDate,
 			Notes:             &notes,
+			QuickTask:         false,
 			Repeating:         repeating,
 			RepeatingInterval: &repeatingInterval,
 			RepeatingEndDate:  &repeatingEndDate,

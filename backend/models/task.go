@@ -12,6 +12,7 @@ type Task struct {
 	CreatedDate       time.Time  `json:"created_date"`
 	StartDate         *time.Time `json:"start_date"`
 	EndDate           *time.Time `json:"end_date"`
+	QuickTask         bool       `json:"quick_task"`
 	Notes             *string    `json:"notes"`
 	Repeating         bool       `json:"repeating"`
 	RepeatingInterval *string    `json:"repeating_interval"`

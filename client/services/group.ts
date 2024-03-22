@@ -17,7 +17,8 @@ const getGroupRoles = async (groupId: number): Promise<GroupRole[]> => {
 export const useUserGroup = (userId: string) => {
   const { data: groupId, isLoading: groupIdIsLoading } = useQuery({
     queryKey: ['groupId', userId],
-    queryFn: () => getUserGroup(userId)
+    queryFn: () => getUserGroup(userId),
+    refetchInterval: 10000
   });
 
   return { groupId, groupIdIsLoading };
@@ -26,7 +27,8 @@ export const useUserGroup = (userId: string) => {
 export const useGroup = (groupId: number) => {
   const { data: roles, isLoading: rolesAreLoading } = useQuery({
     queryKey: ['roles', groupId],
-    queryFn: () => getGroupRoles(groupId)
+    queryFn: () => getGroupRoles(groupId),
+    refetchInterval: 10000
   });
 
   return { roles, rolesAreLoading };

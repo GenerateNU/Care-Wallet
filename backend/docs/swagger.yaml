@@ -88,6 +88,8 @@ definitions:
         type: integer
       notes:
         type: string
+      quick_task:
+        type: boolean
       repeating:
         type: boolean
       repeating_end_date:
@@ -180,6 +182,8 @@ definitions:
         type: integer
       notes:
         type: string
+      quick_task:
+        type: boolean
       repeating:
         type: boolean
       repeating_end_date:
@@ -758,6 +762,9 @@ paths:
         type: string
       - in: query
         name: groupID
+        type: string
+      - in: query
+        name: quickTask
         type: string
       - in: query
         name: startDate

@@ -10,11 +10,11 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jackc/pgx"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 type PgModel struct {
-	Conn *pgx.Conn
+	Conn *pgxpool.Pool
 }
 
 func TaskGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
@@ -71,6 +71,7 @@ type TaskQuery struct {
 	TaskType   string `form:"taskType"`
 	StartDate  string `form:"startDate"`
 	EndDate    string `form:"endDate"`
+	QuickTask  string `form:"quickTask"`
 }
 
 // GetFilteredTasks godoc
@@ -88,10 +89,11 @@ func (pg *PgModel) GetFilteredTasks(c *gin.Context) {
 	var filterQuery TaskQuery
 	if err := c.ShouldBindQuery(&filterQuery); err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
-		fmt.Println("error binding to query: ", err)
 		return
 	}
+
 	tasks, err := GetTasksByQueryFromDB(pg.Conn, filterQuery)
+
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
 		return
@@ -194,6 +196,7 @@ type TaskBody struct {
 	CreatedDate       time.Time  `json:"created_date"`
 	StartDate         *time.Time `json:"start_date"`
 	EndDate           *time.Time `json:"end_date"`
+	QuickTask         bool       `json:"quick_task"`
 	Notes             *string    `json:"notes"`
 	Repeating         bool       `json:"repeating"`
 	RepeatingInterval *string    `json:"repeating_interval"`
