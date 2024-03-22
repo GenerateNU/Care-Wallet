@@ -6,7 +6,7 @@ export interface Task {
   created_date: string;
   start_date?: string | null;
   end_date?: string | null;
-  notes: string;
+  notes?: string | null;
   repeating: boolean;
   repeating_interval?: string | null;
   repeating_end_date?: string | null;
@@ -14,4 +14,5 @@ export interface Task {
   task_status: string;
   task_type: string;
   task_info?: string | null;
+  [key: string]: string | number | boolean | null | undefined; // Index signature for string indexing
 }

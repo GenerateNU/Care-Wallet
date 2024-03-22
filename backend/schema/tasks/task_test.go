@@ -119,7 +119,7 @@ func TestTaskGroup(t *testing.T) {
 		}
 
 		if !reflect.DeepEqual(expectedTasks, responseTasks) {
-			t.Error("Result was not correct")
+			t.Error("Result was not correct", responseTasks, "Expected", expectedTasks)
 			return
 		}
 	})
