@@ -3,6 +3,7 @@ import { Text } from 'react-native';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import Bell from '../assets/bottom-nav/bell.svg';
 import Calendar from '../assets/bottom-nav/calendar.svg';
@@ -38,7 +39,7 @@ export function AppStackBottomTabNavigator() {
       <AppStackBottomTab.Screen
         name="Calendar"
         options={{
-          headerShown: true,
+          headerShown: false,
           tabBarIcon: ({ color }) => <Calendar color={color} />,
           tabBarLabel: () => <Text></Text>
         }}
@@ -85,9 +86,11 @@ export function ProfileNavigation() {
 
 function CalendarTopTapNavigator() {
   return (
-    <TopTab.Navigator>
-      <TopTab.Screen name="TaskList" component={TaskList} />
-      <TopTab.Screen name="Calendar" component={TimelineCalendarScreen} />
-    </TopTab.Navigator>
+    <SafeAreaView style={{ flex: 1 }} className="bg-carewallet-white">
+      <TopTab.Navigator>
+        <TopTab.Screen name="Calendar" component={TimelineCalendarScreen} />
+        <TopTab.Screen name="TaskList" component={TaskList} />
+      </TopTab.Navigator>
+    </SafeAreaView>
   );
 }

@@ -22,13 +22,13 @@ import { Task } from '../types/task';
 export default function TaskListScreen() {
   const { group } = useCareWalletContext();
   const [queryParams] = useState({
-    groupID: group.groupID?.toString() || '-1'
+    groupID: group.groupID ?? -1
   });
   const [searchQuery, setSearchQuery] = useState('');
   const [taskLabels, setTaskLabels] = useState<{ [taskId: string]: string[] }>(
     {}
   );
-  const { tasks } = useFilteredTasks(queryParams);
+  const { tasks } = useFilteredTasks({ groupID: queryParams.groupID });
 
   // Filter button (olivia goated)
   const snapToIndex = (index: number) =>
@@ -65,7 +65,7 @@ export default function TaskListScreen() {
         await Promise.all(
           tasks.map(async (task) => {
             const labelsForTask = await getTaskLabels(task.task_id.toString());
-            labels[task.task_id.toString()] = labelsForTask.map(
+            labels[task?.task_id.toString()] = (labelsForTask ?? []).map(
               (label) => label.label_name
             );
           })
@@ -110,7 +110,7 @@ export default function TaskListScreen() {
     (task) => task?.task_status === 'PARTIAL'
   );
   const inFutureTasks = tasks?.filter(
-    (task) => task?.start_date || '' > String(new Date())
+    (task) => (task?.start_date || '') > String(new Date())
   );
   const completeTasks = tasks?.filter(
     (task) => task?.task_status === 'COMPLETE'
@@ -131,7 +131,7 @@ export default function TaskListScreen() {
         {tasks.map((task, index) => {
           return (
             <TaskInfoComponent
-              key={index}
+              key={index + title}
               name={task?.task_id?.toString() || 'N/A'}
               label={`Label: ${taskLabels[task.task_id.toString()]?.join(', ') || ''}`}
               category={`Category: ${task?.task_type || ''}`}

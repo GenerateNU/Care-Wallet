@@ -6,7 +6,7 @@ export interface Task {
   created_date: string;
   start_date?: string | null;
   end_date?: string | null;
-  notes?: string | null;
+  notes: string;
   repeating: boolean;
   repeating_interval?: string | null;
   repeating_end_date?: string | null;
