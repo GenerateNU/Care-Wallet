@@ -12,8 +12,8 @@ import (
 	"carewallet/schema/task_labels"
 	"carewallet/schema/tasks"
 	"carewallet/schema/user"
-	"context"
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -38,7 +38,7 @@ func main() {
 
 	conn := db.ConnectPosgresDatabase(config)
 
-	defer conn.Close(context.Background())
+	defer conn.Close()
 
 	// prepare gin
 	// uncomment below mode if want to get back to release debug mode
@@ -75,5 +75,5 @@ func main() {
 		r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	}
 
-	r.Run()
+	log.Fatalf("%v", r.Run(":8080"))
 }

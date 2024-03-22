@@ -4,10 +4,10 @@ import (
 	"carewallet/models"
 	"context"
 
-	"github.com/jackc/pgx/v4"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-func GetAllMedsFromDB(pool *pgx.Conn) ([]models.Medication, error) {
+func GetAllMedsFromDB(pool *pgxpool.Pool) ([]models.Medication, error) {
 	rows, err := pool.Query(context.Background(), "SELECT medication_id, medication_name FROM medication;")
 
 	if err != nil {
@@ -35,7 +35,7 @@ func GetAllMedsFromDB(pool *pgx.Conn) ([]models.Medication, error) {
 	return results, nil
 }
 
-func AddMedToDB(pool *pgx.Conn, med models.Medication) (models.Medication, error) {
+func AddMedToDB(pool *pgxpool.Pool, med models.Medication) (models.Medication, error) {
 	err := pool.QueryRow(context.Background(), "INSERT INTO medication (medication_id, medication_name) VALUES ($1, $2) RETURNING medication_id;",
 		med.MedicationID, med.MedicationName).Scan(&med.MedicationID)
 

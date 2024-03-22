@@ -5,11 +5,11 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/jackc/pgx/v4"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 // GetGroupIDByUIDFromDB returns the groupID of a user given their UID
-func GetGroupMemberByUIDFromDB(pool *pgx.Conn, uid string) (models.GroupRole, error) {
+func GetGroupMemberByUIDFromDB(pool *pgxpool.Pool, uid string) (models.GroupRole, error) {
 	var groupMember models.GroupRole
 	err := pool.QueryRow(context.Background(), "SELECT * FROM group_roles WHERE user_id = $1", uid).Scan(&groupMember.GroupID, &groupMember.UserID, &groupMember.Role)
 
@@ -22,7 +22,7 @@ func GetGroupMemberByUIDFromDB(pool *pgx.Conn, uid string) (models.GroupRole, er
 }
 
 // Get all group roles from the DB
-func GetAllGroupRolesFromDB(pool *pgx.Conn, gid int) ([]models.GroupRole, error) {
+func GetAllGroupRolesFromDB(pool *pgxpool.Pool, gid int) ([]models.GroupRole, error) {
 	rows, err := pool.Query(context.Background(), "SELECT group_id, user_id, role FROM group_roles WHERE group_id = $1;", gid)
 
 	if err != nil {

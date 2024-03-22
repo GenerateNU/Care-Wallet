@@ -35,7 +35,8 @@ export const getTaskLabels = async (taskID: string): Promise<TaskLabel[]> => {
 export const useFilteredTasks = (queryParams: TaskQueryParams) => {
   const { data: tasks, isLoading: tasksIsLoading } = useQuery<Task[]>({
     queryKey: ['filteredTaskList', queryParams],
-    queryFn: () => getFilteredTasks(queryParams)
+    queryFn: () => getFilteredTasks(queryParams),
+    refetchInterval: 10000
   });
   return {
     tasks,

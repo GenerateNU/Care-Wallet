@@ -12,14 +12,14 @@ import (
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/jackc/pgx/v5/pgxpool"
 
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
-	"github.com/jackc/pgx/v4"
 )
 
 var AWS_BUCKET_NAME = "care-wallet-storage"
 
-func UploadFile(pool *pgx.Conn, file models.File, data *multipart.FileHeader, reader io.Reader) error {
+func UploadFile(pool *pgxpool.Pool, file models.File, data *multipart.FileHeader, reader io.Reader) error {
 	file.FileName = data.Filename
 	file.UploadDate = time.Now().Format("2006-01-02 15:04:05")
 

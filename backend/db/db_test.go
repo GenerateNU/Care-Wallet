@@ -20,7 +20,7 @@ func TestDBConnection(t *testing.T) {
 
 	t.Run("TestConnectPosgresDatabase", func(t *testing.T) {
 		conn := ConnectPosgresDatabase(config)
-		defer conn.Close(context.Background())
+		defer conn.Close()
 
 		err = conn.Ping(context.Background())
 

@@ -8,10 +8,11 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/jackc/pgx/v4"
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-func GetTasksByQueryFromDB(pool *pgx.Conn, filterQuery TaskQuery) ([]models.Task, error) {
+func GetTasksByQueryFromDB(pool *pgxpool.Pool, filterQuery TaskQuery) ([]models.Task, error) {
 	query_fields := []string{
 		filterQuery.TaskID,
 		filterQuery.TaskTitle,
@@ -65,7 +66,7 @@ func GetTasksByQueryFromDB(pool *pgx.Conn, filterQuery TaskQuery) ([]models.Task
 	return results, nil
 }
 
-func AssignUsersToTaskInDB(pool *pgx.Conn, users []string, taskID string, assigner string) ([]models.TaskUser, error) {
+func AssignUsersToTaskInDB(pool *pgxpool.Pool, users []string, taskID string, assigner string) ([]models.TaskUser, error) {
 	task_id, err := strconv.Atoi(taskID)
 	if err != nil {
 		return nil, err
@@ -87,7 +88,7 @@ func AssignUsersToTaskInDB(pool *pgx.Conn, users []string, taskID string, assign
 	return assignedUsers, nil
 }
 
-func RemoveUsersFromTaskInDB(pool *pgx.Conn, users []string, taskID string) ([]models.TaskUser, error) {
+func RemoveUsersFromTaskInDB(pool *pgxpool.Pool, users []string, taskID string) ([]models.TaskUser, error) {
 	task_id, err := strconv.Atoi(taskID)
 	if err != nil {
 		print(err, "error converting task ID to int")
@@ -119,7 +120,7 @@ func RemoveUsersFromTaskInDB(pool *pgx.Conn, users []string, taskID string) ([]m
 	return removedUsers, nil
 }
 
-func GetTasksByAssignedFromDB(pool *pgx.Conn, userIDs []string) ([]models.Task, error) {
+func GetTasksByAssignedFromDB(pool *pgxpool.Pool, userIDs []string) ([]models.Task, error) {
 	var task_ids []int
 	var tasks []models.Task
 
@@ -161,7 +162,7 @@ func GetTasksByAssignedFromDB(pool *pgx.Conn, userIDs []string) ([]models.Task, 
 }
 
 // CreateTaskInDB creates a new task in the database and returns its ID
-func CreateTaskInDB(pool *pgx.Conn, newTask models.Task) (int, error) {
+func CreateTaskInDB(pool *pgxpool.Pool, newTask models.Task) (int, error) {
 	query := `
         INSERT INTO task (group_id, created_by, created_date, start_date, end_date, quick_task, notes, repeating, repeating_interval, repeating_end_date, task_status, task_type, task_info, task_title) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) RETURNING task_id`
 
@@ -188,7 +189,7 @@ func CreateTaskInDB(pool *pgx.Conn, newTask models.Task) (int, error) {
 }
 
 // DeleteTaskInDB deletes a task from the database by ID
-func DeleteTaskInDB(pool *pgx.Conn, taskID int) error {
+func DeleteTaskInDB(pool *pgxpool.Pool, taskID int) error {
 	// Assuming "task" table structure, adjust the query based on your schema
 	query := "DELETE FROM task WHERE task_id = $1"
 
@@ -197,7 +198,7 @@ func DeleteTaskInDB(pool *pgx.Conn, taskID int) error {
 }
 
 // UpdateTaskInfoInDB updates the task_info field in the database
-func UpdateTaskInfoInDB(pool *pgx.Conn, taskID int, taskInfo json.RawMessage) error {
+func UpdateTaskInfoInDB(pool *pgxpool.Pool, taskID int, taskInfo json.RawMessage) error {
 	// Assuming "task" table structure, adjust the query based on your schema
 	query := "UPDATE task SET task_info = $1 WHERE task_id = $2"
 
@@ -206,7 +207,7 @@ func UpdateTaskInfoInDB(pool *pgx.Conn, taskID int, taskInfo json.RawMessage) er
 }
 
 // GetTaskByID fetches a task from the database by its ID
-func GetTaskByID(pool *pgx.Conn, taskID int) (models.Task, error) {
+func GetTaskByID(pool *pgxpool.Pool, taskID int) (models.Task, error) {
 	query := `SELECT * FROM task WHERE task_id = $1`
 
 	var task models.Task
@@ -230,7 +231,7 @@ func GetTaskByID(pool *pgx.Conn, taskID int) (models.Task, error) {
 	return task, err
 }
 
-func GetUsersAssignedToTaskFromDB(pool *pgx.Conn, taskID int) ([]string, error) {
+func GetUsersAssignedToTaskFromDB(pool *pgxpool.Pool, taskID int) ([]string, error) {
 	var userIDs []string
 
 	// Get all user IDs assigned to the task
