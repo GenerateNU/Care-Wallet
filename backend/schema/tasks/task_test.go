@@ -12,7 +12,6 @@ import (
 	"net/url"
 	"os"
 	"reflect"
-	"strconv"
 	"testing"
 	"time"
 
@@ -349,48 +348,8 @@ func TestTaskGroup(t *testing.T) {
 	})
 
 	t.Run("TestDeleteTask", func(t *testing.T) {
-		getTaskByIDFunc := func(taskID int) (models.Task, error) {
-			return models.Task{
-				TaskID: taskID,
-				// Add other necessary fields
-			}, nil
-		}
-
-		// Mock the successful deletion of the task in the database
-		deleteTaskInDBFunc := func(taskID int) error {
-			return nil
-		}
-
-		// Create a new Gin router
-		router := gin.Default()
-
-		// Attach the DeleteTask route to the router
-		router.DELETE("/tasks/:tid", func(c *gin.Context) {
-			// Extract task ID from the path parameter
-			taskID, err := strconv.Atoi(c.Param("tid"))
-			if err != nil {
-				c.JSON(http.StatusBadRequest, err.Error())
-				return
-			}
-
-			// Check if the task exists before attempting to delete
-			if _, err := getTaskByIDFunc(taskID); err != nil {
-				c.JSON(http.StatusBadRequest, err.Error())
-				return
-			}
-
-			// Delete the task from the database
-			if err := deleteTaskInDBFunc(taskID); err != nil {
-				fmt.Println("error deleting task from the database:", err)
-				c.JSON(http.StatusBadRequest, err.Error())
-				return
-			}
-
-			c.Status(http.StatusNoContent)
-		})
-
 		// Perform a DELETE request to the /tasks/:tid endpoint
-		req, err := http.NewRequest("DELETE", "/tasks/1", nil)
+		req, err := http.NewRequest("DELETE", "/tasks/5", nil)
 		if err != nil {
 			t.Fatal("Failed to create HTTP request:", err)
 		}

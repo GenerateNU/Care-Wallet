@@ -34,6 +34,6 @@ VALUES
   (2, 2, 'Appointments'),
   (3, 3, 'Financial'),
   (4, 4, 'Household'),
-  (5, 5, 'Financial'),
-  (6, 5, 'Appointments')
+  (6, 5, 'Financial'),
+  (7, 5, 'Appointments')
 ;
