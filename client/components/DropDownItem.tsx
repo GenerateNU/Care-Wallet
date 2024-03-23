@@ -1,30 +1,10 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
-function DropdownItem({ label }: { label: string }) {
+export function DropdownItem({ label }: { label: string }) {
   return (
-    <View style={styles.container}>
-      <Text style={styles.dropdownLabel}>{label}</Text>
+    <View className="mb-10 flex flex-row items-center">
+      <Text className="mr-10  text-lg text-carewallet-black">{label}</Text>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10
-  },
-  dropdownLabel: {
-    fontSize: 18,
-    color: 'care-wallet-black',
-    marginRight: 10
-  },
-  line: {
-    flex: 1,
-    height: 1,
-    backgroundColor: 'gray'
-  }
-});
-
-export { DropdownItem };

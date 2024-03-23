@@ -1,48 +1,29 @@
-import React, { useEffect, useState } from 'react';
-import { Text, TextInput, View } from 'react-native';
+import React, { useState } from 'react';
+import { ActivityIndicator, Text, TextInput, View } from 'react-native';
 
+import { RouteProp, useRoute } from '@react-navigation/native';
+import moment from 'moment';
 import DropDownPicker from 'react-native-dropdown-picker';
 
 import CheckMark from '../assets/checkmark.svg';
 import Reject from '../assets/reject.svg';
 import { BackButton } from '../components/BackButton';
-import { getTask, useGetTaskLabel } from '../services/task';
-import { Task } from '../types/task';
+import { useTaskById } from '../services/task';
 import { Category, categoryToTypeMap, TypeOfTask } from '../types/type';
 
+type ParamList = {
+  mt: {
+    id: string;
+  };
+};
+
 export default function SingleTaskScreen() {
-  const [taskId] = useState('1');
+  const route = useRoute<RouteProp<ParamList, 'mt'>>();
+  const { id } = route.params;
   const [open, setOpen] = useState(false);
   const [taskType, setTaskType] = useState<TypeOfTask>(TypeOfTask.ACTIVITIES);
-  const label = useGetTaskLabel(taskId);
-  const [title, setTitle] = useState<string | null>(null);
-  const [createdDate, setCreatedDate] = useState<string | null>(null);
-  const [notes, setNotes] = useState<string | null>('');
-
-  function formatTimestampToTime(timestamp: string): string {
-    const date = new Date(timestamp);
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
-    const ampm = hours >= 12 ? 'PM' : 'AM';
-    const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
-    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
-    return `${formattedHours}:${formattedMinutes} ${ampm}`;
-  }
-
-  useEffect(() => {
-    const fetchTask = async () => {
-      try {
-        const task: Task = await getTask(taskId);
-        setTitle(task.task_title);
-        setCreatedDate(formatTimestampToTime(task.created_date));
-        setNotes(task.notes || '');
-      } catch (error) {
-        console.error('Failed to retrieve Task in Screen.', error);
-      }
-    };
-
-    fetchTask();
-  }, [taskId]); // Execute fetchTask when taskId changes
+  const { task, taskIsLoading, taskLabels, taskLabelsIsLoading } =
+    useTaskById(id);
 
   // Gets category based on Task Type
   const getCategoryFromTaskType = (taskType: TypeOfTask): Category => {
@@ -59,6 +40,14 @@ export default function SingleTaskScreen() {
     return Category.ALL; // Return a default category if no match is found
   };
 
+  if (taskIsLoading || taskLabelsIsLoading)
+    return (
+      <View className="w-[100vw] flex-1 items-center justify-center bg-carewallet-white text-3xl">
+        <ActivityIndicator size="large" />
+        <Text>Loading Task...</Text>
+      </View>
+    );
+
   return (
     <View className="flex flex-col items-start p-4">
       <View className="flex-row items-center">
@@ -66,8 +55,6 @@ export default function SingleTaskScreen() {
       </View>
       <View className="absolute right-0 top-4 z-20 m-4">
         <DropDownPicker
-          // Very light placeholder for the real dropdown picker. Once backend routes are added
-          // to update a task status, then this can be dynamically rendered
           open={open}
           value="value"
           items={[
@@ -84,9 +71,14 @@ export default function SingleTaskScreen() {
       </View>
       <View className="mt-4">
         <Text className="text-black font-inter text-2xl font-bold">
-          {title || 'Doctor’s Appointment'} {'\n'} @ {createdDate}
+          {task?.task_title} {'\n'} @{' '}
+          {moment(task?.start_date).format('hh:mm A')}
         </Text>
-        <Text className="text-base "> {label || ''}</Text>
+        {taskLabels?.map((label) => (
+          <Text key={label.task_id + label.label_name} className="text-base">
+            {label.label_name || ''}
+          </Text>
+        ))}
         <Text className="text-base ">
           {getCategoryFromTaskType(taskType) || 'Category Task'} | {taskType}
         </Text>
@@ -95,14 +87,13 @@ export default function SingleTaskScreen() {
 
       <View className="mt-2">
         <Text className="text-black font-inter mb-4 text-base font-normal">
-          {notes}
+          {task?.notes}
         </Text>
         <Text className="text-black font-inter text-xl">Additional Notes</Text>
         <TextInput className="border-black mb-2 h-32 w-80 rounded-lg border-2" />
       </View>
 
       <View className="ml-auto flex-1 flex-row space-x-4">
-        {/* Once backend endpoints for assigning tasks are implemented, then can connect these buttons */}
         <CheckMark />
         <Reject />
       </View>

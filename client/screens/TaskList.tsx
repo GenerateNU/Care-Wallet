@@ -91,7 +91,8 @@ export default function TaskListScreen() {
           return (
             <TaskInfoComponent
               key={index + title + task?.task_id?.toString()}
-              name={task?.task_id?.toString() || 'N/A'}
+              id={task.task_id}
+              name={task?.task_title || 'N/A'}
               category={`Category: ${task?.task_type || ''}`}
               type={`Task Status: ${task?.task_status || ''}`}
               date={task?.start_date ? new Date(task.start_date) : new Date()}
@@ -127,12 +128,13 @@ export default function TaskListScreen() {
         <Text className="text-xl font-bold text-carewallet-black">
           Task List (all tasks of all time)
         </Text>
-        {renderSection(filteredTasks ?? [], 'All Tasks')}
-        {renderSection(pastDueTasks ?? [], 'Past Due')}
-        {renderSection(inProgressTasks ?? [], 'In Progress')}
-        {renderSection(inFutureTasks ?? [], 'Future')}
-        {renderSection(completeTasks ?? [], 'Done')}
-        {renderSection(incompleteTasks ?? [], 'Marked as Incomplete')}
+        {filteredTasks && renderSection(filteredTasks, 'All Tasks')}
+        {pastDueTasks && renderSection(pastDueTasks, 'Past Due')}
+        {inProgressTasks && renderSection(inProgressTasks, 'In Progress')}
+        {inFutureTasks && renderSection(inFutureTasks, 'Future')}
+        {completeTasks && renderSection(completeTasks, 'Done')}
+        {incompleteTasks &&
+          renderSection(incompleteTasks, 'Marked as Incomplete')}
       </ScrollView>
       <BottomSheet
         ref={bottomSheetRef}

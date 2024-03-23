@@ -3,9 +3,8 @@ import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { Button } from 'react-native-paper';
 
-import { AppStackNavigation } from '../navigation/AppNavigation';
+import { AppStackNavigation } from '../navigation/types';
 
-// TODO style
 export function BackButton() {
   const navigation = useNavigation<AppStackNavigation>();
 

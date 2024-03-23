@@ -8,6 +8,42 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
+func ChangeUserGroupRoleInDB(pool *pgxpool.Pool, gid int, uid string, role string) (models.GroupRole, error) {
+	var groupMember models.GroupRole
+	fmt.Println(role)
+	err := pool.QueryRow(context.Background(), "UPDATE group_roles SET role = $1 WHERE group_id = $2 AND user_id = $3", role, gid, uid).Scan(&groupMember.Role, &groupMember.GroupID, &groupMember.UserID)
+
+	if err != nil {
+		fmt.Printf("Error getting group_id from user_id: %v", err)
+		return groupMember, err
+	}
+
+	return groupMember, nil
+}
+
+func AddUserToGroupInDB(pool *pgxpool.Pool, gid int, uid string, role string) (models.GroupRole, error) {
+	var groupMember models.GroupRole
+	err := pool.QueryRow(context.Background(), "INSERT into group_roles (group_id, user_id, role) VALUES ($1, $2, $3) RETURNING *", gid, uid, role).Scan(&groupMember.GroupID, &groupMember.UserID, &groupMember.Role)
+
+	if err != nil {
+		fmt.Printf("Error getting group_id from user_id: %v", err)
+		return groupMember, err
+	}
+
+	return groupMember, nil
+}
+
+func RemoveUserFromGroupInDB(pool *pgxpool.Pool, gid int, uid string) error {
+	_, err := pool.Exec(context.Background(), "DELETE from group_roles WHERE group_id = $1 AND user_id = $2", gid, uid)
+
+	if err != nil {
+		fmt.Printf("Error getting group_id from user_id: %v", err)
+		return err
+	}
+
+	return nil
+}
+
 // GetGroupIDByUIDFromDB returns the groupID of a user given their UID
 func GetGroupMemberByUIDFromDB(pool *pgxpool.Pool, uid string) (models.GroupRole, error) {
 	var groupMember models.GroupRole

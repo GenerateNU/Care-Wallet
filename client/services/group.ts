@@ -4,7 +4,7 @@ import axios from 'axios';
 import { GroupRole } from '../types/group';
 import { api_url } from './api-links';
 
-const getUserGroup = async (userId: string): Promise<number> => {
+const getUserGroup = async (userId: string): Promise<GroupRole> => {
   const { data } = await axios.get(`${api_url}/group/member/${userId}`);
   return data;
 };
@@ -15,13 +15,13 @@ const getGroupRoles = async (groupId: number): Promise<GroupRole[]> => {
 };
 
 export const useUserGroup = (userId: string) => {
-  const { data: groupId, isLoading: groupIdIsLoading } = useQuery({
+  const { data: userGroupRole, isLoading: userGroupRoleIsLoading } = useQuery({
     queryKey: ['groupId', userId],
     queryFn: () => getUserGroup(userId),
-    refetchInterval: 10000
+    refetchInterval: 5000
   });
 
-  return { groupId, groupIdIsLoading };
+  return { userGroupRole, userGroupRoleIsLoading };
 };
 
 export const useGroup = (groupId: number) => {

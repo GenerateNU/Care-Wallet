@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { IconButton } from 'react-native-paper';
 
 import BackArrow from '../../assets/back-arrow.svg';
-import { AppStackNavigation } from '../../navigation/AppNavigation';
+import { AppStackNavigation } from '../../navigation/types';
 
 export function BackButton() {
   const navigation = useNavigation<AppStackNavigation>();

@@ -4,7 +4,7 @@ import { Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { IconButton } from 'react-native-paper';
 
-import { AppStackNavigation } from '../../navigation/AppNavigation';
+import { AppStackNavigation } from '../../navigation/types';
 import { User } from '../../types/user';
 
 interface ProfileTopHeaderProps {

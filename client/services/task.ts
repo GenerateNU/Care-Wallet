@@ -16,19 +16,27 @@ type TaskQueryParams = {
   quickTask?: boolean;
 };
 
-export const getTask = async (taskID: string): Promise<Task> => {
+const getTask = async (taskID: string): Promise<Task> => {
   const { data } = await axios.get(`${api_url}/tasks/${taskID}`);
+  return data;
+};
+
+const getTaskByAssigned = async (userId: string): Promise<Task[]> => {
+  const { data } = await axios.get(
+    `${api_url}/tasks/assigned?userIDs=${userId}`
+  );
+
   return data;
 };
 
 const getFilteredTasks = async (
   queryParams: TaskQueryParams
 ): Promise<Task[]> => {
+  if (!queryParams.groupID) [];
   const { data } = await axios.get(`${api_url}/tasks/filtered`, {
     params: queryParams
   });
 
-  console.log('filtered tasks', data);
   return data;
 };
 
@@ -49,16 +57,35 @@ export const useFilteredTasks = (queryParams: TaskQueryParams) => {
   };
 };
 
-export const useTaskLabels = (taskID: string) => {
+export const useTaskById = (id: string) => {
+  const { data: task, isLoading: taskIsLoading } = useQuery<Task>({
+    queryKey: ['task', id],
+    queryFn: () => getTask(id),
+    refetchInterval: 10000
+  });
+
   const { data: taskLabels, isLoading: taskLabelsIsLoading } = useQuery<
     TaskLabel[]
   >({
-    queryKey: ['taskLabels', taskID],
-    queryFn: () => getTaskLabels(taskID),
+    queryKey: ['taskLabels', id],
+    queryFn: () => getTaskLabels(id),
     refetchInterval: 10000
   });
+
+  const { data: taskByUser, isLoading: taskByUserIsLoading } = useQuery<Task[]>(
+    {
+      queryKey: ['tasks', id],
+      queryFn: () => getTaskByAssigned(id),
+      refetchInterval: 10000
+    }
+  );
+
   return {
+    task,
+    taskIsLoading,
     taskLabels,
-    taskLabelsIsLoading
+    taskLabelsIsLoading,
+    taskByUser,
+    taskByUserIsLoading
   };
 };

@@ -1,3 +1,5 @@
+import { Role } from '../types/group';
+
 export interface User {
   userID: string;
   userEmail: string;
@@ -5,5 +7,5 @@ export interface User {
 
 export interface Group {
   groupID: number;
-  role: string; // TODO: update to enum
+  role: Role;
 }

@@ -10,6 +10,7 @@ import { useCareWalletContext } from '../../contexts/CareWalletContext';
 import { AppStackNavigation } from '../../navigation/types';
 import { useAuth } from '../../services/auth';
 import { useGroup } from '../../services/group';
+import { useTaskById } from '../../services/task';
 import { useUsers } from '../../services/user';
 
 export default function Profile() {
@@ -20,10 +21,11 @@ export default function Profile() {
   const { users, usersAreLoading } = useUsers(
     roles?.map((role) => role.user_id) ?? []
   );
+  const { taskByUser, taskByUserIsLoading } = useTaskById(activeUser);
 
   const { signOutMutation } = useAuth();
 
-  if (rolesAreLoading || usersAreLoading) {
+  if (rolesAreLoading || usersAreLoading || taskByUserIsLoading) {
     return (
       <View className="w-full flex-1 items-center justify-center bg-carewallet-white text-3xl">
         <ActivityIndicator size="large" />
@@ -40,10 +42,6 @@ export default function Profile() {
     );
   }
 
-  // TODO: Connext with task screen
-  // TODO: Get task number from backend
-  // TODO: Connext with patient information screen
-  // TODO: Add ability to change user view if I click on another user?
   return (
     <View className="flex flex-1 flex-col">
       <Header
@@ -58,10 +56,13 @@ export default function Profile() {
         roles={roles ?? []}
         rolesAreLoading={rolesAreLoading}
       />
-      <View className="mt-5 flex items-center pb-5">
+      <View
+        className="mt-5 flex items-center pb-5"
+        onTouchEnd={() => navigation.navigate('TaskList')}
+      >
         <View className="h-20 w-80 items-center justify-center rounded-xl border border-carewallet-black">
           <Text className="text-md">Your Tasks</Text>
-          <Text className="text-2xl">4</Text>
+          <Text className="text-2xl">{taskByUser?.length}</Text>
         </View>
       </View>
       <View className="mb-5 items-center">
