@@ -16,6 +16,11 @@ type TaskQueryParams = {
   quickTask?: boolean;
 };
 
+export const getTask = async (taskID: string): Promise<Task> => {
+  const { data } = await axios.get(`${api_url}/tasks/${taskID}`);
+  return data;
+};
+
 const getFilteredTasks = async (
   queryParams: TaskQueryParams
 ): Promise<Task[]> => {

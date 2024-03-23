@@ -1,3 +1,5 @@
+import { TypeOfTask } from './type';
+
 export interface Task {
   task_id: number;
   task_title: string;
@@ -12,7 +14,7 @@ export interface Task {
   repeating_end_date?: string | null;
   quick_task: boolean;
   task_status: string;
-  task_type: string;
+  task_type: TypeOfTask;
   task_info?: string | null;
   [key: string]: string | number | boolean | null | undefined; // Index signature for string indexing
 }
