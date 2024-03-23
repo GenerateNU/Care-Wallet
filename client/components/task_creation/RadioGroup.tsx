@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 
-import RadioButton from '../../assets/radio-button-ellipse.svg';
+import ButtonCircle from '../../assets/radio-button-circle.svg';
 
 interface RadioGroupProps {
   title: string;
@@ -10,10 +10,11 @@ interface RadioGroupProps {
 }
 
 export function RadioGroup({ title, options, onChange }: RadioGroupProps) {
-  const [, setSelectedOption] = useState('');
+  const [selectedOption, setSelectedOption] = useState('');
 
   const handleOptionSelect = (option: string) => {
     setSelectedOption(option);
+    console.log('Selected option:', option);
     if (onChange) {
       onChange(option);
     }
@@ -26,10 +27,12 @@ export function RadioGroup({ title, options, onChange }: RadioGroupProps) {
         {options.map((option, index) => (
           <TouchableOpacity
             key={index}
-            className="border-gray-300 flex h-12 flex-row items-center space-x-2 rounded-md border px-4 py-2"
-            onPress={() => handleOptionSelect(option)}
+            className={`flex h-12 flex-row items-center space-x-2 rounded-md border px-4 py-2 ${option === selectedOption ? 'bg-carewallet-gray' : ''}`}
+            onPress={() => {
+              handleOptionSelect(option);
+            }}
           >
-            <RadioButton />
+            <ButtonCircle />
             <Text>{option}</Text>
           </TouchableOpacity>
         ))}
