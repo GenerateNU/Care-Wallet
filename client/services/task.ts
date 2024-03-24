@@ -57,35 +57,37 @@ export const useFilteredTasks = (queryParams: TaskQueryParams) => {
   };
 };
 
-export const useTaskById = (id: string) => {
+export const useTaskByAssigned = (userId: string) => {
+  const { data: taskByUser, isLoading: taskByUserIsLoading } = useQuery<Task[]>(
+    {
+      queryKey: ['tasks', userId],
+      queryFn: () => getTaskByAssigned(userId),
+      refetchInterval: 20000
+    }
+  );
+
+  return { taskByUser, taskByUserIsLoading };
+};
+
+export const useTaskById = (taskId: string) => {
   const { data: task, isLoading: taskIsLoading } = useQuery<Task>({
-    queryKey: ['task', id],
-    queryFn: () => getTask(id),
+    queryKey: ['task', taskId],
+    queryFn: () => getTask(taskId),
     refetchInterval: 20000
   });
 
   const { data: taskLabels, isLoading: taskLabelsIsLoading } = useQuery<
     TaskLabel[]
   >({
-    queryKey: ['taskLabels', id],
-    queryFn: () => getTaskLabels(id),
+    queryKey: ['taskLabels', taskId],
+    queryFn: () => getTaskLabels(taskId),
     refetchInterval: 20000
   });
-
-  const { data: taskByUser, isLoading: taskByUserIsLoading } = useQuery<Task[]>(
-    {
-      queryKey: ['tasks', id],
-      queryFn: () => getTaskByAssigned(id),
-      refetchInterval: 20000
-    }
-  );
 
   return {
     task,
     taskIsLoading,
     taskLabels,
-    taskLabelsIsLoading,
-    taskByUser,
-    taskByUserIsLoading
+    taskLabelsIsLoading
   };
 };

@@ -10,7 +10,7 @@ import { useCareWalletContext } from '../../contexts/CareWalletContext';
 import { AppStackNavigation } from '../../navigation/types';
 import { useAuth } from '../../services/auth';
 import { useGroup } from '../../services/group';
-import { useTaskById } from '../../services/task';
+import { useTaskByAssigned } from '../../services/task';
 import { useUsers } from '../../services/user';
 
 export default function Profile() {
@@ -21,7 +21,7 @@ export default function Profile() {
   const { users, usersAreLoading } = useUsers(
     roles?.map((role) => role.user_id) ?? []
   );
-  const { taskByUser, taskByUserIsLoading } = useTaskById(activeUser);
+  const { taskByUser, taskByUserIsLoading } = useTaskByAssigned(activeUser);
 
   const { signOutMutation } = useAuth();
 
