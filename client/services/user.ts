@@ -32,8 +32,7 @@ export const useUser = (userId: string) => {
 
   const { data: user, isLoading: userIsLoading } = useQuery<User>({
     queryKey: ['user', userId],
-    queryFn: () => getUser(userId),
-    refetchInterval: 20000
+    queryFn: () => getUser(userId)
   });
 
   const { mutate: updateUserMutation } = useMutation({
@@ -57,8 +56,7 @@ export const useUsers = (userIds: string[]) => {
   const { data: users, isLoading: usersAreLoading } = useQuery<User[]>({
     queryKey: ['users', userIds],
     queryFn: () => getUsers(userIds),
-    enabled: userIds.length > 0,
-    refetchInterval: 20000
+    enabled: userIds.length > 0
   });
 
   return { users, usersAreLoading };

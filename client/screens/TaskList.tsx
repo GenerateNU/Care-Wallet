@@ -1,8 +1,9 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { ScrollView, Text, TextInput, View } from 'react-native';
+import { Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 
 import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
 import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
+import { useNavigation } from '@react-navigation/native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Button } from 'react-native-paper';
@@ -10,11 +11,14 @@ import { Button } from 'react-native-paper';
 import { TaskInfoComponent } from '../components/TaskInfoCard';
 import { CloseButton } from '../components/TaskType/CloseButton';
 import { useCareWalletContext } from '../contexts/CareWalletContext';
+import { AppStackNavigation } from '../navigation/types';
 import { useFilteredTasks } from '../services/task';
 import { Task } from '../types/task';
 
 export default function TaskListScreen() {
   const { group } = useCareWalletContext();
+  const navigator = useNavigation<AppStackNavigation>();
+  const [canPress, setCanPress] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const { tasks } = useFilteredTasks({ groupID: group.groupID });
 
@@ -89,14 +93,21 @@ export default function TaskListScreen() {
         <Text className="text-lg text-carewallet-black">{title}</Text>
         {tasks.map((task, index) => {
           return (
-            <TaskInfoComponent
-              key={index + title + task?.task_id?.toString()}
-              id={task.task_id}
-              name={task?.task_title || 'N/A'}
-              category={`Category: ${task?.task_type || ''}`}
-              type={`Task Status: ${task?.task_status || ''}`}
-              date={task?.start_date ? new Date(task.start_date) : new Date()}
-            />
+            <Pressable
+              key={index + title}
+              onTouchEnd={() => {
+                if (!canPress) return;
+                navigator.navigate('TaskDisplay', { id: task.task_id });
+              }}
+            >
+              <TaskInfoComponent
+                id={task.task_id}
+                name={task?.task_title}
+                category={task?.task_type}
+                status={task?.task_status}
+                date={task?.start_date ? new Date(task.start_date) : new Date()}
+              />
+            </Pressable>
           );
         })}
       </View>
@@ -105,7 +116,11 @@ export default function TaskListScreen() {
 
   return (
     <GestureHandlerRootView>
-      <ScrollView className="mb-0 flex w-[100vw] pl-4 pr-4 pt-4">
+      <ScrollView
+        className="mb-0 flex w-[100vw] pl-4 pr-4 pt-4"
+        onScrollBeginDrag={() => setCanPress(false)}
+        onScrollEndDrag={() => setCanPress(true)}
+      >
         <View className="mb-5 flex-row items-center">
           <TextInput
             className="mr-4 h-10 flex-1 overflow-hidden rounded-full border-2 border-carewallet-gray px-2"

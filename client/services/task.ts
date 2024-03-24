@@ -48,8 +48,7 @@ const getTaskLabels = async (taskID: string): Promise<TaskLabel[]> => {
 export const useFilteredTasks = (queryParams: TaskQueryParams) => {
   const { data: tasks, isLoading: tasksIsLoading } = useQuery<Task[]>({
     queryKey: ['filteredTaskList', queryParams],
-    queryFn: () => getFilteredTasks(queryParams),
-    refetchInterval: 20000
+    queryFn: () => getFilteredTasks(queryParams)
   });
   return {
     tasks,
@@ -61,8 +60,7 @@ export const useTaskByAssigned = (userId: string) => {
   const { data: taskByUser, isLoading: taskByUserIsLoading } = useQuery<Task[]>(
     {
       queryKey: ['tasks', userId],
-      queryFn: () => getTaskByAssigned(userId),
-      refetchInterval: 20000
+      queryFn: () => getTaskByAssigned(userId)
     }
   );
 
@@ -72,16 +70,14 @@ export const useTaskByAssigned = (userId: string) => {
 export const useTaskById = (taskId: string) => {
   const { data: task, isLoading: taskIsLoading } = useQuery<Task>({
     queryKey: ['task', taskId],
-    queryFn: () => getTask(taskId),
-    refetchInterval: 20000
+    queryFn: () => getTask(taskId)
   });
 
   const { data: taskLabels, isLoading: taskLabelsIsLoading } = useQuery<
     TaskLabel[]
   >({
     queryKey: ['taskLabels', taskId],
-    queryFn: () => getTaskLabels(taskId),
-    refetchInterval: 20000
+    queryFn: () => getTaskLabels(taskId)
   });
 
   return {

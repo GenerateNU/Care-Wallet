@@ -20,7 +20,6 @@ type ParamList = {
 export default function SingleTaskScreen() {
   const route = useRoute<RouteProp<ParamList, 'mt'>>();
   const { id } = route.params;
-  console.log(id);
   const [open, setOpen] = useState(false);
   const [taskType, setTaskType] = useState<TypeOfTask>(TypeOfTask.ACTIVITIES);
   const { task, taskIsLoading, taskLabels, taskLabelsIsLoading } =
@@ -49,36 +48,36 @@ export default function SingleTaskScreen() {
       </View>
     );
 
-  if (!task) {
+  if (!task || task == undefined) {
     <View className="w-[100vw] flex-1 items-center justify-center bg-carewallet-white text-3xl">
       <Text>Error Loading Task</Text>
     </View>;
   }
 
   return (
-    <View className="flex flex-col items-start p-4">
-      <View className="flex-row items-center">
+    <View className="flex h-full flex-col items-start bg-carewallet-white p-4">
+      <View className="w-[100vw] flex-row items-center">
         <BackButton />
-      </View>
-      <View className="absolute right-0 top-4 z-20 m-4">
-        <DropDownPicker
-          open={open}
-          value="value"
-          items={[
-            { label: 'INCOMPLETE', value: 'incomplete' },
-            { label: 'COMPLETE', value: 'Complete' },
-            { label: 'PARTIAL', value: 'Partial' }
-          ]}
-          setOpen={setOpen}
-          setValue={setTaskType}
-          placeholder="To-do"
-          containerStyle={{ height: 40, marginBottom: 8, width: 100 }}
-          style={{ backgroundColor: 'lightgray', borderColor: 'gray' }}
-        />
+        <View className="z-20 ml-auto mr-10 mt-4">
+          <DropDownPicker
+            open={open}
+            value="value"
+            items={[
+              { label: 'INCOMPLETE', value: 'incomplete' },
+              { label: 'COMPLETE', value: 'Complete' },
+              { label: 'PARTIAL', value: 'Partial' }
+            ]}
+            setOpen={setOpen}
+            setValue={setTaskType}
+            placeholder="To-do"
+            containerStyle={{ height: 40, marginBottom: 8, width: 100 }}
+            style={{ backgroundColor: 'lightgray', borderColor: 'gray' }}
+          />
+        </View>
       </View>
       <View className="mt-4">
         <Text className="text-black font-inter text-2xl font-bold">
-          {task?.task_title} {'\n'} @{' '}
+          {task?.task_title} {'\n'}
           {moment(task?.start_date).format('hh:mm A')}
         </Text>
         {taskLabels?.map((label) => (
@@ -87,7 +86,7 @@ export default function SingleTaskScreen() {
           </Text>
         ))}
         <Text className="text-base ">
-          {getCategoryFromTaskType(taskType) || 'Category Task'} | {taskType}
+          {getCategoryFromTaskType(taskType)} | {taskType}
         </Text>
       </View>
       <View className="mt-4"></View>
@@ -100,9 +99,13 @@ export default function SingleTaskScreen() {
         <TextInput className="border-black mb-2 h-32 w-80 rounded-lg border-2" />
       </View>
 
-      <View className="ml-auto flex-1 flex-row space-x-4">
-        <CheckMark />
-        <Reject />
+      <View className="ml-auto mt-auto flex-1 flex-row space-x-4">
+        <View className="mt-auto rounded-lg bg-carewallet-gray p-2">
+          <CheckMark />
+        </View>
+        <View className="mt-auto rounded-lg bg-carewallet-gray p-2">
+          <Reject />
+        </View>
       </View>
     </View>
   );

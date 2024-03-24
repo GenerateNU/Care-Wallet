@@ -12,6 +12,7 @@ import TimelineCalendarScreen from '../screens/Calendar';
 import MedicationList from '../screens/MedicationList';
 import PatientView from '../screens/Profile/PatientView';
 import Profile from '../screens/Profile/Profile';
+import SingleTaskScreen from '../screens/SingleTask';
 import TaskList from '../screens/TaskList';
 import { AppStack } from './types';
 
@@ -29,20 +30,20 @@ export function AppStackBottomTabNavigator() {
       <AppStackBottomTab.Screen
         name="Landing"
         options={{
-          headerShown: true,
+          headerShown: false,
           tabBarIcon: ({ color }) => <Home color={color} />,
           tabBarLabel: () => <Text></Text>
         }}
         component={MedicationList}
       />
       <AppStackBottomTab.Screen
-        name="CalendarTopNav"
+        name="CalendarContainer"
         options={{
           headerShown: false,
           tabBarIcon: ({ color }) => <Calendar color={color} />,
           tabBarLabel: () => <Text></Text>
         }}
-        component={CalendarTopTapNavigator}
+        component={CalendarNavigationContainer}
       />
       <AppStackBottomTab.Screen
         name="Notifications"
@@ -83,7 +84,24 @@ export function ProfileNavigation() {
   );
 }
 
-function CalendarTopTapNavigator() {
+function CalendarNavigationContainer() {
+  return (
+    <AppStack.Navigator>
+      <AppStack.Screen
+        name="CalendarTopNav"
+        options={{ headerShown: false }}
+        component={CalendarTopNav}
+      />
+      <AppStack.Screen
+        name="TaskDisplay"
+        options={{ headerShown: false }}
+        component={SingleTaskScreen}
+      />
+    </AppStack.Navigator>
+  );
+}
+
+function CalendarTopNav() {
   return (
     <TopTab.Navigator>
       <TopTab.Screen name="Calendar" component={TimelineCalendarScreen} />
