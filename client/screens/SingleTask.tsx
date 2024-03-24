@@ -20,6 +20,7 @@ type ParamList = {
 export default function SingleTaskScreen() {
   const route = useRoute<RouteProp<ParamList, 'mt'>>();
   const { id } = route.params;
+  console.log(id);
   const [open, setOpen] = useState(false);
   const [taskType, setTaskType] = useState<TypeOfTask>(TypeOfTask.ACTIVITIES);
   const { task, taskIsLoading, taskLabels, taskLabelsIsLoading } =
@@ -47,6 +48,12 @@ export default function SingleTaskScreen() {
         <Text>Loading Task...</Text>
       </View>
     );
+
+  if (!task) {
+    <View className="w-[100vw] flex-1 items-center justify-center bg-carewallet-white text-3xl">
+      <Text>Error Loading Task</Text>
+    </View>;
+  }
 
   return (
     <View className="flex flex-col items-start p-4">

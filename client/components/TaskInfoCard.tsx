@@ -20,7 +20,7 @@ export function TaskInfoComponent({
   date: Date;
 }) {
   const navigator = useNavigation<AppStackNavigation>();
-  const { taskLabels } = useTaskById(name);
+  const { taskLabels } = useTaskById(id.toString());
   const formattedStartDate = date ? new Date(date).toLocaleDateString() : 'N/A';
 
   return (

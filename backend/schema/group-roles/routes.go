@@ -22,7 +22,7 @@ func GroupRolesGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 			user := group.Group(":uid")
 			{
 				user.DELETE("", c.RemoveUserFromGroup)
-				user.PATCH(":newRole", c.ChangeUserGroupRole)
+				user.PATCH(":role", c.ChangeUserGroupRole)
 				user.PUT(":role", c.AddUserToGroup)
 			}
 		}
@@ -48,16 +48,16 @@ func GroupRolesGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 //
 //	@param			groupId	path		string	true	"groupId"
 //	@param			uid		path		string	true	"userId"
-//	@param			newRole	path		string	true	"New User Group Role"
+//	@param			role	path		string	true	"New User Group Role"
 //
 //	@success		200		{object}	models.GroupRole
 //	@failure		400		{object}	string
-//	@router			/group/{groupId}/{uid}/{newRole} [patch]
+//	@router			/group/{groupId}/{uid}/{role} [patch]
 func (pg *PgModel) ChangeUserGroupRole(c *gin.Context) {
 	gid := c.Param("groupId")
 	gidInt, err := strconv.Atoi(gid)
 	uid := c.Param("uid")
-	role := c.Param("newRole")
+	role := c.Param("role")
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())

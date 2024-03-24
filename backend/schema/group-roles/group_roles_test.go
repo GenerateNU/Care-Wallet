@@ -64,4 +64,37 @@ func TestGetGroupRoles(t *testing.T) {
 			t.Errorf("Expected group ID: %+v, Actual group ID: %+v", expectedGroup, responseGroup)
 		}
 	})
+
+	t.Run("TestRemoveUserFromGroup", func(t *testing.T) {
+		w := httptest.NewRecorder()
+		req, _ := http.NewRequest("DELETE", "/group/5/fIoFY26mJnYWH8sNdfuVoxpnVnr1", nil)
+		router.ServeHTTP(w, req)
+
+		// Check for HTTP Status OK (200)
+		if http.StatusOK != w.Code {
+			t.Error("Failed to remove user from group.")
+		}
+	})
+
+	t.Run("TestAddUserToGroup", func(t *testing.T) {
+		w := httptest.NewRecorder()
+		req, _ := http.NewRequest("PUT", "/group/1/fIoFY26mJnYWH8sNdfuVoxpnVnr1/SECONDARY", nil)
+		router.ServeHTTP(w, req)
+
+		// Check for HTTP Status OK (200)
+		if http.StatusOK != w.Code {
+			t.Error("Failed to remove user from group.")
+		}
+	})
+
+	t.Run("TestChangeUserGroupRole", func(t *testing.T) {
+		w := httptest.NewRecorder()
+		req, _ := http.NewRequest("PATCH", "/group/1/fIoFY26mJnYWH8sNdfuVoxpnVnr1/PATIENT", nil)
+		router.ServeHTTP(w, req)
+
+		// Check for HTTP Status OK (200)
+		if http.StatusOK != w.Code {
+			t.Error("Failed to change user role in group.")
+		}
+	})
 }

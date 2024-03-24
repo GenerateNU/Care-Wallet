@@ -49,7 +49,7 @@ export const useFilteredTasks = (queryParams: TaskQueryParams) => {
   const { data: tasks, isLoading: tasksIsLoading } = useQuery<Task[]>({
     queryKey: ['filteredTaskList', queryParams],
     queryFn: () => getFilteredTasks(queryParams),
-    refetchInterval: 10000
+    refetchInterval: 20000
   });
   return {
     tasks,
@@ -61,7 +61,7 @@ export const useTaskById = (id: string) => {
   const { data: task, isLoading: taskIsLoading } = useQuery<Task>({
     queryKey: ['task', id],
     queryFn: () => getTask(id),
-    refetchInterval: 10000
+    refetchInterval: 20000
   });
 
   const { data: taskLabels, isLoading: taskLabelsIsLoading } = useQuery<
@@ -69,14 +69,14 @@ export const useTaskById = (id: string) => {
   >({
     queryKey: ['taskLabels', id],
     queryFn: () => getTaskLabels(id),
-    refetchInterval: 10000
+    refetchInterval: 20000
   });
 
   const { data: taskByUser, isLoading: taskByUserIsLoading } = useQuery<Task[]>(
     {
       queryKey: ['tasks', id],
       queryFn: () => getTaskByAssigned(id),
-      refetchInterval: 10000
+      refetchInterval: 20000
     }
   );
 

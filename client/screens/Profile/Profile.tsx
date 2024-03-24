@@ -62,7 +62,7 @@ export default function Profile() {
       >
         <View className="h-20 w-80 items-center justify-center rounded-xl border border-carewallet-black">
           <Text className="text-md">Your Tasks</Text>
-          <Text className="text-2xl">{taskByUser?.length}</Text>
+          <Text className="text-2xl">{taskByUser?.length ?? 0}</Text>
         </View>
       </View>
       <View className="mb-5 items-center">

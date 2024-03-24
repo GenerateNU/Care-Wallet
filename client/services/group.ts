@@ -18,7 +18,7 @@ export const useUserGroup = (userId: string) => {
   const { data: userGroupRole, isLoading: userGroupRoleIsLoading } = useQuery({
     queryKey: ['groupId', userId],
     queryFn: () => getUserGroup(userId),
-    refetchInterval: 5000
+    refetchInterval: 20000
   });
 
   return { userGroupRole, userGroupRoleIsLoading };
@@ -28,7 +28,7 @@ export const useGroup = (groupId: number) => {
   const { data: roles, isLoading: rolesAreLoading } = useQuery({
     queryKey: ['roles', groupId],
     queryFn: () => getGroupRoles(groupId),
-    refetchInterval: 10000
+    refetchInterval: 20000
   });
 
   return { roles, rolesAreLoading };

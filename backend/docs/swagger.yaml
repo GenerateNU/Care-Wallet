@@ -296,7 +296,7 @@ paths:
       summary: Remove a user from a group
       tags:
       - group
-  /group/{groupId}/{uid}/{newRole}:
+  /group/{groupId}/{uid}/{role}:
     patch:
       description: Change a user group role based off of group id and user id and
         role
@@ -313,7 +313,7 @@ paths:
         type: string
       - description: New User Group Role
         in: path
-        name: newRole
+        name: role
         required: true
         type: string
       responses:
@@ -328,7 +328,6 @@ paths:
       summary: Change a user group role
       tags:
       - group
-  /group/{groupId}/{uid}/{role}:
     put:
       description: add a user to a group given a user id and group id and role
       parameters:

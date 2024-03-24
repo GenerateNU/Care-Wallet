@@ -419,52 +419,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/group/{groupId}/{uid}/{newRole}": {
-            "patch": {
-                "description": "Change a user group role based off of group id and user id and role",
-                "tags": [
-                    "group"
-                ],
-                "summary": "Change a user group role",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "groupId",
-                        "name": "groupId",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "userId",
-                        "name": "uid",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "New User Group Role",
-                        "name": "newRole",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.GroupRole"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
         "/group/{groupId}/{uid}/{role}": {
             "put": {
                 "description": "add a user to a group given a user id and group id and role",
@@ -490,6 +444,50 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "Group\tRole",
+                        "name": "role",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.GroupRole"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "Change a user group role based off of group id and user id and role",
+                "tags": [
+                    "group"
+                ],
+                "summary": "Change a user group role",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "groupId",
+                        "name": "groupId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "userId",
+                        "name": "uid",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "New User Group Role",
                         "name": "role",
                         "in": "path",
                         "required": true
