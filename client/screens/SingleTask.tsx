@@ -7,7 +7,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 
 import CheckMark from '../assets/checkmark.svg';
 import Reject from '../assets/reject.svg';
-import { BackButton } from '../components/task-type/BackButton';
+import { BackButton } from '../components/nav_buttons/BackButton';
 import { useTaskById } from '../services/task';
 import { TaskTypeDescriptions, TypeToCategoryMap } from '../types/type';
 
