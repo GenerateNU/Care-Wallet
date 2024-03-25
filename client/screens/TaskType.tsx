@@ -19,8 +19,8 @@ import { Button, Text } from 'react-native-paper';
 
 import { BackButton } from '../components/nav_buttons/BackButton';
 import { CloseButton } from '../components/nav_buttons/CloseButton';
-import { AppStackNavigation } from '../navigation/AppNavigation';
-import { Category, categoryToTypeMap, TypeOfTask } from '../types/type';
+import { AppStackNavigation } from '../navigation/types';
+import { Category, CategoryToTypeMap, TypeOfTask } from '../types/type';
 
 export function TaskType() {
   const navigation = useNavigation<AppStackNavigation>();
@@ -36,7 +36,7 @@ export function TaskType() {
   useEffect(() => {
     setSelectedTypes(
       selectedCategory
-        ? categoryToTypeMap[selectedCategory]
+        ? CategoryToTypeMap[selectedCategory]
         : Object.values(TypeOfTask)
     );
   }, [selectedCategory]);
@@ -71,7 +71,7 @@ export function TaskType() {
   );
 
   return (
-    <GestureHandlerRootView className="mt-10">
+    <GestureHandlerRootView className="bg-carewallet-white pt-10">
       <View className="flex w-full flex-row items-center justify-center">
         <View className="mr-[95px]">
           <BackButton />
@@ -93,28 +93,30 @@ export function TaskType() {
         </Button>
       </View>
 
-      <FlatList
-        className="h-full"
-        data={selectedTypes}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            className="m-2 h-[50px] overflow-hidden rounded-xl"
-            onPress={() =>
-              navigation.navigate('TaskCreation', {
-                taskType: JSON.stringify(item)
-              })
-            }
-          >
-            <Button
-              className="m-2 h-[50px] items-center justify-center rounded-xl"
-              textColor="black"
-              mode="outlined"
+      <View className="h-[68vh]">
+        <FlatList
+          className="h-[80vh] scroll-pb-96"
+          data={selectedTypes}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              className="m-2 h-[50px] overflow-hidden rounded-xl"
+              onPress={() =>
+                navigation.navigate('TaskCreation', {
+                  taskType: JSON.stringify(item)
+                })
+              }
             >
-              {item}
-            </Button>
-          </TouchableOpacity>
-        )}
-      />
+              <Button
+                className="m-2 h-[50px] items-center justify-center rounded-xl"
+                textColor="black"
+                mode="outlined"
+              >
+                {item}
+              </Button>
+            </TouchableOpacity>
+          )}
+        />
+      </View>
 
       <BottomSheet
         ref={bottomSheetRef}
