@@ -373,6 +373,135 @@
                 }
             }
         },
+        "/group/{groupId}/{uid}": {
+            "delete": {
+                "description": "removes a user from a group given a group id and user id",
+                "tags": [
+                    "group"
+                ],
+                "summary": "Remove a user from a group",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "groupId",
+                        "name": "groupId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "userId",
+                        "name": "uid",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.GroupRole"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/group/{groupId}/{uid}/{role}": {
+            "put": {
+                "description": "add a user to a group given a user id and group id and role",
+                "tags": [
+                    "group"
+                ],
+                "summary": "Add a user to a group",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "groupId",
+                        "name": "groupId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "userId",
+                        "name": "uid",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Group\tRole",
+                        "name": "role",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.GroupRole"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "Change a user group role based off of group id and user id and role",
+                "tags": [
+                    "group"
+                ],
+                "summary": "Change a user group role",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "groupId",
+                        "name": "groupId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "userId",
+                        "name": "uid",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "New User Group Role",
+                        "name": "role",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/medications": {
             "get": {
                 "description": "get all user medications",

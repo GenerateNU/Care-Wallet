@@ -5,10 +5,11 @@ import React, {
   useRef,
   useState
 } from 'react';
-import { ActivityIndicator, Text, View } from 'react-native';
+import { ActivityIndicator, Pressable, Text, View } from 'react-native';
 
 import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
 import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
+import { useNavigation } from '@react-navigation/native';
 import _, { Dictionary } from 'lodash';
 import moment from 'moment';
 import {
@@ -25,13 +26,16 @@ import { FlatList, GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { QuickTaskCard } from '../components/QuickTaskCard';
 import { useCareWalletContext } from '../contexts/CareWalletContext';
+import { AppStackNavigation } from '../navigation/types';
 import { useFilteredTasks } from '../services/task';
 import { Task } from '../types/task';
-import { EVENT_COLOR, getDate } from './timelineEvents';
 
 export default function TimelineCalendarScreen() {
+  const navigation = useNavigation<AppStackNavigation>();
   const { group } = useCareWalletContext();
-  const [currentDate, setCurrentDate] = useState<string>(getDate());
+  const [currentDate, setCurrentDate] = useState<string>(
+    moment(new Date()).format('YYYY-MM-DD')
+  );
   const [month, setCurrentMonth] = useState<string>();
 
   const { tasks, tasksIsLoading } = useFilteredTasks({
@@ -103,7 +107,7 @@ export default function TimelineCalendarScreen() {
             end: moment(task.end_date).format('YYYY-MM-DD hh:mm:ss'),
             title: task.task_title,
             summary: task.task_status,
-            color: EVENT_COLOR
+            color: '#e6add8'
           };
         }),
         (e) => CalendarUtils.getCalendarDateString(e?.start)
@@ -138,6 +142,8 @@ export default function TimelineCalendarScreen() {
       handleOpenPress();
       return;
     }
+
+    navigation.navigate('TaskDisplay', { id: parseInt(e.id ?? '-1') });
   }
 
   const renderBackdrop = useCallback(
@@ -153,14 +159,6 @@ export default function TimelineCalendarScreen() {
 
   const snapPoints = useMemo(() => ['70%'], []);
   const bottomSheetRef = useRef<BottomSheet>(null);
-
-  // Todo: Look into if there is a change for this
-  const taskTypeDescriptions: Record<string, string> = {
-    med_mgmt: 'Medication Management',
-    dr_appt: 'Doctor Appointment',
-    financial: 'Financial Task',
-    other: 'Other Task'
-  };
 
   const timelineProps: Partial<TimelineProps> = {
     format24h: true,
@@ -195,19 +193,18 @@ export default function TimelineCalendarScreen() {
         showTodayButton
         disabledOpacity={0.6}
       >
-        <View>
-          <ExpandableCalendar firstDay={1} markedDates={marked} />
-          <TimelineList
-            events={events ?? ({} as Dictionary<Event[]>)}
-            timelineProps={timelineProps}
-            showNowIndicator
-            scrollToFirst
-            initialTime={{
-              hour: parseInt(moment(Date.now()).format('hh')),
-              minutes: parseInt(moment(Date.now()).format('mm'))
-            }}
-          />
-        </View>
+        <ExpandableCalendar firstDay={1} markedDates={marked} />
+        <TimelineList
+          scrollToNow
+          events={events ?? ({} as Dictionary<Event[]>)}
+          timelineProps={timelineProps}
+          showNowIndicator
+          scrollToFirst
+          initialTime={{
+            hour: parseInt(moment(Date.now()).format('hh')),
+            minutes: parseInt(moment(Date.now()).format('mm'))
+          }}
+        />
       </CalendarProvider>
 
       <BottomSheet
@@ -225,10 +222,13 @@ export default function TimelineCalendarScreen() {
           ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
           keyExtractor={(item) => item.task_id.toString()}
           renderItem={({ item }) => (
-            <QuickTaskCard
-              name={item.notes}
-              label={taskTypeDescriptions[item.task_type]}
-            />
+            <Pressable
+              onTouchEnd={() =>
+                navigation.navigate('TaskDisplay', { id: item.task_id })
+              }
+            >
+              <QuickTaskCard name={item.notes} label={item.task_type} />
+            </Pressable>
           )}
         />
       </BottomSheet>

@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
-import { getUserGroup } from './api';
+import { useUserGroup } from '../services/group';
 import { Group, User } from './types';
 
 type CareWalletContextData = {
@@ -21,6 +21,8 @@ export function CareWalletProvider({
   const [group, setGroup] = useState({} as Group);
   const auth = getAuth();
 
+  const { userGroupRole, userGroupRoleIsLoading } = useUserGroup(user.userID);
+
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       const signedInUser: User = {
@@ -29,15 +31,16 @@ export function CareWalletProvider({
       };
 
       setUser(signedInUser);
-
-      // TODO: What should happen if a user isnt apart of a group?
-      if (user) {
-        getUserGroup(user.uid).then((grouprole) => {
-          setGroup({ role: grouprole.role, groupID: grouprole.group_id });
-        });
-      }
     });
   }, []);
+
+  useEffect(() => {
+    if (userGroupRole && !userGroupRoleIsLoading)
+      setGroup({
+        groupID: userGroupRole.group_id,
+        role: userGroupRole.role
+      });
+  }, [userGroupRole]);
 
   const CareWalletContextStore: CareWalletContextData = {
     user: user,

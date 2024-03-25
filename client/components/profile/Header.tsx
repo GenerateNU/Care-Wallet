@@ -8,7 +8,7 @@ import ArrowLeft from '../../assets/arrow-left.svg';
 import Edit from '../../assets/profile/edit.svg';
 import Ellipse from '../../assets/profile/ellipse.svg';
 import { useCareWalletContext } from '../../contexts/CareWalletContext';
-import { AppStackNavigation } from '../../navigation/AppNavigation';
+import { AppStackNavigation } from '../../navigation/types';
 import { GroupRole, Role } from '../../types/group';
 import { User } from '../../types/user';
 import { ProfileTopHeader } from './ProfileTopHeader';

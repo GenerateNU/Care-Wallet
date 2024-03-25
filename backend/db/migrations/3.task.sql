@@ -46,12 +46,15 @@ VALUES
   ('task 2', 2, 'user3', '2024-02-20 23:59:59', '2024-02-10 14:30:00', NULL, 'Schedule doctor appointment', 'INCOMPLETE', 'other', FALSE),
   ('task 3', 3, 'user4', '2020-02-05 11:00:00', NULL, '2024-02-20 23:59:59', 'Submit insurance claim', 'PARTIAL', 'financial', FALSE),
   ('task 4', 4, 'user1', '2006-01-02 15:04:05', NULL, NULL, 'Refill water pitcher', 'COMPLETE', 'other', TRUE),
+  ('task 1 - NO LABEL', 1, 'user2', '2024-02-03 10:45:00', '2024-02-05 10:00:00', '2024-02-05 11:00:00', 'Pick up medication from pharmacy', 'INCOMPLETE', 'med_mgmt', FALSE),
   ('task 5', 5, 'user1', '2024-03-19 11:00:00', '2024-03-19 15:00:00', '2024-03-19 19:00:00', 'Get medications', 'INCOMPLETE', 'dr_appt', TRUE),
   ('task 6', 5, 'user2', '2024-03-19 11:00:00', '2024-03-19 11:00:00', '2024-03-19 13:00:00', 'File Papers', 'INCOMPLETE', 'med_mgmt', TRUE),
   ('task 7', 5, 'user3', '2024-03-19 11:00:00', '2024-03-19 07:00:00', '2024-03-19 09:00:00', 'Send check to Drs', 'INCOMPLETE', 'financial', TRUE),
   ('task 8', 5, 'user1', '2024-03-19 11:00:00', '2024-03-19 15:00:00', '2024-03-19 19:00:00', 'Get medications', 'INCOMPLETE', 'dr_appt', FALSE),
   ('task 9', 5, 'user2', '2024-03-19 11:00:00', '2024-03-19 11:00:00', '2024-03-19 13:00:00', 'File Papers', 'INCOMPLETE', 'med_mgmt', FALSE),
-  ('task 10', 5, 'user3', '2024-03-19 11:00:00', '2024-03-19 07:00:00', '2024-03-19 09:00:00', 'Send check to Drs', 'INCOMPLETE', 'financial', FALSE)
+  ('task 10', 5, 'user3', '2024-03-19 11:00:00', '2024-03-19 07:00:00', '2024-03-19 09:00:00', 'Send check to Drs', 'INCOMPLETE', 'financial', FALSE),
+  ('test tile', 5, 'P03ggWcw63N0RSY7ltbkeBoR6bd2', '2020-02-05 11:00:00', NULL, '2024-02-20 23:59:59', 'Submit insurance claim', 'PARTIAL', 'financial', FALSE),
+  ('test tile', 5, 'P03ggWcw63N0RSY7ltbkeBoR6bd2', '2024-02-20 23:59:59', '2024-02-10 14:30:00', NULL, 'Schedule doctor appointment', 'INCOMPLETE', 'med_mgmt', FALSE)
 ;
 
 INSERT INTO task_assignees (task_id, user_id, assignment_status, assigned_by, assigned_date)
