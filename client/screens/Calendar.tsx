@@ -29,12 +29,13 @@ import { useCareWalletContext } from '../contexts/CareWalletContext';
 import { AppStackNavigation } from '../navigation/types';
 import { useFilteredTasks } from '../services/task';
 import { Task } from '../types/task';
-import { EVENT_COLOR, getDate } from './timelineEvents';
 
 export default function TimelineCalendarScreen() {
   const navigation = useNavigation<AppStackNavigation>();
   const { group } = useCareWalletContext();
-  const [currentDate, setCurrentDate] = useState<string>(getDate());
+  const [currentDate, setCurrentDate] = useState<string>(
+    moment(new Date()).format('YYYY-MM-DD')
+  );
   const [month, setCurrentMonth] = useState<string>();
 
   const { tasks, tasksIsLoading } = useFilteredTasks({
@@ -106,7 +107,7 @@ export default function TimelineCalendarScreen() {
             end: moment(task.end_date).format('YYYY-MM-DD hh:mm:ss'),
             title: task.task_title,
             summary: task.task_status,
-            color: EVENT_COLOR
+            color: '#e6add8'
           };
         }),
         (e) => CalendarUtils.getCalendarDateString(e?.start)
@@ -194,6 +195,7 @@ export default function TimelineCalendarScreen() {
       >
         <ExpandableCalendar firstDay={1} markedDates={marked} />
         <TimelineList
+          scrollToNow
           events={events ?? ({} as Dictionary<Event[]>)}
           timelineProps={timelineProps}
           showNowIndicator
