@@ -8,17 +8,11 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-func ChangeUserGroupRoleInDB(pool *pgxpool.Pool, gid int, uid string, role string) (models.GroupRole, error) {
-	var groupMember models.GroupRole
+func ChangeUserGroupRoleInDB(pool *pgxpool.Pool, gid int, uid string, role string) error {
 	fmt.Println(role)
-	err := pool.QueryRow(context.Background(), "UPDATE group_roles SET role = $1 WHERE group_id = $2 AND user_id = $3", role, gid, uid).Scan(&groupMember.Role, &groupMember.GroupID, &groupMember.UserID)
+	_, err := pool.Exec(context.Background(), "UPDATE group_roles SET role = $1 WHERE group_id = $2 AND user_id = $3", role, gid, uid)
 
-	if err != nil {
-		fmt.Printf("Error getting group_id from user_id: %v", err)
-		return groupMember, err
-	}
-
-	return groupMember, nil
+	return err
 }
 
 func AddUserToGroupInDB(pool *pgxpool.Pool, gid int, uid string, role string) (models.GroupRole, error) {

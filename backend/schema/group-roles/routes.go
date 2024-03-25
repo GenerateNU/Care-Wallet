@@ -50,7 +50,7 @@ func GroupRolesGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 //	@param			uid		path		string	true	"userId"
 //	@param			role	path		string	true	"New User Group Role"
 //
-//	@success		200		{object}	models.GroupRole
+//	@success		200		{object}	string
 //	@failure		400		{object}	string
 //	@router			/group/{groupId}/{uid}/{role} [patch]
 func (pg *PgModel) ChangeUserGroupRole(c *gin.Context) {
@@ -64,14 +64,14 @@ func (pg *PgModel) ChangeUserGroupRole(c *gin.Context) {
 		return
 	}
 
-	careGroups, err := ChangeUserGroupRoleInDB(pg.Conn, gidInt, uid, role)
+	err = ChangeUserGroupRoleInDB(pg.Conn, gidInt, uid, role)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
 
-	c.JSON(http.StatusOK, careGroups)
+	c.JSON(http.StatusOK, "")
 }
 
 // AddUserToGroup godoc

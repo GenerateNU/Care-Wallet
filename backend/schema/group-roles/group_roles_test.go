@@ -89,7 +89,7 @@ func TestGetGroupRoles(t *testing.T) {
 
 	t.Run("TestChangeUserGroupRole", func(t *testing.T) {
 		w := httptest.NewRecorder()
-		req, _ := http.NewRequest("PATCH", "/group/1/fIoFY26mJnYWH8sNdfuVoxpnVnr1/PATIENT", nil)
+		req, _ := http.NewRequest("PATCH", "/group/5/JamnX6TZf0dt6juozMRzNG5LMQd2/PATIENT", nil)
 		router.ServeHTTP(w, req)
 
 		// Check for HTTP Status OK (200)
