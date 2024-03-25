@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState
 } from 'react';
-import { ActivityIndicator, Text, View } from 'react-native';
+import { ActivityIndicator, Pressable, Text, View } from 'react-native';
 
 import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
 import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
@@ -222,7 +222,13 @@ export default function TimelineCalendarScreen() {
           ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
           keyExtractor={(item) => item.task_id.toString()}
           renderItem={({ item }) => (
-            <QuickTaskCard name={item.notes} label={item.task_type} />
+            <Pressable
+              onTouchEnd={() =>
+                navigation.navigate('TaskDisplay', { id: item.task_id })
+              }
+            >
+              <QuickTaskCard name={item.notes} label={item.task_type} />
+            </Pressable>
           )}
         />
       </BottomSheet>

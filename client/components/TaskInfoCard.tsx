@@ -6,6 +6,7 @@ import moment from 'moment';
 import Calendar from '../assets/Date_today.svg';
 import Time from '../assets/Time.svg';
 import { useTaskById } from '../services/task';
+import { TaskTypeDescriptions } from '../types/type';
 
 export function TaskInfoComponent({
   name,
@@ -40,7 +41,7 @@ export function TaskInfoComponent({
       <View className="space-y-2">
         <View className="mr-auto flex flex-row items-center space-x-2 rounded-full border border-carewallet-black px-2 py-1">
           <View className="h-4 w-4 rounded-full bg-carewallet-gray" />
-          <Text>{category}</Text>
+          <Text>{TaskTypeDescriptions[category]}</Text>
         </View>
         <View className="mr-auto flex flex-row items-center space-x-2 rounded-full border border-carewallet-black px-2 py-1">
           <View className="h-4 w-4 rounded-full bg-carewallet-gray" />

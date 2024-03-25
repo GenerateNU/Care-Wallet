@@ -7,9 +7,9 @@ import DropDownPicker from 'react-native-dropdown-picker';
 
 import CheckMark from '../assets/checkmark.svg';
 import Reject from '../assets/reject.svg';
-import { BackButton } from '../components/BackButton';
+import { BackButton } from '../components/task-type/BackButton';
 import { useTaskById } from '../services/task';
-import { Category, categoryToTypeMap, TypeOfTask } from '../types/type';
+import { TaskTypeDescriptions, TypeToCategoryMap } from '../types/type';
 
 type ParamList = {
   mt: {
@@ -21,24 +21,8 @@ export default function SingleTaskScreen() {
   const route = useRoute<RouteProp<ParamList, 'mt'>>();
   const { id } = route.params;
   const [open, setOpen] = useState(false);
-  const [taskType, setTaskType] = useState<TypeOfTask>(TypeOfTask.ACTIVITIES);
   const { task, taskIsLoading, taskLabels, taskLabelsIsLoading } =
     useTaskById(id);
-
-  // Gets category based on Task Type
-  const getCategoryFromTaskType = (taskType: TypeOfTask): Category => {
-    if (!taskType) {
-      return Category.ALL; // Return a default category if taskType is undefined
-    }
-    // Iterate over each category in the categoryToTypeMap object
-    for (const category in categoryToTypeMap) {
-      // Check if the taskType exists in the current category's array of task types
-      if (categoryToTypeMap[category as Category].includes(taskType)) {
-        return category as Category; // Return the category if found
-      }
-    }
-    return Category.ALL; // Return a default category if no match is found
-  };
 
   if (taskIsLoading || taskLabelsIsLoading)
     return (
@@ -58,27 +42,34 @@ export default function SingleTaskScreen() {
     <View className="flex h-full flex-col items-start bg-carewallet-white p-4">
       <View className="w-[100vw] flex-row items-center">
         <BackButton />
-        <View className="z-20 ml-auto mr-10 mt-4">
+        <View className="relative z-20 ml-auto mr-10 mt-4 w-24">
           <DropDownPicker
             open={open}
             value="value"
             items={[
-              { label: 'INCOMPLETE', value: 'incomplete' },
-              { label: 'COMPLETE', value: 'Complete' },
-              { label: 'PARTIAL', value: 'Partial' }
+              { label: 'Incomplete', value: 'INCOMPLETE' },
+              { label: 'Complete', value: 'COMPLETE' },
+              { label: 'Partial', value: 'PARTIAL' }
             ]}
             setOpen={setOpen}
-            setValue={setTaskType}
-            placeholder="To-do"
-            containerStyle={{ height: 40, marginBottom: 8, width: 100 }}
-            style={{ backgroundColor: 'lightgray', borderColor: 'gray' }}
+            setValue={() => ''}
+            placeholder="To-Do"
+            style={{
+              backgroundColor: 'lightgray',
+              borderColor: 'gray',
+              position: 'relative',
+              zIndex: 10
+            }}
           />
         </View>
       </View>
       <View className="mt-4">
-        <Text className="text-black font-inter text-2xl font-bold">
-          {task?.task_title} {'\n'}
+        <Text className="font-inter text-2xl font-semibold text-carewallet-black">
+          {task?.task_title}
+        </Text>
+        <Text className="font-inter pt-5 text-2xl font-semibold text-carewallet-black">
           {moment(task?.start_date).format('hh:mm A')}
+          {task?.end_date && `- ${moment(task?.end_date).format('hh:mm A')}`}
         </Text>
         {taskLabels?.map((label) => (
           <Text key={label.task_id + label.label_name} className="text-base">
@@ -86,7 +77,8 @@ export default function SingleTaskScreen() {
           </Text>
         ))}
         <Text className="text-base ">
-          {getCategoryFromTaskType(taskType)} | {taskType}
+          {task &&
+            `${TypeToCategoryMap[task.task_type]} | ${TaskTypeDescriptions[task.task_type]}`}
         </Text>
       </View>
       <View className="mt-4"></View>
