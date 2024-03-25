@@ -2,25 +2,29 @@ package tasks
 
 import (
 	"carewallet/models"
+	"context"
 	"encoding/json"
 	"fmt"
 	"strconv"
 	"time"
 
-	"github.com/jackc/pgx"
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-func GetTasksByQueryFromDB(pool *pgx.Conn, filterQuery TaskQuery) ([]models.Task, error) {
+func GetTasksByQueryFromDB(pool *pgxpool.Pool, filterQuery TaskQuery) ([]models.Task, error) {
 	query_fields := []string{
 		filterQuery.TaskID,
+		filterQuery.TaskTitle,
 		filterQuery.GroupID,
 		filterQuery.CreatedBy,
 		filterQuery.TaskStatus,
 		filterQuery.TaskType,
 		filterQuery.StartDate,
-		filterQuery.EndDate}
+		filterQuery.EndDate,
+		filterQuery.QuickTask}
 
-	field_names := []string{"task_id =", "group_id =", "created_by =", "task_status =", "task_type =", "start_date >=", "end_date <="}
+	field_names := []string{"task_id =", "task_title =", "group_id =", "created_by =", "task_status =", "task_type =", "start_date >=", "end_date <=", "quick_task ="}
 	var query string
 	var args []interface{}
 
@@ -34,10 +38,12 @@ func GetTasksByQueryFromDB(pool *pgx.Conn, filterQuery TaskQuery) ([]models.Task
 		}
 	}
 
-	rows, err := pool.Query("SELECT task_id, group_id, created_by, created_date, start_date, end_date, task_status, task_type FROM task WHERE "+query, args...)
+	queryString := "SELECT * FROM task WHERE " + query
+
+	rows, err := pool.Query(context.Background(), queryString, args...)
 
 	if err != nil {
-		print(err, "error selecting tasks by query")
+		print(err.Error(), "error selecting tasks by query")
 		return nil, err
 	}
 
@@ -47,10 +53,10 @@ func GetTasksByQueryFromDB(pool *pgx.Conn, filterQuery TaskQuery) ([]models.Task
 
 	for rows.Next() {
 		task := models.Task{}
-		err := rows.Scan(&task.TaskID, &task.GroupID, &task.CreatedBy, &task.CreatedDate, &task.StartDate, &task.EndDate, &task.TaskStatus, &task.TaskType)
+		err := rows.Scan(&task.TaskID, &task.TaskTitle, &task.GroupID, &task.CreatedBy, &task.CreatedDate, &task.StartDate, &task.EndDate, &task.QuickTask, &task.Notes, &task.Repeating, &task.RepeatingInterval, &task.RepeatingEndDate, &task.TaskStatus, &task.TaskType, &task.TaskInfo)
 
 		if err != nil {
-			print(err, "error scanning tasks by query")
+			print(err.Error(), "error scanning tasks by query")
 			return nil, err
 		}
 
@@ -60,7 +66,7 @@ func GetTasksByQueryFromDB(pool *pgx.Conn, filterQuery TaskQuery) ([]models.Task
 	return results, nil
 }
 
-func AssignUsersToTaskInDB(pool *pgx.Conn, users []string, taskID string, assigner string) ([]models.TaskUser, error) {
+func AssignUsersToTaskInDB(pool *pgxpool.Pool, users []string, taskID string, assigner string) ([]models.TaskUser, error) {
 	task_id, err := strconv.Atoi(taskID)
 	if err != nil {
 		return nil, err
@@ -69,7 +75,7 @@ func AssignUsersToTaskInDB(pool *pgx.Conn, users []string, taskID string, assign
 	var assignedUsers []models.TaskUser
 
 	for _, user := range users {
-		_, err := pool.Exec("INSERT INTO task_assignees (task_id, user_id, assignment_status, assigned_by, assigned_date) VALUES ($1, $2, $3, $4, $5);", task_id, user, "NOTIFIED", assigner, time.Now())
+		_, err := pool.Exec(context.Background(), "INSERT INTO task_assignees (task_id, user_id, assignment_status, assigned_by, assigned_date) VALUES ($1, $2, $3, $4, $5);", task_id, user, "NOTIFIED", assigner, time.Now())
 
 		if err != nil {
 			print(err.Error(), "error inserting users into task_assignees")
@@ -82,7 +88,7 @@ func AssignUsersToTaskInDB(pool *pgx.Conn, users []string, taskID string, assign
 	return assignedUsers, nil
 }
 
-func RemoveUsersFromTaskInDB(pool *pgx.Conn, users []string, taskID string) ([]models.TaskUser, error) {
+func RemoveUsersFromTaskInDB(pool *pgxpool.Pool, users []string, taskID string) ([]models.TaskUser, error) {
 	task_id, err := strconv.Atoi(taskID)
 	if err != nil {
 		print(err, "error converting task ID to int")
@@ -93,7 +99,7 @@ func RemoveUsersFromTaskInDB(pool *pgx.Conn, users []string, taskID string) ([]m
 
 	for _, user := range users {
 		var exists int
-		err := pool.QueryRow("SELECT 1 FROM task_assignees WHERE task_id = $1 AND user_id = $2 LIMIT 1;", task_id, user).Scan(&exists)
+		err := pool.QueryRow(context.Background(), "SELECT 1 FROM task_assignees WHERE task_id = $1 AND user_id = $2 LIMIT 1;", task_id, user).Scan(&exists)
 		if err != nil {
 			if err == pgx.ErrNoRows {
 				return nil, fmt.Errorf("user not assigned to task")
@@ -102,7 +108,7 @@ func RemoveUsersFromTaskInDB(pool *pgx.Conn, users []string, taskID string) ([]m
 			return nil, err
 		}
 
-		_, err = pool.Exec("DELETE FROM task_assignees WHERE task_id = $1 AND user_id = $2;", task_id, user)
+		_, err = pool.Exec(context.Background(), "DELETE FROM task_assignees WHERE task_id = $1 AND user_id = $2;", task_id, user)
 		if err != nil {
 			print(err, "error deleting users from task_assignees")
 			return nil, err
@@ -114,14 +120,14 @@ func RemoveUsersFromTaskInDB(pool *pgx.Conn, users []string, taskID string) ([]m
 	return removedUsers, nil
 }
 
-func GetTasksByAssignedFromDB(pool *pgx.Conn, userIDs []string) ([]models.Task, error) {
+func GetTasksByAssignedFromDB(pool *pgxpool.Pool, userIDs []string) ([]models.Task, error) {
 	var task_ids []int
 	var tasks []models.Task
 
 	// Get all task IDs assigned to the user
 	for _, userID := range userIDs {
 		fmt.Println(userID)
-		taskIDs, err := pool.Query("SELECT task_id FROM task_assignees WHERE user_id = $1;", userID)
+		taskIDs, err := pool.Query(context.Background(), "SELECT task_id FROM task_assignees WHERE user_id = $1;", userID)
 		if err != nil {
 			print(err, "error selecting task assignees")
 			return nil, err
@@ -143,7 +149,7 @@ func GetTasksByAssignedFromDB(pool *pgx.Conn, userIDs []string) ([]models.Task, 
 	// Get all tasks by task ID
 	var task models.Task
 	for _, task_id := range task_ids {
-		err := pool.QueryRow("SELECT * FROM task WHERE task_id = $1;", task_id).Scan(&task.TaskID, &task.GroupID, &task.CreatedBy, &task.CreatedDate, &task.StartDate, &task.EndDate, &task.Notes, &task.Repeating, &task.RepeatingInterval, &task.RepeatingEndDate, &task.TaskStatus, &task.TaskType, &task.TaskInfo)
+		err := pool.QueryRow(context.Background(), "SELECT * FROM task WHERE task_id = $1;", task_id).Scan(&task.TaskID, &task.TaskTitle, &task.GroupID, &task.CreatedBy, &task.CreatedDate, &task.StartDate, &task.EndDate, &task.QuickTask, &task.Notes, &task.Repeating, &task.RepeatingInterval, &task.RepeatingEndDate, &task.TaskStatus, &task.TaskType, &task.TaskInfo)
 		if err != nil {
 			print(err, "error querying task by ID")
 			return nil, err
@@ -156,18 +162,19 @@ func GetTasksByAssignedFromDB(pool *pgx.Conn, userIDs []string) ([]models.Task, 
 }
 
 // CreateTaskInDB creates a new task in the database and returns its ID
-func CreateTaskInDB(pool *pgx.Conn, newTask models.Task) (int, error) {
+func CreateTaskInDB(pool *pgxpool.Pool, newTask models.Task) (int, error) {
 	query := `
-        INSERT INTO task (group_id, created_by, created_date, start_date, end_date, notes, repeating, repeating_interval, repeating_end_date, task_status, task_type, task_info) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING task_id`
+        INSERT INTO task (group_id, created_by, created_date, start_date, end_date, quick_task, notes, repeating, repeating_interval, repeating_end_date, task_status, task_type, task_info, task_title) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) RETURNING task_id`
 
 	var newTaskID int
-	err := pool.QueryRow(
+	err := pool.QueryRow(context.Background(),
 		query,
 		newTask.GroupID,
 		newTask.CreatedBy,
 		time.Now(), // Assuming created_date should be the current timestamp
 		newTask.StartDate,
 		newTask.EndDate,
+		newTask.QuickTask,
 		newTask.Notes,
 		newTask.Repeating,
 		newTask.RepeatingInterval,
@@ -175,42 +182,44 @@ func CreateTaskInDB(pool *pgx.Conn, newTask models.Task) (int, error) {
 		newTask.TaskStatus,
 		newTask.TaskType,
 		newTask.TaskInfo,
+		newTask.TaskTitle,
 	).Scan(&newTaskID)
 
 	return newTaskID, err
 }
 
 // DeleteTaskInDB deletes a task from the database by ID
-func DeleteTaskInDB(pool *pgx.Conn, taskID int) error {
+func DeleteTaskInDB(pool *pgxpool.Pool, taskID int) error {
 	// Assuming "task" table structure, adjust the query based on your schema
 	query := "DELETE FROM task WHERE task_id = $1"
 
-	_, err := pool.Exec(query, taskID)
+	_, err := pool.Exec(context.Background(), query, taskID)
 	return err
 }
 
 // UpdateTaskInfoInDB updates the task_info field in the database
-func UpdateTaskInfoInDB(pool *pgx.Conn, taskID int, taskInfo json.RawMessage) error {
+func UpdateTaskInfoInDB(pool *pgxpool.Pool, taskID int, taskInfo json.RawMessage) error {
 	// Assuming "task" table structure, adjust the query based on your schema
 	query := "UPDATE task SET task_info = $1 WHERE task_id = $2"
 
-	_, err := pool.Exec(query, taskInfo, taskID)
+	_, err := pool.Exec(context.Background(), query, taskInfo, taskID)
 	return err
 }
 
 // GetTaskByID fetches a task from the database by its ID
-func GetTaskByID(pool *pgx.Conn, taskID int) (models.Task, error) {
-	query := `
-        SELECT task_id, group_id, created_by, created_date, start_date, end_date, notes, repeating, repeating_interval, repeating_end_date, task_status, task_type, task_info FROM task WHERE task_id = $1`
+func GetTaskByID(pool *pgxpool.Pool, taskID int) (models.Task, error) {
+	query := `SELECT * FROM task WHERE task_id = $1`
 
 	var task models.Task
-	err := pool.QueryRow(query, taskID).Scan(
+	err := pool.QueryRow(context.Background(), query, taskID).Scan(
 		&task.TaskID,
+		&task.TaskTitle,
 		&task.GroupID,
 		&task.CreatedBy,
 		&task.CreatedDate,
 		&task.StartDate,
 		&task.EndDate,
+		&task.QuickTask,
 		&task.Notes,
 		&task.Repeating,
 		&task.RepeatingInterval,
@@ -222,11 +231,11 @@ func GetTaskByID(pool *pgx.Conn, taskID int) (models.Task, error) {
 	return task, err
 }
 
-func GetUsersAssignedToTaskFromDB(pool *pgx.Conn, taskID int) ([]string, error) {
+func GetUsersAssignedToTaskFromDB(pool *pgxpool.Pool, taskID int) ([]string, error) {
 	var userIDs []string
 
 	// Get all user IDs assigned to the task
-	rows, err := pool.Query("SELECT user_id FROM task_assignees WHERE task_id = $1;", taskID)
+	rows, err := pool.Query(context.Background(), "SELECT user_id FROM task_assignees WHERE task_id = $1;", taskID)
 	if err != nil {
 		fmt.Println(err, "error selecting user assignees")
 		return nil, err

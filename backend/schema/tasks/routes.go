@@ -10,11 +10,11 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jackc/pgx"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 type PgModel struct {
-	Conn *pgx.Conn
+	Conn *pgxpool.Pool
 }
 
 func TaskGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
@@ -64,12 +64,14 @@ func (pg *PgModel) GetTaskByID(c *gin.Context) {
 
 type TaskQuery struct {
 	TaskID     string `form:"taskID"`
+	TaskTitle  string `form:"taskTitle"`
 	GroupID    string `form:"groupID"`
 	CreatedBy  string `form:"createdBy"`
 	TaskStatus string `form:"taskStatus"`
 	TaskType   string `form:"taskType"`
 	StartDate  string `form:"startDate"`
 	EndDate    string `form:"endDate"`
+	QuickTask  string `form:"quickTask"`
 }
 
 // GetFilteredTasks godoc
@@ -89,7 +91,9 @@ func (pg *PgModel) GetFilteredTasks(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
+
 	tasks, err := GetTasksByQueryFromDB(pg.Conn, filterQuery)
+
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
 		return
@@ -192,6 +196,7 @@ type TaskBody struct {
 	CreatedDate       time.Time  `json:"created_date"`
 	StartDate         *time.Time `json:"start_date"`
 	EndDate           *time.Time `json:"end_date"`
+	QuickTask         bool       `json:"quick_task"`
 	Notes             *string    `json:"notes"`
 	Repeating         bool       `json:"repeating"`
 	RepeatingInterval *string    `json:"repeating_interval"`

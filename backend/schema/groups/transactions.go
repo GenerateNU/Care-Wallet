@@ -2,16 +2,17 @@ package groups
 
 import (
 	"carewallet/models"
+	"context"
 	"strconv"
 
-	"github.com/jackc/pgx"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-func CreateCareGroupsFromDB(conn *pgx.Conn, groupName string) (int, error) {
+func CreateCareGroupsFromDB(conn *pgxpool.Pool, groupName string) (int, error) {
 
 	var caregroup models.CareGroup
 
-	err := conn.QueryRow("INSERT INTO care_group (group_name, date_created) VALUES ($1, Now()) RETURNING *", groupName).Scan(&caregroup.GroupID, &caregroup.GroupName, &caregroup.DateCreated)
+	err := conn.QueryRow(context.Background(), "INSERT INTO care_group (group_name, date_created) VALUES ($1, Now()) RETURNING *", groupName).Scan(&caregroup.GroupID, &caregroup.GroupName, &caregroup.DateCreated)
 
 	if err != nil {
 		print(err, "from transactions err ")
@@ -23,10 +24,10 @@ func CreateCareGroupsFromDB(conn *pgx.Conn, groupName string) (int, error) {
 
 }
 
-func AddUserCareGroupFromDB(conn *pgx.Conn, groupId string, groupMember GroupMember) (int, error) {
+func AddUserCareGroupFromDB(conn *pgxpool.Pool, groupId string, groupMember GroupMember) (int, error) {
 
 	var returningGroupId int
-	err := conn.QueryRow("INSERT INTO group_roles (group_id, user_id, role) VALUES ($1, $2, $3) RETURNING group_id", groupId, groupMember.UserId, groupMember.Role).Scan(&returningGroupId)
+	err := conn.QueryRow(context.Background(), "INSERT INTO group_roles (group_id, user_id, role) VALUES ($1, $2, $3) RETURNING group_id", groupId, groupMember.UserId, groupMember.Role).Scan(&returningGroupId)
 
 	if err != nil {
 		print(err, "from transactions err ")
@@ -38,10 +39,10 @@ func AddUserCareGroupFromDB(conn *pgx.Conn, groupId string, groupMember GroupMem
 }
 
 // Return all members of a group (by user_id)
-func GetGroupFromDB(conn *pgx.Conn, groupId string) (models.CareGroup, error) {
+func GetGroupFromDB(conn *pgxpool.Pool, groupId string) (models.CareGroup, error) {
 	var caregroup models.CareGroup
 	groupIdInt, _ := strconv.Atoi(groupId)
-	err := conn.QueryRow("SELECT * FROM care_group WHERE group_id = $1", groupIdInt).Scan(&caregroup.GroupID, &caregroup.GroupName, &caregroup.DateCreated)
+	err := conn.QueryRow(context.Background(), "SELECT * FROM care_group WHERE group_id = $1", groupIdInt).Scan(&caregroup.GroupID, &caregroup.GroupName, &caregroup.DateCreated)
 
 	if err != nil {
 		print(err, "from transactions err ")

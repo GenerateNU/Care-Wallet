@@ -1,25 +1,10 @@
 import React from 'react';
 
-import { NavigationProp } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
 import LoginPage from '../screens/LoginPage';
 import { TaskCreation } from '../screens/TaskCreation';
 import { TaskType } from '../screens/TaskType';
 import { AppStackBottomTabNavigator } from './AppStackBottomTabNavigator';
-
-export type AppStackParamList = {
-  TaskType: undefined;
-  Main: undefined;
-  Home: undefined;
-  Login: undefined;
-  Profile: undefined;
-  TaskCreation: { taskType: string };
-};
-
-export type AppStackNavigation = NavigationProp<AppStackParamList>;
-
-const AppStack = createNativeStackNavigator<AppStackParamList>();
+import { AppStack } from './types';
 
 export function AppNavigation() {
   return (

@@ -522,6 +522,11 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "name": "quickTask",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "name": "startDate",
                         "in": "query"
                     },
@@ -533,6 +538,11 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "name": "taskStatus",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "taskTitle",
                         "in": "query"
                     },
                     {
@@ -1166,6 +1176,9 @@ const docTemplate = `{
                 "notes": {
                     "type": "string"
                 },
+                "quick_task": {
+                    "type": "boolean"
+                },
                 "repeating": {
                     "type": "boolean"
                 },
@@ -1185,6 +1198,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "task_status": {
+                    "type": "string"
+                },
+                "task_title": {
                     "type": "string"
                 },
                 "task_type": {
@@ -1303,6 +1319,9 @@ const docTemplate = `{
                 },
                 "notes": {
                     "type": "string"
+                },
+                "quick_task": {
+                    "type": "boolean"
                 },
                 "repeating": {
                     "type": "boolean"

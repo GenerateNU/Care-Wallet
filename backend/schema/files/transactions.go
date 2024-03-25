@@ -2,6 +2,7 @@ package files
 
 import (
 	"carewallet/models"
+	"context"
 	"errors"
 	"fmt"
 	"io"
@@ -11,14 +12,14 @@ import (
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/jackc/pgx/v5/pgxpool"
 
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
-	"github.com/jackc/pgx"
 )
 
 var AWS_BUCKET_NAME = "care-wallet-storage"
 
-func UploadFile(pool *pgx.Conn, file models.File, data *multipart.FileHeader, reader io.Reader) error {
+func UploadFile(pool *pgxpool.Pool, file models.File, data *multipart.FileHeader, reader io.Reader) error {
 	file.FileName = data.Filename
 	file.UploadDate = time.Now().Format("2006-01-02 15:04:05")
 
@@ -29,7 +30,7 @@ func UploadFile(pool *pgx.Conn, file models.File, data *multipart.FileHeader, re
 	}
 
 	// Insert file into database
-	err := pool.QueryRow("INSERT INTO files (file_name, group_id, upload_by, upload_date, file_size) VALUES ($1, $2, $3, $4, $5) RETURNING file_id;",
+	err := pool.QueryRow(context.Background(), "INSERT INTO files (file_name, group_id, upload_by, upload_date, file_size) VALUES ($1, $2, $3, $4, $5) RETURNING file_id;",
 		file.FileName, file.GroupID, file.UploadBy, file.UploadDate, data.Size).Scan(&file.FileID)
 	if err != nil {
 		fmt.Println(err.Error())
@@ -58,12 +59,11 @@ func UploadFile(pool *pgx.Conn, file models.File, data *multipart.FileHeader, re
 	})
 
 	if err != nil {
-		_, err := pool.Exec("DELETE FROM files WHERE file_id = $1", file.FileID)
+		_, err := pool.Exec(context.Background(), "DELETE FROM files WHERE file_id = $1", file.FileID)
 		if err != nil {
 			fmt.Println(err.Error())
 			return err
 		}
-		fmt.Println(err.Error())
 		return err
 	}
 

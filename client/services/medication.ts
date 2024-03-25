@@ -26,7 +26,8 @@ export const useMedication = () => {
     Medication[]
   >({
     queryKey: ['medList'], // if querying with a value add values here ex. ['medList', {id}]
-    queryFn: getAllMedications
+    queryFn: getAllMedications,
+    refetchInterval: 10000
   });
 
   const { mutate: addMedicationMutation } = useMutation({

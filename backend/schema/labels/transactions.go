@@ -2,18 +2,19 @@ package labels
 
 import (
 	"carewallet/models"
+	"context"
 	"strconv"
 
-	"github.com/jackc/pgx"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-func GetLabelsByGroupFromDB(pool *pgx.Conn, groupID string) ([]models.Label, error) {
+func GetLabelsByGroupFromDB(pool *pgxpool.Pool, groupID string) ([]models.Label, error) {
 	groupIDInt, err := strconv.Atoi(groupID)
 	if err != nil {
 		return nil, err
 	}
 
-	rows, err := pool.Query("SELECT label_name, label_color FROM label WHERE group_id = $1", groupIDInt)
+	rows, err := pool.Query(context.Background(), "SELECT label_name, label_color FROM label WHERE group_id = $1", groupIDInt)
 	if err != nil {
 		return nil, err
 	}
@@ -36,11 +37,11 @@ func GetLabelsByGroupFromDB(pool *pgx.Conn, groupID string) ([]models.Label, err
 
 }
 
-func CreateNewLabelInDB(pool *pgx.Conn, groupID int, requestBody LabelData) (models.Label, error) {
+func CreateNewLabelInDB(pool *pgxpool.Pool, groupID int, requestBody LabelData) (models.Label, error) {
 	labelName := requestBody.LabelName
 	labelColor := requestBody.LabelColor
 
-	_, err := pool.Exec("INSERT INTO label (group_id, label_name, label_color) VALUES ($1, $2, $3)", groupID, labelName, labelColor)
+	_, err := pool.Exec(context.Background(), "INSERT INTO label (group_id, label_name, label_color) VALUES ($1, $2, $3)", groupID, labelName, labelColor)
 
 	if err != nil {
 		print(err.Error())
@@ -55,13 +56,13 @@ func CreateNewLabelInDB(pool *pgx.Conn, groupID int, requestBody LabelData) (mod
 	return label, nil
 }
 
-func DeleteLabelFromDB(pool *pgx.Conn, groupID string, labelName string) error {
+func DeleteLabelFromDB(pool *pgxpool.Pool, groupID string, labelName string) error {
 	groupIDInt, err := strconv.Atoi(groupID)
 	if err != nil {
 		return err
 	}
 
-	_, err = pool.Exec("DELETE FROM label WHERE group_id = $1 AND label_name = $2", groupIDInt, labelName)
+	_, err = pool.Exec(context.Background(), "DELETE FROM label WHERE group_id = $1 AND label_name = $2", groupIDInt, labelName)
 	if err != nil {
 		return err
 	}
@@ -69,13 +70,13 @@ func DeleteLabelFromDB(pool *pgx.Conn, groupID string, labelName string) error {
 	return nil
 }
 
-func EditLabelInDB(pool *pgx.Conn, groupID string, labelName string, data LabelData) (models.Label, error) {
+func EditLabelInDB(pool *pgxpool.Pool, groupID string, labelName string, data LabelData) (models.Label, error) {
 	groupIDInt, err := strconv.Atoi(groupID)
 	if err != nil {
 		return models.Label{}, err
 	}
 
-	_, err = pool.Exec("UPDATE label SET label_color = $1, label_name = $2 WHERE group_id = $3 AND label_name = $4", data.LabelColor, data.LabelName, groupIDInt, labelName)
+	_, err = pool.Exec(context.Background(), "UPDATE label SET label_color = $1, label_name = $2 WHERE group_id = $3 AND label_name = $4", data.LabelColor, data.LabelName, groupIDInt, labelName)
 	if err != nil {
 		print(err.Error())
 		return models.Label{}, err
@@ -92,7 +93,7 @@ func EditLabelInDB(pool *pgx.Conn, groupID string, labelName string, data LabelD
 		LabelName: editedName,
 	}
 
-	err = pool.QueryRow("SELECT label_color FROM label WHERE group_id = $1 AND label_name = $2", groupIDInt, editedName).Scan(&label.LabelColor)
+	err = pool.QueryRow(context.Background(), "SELECT label_color FROM label WHERE group_id = $1 AND label_name = $2", groupIDInt, editedName).Scan(&label.LabelColor)
 	if err != nil {
 		return models.Label{}, err
 	}

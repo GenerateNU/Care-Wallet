@@ -7,8 +7,11 @@ import Bell from '../assets/bottom-nav/bell.svg';
 import Calendar from '../assets/bottom-nav/calendar.svg';
 import Home from '../assets/bottom-nav/home.svg';
 import User from '../assets/bottom-nav/user.svg';
+import TimelineCalendarScreen from '../screens/Calendar';
 import MedicationList from '../screens/MedicationList';
-import Profile from '../screens/Profile';
+import PatientView from '../screens/Profile/PatientView';
+import Profile from '../screens/Profile/Profile';
+import { AppStack } from './types';
 
 const AppStackBottomTab = createBottomTabNavigator();
 
@@ -36,7 +39,7 @@ export function AppStackBottomTabNavigator() {
           tabBarIcon: ({ color }) => <Calendar color={color} />,
           tabBarLabel: () => <Text></Text>
         }}
-        component={MedicationList}
+        component={TimelineCalendarScreen}
       />
       <AppStackBottomTab.Screen
         name="Notifications"
@@ -48,14 +51,31 @@ export function AppStackBottomTabNavigator() {
         component={MedicationList}
       />
       <AppStackBottomTab.Screen
-        name="Profile"
+        name="ProfileScreens"
         options={{
           headerShown: false,
           tabBarIcon: ({ color }) => <User color={color} />,
           tabBarLabel: () => <Text></Text>
         }}
-        component={Profile}
+        component={ProfileNavigation}
       />
     </AppStackBottomTab.Navigator>
+  );
+}
+
+export function ProfileNavigation() {
+  return (
+    <AppStack.Navigator>
+      <AppStack.Screen
+        name="Profile"
+        options={{ headerShown: false }}
+        component={Profile}
+      />
+      <AppStack.Screen
+        name="PatientView"
+        options={{ headerShown: false }}
+        component={PatientView}
+      />
+    </AppStack.Navigator>
   );
 }
