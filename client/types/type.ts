@@ -20,7 +20,14 @@ export enum Category {
   OTHER = 'Other'
 }
 
-export const categoryToTypeMap: Record<Category, TypeOfTask[]> = {
+export const TypeToCategoryMap: Record<string, Category> = {
+  med_mgmt: Category.HEALTH,
+  dr_appt: Category.HEALTH,
+  financial: Category.FINANCIAL,
+  other: Category.OTHER
+};
+
+export const CategoryToTypeMap: Record<Category, TypeOfTask[]> = {
   [Category.ALL]: [],
   [Category.HEALTH]: [
     TypeOfTask.MEDICATION,
@@ -37,4 +44,11 @@ export const categoryToTypeMap: Record<Category, TypeOfTask[]> = {
   [Category.HOME]: [TypeOfTask.DIET, TypeOfTask.ACTIVITIES],
   [Category.FINANCIAL]: [TypeOfTask.BILLS, TypeOfTask.INSURANCE],
   [Category.OTHER]: [TypeOfTask.OTHER]
+};
+
+export const TaskTypeDescriptions: Record<string, string> = {
+  med_mgmt: 'Medication Management',
+  dr_appt: 'Doctor Appointment',
+  financial: 'Financial Task',
+  other: 'Other Task'
 };

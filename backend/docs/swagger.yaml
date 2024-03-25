@@ -270,6 +270,94 @@ paths:
       summary: Get a group
       tags:
       - group
+  /group/{groupId}/{uid}:
+    delete:
+      description: removes a user from a group given a group id and user id
+      parameters:
+      - description: groupId
+        in: path
+        name: groupId
+        required: true
+        type: string
+      - description: userId
+        in: path
+        name: uid
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.GroupRole'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Remove a user from a group
+      tags:
+      - group
+  /group/{groupId}/{uid}/{role}:
+    patch:
+      description: Change a user group role based off of group id and user id and
+        role
+      parameters:
+      - description: groupId
+        in: path
+        name: groupId
+        required: true
+        type: string
+      - description: userId
+        in: path
+        name: uid
+        required: true
+        type: string
+      - description: New User Group Role
+        in: path
+        name: role
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Change a user group role
+      tags:
+      - group
+    put:
+      description: add a user to a group given a user id and group id and role
+      parameters:
+      - description: groupId
+        in: path
+        name: groupId
+        required: true
+        type: string
+      - description: userId
+        in: path
+        name: uid
+        required: true
+        type: string
+      - description: "Group\tRole"
+        in: path
+        name: role
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.GroupRole'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Add a user to a group
+      tags:
+      - group
   /group/{groupId}/add:
     post:
       description: Adds a user to a care group given a userID, groupID, and role

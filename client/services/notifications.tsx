@@ -14,9 +14,6 @@ import {
 export async function registerForPushNotificationsAsync() {
   // checks that this is a physical device
   if (!isDevice) {
-    alert(
-      'Must use physical device for Push Notifications. Must be ios or android.'
-    );
     return null;
   }
 
