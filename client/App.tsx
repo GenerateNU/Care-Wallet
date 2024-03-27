@@ -1,6 +1,15 @@
 import React from 'react';
 import { SafeAreaView, Text, View } from 'react-native';
 
+import {
+  Manrope_200ExtraLight,
+  Manrope_300Light,
+  Manrope_400Regular,
+  Manrope_500Medium,
+  Manrope_600SemiBold,
+  Manrope_700Bold,
+  Manrope_800ExtraBold
+} from '@expo-google-fonts/manrope';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useFonts } from 'expo-font';
 import { ActivityIndicator, PaperProvider } from 'react-native-paper';
@@ -11,7 +20,13 @@ import { Router } from './navigation/Router';
 export default function App() {
   const queryClient = new QueryClient();
   const [fontsLoaded] = useFonts({
-    Manrope: require('./assets/fonts/Manrope-VariableFont_wght.ttf')
+    Manrope_200ExtraLight,
+    Manrope_300Light,
+    Manrope_400Regular,
+    Manrope_500Medium,
+    Manrope_600SemiBold,
+    Manrope_700Bold,
+    Manrope_800ExtraBold
   });
 
   if (!fontsLoaded)

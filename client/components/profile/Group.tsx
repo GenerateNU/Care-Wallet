@@ -70,7 +70,9 @@ export function Group({
           >
             <View className="items-center px-2">
               <View className="z-10 h-14 w-14 rounded-full  bg-carewallet-lightergray" />
-              <Text className="text-center">{item.first_name}</Text>
+              <Text className="text-center font-carewallet-manrope-semibold text-xs">
+                {item.first_name}
+              </Text>
             </View>
           </Pressable>
         )}

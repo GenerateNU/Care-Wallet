@@ -16,7 +16,9 @@ module.exports = {
       'carewallet-pink': '#FC2C51'
     },
     fontFamily: {
-      Manrope: ['Manrope']
+      'carewallet-manrope': ['Manrope_400Regular'],
+      'carewallet-manrope-semibold': ['Manrope_600SemiBold'],
+      'carewallet-manrope-bold': ['Manrope_700Bold']
     }
   },
   plugins: []

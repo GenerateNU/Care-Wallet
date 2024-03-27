@@ -28,12 +28,12 @@ export function Header({ user, role }: HeaderProps) {
               <Text className="items-center justify-center text-left text-xs font-semibold text-carewallet-black">
                 {`${role?.role} ${role?.role !== Role.PATIENT ? 'CARETAKER' : ''}`}
               </Text>
-              <Text className="items-center justify-center text-left text-xs font-bold  text-carewallet-black">
+              <Text className="items-center justify-center text-left text-xs  text-carewallet-black">
                 {user.phone ? user.phone : user.email}
               </Text>
             </View>
             <IconButton
-              className="absolute -bottom-5 right-0 ml-auto h-[50px] w-[50px] self-end rounded-xl border border-carewallet-lightgray bg-carewallet-white"
+              className="absolute -bottom-5 -right-3 ml-auto h-[50px] w-[50px] self-end rounded-xl border border-carewallet-lightgray bg-carewallet-white"
               mode="contained"
               icon={() => <Edit color={'blue'} />}
             />

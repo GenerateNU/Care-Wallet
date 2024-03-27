@@ -12,7 +12,9 @@ export function CircleCard({ onTouchEnd, ButtonText, Icon }: CircleCardProps) {
       <View className="h-10 w-[80vw] flex-row items-center rounded-xl border border-carewallet-gray bg-carewallet-white">
         <View className="mx-3">{Icon}</View>
 
-        <Text className="text-md font-Manrope font-semibold">{ButtonText}</Text>
+        <Text className="text-md font-carewallet-manrope-semibold">
+          {ButtonText}
+        </Text>
       </View>
     </Pressable>
   );
