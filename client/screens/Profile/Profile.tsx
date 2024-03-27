@@ -45,7 +45,7 @@ export default function Profile() {
   }
 
   return (
-    <View className="flex h-[100vh] flex-1 flex-col bg-carewallet-lightergray">
+    <View className="flex h-[100vh] flex-1 flex-col bg-carewallet-white/25">
       <Header
         user={users.find((user) => user.user_id === activeUser)}
         role={roles.find((role) => role.user_id === activeUser)}
