@@ -7,12 +7,16 @@ module.exports = {
       'carewallet-black': '#000000',
       'carewallet-gray': '#BEBEBE',
       'carewallet-lightgray': '#D9D9D9',
+      'carewallet-lightergray': '#0000000D',
       'carewallet-blue': '#1A56C4',
       'carewallet-green': '#4DB8A6',
       'carewallet-coral': '#FF6258',
       'carewallet-yellow': '#FFD9900',
       'carewallet-purple': '#990099',
       'carewallet-pink': '#FC2C51'
+    },
+    fontFamily: {
+      Manrope: ['Manrope']
     }
   },
   plugins: []
