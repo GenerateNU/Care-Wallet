@@ -2,7 +2,6 @@ package tasks
 
 import (
 	"carewallet/models"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -302,16 +301,8 @@ func (pg *PgModel) UpdateTaskInfo(c *gin.Context) {
 		return
 	}
 
-	// Convert TaskInfo to json.RawMessage
-	taskInfoRaw, err := json.Marshal(requestBody.TaskInfo)
-	if err != nil {
-		fmt.Println("error converting TaskInfo to json.RawMessage:", err)
-		c.JSON(http.StatusBadRequest, err.Error())
-		return
-	}
-
 	// Update the task_info field in the database
-	if err := UpdateTaskInfoInDB(pg.Conn, taskID, taskInfoRaw); err != nil {
+	if err := UpdateTaskInfoInDB(pg.Conn, taskID, requestBody); err != nil {
 		fmt.Println("error updating task info in the database:", err)
 		c.JSON(http.StatusBadRequest, err.Error())
 		return

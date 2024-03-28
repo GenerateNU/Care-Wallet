@@ -3,7 +3,6 @@ package tasks
 import (
 	"carewallet/models"
 	"context"
-	"encoding/json"
 	"fmt"
 	"strconv"
 	"time"
@@ -197,12 +196,31 @@ func DeleteTaskInDB(pool *pgxpool.Pool, taskID int) error {
 	return err
 }
 
-// UpdateTaskInfoInDB updates the task_info field in the database
-func UpdateTaskInfoInDB(pool *pgxpool.Pool, taskID int, taskInfo json.RawMessage) error {
-	// Assuming "task" table structure, adjust the query based on your schema
-	query := "UPDATE task SET task_info = $1 WHERE task_id = $2"
+// UpdateTaskInfoInDB updates all fields of a task in the database
+func UpdateTaskInfoInDB(pool *pgxpool.Pool, taskID int, taskFields models.Task) error {
+	// Construct the SQL query dynamically based on the task_fields parameter
+	query := `
+        UPDATE task SET task_title = $1, group_id = $2, created_by = $3, created_date = $4, start_date = $5, end_date = $6, quick_task = $7, notes = $8, repeating = $9, repeating_interval = $10, repeating_end_date = $11, task_status = $12, task_type = $13, task_info = $14 WHERE task_id = $15
+    `
 
-	_, err := pool.Exec(context.Background(), query, taskInfo, taskID)
+	// Execute the SQL query with the provided task fields and task ID
+	_, err := pool.Exec(context.Background(), query,
+		taskFields.TaskTitle,
+		taskFields.GroupID,
+		taskFields.CreatedBy,
+		taskFields.CreatedDate,
+		taskFields.StartDate,
+		taskFields.EndDate,
+		taskFields.QuickTask,
+		taskFields.Notes,
+		taskFields.Repeating,
+		taskFields.RepeatingInterval,
+		taskFields.RepeatingEndDate,
+		taskFields.TaskStatus,
+		taskFields.TaskType,
+		taskFields.TaskInfo,
+		taskID,
+	)
 	return err
 }
 
