@@ -62,7 +62,7 @@ export function AppStackBottomTabNavigator() {
           tabBarIcon: ({ color }) => <User color={color} />,
           tabBarLabel: () => <Text></Text>
         }}
-        component={FileUploadScreen}
+        component={ProfileNavigation}
       />
     </AppStackBottomTab.Navigator>
   );
@@ -80,6 +80,11 @@ export function ProfileNavigation() {
         name="PatientView"
         options={{ headerShown: false }}
         component={PatientView}
+      />
+      <AppStack.Screen
+        name="FileUploadScreen"
+        options={{ headerShown: false }}
+        component={FileUploadScreen}
       />
     </AppStack.Navigator>
   );

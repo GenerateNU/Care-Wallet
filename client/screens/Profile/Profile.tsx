@@ -74,6 +74,12 @@ export default function Profile() {
       <View className="mb-auto flex-1 items-center">
         <CircleCard ButtonText="Settings" />
       </View>
+      <View className="flex-1 items-center">
+        <CircleCard
+          ButtonText="View Files"
+          onTouchEnd={() => navigation.navigate('FileUploadScreen')}
+        />
+      </View>
       <View className="items-center pb-5">
         <CircleCard ButtonText="Log Out" onTouchEnd={() => signOutMutation()} />
       </View>
