@@ -18,6 +18,8 @@ func FileGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 	files := v1.Group("files")
 	{
 		files.POST("/upload", c.UploadFile)
+		files.DELETE("/:fileID", c.RemoveFile) 
+        files.GET("/:fileID", c.GetFile)      
 	}
 
 	return files
@@ -69,4 +71,53 @@ func (pg *PgModel) UploadFile(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, file)
+}
+
+
+// RemoveFile godoc
+//
+//	@summary		Remove a file
+//	@description	Remove a file from database and S3 bucket
+//	@tags			file
+//
+//	@param			fileID	path	string	true	"The fileID of the file to remove"
+//
+//	@success		200			{object}	string
+//	@failure		400			{object}	string
+//	@router			/files/{fileID} [delete]
+func (pg *PgModel) RemoveFile(c *gin.Context) {
+    fileID := c.Param("fileID")
+    // You might want to validate fileID here
+
+    err := RemoveFile(pg.Conn, fileID)
+    if err != nil {
+        c.JSON(http.StatusBadRequest, "Failed to remove file: "+err.Error())
+        return
+    }
+
+    c.Status(http.StatusOK)
+}
+
+// GetFile godoc
+//
+//	@summary		Get a file
+//	@description	Get a file from S3 bucket
+//	@tags			file
+//
+//	@param			fileID	path	string	true	"The fileID of the file to get"
+//
+//	@success		200			{object}	string
+//	@failure		400			{object}	string
+//	@router			/files/{fileID} [get]
+func (pg *PgModel) GetFile(c *gin.Context) {
+    fileID := c.Param("fileID")
+    // You might want to validate fileID here
+
+    url, err := GetFileURL(pg.Conn, fileID)
+    if err != nil {
+        c.JSON(http.StatusBadRequest, "Failed to get file: "+err.Error())
+        return
+    }
+
+    c.Redirect(http.StatusTemporaryRedirect, url)
 }
