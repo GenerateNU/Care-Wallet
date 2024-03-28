@@ -14,11 +14,10 @@ import { AppStackNavigation } from '../navigation/types';
 import { useTaskByAssigned } from '../services/task';
 import { Task } from '../types/task';
 
-// const currentUserIDs = [useCareWalletContext().user.userID];
-const currentUserIDs = ['0'];
+const currentUserIDs = ['0']; // Assuming this is your current user ID array
 
 export default function AddNewTask() {
-  const navigation = useNavigation<AppStackNavigation>(); // Initialize navigation
+  const navigation = useNavigation<AppStackNavigation>();
 
   const [newTaskState, setNewTaskState] = useState<Task>({
     task_id: 0,
@@ -34,56 +33,33 @@ export default function AddNewTask() {
   });
 
   const [addingTask, setAddingTask] = useState(false);
-  console.log(addingTask);
   const { addTaskMutation: addNewTaskMutation } =
     useTaskByAssigned(currentUserIDs);
+
+  print(addingTask);
 
   const handleAddTask = async () => {
     setAddingTask(true);
     await addNewTaskMutation(newTaskState);
     setAddingTask(false);
-    navigation.navigate('TaskList'); // Navigate back to TaskList screen
+    navigation.navigate('TaskList');
   };
 
-  // State to manage the visibility of the modal
   const [modalVisible, setModalVisible] = useState(false);
 
   return (
-    <View style={{ flex: 1, position: 'relative' }}>
-      <View style={{ position: 'absolute', top: '10%', left: 5, right: 5 }}>
+    <View className="relative flex-1">
+      <View className="absolute left-5 right-5 top-10">
         <PopupModal isVisible={modalVisible} setVisible={setModalVisible}>
           <ActivityIndicator size="large" />
           <Text>Adding Task...</Text>
         </PopupModal>
-        <Text
-          style={{
-            color: 'black',
-            fontSize: 24,
-            fontWeight: 'bold',
-            fontFamily: 'Inter'
-          }}
-        >
+        <Text className="text-black font-inter text-2xl font-bold">
           Task Details
         </Text>
 
-        <View
-          style={{
-            width: 346,
-            height: 125,
-            flexDirection: 'column',
-            justifyContent: 'flex-start',
-            alignItems: 'flex-start',
-            marginBottom: 10
-          }}
-        >
-          <Text
-            style={{
-              color: 'black',
-              fontSize: 14,
-              fontWeight: 'normal',
-              fontFamily: 'Inter'
-            }}
-          >
+        <View className="mb-4 h-32 w-96 flex-col items-start justify-start">
+          <Text className="text-black mb-1 text-base font-normal">
             Task ID:
           </Text>
           <TextInput
@@ -92,8 +68,8 @@ export default function AddNewTask() {
               borderColor: 'gray',
               padding: 5,
               fontSize: 18,
-              width: '100%', // Stretch the TextInput to the full width
-              marginBottom: 10 // Add marginBottom to match the CSS styling
+              width: '100%',
+              marginBottom: 10
             }}
             onChangeText={(val) =>
               setNewTaskState({ ...newTaskState, task_id: parseInt(val) || 0 })
@@ -102,7 +78,6 @@ export default function AddNewTask() {
           />
         </View>
 
-        {/* Add input fields for other task fields (start_date, end_date, notes, task_status, task_type) similarly */}
         <Pressable
           onPress={handleAddTask}
           style={{
@@ -112,7 +87,7 @@ export default function AddNewTask() {
             alignItems: 'center'
           }}
         >
-          <Text style={{ color: 'white', fontSize: 18 }}>Add Task</Text>
+          <Text className="text-white text-lg">Add Task</Text>
         </Pressable>
       </View>
     </View>
