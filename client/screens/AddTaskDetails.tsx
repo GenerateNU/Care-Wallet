@@ -7,43 +7,39 @@ import {
   View
 } from 'react-native';
 
-import { useNavigation } from '@react-navigation/native';
-
+// import { useNavigation } from '@react-navigation/native';
 import { PopupModal } from '../components/PopupModal';
-import { AppStackNavigation } from '../navigation/types';
-import { useTaskByAssigned } from '../services/task';
-import { Task } from '../types/task';
 
-const currentUserIDs = ['0']; // Assuming this is your current user ID array
+// import { AppStackNavigation } from '../navigation/types';
+// import { addNewTaskMutation } from '../services/task';
+// import { Task } from '../types/task';
 
 export default function AddNewTask() {
-  const navigation = useNavigation<AppStackNavigation>();
+  //   const navigation = useNavigation<AppStackNavigation>();
 
-  const [newTaskState, setNewTaskState] = useState<Task>({
-    task_id: 0,
-    task_title: '',
-    group_id: 0,
-    created_by: '',
-    created_date: '',
-    start_date: '',
-    end_date: '',
-    notes: '',
-    task_status: '',
-    task_type: ''
-  });
+  //   const [newTaskState, setNewTaskState] = useState<Task>({
+  //     task_id: 0,
+  //     task_title: '',
+  //     group_id: 0,
+  //     created_by: '',
+  //     created_date: '',
+  //     start_date: '',
+  //     end_date: '',
+  //     notes: '',
+  //     task_status: '',
+  //     task_type: ''
+  //   });
 
-  const [addingTask, setAddingTask] = useState(false);
-  const { addTaskMutation: addNewTaskMutation } =
-    useTaskByAssigned(currentUserIDs);
+  //   const [addingTask, setAddingTask] = useState(false);
+  //   const { addTaskMutation } =
+  //     addNewTaskMutation();
 
-  print(addingTask);
-
-  const handleAddTask = async () => {
-    setAddingTask(true);
-    await addNewTaskMutation(newTaskState);
-    setAddingTask(false);
-    navigation.navigate('TaskList');
-  };
+  //   const handleAddTask = async () => {
+  //     setAddingTask(true);
+  //     await addNewTaskMutation(newTaskState);
+  //     setAddingTask(false);
+  //     navigation.navigate('TaskList');
+  //   };
 
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -71,15 +67,15 @@ export default function AddNewTask() {
               width: '100%',
               marginBottom: 10
             }}
-            onChangeText={(val) =>
-              setNewTaskState({ ...newTaskState, task_id: parseInt(val) || 0 })
-            }
+            // onChangeText={(val) =>
+            //   setNewTaskState({ ...newTaskState, task_id: parseInt(val) || 0 })
+            // }
             keyboardType="numeric"
           />
         </View>
 
         <Pressable
-          onPress={handleAddTask}
+          //   onPress={handleAddTask}
           style={{
             backgroundColor: '#007bff',
             padding: 10,
