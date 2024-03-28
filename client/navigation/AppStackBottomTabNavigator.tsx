@@ -9,6 +9,7 @@ import Calendar from '../assets/bottom-nav/calendar.svg';
 import Home from '../assets/bottom-nav/home.svg';
 import User from '../assets/bottom-nav/user.svg';
 import TimelineCalendarScreen from '../screens/Calendar';
+import FileUploadScreen from '../screens/FileUpload';
 import MedicationList from '../screens/MedicationList';
 import PatientView from '../screens/Profile/PatientView';
 import Profile from '../screens/Profile/Profile';
@@ -61,7 +62,7 @@ export function AppStackBottomTabNavigator() {
           tabBarIcon: ({ color }) => <User color={color} />,
           tabBarLabel: () => <Text></Text>
         }}
-        component={ProfileNavigation}
+        component={FileUploadScreen}
       />
     </AppStackBottomTab.Navigator>
   );
