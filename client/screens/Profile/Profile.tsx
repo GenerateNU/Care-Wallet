@@ -77,7 +77,10 @@ export default function Profile() {
             onTouchEnd={() => navigation.navigate('PatientView')}
           />
         </View>
-        <View className="mb-auto flex-1 items-center">
+        <View
+          className="mb-auto flex-1 items-center"
+          onTouchEnd={() => navigation.navigate('Settings')}
+        >
           <CircleCard Icon={<Settings />} ButtonText="Settings" />
         </View>
         <View className="mb-5 items-center">

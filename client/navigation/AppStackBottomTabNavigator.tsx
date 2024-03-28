@@ -12,6 +12,7 @@ import TimelineCalendarScreen from '../screens/Calendar';
 import MedicationList from '../screens/MedicationList';
 import PatientView from '../screens/Profile/PatientView';
 import Profile from '../screens/Profile/Profile';
+import Settings from '../screens/Settings';
 import SingleTaskScreen from '../screens/SingleTask';
 import TaskList from '../screens/TaskList';
 import { AppStack } from './types';
@@ -82,6 +83,11 @@ export function ProfileNavigation() {
         name="PatientView"
         options={{ headerShown: false }}
         component={PatientView}
+      />
+      <AppStack.Screen
+        name="Settings"
+        options={{ headerShown: false }}
+        component={Settings}
       />
     </AppStack.Navigator>
   );
