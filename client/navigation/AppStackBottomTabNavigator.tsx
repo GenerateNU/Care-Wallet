@@ -10,6 +10,7 @@ import Home from '../assets/bottom-nav/home.svg';
 import User from '../assets/bottom-nav/user.svg';
 import TimelineCalendarScreen from '../screens/Calendar';
 import MedicationList from '../screens/MedicationList';
+import NotificationScreen from '../screens/NotificationScreen';
 import PatientView from '../screens/Profile/PatientView';
 import Profile from '../screens/Profile/Profile';
 import SingleTaskScreen from '../screens/SingleTask';
@@ -52,7 +53,7 @@ export function AppStackBottomTabNavigator() {
           tabBarIcon: ({ color }) => <Bell color={color} />,
           tabBarLabel: () => <Text></Text>
         }}
-        component={MedicationList}
+        component={NotificationScreen} // changed this from MedicationList
       />
       <AppStackBottomTab.Screen
         name="ProfileScreens"
