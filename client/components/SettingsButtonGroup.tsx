@@ -12,13 +12,13 @@ export function SettingsButtonGroup({
 }) {
   return (
     <View className="mx-auto mt-2 w-[80vw]">
-      <Text className="text-base">{title}</Text>
-      <View className="mt-3 rounded-lg border border-carewallet-black">
+      <Text className="text-base font-semibold">{title}</Text>
+      <View className="mt-3 rounded-xl border border-carewallet-black">
         {buttons.map((button, index) => (
           <View
             key={index + title}
             className={clsx(
-              'h-10 w-full justify-center border-carewallet-black',
+              'h-10 w-full justify-center rounded-xl border-carewallet-black bg-carewallet-white',
               index !== 0 && 'border-t'
             )}
             onTouchEnd={button.onPress}

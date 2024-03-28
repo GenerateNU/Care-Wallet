@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { Text, View } from 'react-native';
 
 import Bell from '../assets/profile/settings/bell.svg';
 import Clock from '../assets/profile/settings/clock.svg';
@@ -9,11 +9,18 @@ import FlagAlt from '../assets/profile/settings/flag_alt.svg';
 import Globe from '../assets/profile/settings/globe.svg';
 import Group from '../assets/profile/settings/group.svg';
 import GroupScan from '../assets/profile/settings/group_scan.svg';
+import { BackButton } from '../components/nav_buttons/BackButton';
 import { SettingsButtonGroup } from '../components/SettingsButtonGroup';
 
 export default function Settings() {
   return (
-    <View>
+    <View className="bg-carewallet-white/20">
+      <View className="flex flex-row items-center justify-center bg-carewallet-white">
+        <BackButton />
+        <Text className="mx-auto pr-[70px] text-center text-xl font-bold text-carewallet-blue">
+          Settings
+        </Text>
+      </View>
       <SettingsButtonGroup
         title="Manage Care Group"
         buttons={[
