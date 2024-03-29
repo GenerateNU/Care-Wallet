@@ -45,17 +45,17 @@ export default function AddTaskDetails() {
 
   return (
     <View className="relative flex-1">
-      <View className="absolute left-5 right-5 top-10">
+      <View className="">
         <PopupModal isVisible={modalVisible} setVisible={setModalVisible}>
           <ActivityIndicator size="large" />
           <Text>Adding Task...</Text>
         </PopupModal>
-        <Text className="text-black font-inter text-2xl font-bold">
+        <Text className="text-2xl font-bold text-carewallet-black">
           Task Details
         </Text>
 
         <View className="mb-4 h-32 w-96 flex-col items-start justify-start">
-          <Text className="text-black mb-1 text-base font-normal">
+          <Text className="mb-1 text-base font-normal text-carewallet-black">
             Task ID:
           </Text>
           <TextInput
@@ -83,7 +83,7 @@ export default function AddTaskDetails() {
             alignItems: 'center'
           }}
         >
-          <Text className="text-white text-lg">Add Task</Text>
+          <Text className="text-carewallet-white">Add Task</Text>
         </Pressable>
       </View>
     </View>
