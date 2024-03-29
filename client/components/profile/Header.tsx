@@ -4,18 +4,23 @@ import { Text, View } from 'react-native';
 import { IconButton } from 'react-native-paper';
 
 import Edit from '../../assets/profile/edit.svg';
+import { useCareWalletContext } from '../../contexts/CareWalletContext';
 import { GroupRole, Role } from '../../types/group';
 import { User } from '../../types/user';
+import { BackButton } from '../nav_buttons/BackButton';
+import { NavigationLeftArrow } from '../nav_buttons/NavigateLeftArrow';
 
 interface HeaderProps {
   user: User | undefined;
   role: GroupRole | undefined;
+  onPress?: () => void;
 }
 
-export function Header({ user, role }: HeaderProps) {
+export function Header({ user, role, onPress }: HeaderProps) {
+  const { user: signedInUser } = useCareWalletContext();
   if (!user) return null;
 
-  return (
+  return signedInUser.userID === user.user_id ? (
     <View className="flex flex-row items-center border-b border-carewallet-lightgray bg-carewallet-white">
       <View className="mb-3 ml-3 h-20 w-20 rounded-full bg-carewallet-lightergray" />
       <View className="mt-5 flex h-fit max-h-fit min-h-fit flex-row items-center">
@@ -40,6 +45,30 @@ export function Header({ user, role }: HeaderProps) {
           </View>
         </View>
       </View>
+    </View>
+  ) : (
+    <View className="flex flex-row items-center border-b border-carewallet-lightgray bg-carewallet-white">
+      <View className="my-auto">
+        {role?.role === Role.PATIENT ? (
+          <BackButton />
+        ) : (
+          onPress && <NavigationLeftArrow onPress={onPress} />
+        )}
+      </View>
+      <View className="mt-5 flex h-fit max-h-fit min-h-fit flex-row items-center">
+        <View className="mb-5 ml-8">
+          <Text className="flex-wrap text-center text-xl font-bold text-carewallet-blue">
+            {user.first_name} {user.last_name}
+          </Text>
+          <Text className="text-center text-xs font-semibold text-carewallet-black">
+            {`${role?.role} ${role?.role !== Role.PATIENT ? 'CARETAKER' : ''}`}
+          </Text>
+          <Text className="text-center text-xs  text-carewallet-black">
+            {user.phone ? user.phone : user.email}
+          </Text>
+        </View>
+      </View>
+      <View className="mb-3 ml-auto mr-3 h-14 w-14 rounded-full bg-carewallet-lightergray" />
     </View>
   );
 }

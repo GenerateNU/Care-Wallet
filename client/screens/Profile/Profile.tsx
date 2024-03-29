@@ -49,6 +49,7 @@ export default function Profile() {
       <Header
         user={users.find((user) => user.user_id === activeUser)}
         role={roles.find((role) => role.user_id === activeUser)}
+        onPress={() => setActiveUser(signedInUser.userID)}
       />
       <View className="h-[70vh] pt-10">
         <Group
