@@ -14,7 +14,7 @@ import { PopupModal } from '../components/PopupModal';
 // import { addNewTaskMutation } from '../services/task';
 // import { Task } from '../types/task';
 
-export default function AddNewTask() {
+export default function AddTaskDetails() {
   //   const navigation = useNavigation<AppStackNavigation>();
 
   //   const [newTaskState, setNewTaskState] = useState<Task>({

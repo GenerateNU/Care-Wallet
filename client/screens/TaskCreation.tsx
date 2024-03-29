@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 import { Text, View } from 'react-native';
 
-import { RouteProp, useRoute } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import {
   GestureHandlerRootView,
   ScrollView
 } from 'react-native-gesture-handler';
 
 import { BackButton } from '../components/nav_buttons/BackButton';
+import { ForwardButton } from '../components/nav_buttons/ForwardButton.tsx';
 import { AddressComponent } from '../components/task_creation/AddressComponent.tsx';
 import { RadioGroup } from '../components/task_creation/RadioGroup.tsx';
 import { TextInputLine } from '../components/task_creation/TextInputLine.tsx';
 import { TextInputParagraph } from '../components/task_creation/TextInputParagraph.tsx';
+import { AppStackNavigation } from '../navigation/types.ts';
 import { TaskCreationJson } from '../types/task-creation-json.ts';
 
 type ParamList = {
@@ -21,6 +23,7 @@ type ParamList = {
 };
 
 export function TaskCreation() {
+  const navigation = useNavigation<AppStackNavigation>();
   const route = useRoute<RouteProp<ParamList, 'mt'>>();
   const { taskType } = route.params;
 
@@ -47,7 +50,23 @@ export function TaskCreation() {
       ...prevValues,
       [key]: value
     }));
-    console.log('Current values:', values);
+  };
+
+  // Function to check if all fields are filled
+  const allFieldsFilled = () => {
+    return Object.values(values).every((value) => value.trim() !== '');
+  };
+
+  // Function to handle forward button click
+  const handleForwardButtonClick = () => {
+    if (allFieldsFilled()) {
+      // Navigate to the AddTaskDetails screen with the necessary parameters
+      navigation.navigate('AddTaskDetails', {
+        /* any parameters you want to pass */
+      });
+    } else {
+      console.log('Please fill all fields before proceeding.');
+    }
   };
 
   return (
@@ -86,6 +105,12 @@ export function TaskCreation() {
             )}
           </View>
         ))}
+        <View className="flex-row justify-end">
+          {/* Render ForwardButton component conditionally */}
+          {allFieldsFilled() && (
+            <ForwardButton onPress={handleForwardButtonClick} />
+          )}
+        </View>
       </ScrollView>
     </GestureHandlerRootView>
   );

@@ -1,5 +1,6 @@
 import React from 'react';
 
+import AddTaskDetails from '../screens/AddTaskDetails';
 import LoginPage from '../screens/LoginPage';
 import { TaskCreation } from '../screens/TaskCreation';
 import { TaskType } from '../screens/TaskType';
@@ -28,6 +29,11 @@ export function AppNavigation() {
         name="TaskCreation"
         options={{ headerShown: false }}
         component={TaskCreation}
+      />
+      <AppStack.Screen
+        name="AddTaskDetails"
+        options={{ headerShown: false }}
+        component={AddTaskDetails}
       />
     </AppStack.Navigator>
   );
