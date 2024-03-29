@@ -64,8 +64,9 @@ const editTask = async (taskID: string, updatedTask: Task): Promise<Task> => {
 
 export const useFilteredTasks = (queryParams: TaskQueryParams) => {
   const { data: tasks, isLoading: tasksIsLoading } = useQuery<Task[]>({
-    queryKey: ['filteredTaskList', queryParams],
-    queryFn: () => getFilteredTasks(queryParams)
+    queryKey: ['filteredTaskList'],
+    queryFn: () => getFilteredTasks(queryParams),
+    refetchInterval: 20000
   });
   return {
     tasks,

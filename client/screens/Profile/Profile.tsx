@@ -3,14 +3,17 @@ import { ActivityIndicator, Text, View } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 
+import Folder from '../../assets/profile/folderopen.svg';
+import RightArrow from '../../assets/profile/rightarrow.svg';
+import Settings from '../../assets/profile/settings.svg';
 import { CircleCard } from '../../components/profile/CircleCard';
 import { Group } from '../../components/profile/Group';
 import { Header } from '../../components/profile/Header';
+import { UserTaskStatusCard } from '../../components/profile/UserTaskStatusCard';
 import { useCareWalletContext } from '../../contexts/CareWalletContext';
 import { AppStackNavigation } from '../../navigation/types';
 import { useAuth } from '../../services/auth';
 import { useGroup } from '../../services/group';
-import { useTaskByAssigned } from '../../services/task';
 import { useUsers } from '../../services/user';
 
 export default function Profile() {
@@ -21,11 +24,10 @@ export default function Profile() {
   const { users, usersAreLoading } = useUsers(
     roles?.map((role) => role.user_id) ?? []
   );
-  const { taskByUser, taskByUserIsLoading } = useTaskByAssigned(activeUser);
 
   const { signOutMutation } = useAuth();
 
-  if (rolesAreLoading || usersAreLoading || taskByUserIsLoading) {
+  if (rolesAreLoading || usersAreLoading) {
     return (
       <View className="w-full flex-1 items-center justify-center bg-carewallet-white text-3xl">
         <ActivityIndicator size="large" />
@@ -43,45 +45,48 @@ export default function Profile() {
   }
 
   return (
-    <View className="flex flex-1 flex-col">
+    <View className="flex h-[100vh] flex-1 flex-col bg-carewallet-white/25">
       <Header
         user={users.find((user) => user.user_id === activeUser)}
         role={roles.find((role) => role.user_id === activeUser)}
       />
-      <Group
-        users={users ?? []}
-        usersAreLoading={usersAreLoading}
-        setActiveUser={setActiveUser}
-        activeUser={activeUser}
-        roles={roles ?? []}
-        rolesAreLoading={rolesAreLoading}
-      />
-      <View
-        className="mt-5 flex items-center pb-5"
-        onTouchEnd={() => navigation.navigate('TaskList')}
-      >
-        <View className="h-20 w-80 items-center justify-center rounded-xl border border-carewallet-black">
-          <Text className="text-md">Your Tasks</Text>
-          <Text className="text-2xl">{taskByUser?.length ?? 0}</Text>
+      <View className="h-[70vh] pt-10">
+        <Group
+          users={users ?? []}
+          usersAreLoading={usersAreLoading}
+          setActiveUser={setActiveUser}
+          activeUser={activeUser}
+          roles={roles ?? []}
+          rolesAreLoading={rolesAreLoading}
+        />
+        <View
+          className="mt-5 flex items-center pb-5"
+          onTouchEnd={() => {
+            navigation.navigate('CalendarContainer', {
+              screen: 'CalendarTopNav',
+              params: { screen: 'TaskList' }
+            });
+          }}
+        >
+          <UserTaskStatusCard userID={activeUser} />
         </View>
-      </View>
-      <View className="mb-5 items-center">
-        <CircleCard
-          ButtonText="View Patient Information"
-          onTouchEnd={() => navigation.navigate('PatientView')}
-        />
-      </View>
-      <View className="mb-auto flex-1 items-center">
-        <CircleCard ButtonText="Settings" />
-      </View>
-      <View className="flex-1 items-center">
-        <CircleCard
-          ButtonText="View Files"
-          onTouchEnd={() => navigation.navigate('FileUploadScreen')}
-        />
-      </View>
-      <View className="items-center pb-5">
-        <CircleCard ButtonText="Log Out" onTouchEnd={() => signOutMutation()} />
+        <View className="mb-5 items-center">
+          <CircleCard
+            Icon={<Folder />}
+            ButtonText="View Patient Information"
+            onTouchEnd={() => navigation.navigate('PatientView')}
+          />
+        </View>
+        <View className="mb-auto flex-1 items-center">
+          <CircleCard Icon={<Settings />} ButtonText="Settings" />
+        </View>
+        <View className="mb-5 items-center">
+          <CircleCard
+            Icon={<RightArrow />}
+            ButtonText="Log Out"
+            onTouchEnd={() => signOutMutation()}
+          />
+        </View>
       </View>
     </View>
   );

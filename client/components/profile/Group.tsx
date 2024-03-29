@@ -47,32 +47,36 @@ export function Group({
   }
 
   return (
-    <FlatList
-      keyboardShouldPersistTaps="always"
-      className="h-fit max-h-fit flex-grow-0"
-      onScrollBeginDrag={() => setCanPress(false)}
-      onScrollEndDrag={() => setCanPress(true)}
-      horizontal
-      showsHorizontalScrollIndicator={false}
-      data={users.filter(
-        (user) =>
-          user.user_id !== activeUser &&
-          user.user_id !==
-            (roles.find((role) => role.role === Role.PATIENT)?.user_id ?? '')
-      )}
-      renderItem={({ item, index }) => (
-        <Pressable
-          key={index}
-          onTouchEnd={() => {
-            if (canPress) setActiveUser(item.user_id);
-          }}
-        >
-          <View className="items-center px-2">
-            <View className="z-10 h-20 w-20 rounded-full border border-carewallet-black bg-carewallet-white" />
-            <Text className="text-center">{item.first_name}</Text>
-          </View>
-        </Pressable>
-      )}
-    />
+    <View className="items-center">
+      <FlatList
+        keyboardShouldPersistTaps="always"
+        className="h-fit max-h-fit flex-grow-0"
+        onScrollBeginDrag={() => setCanPress(false)}
+        onScrollEndDrag={() => setCanPress(true)}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        data={users.filter(
+          (user) =>
+            user.user_id !== activeUser &&
+            user.user_id !==
+              (roles.find((role) => role.role === Role.PATIENT)?.user_id ?? '')
+        )}
+        renderItem={({ item, index }) => (
+          <Pressable
+            key={index}
+            onTouchEnd={() => {
+              if (canPress) setActiveUser(item.user_id);
+            }}
+          >
+            <View className="items-center px-2">
+              <View className="z-10 h-14 w-14 rounded-full  bg-carewallet-lightergray" />
+              <Text className="text-center font-carewallet-manrope-semibold text-xs">
+                {item.first_name}
+              </Text>
+            </View>
+          </Pressable>
+        )}
+      />
+    </View>
   );
 }
