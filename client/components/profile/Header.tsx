@@ -55,7 +55,7 @@ export function Header({ user, role, onPress }: HeaderProps) {
           onPress && <NavigationLeftArrow onPress={onPress} />
         )}
       </View>
-      <View className="mt-5 flex h-fit max-h-fit min-h-fit flex-row items-center">
+      <View className="mx-auto mt-2 flex h-fit max-h-fit min-h-fit flex-row items-center">
         <View className="mb-5 ml-8">
           <Text className="flex-wrap text-center text-xl font-bold text-carewallet-blue">
             {user.first_name} {user.last_name}
