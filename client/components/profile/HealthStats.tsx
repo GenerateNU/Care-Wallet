@@ -21,7 +21,7 @@ export function HealthStats() {
           }}
         >
           <View className="items-center px-2">
-            <View className="z-10 h-48 w-32 rounded-3xl border border-carewallet-black bg-carewallet-white" />
+            <View className="z-10 h-72 w-32 rounded-3xl border border-carewallet-lightgray bg-carewallet-white" />
           </View>
         </Pressable>
       )}
