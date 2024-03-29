@@ -1,16 +1,16 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 
-import Bell from '../assets/profile/settings/bell.svg';
-import Clock from '../assets/profile/settings/clock.svg';
-import Comment from '../assets/profile/settings/comment.svg';
-import Edit from '../assets/profile/settings/edit.svg';
-import FlagAlt from '../assets/profile/settings/flag_alt.svg';
-import Globe from '../assets/profile/settings/globe.svg';
-import Group from '../assets/profile/settings/group.svg';
-import GroupScan from '../assets/profile/settings/group_scan.svg';
-import { BackButton } from '../components/nav_buttons/BackButton';
-import { SettingsButtonGroup } from '../components/SettingsButtonGroup';
+import Bell from '../../assets/profile/settings/bell.svg';
+import Clock from '../../assets/profile/settings/clock.svg';
+import Comment from '../../assets/profile/settings/comment.svg';
+import Edit from '../../assets/profile/settings/edit.svg';
+import FlagAlt from '../../assets/profile/settings/flag_alt.svg';
+import Globe from '../../assets/profile/settings/globe.svg';
+import Group from '../../assets/profile/settings/group.svg';
+import GroupScan from '../../assets/profile/settings/group_scan.svg';
+import { BackButton } from '../../components/nav_buttons/BackButton';
+import { SettingsButtonGroup } from '../../components/SettingsButtonGroup';
 
 export default function Settings() {
   return (
