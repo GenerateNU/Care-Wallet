@@ -1,91 +1,88 @@
 import React, { useState } from 'react';
 import {
-  ActivityIndicator,
-  Pressable,
-  Text,
-  TextInput,
+  //   ActivityIndicator,
+  //   Pressable,
+  Text, //   TextInput,
   View
 } from 'react-native';
 
 // import { useNavigation } from '@react-navigation/native';
-import { PopupModal } from '../components/PopupModal';
+import {
+  GestureHandlerRootView,
+  ScrollView
+} from 'react-native-gesture-handler';
+
+import { BackButton } from '../components/nav_buttons/BackButton';
+import { AddressComponent } from '../components/task_creation/AddressComponent.tsx';
+import { RadioGroup } from '../components/task_creation/RadioGroup.tsx';
+import { TextInputLine } from '../components/task_creation/TextInputLine.tsx';
+import { TextInputParagraph } from '../components/task_creation/TextInputParagraph.tsx';
 
 // import { AppStackNavigation } from '../navigation/types';
 // import { addNewTaskMutation } from '../services/task';
 // import { Task } from '../types/task';
 
+// type ParamList = {
+//   mt: {
+//     taskType: string;
+//   };
+// };
+
 export default function AddTaskDetails() {
   //   const navigation = useNavigation<AppStackNavigation>();
 
-  //   const [newTaskState, setNewTaskState] = useState<Task>({
-  //     task_id: 0,
-  //     task_title: '',
-  //     group_id: 0,
-  //     created_by: '',
-  //     created_date: '',
-  //     start_date: '',
-  //     end_date: '',
-  //     notes: '',
-  //     task_status: '',
-  //     task_type: ''
-  //   });
+  const compList: { key: string; value: string }[] = [];
 
-  //   const [addingTask, setAddingTask] = useState(false);
-  //   const { addTaskMutation } =
-  //     addNewTaskMutation();
+  const [values, setValues] = useState<{ [key: string]: string }>({});
 
-  //   const handleAddTask = async () => {
-  //     setAddingTask(true);
-  //     await addNewTaskMutation(newTaskState);
-  //     setAddingTask(false);
-  //     navigation.navigate('TaskList');
-  //   };
+  values;
 
-  const [modalVisible, setModalVisible] = useState(false);
+  const handleChange = (key: string, value: string) => {
+    setValues((prevValues) => ({
+      ...prevValues,
+      [key]: value
+    }));
+  };
+
+  //   const [modalVisible, setModalVisible] = useState(false);
 
   return (
-    <View className="relative flex-1">
-      <View className="">
-        <PopupModal isVisible={modalVisible} setVisible={setModalVisible}>
-          <ActivityIndicator size="large" />
-          <Text>Adding Task...</Text>
-        </PopupModal>
-        <Text className="text-2xl font-bold text-carewallet-black">
-          Task Details
-        </Text>
-
-        <View className="mb-4 h-32 w-96 flex-col items-start justify-start">
-          <Text className="mb-1 text-base font-normal text-carewallet-black">
-            Task ID:
+    <GestureHandlerRootView>
+      <ScrollView className="mt-10">
+        <View className="flex w-full flex-row items-center justify-center">
+          <View className="mr-[95px]">
+            <BackButton />
+          </View>
+          <Text className="mr-auto self-center text-center text-carewallet-gray">
+            Step 1 of 2
           </Text>
-          <TextInput
-            style={{
-              borderWidth: 1,
-              borderColor: 'gray',
-              padding: 5,
-              fontSize: 18,
-              width: '100%',
-              marginBottom: 10
-            }}
-            // onChangeText={(val) =>
-            //   setNewTaskState({ ...newTaskState, task_id: parseInt(val) || 0 })
-            // }
-            keyboardType="numeric"
-          />
         </View>
-
-        <Pressable
-          //   onPress={handleAddTask}
-          style={{
-            backgroundColor: '#007bff',
-            padding: 10,
-            borderRadius: 5,
-            alignItems: 'center'
-          }}
-        >
-          <Text className="text-carewallet-white">Add Task</Text>
-        </Pressable>
-      </View>
-    </View>
+        <Text className="text-center text-2xl font-bold">Task Details</Text>
+        {compList.map((item, index) => (
+          <View key={index}>
+            {item.key === 'Address' && <AddressComponent />}
+            {item.value === 'TextInputLine' && (
+              <TextInputLine
+                title={item.key}
+                onChange={(value) => handleChange(item.key, value)}
+              />
+            )}
+            {item.value === 'TextInputParagraph' && (
+              <TextInputParagraph
+                title={item.key}
+                onChange={(value) => handleChange(item.key, value)}
+              />
+            )}
+            {item.value.startsWith('RadioGroup') && (
+              <RadioGroup
+                title={item.key}
+                options={item.value.substring(12).split(', ')}
+                onChange={(value) => handleChange(item.key, value)}
+              />
+            )}
+          </View>
+        ))}
+      </ScrollView>
+    </GestureHandlerRootView>
   );
 }
