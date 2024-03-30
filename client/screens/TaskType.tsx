@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState
 } from 'react';
-import { FlatList, View } from 'react-native';
+import { View } from 'react-native';
 
 import BottomSheet, {
   BottomSheetBackdrop,
@@ -72,50 +72,44 @@ export function TaskType() {
 
   return (
     <GestureHandlerRootView className="bg-carewallet-white pt-10">
-      <View className="flex w-full flex-row items-center justify-center">
-        <View className="mr-[95px]">
-          <BackButton />
-        </View>
-        <Text className="mr-auto self-center text-center text-carewallet-gray">
-          Step 1 of 2
+      <View className="flex w-full flex-row items-center">
+        <BackButton />
+
+        <Text className="mx-auto pr-20 font-carewallet-manrope-bold text-[18px] text-carewallet-blue">
+          Step 1 of 3
         </Text>
       </View>
+      <View className="my-5 border-b border-carewallet-lightgray" />
 
-      <Text className="text-center text-2xl font-bold">Type of Task</Text>
-      <View className="mr-2 flex flex-row justify-end">
+      <View className="flex w-full flex-row items-start justify-between px-4">
+        <Text className="font-carewallet-manrope-bold text-[24px]">
+          Choose Type of Task
+        </Text>
         <Button
-          className="h-[40px] items-center justify-center rounded-xl text-sm"
-          textColor="black"
-          mode="outlined"
+          className=" h-14 items-center justify-center rounded-lg bg-carewallet-blue text-carewallet-white"
+          textColor="white"
           onPress={() => snapToIndex(0)}
         >
-          Filter
+          FILTER
         </Button>
       </View>
 
-      <View className="h-[68vh]">
-        <FlatList
-          className="h-[80vh] scroll-pb-96"
-          data={selectedTypes}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              className="m-2 h-[50px] overflow-hidden rounded-xl"
-              onPress={() =>
-                navigation.navigate('TaskCreation', {
-                  taskType: JSON.stringify(item)
-                })
-              }
-            >
-              <Button
-                className="m-2 h-[50px] items-center justify-center rounded-xl"
-                textColor="black"
-                mode="outlined"
-              >
-                {item}
-              </Button>
-            </TouchableOpacity>
-          )}
-        />
+      <View className="my-2" />
+      <View className="flex h-[68vh] flex-wrap justify-between p-4">
+        {selectedTypes.map((item, index) => (
+          <TouchableOpacity
+            key={index}
+            onPress={() =>
+              navigation.navigate('TaskCreation', {
+                taskType: JSON.stringify(item)
+              })
+            }
+          >
+            <View className="border-gray-400 bg-white flex h-24 w-40 flex-col items-start rounded-lg border p-2">
+              <Text className="flex-shrink flex-grow">{item}</Text>
+            </View>
+          </TouchableOpacity>
+        ))}
       </View>
 
       <BottomSheet
