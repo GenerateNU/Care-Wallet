@@ -58,7 +58,7 @@ export default function TaskCreation() {
             <BackButton />
           </View>
           <Text className="mr-auto self-center text-center text-carewallet-gray">
-            Step 1 of 2
+            Step 2 of 3
           </Text>
         </View>
         <Text className="text-center text-2xl font-bold">{header}</Text>
