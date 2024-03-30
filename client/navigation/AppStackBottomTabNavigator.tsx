@@ -23,8 +23,11 @@ export function AppStackBottomTabNavigator() {
   return (
     <AppStackBottomTab.Navigator
       screenOptions={{
-        tabBarActiveTintColor: 'black',
-        tabBarInactiveTintColor: 'gray'
+        tabBarActiveTintColor: 'white',
+        tabBarInactiveTintColor: '#D9D9D9',
+        tabBarStyle: {
+          backgroundColor: '#1A56C4'
+        }
       }}
     >
       <AppStackBottomTab.Screen
