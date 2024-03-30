@@ -45,7 +45,7 @@ export default function Profile() {
   }
 
   return (
-    <View className="flex h-[100vh] flex-1 flex-col bg-carewallet-white/25">
+    <View className="flex h-[100vh] flex-1 flex-col bg-carewallet-white/80">
       <Header
         user={users.find((user) => user.user_id === activeUser)}
         role={roles.find((role) => role.user_id === activeUser)}
@@ -78,11 +78,13 @@ export default function Profile() {
             onTouchEnd={() => navigation.navigate('PatientView')}
           />
         </View>
-        <View
-          className="mb-auto flex-1 items-center"
-          onTouchEnd={() => navigation.navigate('Settings')}
-        >
-          <CircleCard Icon={<Settings />} ButtonText="Settings" />
+        <View className="mb-auto">
+          <View
+            className="h-10 flex-1 items-center"
+            onTouchEnd={() => navigation.navigate('Settings')}
+          >
+            <CircleCard Icon={<Settings />} ButtonText="Settings" />
+          </View>
         </View>
         <View className="mb-5 items-center">
           <CircleCard

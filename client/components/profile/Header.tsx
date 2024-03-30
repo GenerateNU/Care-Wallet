@@ -55,20 +55,28 @@ export function Header({ user, role, onPress }: HeaderProps) {
           onPress && <NavigationLeftArrow onPress={onPress} />
         )}
       </View>
-      <View className="mx-auto mt-2 flex h-fit max-h-fit min-h-fit flex-row items-center">
-        <View className="mb-5 ml-8">
-          <Text className="flex-wrap text-center text-xl font-bold text-carewallet-blue">
-            {user.first_name} {user.last_name}
-          </Text>
-          <Text className="text-center text-xs font-semibold text-carewallet-black">
-            {`${role?.role} ${role?.role !== Role.PATIENT ? 'CARETAKER' : ''}`}
-          </Text>
-          <Text className="text-center text-xs  text-carewallet-black">
-            {user.phone ? user.phone : user.email}
-          </Text>
-        </View>
-      </View>
-      <View className="mb-3 ml-auto mr-3 h-14 w-14 rounded-full bg-carewallet-lightergray" />
+      {role?.role === Role.PATIENT ? (
+        <Text className="mx-auto pr-10 font-carewallet-montserrat-semibold text-xl text-carewallet-blue">
+          Patient Information
+        </Text>
+      ) : (
+        <>
+          <View className="mx-auto mt-2 flex h-fit max-h-fit min-h-fit flex-row items-center">
+            <View className="mb-5 ml-8">
+              <Text className="flex-wrap text-center text-xl font-bold text-carewallet-blue">
+                {user.first_name} {user.last_name}
+              </Text>
+              <Text className="text-center text-xs font-semibold text-carewallet-black">
+                {`${role?.role} CARETAKER`}
+              </Text>
+              <Text className="text-center text-xs  text-carewallet-black">
+                {user.phone ? user.phone : user.email}
+              </Text>
+            </View>
+          </View>
+          <View className="mb-3 ml-auto mr-3 h-14 w-14 rounded-full bg-carewallet-lightergray" />
+        </>
+      )}
     </View>
   );
 }

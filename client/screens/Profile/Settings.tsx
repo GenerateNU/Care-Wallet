@@ -14,10 +14,10 @@ import { SettingsButtonGroup } from '../../components/SettingsButtonGroup';
 
 export default function Settings() {
   return (
-    <View className="bg-carewallet-white/20">
-      <View className="flex flex-row items-center justify-center bg-carewallet-white">
+    <View className="h-[100vh] bg-carewallet-white/80">
+      <View className="flex flex-row items-center justify-center border-b border-carewallet-lightergray bg-carewallet-white">
         <BackButton />
-        <Text className="mx-auto pr-[70px] text-center text-xl font-bold text-carewallet-blue">
+        <Text className="mx-auto  pr-[70px] text-center text-xl font-bold text-carewallet-blue">
           Settings
         </Text>
       </View>
