@@ -39,7 +39,7 @@ export default function PatientView() {
         </Pressable>
         <Pressable className="ml-2 mt-5 flex h-10 w-[38vw] flex-row items-center justify-center space-x-2 rounded-lg border border-carewallet-lightgray bg-carewallet-white">
           <FileDock />
-          <Text className="my-auto text-center font-carewallet-manrope text-carewallet-black">
+          <Text className="my-auto text-center font-carewallet-manrope-semibold text-carewallet-black">
             View Files
           </Text>
         </Pressable>
