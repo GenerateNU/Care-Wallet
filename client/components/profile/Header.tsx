@@ -66,7 +66,7 @@ export function Header({ user, role, onPress }: HeaderProps) {
               <Text className="flex-wrap text-center text-xl font-bold text-carewallet-blue">
                 {user.first_name} {user.last_name}
               </Text>
-              <Text className="text-center text-xs font-semibold text-carewallet-black">
+              <Text className="mt-3 text-center text-xs font-semibold text-carewallet-black">
                 {`${role?.role} CARETAKER`}
               </Text>
               <Text className="text-center text-xs  text-carewallet-black">
@@ -74,7 +74,7 @@ export function Header({ user, role, onPress }: HeaderProps) {
               </Text>
             </View>
           </View>
-          <View className="mb-3 ml-auto mr-3 h-14 w-14 rounded-full bg-carewallet-lightergray" />
+          <View className="mb-3 ml-auto mr-3 h-20 w-20 rounded-full bg-carewallet-lightergray" />
         </>
       )}
     </View>
