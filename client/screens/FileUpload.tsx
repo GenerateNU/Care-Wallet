@@ -15,7 +15,7 @@ export default function FileUploadScreen() {
   const { uploadFileMutation } = useFile();
   const [open, setOpen] = useState(false);
   const [fileTitle, setFileTitle] = useState('');
-  const [label, setLabel] = useState('Medication');
+  const [label, setLabel] = useState('Financial');
   const [additionalNotes, setAdditionalNotes] = useState('');
   const [pickedFile, setPickedFile] = useState<DocumentPickerAsset | null>(
     null
@@ -23,10 +23,12 @@ export default function FileUploadScreen() {
 
   const handleFileTitleChange = (text: string) => {
     setFileTitle(text);
+    console.log('fileTitle', fileTitle);
   };
 
   const handleAdditionalNotesChange = (text: string) => {
     setAdditionalNotes(text);
+    console.log('notes', additionalNotes);
   };
 
   const pickDocument = async () => {
@@ -50,7 +52,9 @@ export default function FileUploadScreen() {
         uploadFileMutation({
           file: pickedFile,
           userId: user.userID,
-          groupId: group.groupID
+          groupId: group.groupID,
+          label: label,
+          notes: additionalNotes
         });
       }
     } catch (err) {

@@ -43,6 +43,19 @@ const docTemplate = `{
                         "name": "group_id",
                         "in": "formData",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Notes for the file",
+                        "name": "notes",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Label name for the file",
+                        "name": "label_name",
+                        "in": "formData"
                     }
                 ],
                 "responses": {
@@ -1222,6 +1235,12 @@ const docTemplate = `{
                 },
                 "group_id": {
                     "type": "integer"
+                },
+                "label_name": {
+                    "type": "string"
+                },
+                "notes": {
+                    "type": "string"
                 },
                 "task_id": {
                     "type": "integer"
