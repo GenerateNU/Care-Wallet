@@ -22,7 +22,7 @@ import { CloseButton } from '../components/nav_buttons/CloseButton';
 import { AppStackNavigation } from '../navigation/types';
 import { Category, CategoryToTypeMap, TypeOfTask } from '../types/type';
 
-export function TaskType() {
+export default function TaskType() {
   const navigation = useNavigation<AppStackNavigation>();
 
   const [open, setOpen] = useState(false);
