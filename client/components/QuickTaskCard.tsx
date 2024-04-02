@@ -15,7 +15,6 @@ export function QuickTaskCard({
   label,
   status
 }: QuickTaskCardProps): JSX.Element {
-  console.log(status);
   return (
     <View className="mx-auto h-[12vh] w-[90vw] rounded-xl border border-carewallet-gray">
       <View className="flex flex-row items-center">
@@ -28,7 +27,7 @@ export function QuickTaskCard({
           {CategoryIconsMap[TypeToCategoryMap[label]]}
         </View>
       </View>
-      <View className="mb-2 ml-2 mt-auto">{GetStatusPill(status)}</View>
+      <View className="mb-2 ml-2 mr-auto mt-auto">{GetStatusPill(status)}</View>
     </View>
   );
 }

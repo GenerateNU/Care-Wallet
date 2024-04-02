@@ -47,7 +47,15 @@ export function CWTimelineList({
             {item.title === 'Todays Quick Tasks' && (
               <View className="absolute -right-0 -top-1 z-50 h-6 w-6 items-center justify-center rounded-full bg-carewallet-blue">
                 <Text className="text-carewallet-white">
-                  {timelineProps.events.length}
+                  {
+                    tasks?.filter(
+                      (task) =>
+                        moment(task.start_date).format('DD-MM-YYYY') ===
+                          moment(timelineProps.date?.at(0)).format(
+                            'DD-MM-YYYY'
+                          ) && task.quick_task
+                    ).length
+                  }
                 </Text>
               </View>
             )}
