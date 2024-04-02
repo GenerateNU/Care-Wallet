@@ -32,6 +32,7 @@ const getTaskByAssigned = async (userId: string): Promise<Task[]> => {
 const getFilteredTasks = async (
   queryParams: TaskQueryParams
 ): Promise<Task[]> => {
+  if (!queryParams) [];
   if (!queryParams.groupID) [];
   const { data } = await axios.get(`${api_url}/tasks/filtered`, {
     params: queryParams
@@ -105,7 +106,7 @@ export const addNewTaskMutation = () => {
   const { mutate: addTaskMutation } = useMutation({
     mutationFn: (newTask: Task) => addNewTask(newTask),
     onSuccess: () => {
-      queryClient.invalidateQueries('filteredTaskList');
+      queryClient.invalidateQueries({ queryKey: ['filteredTaskList'] });
     },
     onError: (err) => {
       console.error('ERROR: Failed to Add Task. Code:', err);
@@ -127,7 +128,7 @@ export const editTaskMutation = () => {
       updatedTask: Task;
     }) => editTask(taskId, updatedTask),
     onSuccess: () => {
-      queryClient.invalidateQueries('filteredTaskList');
+      queryClient.invalidateQueries({ queryKey: ['filteredTaskList'] });
     },
     onError: (err) => {
       console.error('ERROR: Failed to Edit Task. Code:', err);

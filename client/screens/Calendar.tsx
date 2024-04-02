@@ -1,30 +1,23 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState
-} from 'react';
-import { ActivityIndicator, Pressable, Text, View } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { ActivityIndicator, SafeAreaView, Text, View } from 'react-native';
 
-import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
-import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
+import BottomSheet from '@gorhom/bottom-sheet';
 import { useNavigation } from '@react-navigation/native';
 import _, { Dictionary } from 'lodash';
 import moment from 'moment';
 import {
   CalendarProvider,
   CalendarUtils,
-  ExpandableCalendar,
-  TimelineEventProps,
-  TimelineList,
-  TimelineProps
+  TimelineEventProps
 } from 'react-native-calendars';
 import { Event } from 'react-native-calendars/src/timeline/EventBlock';
 import { MarkedDates } from 'react-native-calendars/src/types';
-import { FlatList, GestureHandlerRootView } from 'react-native-gesture-handler';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-import { QuickTaskCard } from '../components/QuickTaskCard';
+import { CWExpanableCalendar } from '../components/calendar/ExpandableCalendar';
+import { QuickTask } from '../components/calendar/QuickTask';
+import { CWTimelineList } from '../components/calendar/TimelineList';
+import { CalendarTaskListTopNav } from '../components/CalendarTaskListTopNav';
 import { useCareWalletContext } from '../contexts/CareWalletContext';
 import { AppStackNavigation } from '../navigation/types';
 import { useFilteredTasks } from '../services/task';
@@ -53,11 +46,11 @@ export default function TimelineCalendarScreen() {
   const [currentDayTasks, setCurrentDayTasks] = useState<Task[]>();
 
   useEffect(() => {
+    setCurrentDate(moment(new Date()).format('YYYY-MM-DD'));
     setCurrentMonth(moment(currentDate).format('YYYY-MM-DD'));
   }, []);
 
   useEffect(() => {
-    console.log('currentDate', currentDate);
     setCurrentDayTasks(
       tasks?.filter(
         (task) =>
@@ -68,15 +61,12 @@ export default function TimelineCalendarScreen() {
   }, [currentDate]);
 
   useEffect(() => {
-    console.log(JSON.stringify(tasks, null, 2));
     setQuickTasks([]);
     setMarked({});
     setEvents(
       _.groupBy(
         tasks?.map((task) => {
           if (task.quick_task) {
-            console.log('quick task', JSON.stringify(task, null, 2));
-
             if (
               quickTasks.includes(
                 moment(task.start_date).format('YYYY-MM-DD') ?? ''
@@ -90,9 +80,9 @@ export default function TimelineCalendarScreen() {
             return {
               id: `Quick Tasks`,
               start: moment(task.start_date).format('YYYY-MM-DD 00:00:00'),
-              end: moment(task.end_date).format('YYYY-MM-DD 01:00:00'),
+              end: moment(task.end_date).format('YYYY-MM-DD 00:30:00'),
               title: 'Todays Quick Tasks',
-              color: '#4DB8A6',
+              color: '#ffffff',
               summary: 'Todays Quick Tasks'
             } as TimelineEventProps;
           }
@@ -101,15 +91,13 @@ export default function TimelineCalendarScreen() {
             return {} as Event;
           }
 
-          console.log(moment(task.start_date).format('YYYY-MM-DD HH:mm:ss'));
-
           return {
             id: task.task_id.toString(),
             start: moment(task.start_date).format('YYYY-MM-DD HH:mm:ss'),
             end: moment(task.end_date).format('YYYY-MM-DD HH:mm:ss'),
             title: task.task_title,
             summary: task.task_status,
-            color: '#e6add8'
+            color: '#ffffff'
           };
         }),
         (e) => CalendarUtils.getCalendarDateString(e?.start)
@@ -121,12 +109,14 @@ export default function TimelineCalendarScreen() {
       markedList = {
         ...markedList,
         [moment(task.start_date).format('YYYY-MM-DD')]: {
-          marked: true
+          marked: true,
+          selectedColor: '#1A56C4',
+          color: '#1A56C4',
+          dotColor: '#1A56C4',
+          activeOpacity: 1
         }
       };
     });
-
-    console.log('markedList', markedList);
 
     setMarked(markedList);
   }, [month, tasks]);
@@ -138,44 +128,10 @@ export default function TimelineCalendarScreen() {
     }
   };
 
-  function expandEvent(e: TimelineEventProps): void {
-    console.log('expandEvent', e.title);
-    if (e.id === 'Quick Tasks') {
-      handleOpenPress();
-      return;
-    }
-
-    navigation.navigate('TaskDisplay', { id: parseInt(e.id ?? '-1') });
-  }
-
-  const renderBackdrop = useCallback(
-    (props: BottomSheetDefaultBackdropProps) => (
-      <BottomSheetBackdrop
-        appearsOnIndex={0}
-        disappearsOnIndex={-1}
-        {...props}
-      />
-    ),
-    []
-  );
-
-  const snapPoints = useMemo(() => ['70%'], []);
   const bottomSheetRef = useRef<BottomSheet>(null);
-
-  const timelineProps: Partial<TimelineProps> = {
-    format24h: true,
-    unavailableHours: [
-      // { start: 0, end: 6 },
-      // { start: 22, end: 24 }
-    ],
-    onEventPress: (e) => expandEvent(e),
-    overlapEventsSpacing: 8,
-    rightEdgeSpacing: 24
-  };
 
   const handleOpenPress = () => {
     bottomSheetRef.current?.expand();
-    console.log(tasks);
   };
 
   if (tasksIsLoading) {
@@ -188,52 +144,34 @@ export default function TimelineCalendarScreen() {
   }
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <CalendarProvider
-        date={moment(currentDate).format('YYYY-MM-DD')}
-        onDateChanged={onDateChanged}
-        showTodayButton
-        disabledOpacity={0.6}
-      >
-        <ExpandableCalendar firstDay={1} markedDates={marked} />
-        <TimelineList
-          scrollToNow
-          events={events ?? ({} as Dictionary<Event[]>)}
-          timelineProps={timelineProps}
-          showNowIndicator
-          scrollToFirst
-          initialTime={{
-            hour: parseInt(moment(Date.now()).format('HH')),
-            minutes: parseInt(moment(Date.now()).format('mm'))
+    <SafeAreaView style={{ flex: 1 }} className="bg-carewallet-white">
+      <CalendarTaskListTopNav navigator={navigation} current="Calendar" />
+      <GestureHandlerRootView style={{ flex: 1 }} className="h-[90vh]">
+        <CalendarProvider
+          date={moment(currentDate).format('YYYY-MM-DD')}
+          onDateChanged={onDateChanged}
+          showTodayButton
+          disabledOpacity={0.6}
+          theme={{
+            dotColor: '#1A56C4',
+            todayButtonTextColor: '#1A56C4',
+            inactiveDotColor: '#1A56C4'
           }}
+        >
+          <CWExpanableCalendar marked={marked} current={currentDate} />
+          <CWTimelineList
+            handleOpenPress={handleOpenPress}
+            navigation={navigation}
+            events={events}
+            tasks={tasks ?? []}
+          />
+        </CalendarProvider>
+        <QuickTask
+          currentDayTasks={currentDayTasks ?? []}
+          navigation={navigation}
+          bottomSheetRef={bottomSheetRef}
         />
-      </CalendarProvider>
-
-      <BottomSheet
-        index={-1}
-        snapPoints={snapPoints}
-        ref={bottomSheetRef}
-        enablePanDownToClose={true}
-        backdropComponent={renderBackdrop}
-      >
-        <Text className="ml-6 text-lg font-bold">Today&apos;s Quick Tasks</Text>
-        <View style={{ height: 10 }} />
-        <FlatList
-          data={currentDayTasks?.filter((task) => task.quick_task)}
-          className="w-full align-middle"
-          ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
-          keyExtractor={(item) => item.task_id.toString()}
-          renderItem={({ item }) => (
-            <Pressable
-              onTouchEnd={() =>
-                navigation.navigate('TaskDisplay', { id: item.task_id })
-              }
-            >
-              <QuickTaskCard name={item.notes} label={item.task_type} />
-            </Pressable>
-          )}
-        />
-      </BottomSheet>
-    </GestureHandlerRootView>
+      </GestureHandlerRootView>
+    </SafeAreaView>
   );
 }
