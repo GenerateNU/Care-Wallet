@@ -142,7 +142,7 @@ export default function TimelineCalendarScreen() {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
       <CalendarTaskListTopNav navigator={navigation} current="Calendar" />
       <GestureHandlerRootView style={{ flex: 1 }}>
         <CalendarProvider
@@ -151,6 +151,7 @@ export default function TimelineCalendarScreen() {
           showTodayButton
           disabledOpacity={0.6}
           theme={{
+            backgroundColor: 'white',
             selectedDayBackgroundColor: '#1A56C4',
             selectedDotColor: '#ffffff',
             dotColor: '#ffffff',
