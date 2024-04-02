@@ -25,7 +25,11 @@ export function CWExpanableCalendar({
   return (
     <ExpandableCalendar
       firstDay={1}
-      markedDates={marked}
+      marking={{ color: 'blue', today: true }}
+      markedDates={{
+        ...marked,
+        [current]: { selected: true, selectedColor: '#1A56C4' }
+      }}
       renderHeader={renderHeader}
       renderArrow={(direction) => {
         return direction === 'left' ? (

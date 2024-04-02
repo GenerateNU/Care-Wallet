@@ -110,8 +110,6 @@ export default function TimelineCalendarScreen() {
         ...markedList,
         [moment(task.start_date).format('YYYY-MM-DD')]: {
           marked: true,
-          selectedColor: '#1A56C4',
-          color: '#1A56C4',
           dotColor: '#1A56C4',
           activeOpacity: 1
         }
@@ -144,16 +142,18 @@ export default function TimelineCalendarScreen() {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1 }} className="bg-carewallet-white">
+    <SafeAreaView style={{ flex: 1 }}>
       <CalendarTaskListTopNav navigator={navigation} current="Calendar" />
-      <GestureHandlerRootView style={{ flex: 1 }} className="h-[90vh]">
+      <GestureHandlerRootView style={{ flex: 1 }}>
         <CalendarProvider
           date={moment(currentDate).format('YYYY-MM-DD')}
           onDateChanged={onDateChanged}
           showTodayButton
           disabledOpacity={0.6}
           theme={{
-            dotColor: '#1A56C4',
+            selectedDayBackgroundColor: '#1A56C4',
+            selectedDotColor: '#ffffff',
+            dotColor: '#ffffff',
             todayButtonTextColor: '#1A56C4',
             inactiveDotColor: '#1A56C4'
           }}

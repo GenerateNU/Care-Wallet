@@ -123,7 +123,7 @@ export default function TaskListScreen() {
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ flex: 1 }}>
       <CalendarTaskListTopNav navigator={navigator} current="TaskList" />
       <GestureHandlerRootView>
         <ScrollView

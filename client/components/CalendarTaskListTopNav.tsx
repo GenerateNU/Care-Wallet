@@ -13,7 +13,7 @@ export function CalendarTaskListTopNav({
   current: string;
 }): JSX.Element {
   return (
-    <View className="flex flex-row items-center justify-between bg-carewallet-white px-[20vw] py-5">
+    <View className="flex flex-row items-center justify-between px-[20vw] py-5">
       <View
         onTouchEnd={() => {
           navigator.navigate('Calendar');
