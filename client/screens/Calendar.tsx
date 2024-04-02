@@ -165,6 +165,12 @@ export default function TimelineCalendarScreen() {
             events={events}
             tasks={tasks ?? []}
           />
+          <View
+            className="absolute bottom-5 right-5 h-10 w-10 items-center justify-center rounded-xl bg-carewallet-blue"
+            onTouchEnd={() => navigation.navigate('TaskType')}
+          >
+            <Text className="text-4xl text-carewallet-white">+</Text>
+          </View>
         </CalendarProvider>
         <QuickTask
           currentDayTasks={currentDayTasks ?? []}
