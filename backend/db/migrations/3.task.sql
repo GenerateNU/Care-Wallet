@@ -55,14 +55,14 @@ VALUES
   ('task 9', 5, 'user2', '2024-03-19 11:00:00', '2024-03-19 11:00:00', '2024-03-19 13:00:00', 'File Papers', 'INCOMPLETE', 'med_mgmt', FALSE),
   ('task 10', 5, 'user3', '2024-03-19 11:00:00', '2024-03-19 07:00:00', '2024-03-19 09:00:00', 'Send check to Drs', 'INCOMPLETE', 'financial', FALSE),
   ('test tile', 5, 'P03ggWcw63N0RSY7ltbkeBoR6bd2', '2020-02-05 11:00:00', NULL, '2024-02-20 23:59:59', 'Submit insurance claim', 'INPROGRESS', 'financial', FALSE),
-  ('test tile', 5, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', '2024-02-20 23:59:59', '2024-03-29 07:00:00', '2024-03-29 08:00:00', 'Schedule doctor appointment', 'TODO', 'med_mgmt', FALSE),
-  ('test tile', 5, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', '2024-02-20 23:59:59', '2024-03-29 08:00:00', '2024-03-29 09:00:00', 'Schedule doctor appointment', 'INPROGRESS', 'med_mgmt', FALSE),
-  ('test tile', 5, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', '2024-02-20 23:59:59', '2024-03-29 09:00:00', '2024-03-29 10:00:00', 'Schedule doctor appointment', 'TODO', 'med_mgmt', FALSE),
-  ('test tile', 5, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', '2024-02-20 23:59:59', '2024-03-29 10:00:00', '2024-03-29 11:00:00', 'Schedule doctor appointment', 'TODO', 'med_mgmt', FALSE),
-  ('test tile', 5, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', '2024-02-20 23:59:59', '2024-03-29 11:00:00', '2024-03-29 12:00:00', 'Schedule doctor appointment', 'TODO', 'med_mgmt', FALSE),
-  ('test tile', 5, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', '2024-02-20 23:59:59', '2024-03-29 12:00:00', '2024-03-29 13:00:00', 'Schedule doctor appointment', 'INPROGRESS', 'med_mgmt', FALSE),
-  ('test tile', 5, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', '2024-02-20 23:59:59', '2024-03-29 13:00:00', '2024-03-29 14:00:00', 'Schedule doctor appointment', 'INPROGRESS', 'med_mgmt', FALSE),
-  ('test tile', 5, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', '2024-02-20 23:59:59', '2024-03-29 19:00:00', '2024-03-29 23:00:00', 'Schedule doctor appointment', 'INPROGRESS', 'med_mgmt', FALSE)
+  ('test tile', 5, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', '2024-02-20 23:59:59', '2024-03-29 07:00:00', '2024-03-29 08:00:00', 'Schedule doctor appointment', 'TODO', 'med_mgmt', TRUE),
+  ('test tile', 5, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', '2024-02-20 23:59:59', '2024-03-29 08:00:00', '2024-03-29 09:00:00', 'Schedule doctor appointment', 'INPROGRESS', 'med_mgmt', TRUE),
+  ('test tile', 5, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', '2024-02-20 23:59:59', '2024-03-29 09:00:00', '2024-03-29 10:00:00', 'Schedule doctor appointment', 'TODO', 'med_mgmt', TRUE),
+  ('test tile', 5, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', '2024-02-20 23:59:59', '2024-03-29 10:00:00', '2024-03-29 11:00:00', 'Schedule doctor appointment', 'TODO', 'med_mgmt', TRUE),
+  ('test tile', 5, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', '2024-02-20 23:59:59', '2024-03-29 11:00:00', '2024-03-29 12:00:00', 'Schedule doctor appointment', 'INCOMPLETE', 'med_mgmt', TRUE),
+  ('test tile', 5, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', '2024-02-20 23:59:59', '2024-03-29 12:00:00', '2024-03-29 13:00:00', 'Schedule doctor appointment', 'COMPLETE', 'med_mgmt', TRUE),
+  ('test tile', 5, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', '2024-02-20 23:59:59', '2024-03-29 13:00:00', '2024-03-29 14:00:00', 'Schedule doctor appointment', 'INPROGRESS', 'med_mgmt', TRUE),
+  ('test tile', 5, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', '2024-02-20 23:59:59', '2024-03-29 19:00:00', '2024-03-29 23:00:00', 'Schedule doctor appointment', 'OVERDUE', 'med_mgmt', TRUE)
 ;
 
 INSERT INTO task_assignees (task_id, user_id, assignment_status, assigned_by, assigned_date)

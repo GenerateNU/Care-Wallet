@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { FlatList, Pressable, Text, View } from 'react-native';
 
 import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
@@ -18,6 +18,7 @@ export function QuickTask({
   bottomSheetRef: React.RefObject<BottomSheetMethods>;
   navigation: AppStackNavigation;
 }) {
+  const [canPress, setCanPress] = useState(true);
   const renderBackdrop = useCallback(
     (props: BottomSheetDefaultBackdropProps) => (
       <BottomSheetBackdrop
@@ -39,20 +40,27 @@ export function QuickTask({
       enablePanDownToClose={true}
       backdropComponent={renderBackdrop}
     >
-      <Text className="ml-6 text-lg font-bold">Today&apos;s Quick Tasks</Text>
+      <Text className="ml-6 text-2xl font-bold">Today&apos;s Quick Tasks</Text>
       <View style={{ height: 10 }} />
       <FlatList
+        onScrollBeginDrag={() => setCanPress(false)}
+        onScrollEndDrag={() => setCanPress(true)}
         data={currentDayTasks?.filter((task) => task.quick_task)}
-        className="w-full align-middle"
+        className="mb-3 w-full align-middle"
         ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
         keyExtractor={(item) => item.task_id.toString()}
         renderItem={({ item }) => (
           <Pressable
-            onTouchEnd={() =>
-              navigation.navigate('TaskDisplay', { id: item.task_id })
-            }
+            onTouchEnd={() => {
+              if (!canPress) return;
+              navigation.navigate('TaskDisplay', { id: item.task_id });
+            }}
           >
-            <QuickTaskCard name={item.notes} label={item.task_type} />
+            <QuickTaskCard
+              name={item.notes}
+              label={item.task_type}
+              status={item.task_status}
+            />
           </Pressable>
         )}
       />
