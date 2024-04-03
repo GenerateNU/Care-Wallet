@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
-import { FlatList, Pressable, View } from 'react-native';
+import { FlatList, Pressable, Text, View } from 'react-native';
 
 export function HealthStats() {
   const [canPress, setCanPress] = useState(true);
+  const HealthStats: string[] = [];
 
-  return (
+  return HealthStats.length > 0 ? (
     <FlatList
-      keyboardShouldPersistTaps="always"
       className="mt-10 h-fit max-h-fit flex-grow-0"
       onScrollBeginDrag={() => setCanPress(false)}
       onScrollEndDrag={() => setCanPress(true)}
       horizontal
       showsHorizontalScrollIndicator={false}
-      data={Array.from({ length: 10 }, (_, i) => i)}
+      data={HealthStats}
       renderItem={({ index }) => (
         <Pressable
           key={index}
@@ -21,10 +21,14 @@ export function HealthStats() {
           }}
         >
           <View className="items-center px-2">
-            <View className="z-10 h-48 w-32 rounded-3xl border border-carewallet-black bg-carewallet-white" />
+            <View className="z-10 h-[35vh] w-[40vw] rounded-3xl border border-carewallet-lightgray bg-carewallet-white" />
           </View>
         </Pressable>
       )}
     />
+  ) : (
+    <Text className="my-auto text-center font-carewallet-manrope">
+      There are no health stats to view.
+    </Text>
   );
 }

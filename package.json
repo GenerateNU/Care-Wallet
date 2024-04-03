@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@expo-google-fonts/manrope": "^0.2.3",
+    "@expo-google-fonts/montserrat": "^0.2.3"
+  }
+}
