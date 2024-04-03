@@ -1,12 +1,15 @@
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';
 
+import { useNavigation } from '@react-navigation/native';
+
 import FileDock from '../../assets/profile/filedock.svg';
 import Upload from '../../assets/profile/upload.svg';
 import { Header } from '../../components/profile/Header';
 import { HealthStats } from '../../components/profile/HealthStats';
 import { PatientHeader } from '../../components/profile/PatientHeader';
 import { useCareWalletContext } from '../../contexts/CareWalletContext';
+import { AppStackNavigation } from '../../navigation/types';
 import { useGroup } from '../../services/group';
 import { useUsers } from '../../services/user';
 import { Role } from '../../types/group';
@@ -16,6 +19,7 @@ export default function PatientView() {
   const { roles } = useGroup(group.groupID);
   const { users } = useUsers(roles?.map((role) => role.user_id) ?? []);
   const patientId = roles?.find((role) => role.role === Role.PATIENT)?.user_id;
+  const navigation = useNavigation<AppStackNavigation>();
 
   return (
     <View className="flex flex-1 flex-col bg-carewallet-white/80">
@@ -31,7 +35,10 @@ export default function PatientView() {
         <HealthStats />
       </View>
       <View className="mx-auto flex flex-row space-x-3 pr-10">
-        <Pressable className="ml-10 mt-5 flex h-10 w-[38vw] flex-row items-center justify-center space-x-2 rounded-lg border border-carewallet-lightgray bg-carewallet-white">
+        <Pressable
+          onPress={() => navigation.navigate('FileUploadScreen')}
+          className="ml-10 mt-5 flex h-10 w-[38vw] flex-row items-center justify-center space-x-2 rounded-lg border border-carewallet-lightgray bg-carewallet-white"
+        >
           <Upload />
           <Text className="my-auto text-center font-carewallet-manrope-semibold text-carewallet-black">
             Upload Files
