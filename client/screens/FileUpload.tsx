@@ -8,9 +8,9 @@ import {
 } from 'react-native';
 
 import { DocumentPickerAsset, getDocumentAsync } from 'expo-document-picker';
-import DropDownPicker from 'react-native-dropdown-picker';
 
 import { ChooseFileButton } from '../components/ChooseFileButton';
+import { CWDropdown } from '../components/Dropdown';
 import { BackButton } from '../components/nav_buttons/BackButton';
 import { useCareWalletContext } from '../contexts/CareWalletContext';
 import { useFile } from '../services/file';
@@ -19,7 +19,6 @@ import { getLabelsByGroup } from '../services/task';
 export default function FileUploadScreen() {
   const { user, group } = useCareWalletContext();
   const { uploadFileMutation } = useFile();
-  const [open, setOpen] = useState(false);
   const [fileTitle, setFileTitle] = useState('');
   const [label, setLabel] = useState('Financial');
   const [additionalNotes, setAdditionalNotes] = useState('');
@@ -27,7 +26,6 @@ export default function FileUploadScreen() {
     null
   );
   const [allLabels, setAllLabels] = useState<string[]>([]); // Store all unique labels as a list of strings
-  DropDownPicker.setTheme('DARK');
 
   // Fetch all labels by the group id
   useEffect(() => {
@@ -87,10 +85,9 @@ export default function FileUploadScreen() {
     }
   };
 
-  // TODO: Choosefile border color, dropdown styling, fonts, choose file svg
   return (
-    <ScrollView className="flex h-full w-full flex-col bg-carewallet-white align-middle">
-      <View className="ml-6 mr-6 flex h-full flex-col items-start bg-carewallet-white">
+    <ScrollView className="flex flex-col bg-carewallet-white align-middle">
+      <View className="mb-10 ml-6 mr-6 flex items-start bg-carewallet-white">
         <View className="flex flex-row items-center">
           <BackButton />
           <View className="flex-1 items-center">
@@ -99,7 +96,7 @@ export default function FileUploadScreen() {
             </Text>
           </View>
         </View>
-        <ChooseFileButton onPress={pickDocument} />
+        <ChooseFileButton onPress={pickDocument} picked={pickedFile} />
         <View className="mt-4 flex flex-row">
           <View className="mr-4 flex-1">
             <Text className="text-md mb-2 font-carewallet-manrope-bold text-carewallet-black">
@@ -113,36 +110,21 @@ export default function FileUploadScreen() {
             />
           </View>
           <View className="flex-1">
-            <Text className="text-md mb-2 font-carewallet-manrope-bold text-carewallet-black">
+            <Text className="mb-2 font-carewallet-manrope-bold text-carewallet-black">
               FILE LABEL
             </Text>
-            <DropDownPicker
-              open={open}
-              value={label}
-              items={allLabels.map((label) => ({
-                label,
-                value: label
-              }))}
-              setOpen={setOpen}
-              setValue={setLabel}
-              placeholder="Select Label"
-              style={{
-                backgroundColor: '#1A56C4',
-                borderColor: 'transparent'
-              }}
-              textStyle={{
-                fontFamily: 'Manrope_400Regular',
-                color: 'white'
-              }}
-              disabledStyle={{
-                opacity: 0.5
-              }}
-            />
+            <View>
+              <CWDropdown
+                selected={label}
+                items={allLabels}
+                setLabel={setLabel}
+              />
+            </View>
           </View>
         </View>
         <View className="mt-4 flex flex-row">
           <View className="flex-1">
-            <Text className="text-md mb-2 font-carewallet-manrope-bold text-carewallet-black">
+            <Text className="mb-2 font-carewallet-manrope-bold text-carewallet-black">
               ADDITIONAL NOTES
             </Text>
             <TextInput
