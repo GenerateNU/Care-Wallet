@@ -9,10 +9,9 @@ CREATE TABLE IF NOT EXISTS files (
     file_size integer NOT NULL,
     task_id integer,
     notes varchar,
-    label_name varchar NOT NULL,
+    label_name varchar,
     PRIMARY KEY (file_id),
     FOREIGN KEY (group_id) REFERENCES care_group (group_id),
     FOREIGN KEY (upload_by) REFERENCES users (user_id),
-    FOREIGN KEY (task_id) REFERENCES task (task_id),
-    FOREIGN KEY (group_id, label_name) REFERENCES label (group_id, label_name)
+    FOREIGN KEY (task_id) REFERENCES task (task_id)
 );
