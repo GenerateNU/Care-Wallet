@@ -21,13 +21,6 @@ const getTask = async (taskID: string): Promise<Task> => {
   return data;
 };
 
-export const getLabelsByGroup = async (
-  groupID: number
-): Promise<TaskLabel[]> => {
-  const { data } = await axios.get(`${api_url}/group/${groupID}/labels`);
-  return data;
-};
-
 const getTaskByAssigned = async (userId: string): Promise<Task[]> => {
   const { data } = await axios.get(
     `${api_url}/tasks/assigned?userIDs=${userId}`
@@ -112,7 +105,7 @@ export const addNewTaskMutation = () => {
   const { mutate: addTaskMutation } = useMutation({
     mutationFn: (newTask: Task) => addNewTask(newTask),
     onSuccess: () => {
-      queryClient.invalidateQueries('filteredTaskList');
+      queryClient.invalidateQueries({ queryKey: ['filteredTaskList'] });
     },
     onError: (err) => {
       console.error('ERROR: Failed to Add Task. Code:', err);
@@ -134,7 +127,7 @@ export const editTaskMutation = () => {
       updatedTask: Task;
     }) => editTask(taskId, updatedTask),
     onSuccess: () => {
-      queryClient.invalidateQueries('filteredTaskList');
+      queryClient.invalidateQueries({ queryKey: ['filteredTaskList'] });
     },
     onError: (err) => {
       console.error('ERROR: Failed to Edit Task. Code:', err);

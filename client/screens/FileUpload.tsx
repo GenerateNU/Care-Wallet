@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   ScrollView,
   Text,
@@ -14,37 +14,18 @@ import { CWDropdown } from '../components/Dropdown';
 import { BackButton } from '../components/nav_buttons/BackButton';
 import { useCareWalletContext } from '../contexts/CareWalletContext';
 import { useFile } from '../services/file';
-import { getLabelsByGroup } from '../services/task';
+import { useLabelsByGroup } from '../services/label';
 
 export default function FileUploadScreen() {
   const { user, group } = useCareWalletContext();
   const { uploadFileMutation } = useFile();
   const [fileTitle, setFileTitle] = useState('');
-  const [label, setLabel] = useState('Financial');
+  const [label, setLabel] = useState('Select Label');
   const [additionalNotes, setAdditionalNotes] = useState('');
   const [pickedFile, setPickedFile] = useState<DocumentPickerAsset | null>(
     null
   );
-  const [allLabels, setAllLabels] = useState<string[]>([]); // Store all unique labels as a list of strings
-
-  // Fetch all labels by the group id
-  useEffect(() => {
-    const fetchLabels = async () => {
-      try {
-        console.log('Group:', group);
-        const labels = await getLabelsByGroup(group.groupID);
-        const uniqueLabels = Array.from(
-          new Set(labels.map((label) => label.label_name))
-        );
-        setAllLabels(uniqueLabels);
-        console.log('Labels:', allLabels);
-      } catch (error) {
-        console.error('Error fetching labels:', error);
-      }
-    };
-
-    fetchLabels();
-  }, [group]);
+  const { labels } = useLabelsByGroup(group.groupID);
 
   const handleFileTitleChange = (text: string) => {
     setFileTitle(text);
@@ -76,9 +57,14 @@ export default function FileUploadScreen() {
           file: pickedFile,
           userId: user.userID,
           groupId: group.groupID,
-          label: label,
+          label: label === 'Select Label' ? '' : label,
           notes: additionalNotes
         });
+
+        setFileTitle('');
+        setLabel('Select Label');
+        setAdditionalNotes('');
+        setPickedFile(null);
       }
     } catch (err) {
       console.log('err', err);
@@ -116,7 +102,7 @@ export default function FileUploadScreen() {
             <View>
               <CWDropdown
                 selected={label}
-                items={allLabels}
+                items={labels?.map((label) => label.label_name)}
                 setLabel={setLabel}
               />
             </View>
