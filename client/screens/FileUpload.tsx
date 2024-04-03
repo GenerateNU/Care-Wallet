@@ -90,31 +90,31 @@ export default function FileUploadScreen() {
   // TODO: Choosefile border color, dropdown styling, fonts, choose file svg
   return (
     <ScrollView className="flex h-full w-full flex-col bg-carewallet-white align-middle">
-      <View className="flex h-full flex-col items-start bg-carewallet-white p-6">
-        <View className="w-full flex-row items-center">
+      <View className="ml-6 mr-6 flex h-full flex-col items-start bg-carewallet-white">
+        <View className="flex flex-row items-center">
           <BackButton />
-          <View className="flex-1">
-            <Text className="mr-20 text-center text-xl font-medium text-carewallet-blue">
-              File Upload
+          <View className="flex-1 items-center">
+            <Text className="mr-16 text-center font-carewallet-manrope-bold text-2xl text-carewallet-blue">
+              Upload File
             </Text>
           </View>
         </View>
         <ChooseFileButton onPress={pickDocument} />
         <View className="mt-4 flex flex-row">
           <View className="mr-4 flex-1">
-            <Text className="text-md mb-2 text-carewallet-black">
-              File Title
+            <Text className="text-md mb-2 font-carewallet-manrope-bold text-carewallet-black">
+              FILE TITLE
             </Text>
             <TextInput
-              className="rounded-md border border-carewallet-gray p-4"
+              className="rounded-md border border-carewallet-gray p-4 font-carewallet-manrope"
               placeholder="Text here"
               value={fileTitle}
               onChangeText={handleFileTitleChange}
             />
           </View>
           <View className="flex-1">
-            <Text className="text-md mb-2 text-carewallet-black">
-              File Label
+            <Text className="text-md mb-2 font-carewallet-manrope-bold text-carewallet-black">
+              FILE LABEL
             </Text>
             <DropDownPicker
               open={open}
@@ -131,6 +131,7 @@ export default function FileUploadScreen() {
                 borderColor: 'transparent'
               }}
               textStyle={{
+                fontFamily: 'Manrope_400Regular',
                 color: 'white'
               }}
               disabledStyle={{
@@ -141,11 +142,11 @@ export default function FileUploadScreen() {
         </View>
         <View className="mt-4 flex flex-row">
           <View className="flex-1">
-            <Text className="text-md mb-2 text-carewallet-black">
-              Additional Notes
+            <Text className="text-md mb-2 font-carewallet-manrope-bold text-carewallet-black">
+              ADDITIONAL NOTES
             </Text>
             <TextInput
-              className="w-full rounded-md border border-carewallet-gray p-10"
+              className="w-full rounded-md border border-carewallet-gray p-10 font-carewallet-manrope"
               placeholder="Text here"
               value={additionalNotes}
               onChangeText={handleAdditionalNotesChange}
@@ -158,7 +159,7 @@ export default function FileUploadScreen() {
               className="mt-2 rounded-lg bg-carewallet-blue px-8 py-5"
               onPress={submitFile}
             >
-              <Text className="text-center text-base text-carewallet-white">
+              <Text className="text-center font-carewallet-manrope text-base text-carewallet-white">
                 Submit
               </Text>
             </TouchableOpacity>
