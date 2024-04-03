@@ -21,6 +21,13 @@ const getTask = async (taskID: string): Promise<Task> => {
   return data;
 };
 
+export const getLabelsByGroup = async (
+  groupID: number
+): Promise<TaskLabel[]> => {
+  const { data } = await axios.get(`${api_url}/group/${groupID}/labels`);
+  return data;
+};
+
 const getTaskByAssigned = async (userId: string): Promise<Task[]> => {
   const { data } = await axios.get(
     `${api_url}/tasks/assigned?userIDs=${userId}`
