@@ -1,47 +1,61 @@
-import React, { useEffect, useState } from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { useEffect } from 'react';
 
-import { TaskInfoComponent } from '../components/TaskInfoCard';
 import { useCareWalletContext } from '../contexts/CareWalletContext';
 import { useFilteredTasks } from '../services/task';
-import { Task } from '../types/task';
+
+//import { Task } from '../types/task';
 
 export default function NotificationScreen() {
   const { group } = useCareWalletContext();
-  const [queryParams] = useState({
-    groupID: group.groupID?.toString() || '-1'
-  });
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const { tasks } = useFilteredTasks({ groupID: group.groupID });
+  // const [dueSoonTasks, setDueSoonTasks] = useState<Task[]>([]);
+  // const [overdueTasks, setOverdueTasks] = useState<Task[]>([]);
+  // const [createdTodayTasks, setCreatedTodayTasks] = useState<Task[]>([]);
 
   useEffect(() => {
-    const fetchTasks = async () => {
-      const { tasks: fetchedTasks } = await useFilteredTasks({
-        groupID: parseInt(queryParams.groupID)
-      });
-      if (fetchedTasks) {
-        setTasks(fetchedTasks);
-      }
-    };
+    if (tasks) {
+      // Filter tasks that are due within the next 5 days
+      const currentDate = new Date();
+      const fiveDaysLater = new Date(currentDate);
+      fiveDaysLater.setDate(currentDate.getDate() + 5);
 
-    fetchTasks();
-  }, [queryParams]);
+      const dueSoon = tasks.filter(
+        (task) => task.end_date && new Date(task.end_date) <= fiveDaysLater
+      );
 
-  return (
-    <ScrollView style={{ padding: 10 }}>
-      <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 10 }}>
-        Notification List
-      </Text>
-      {tasks.map((task, index) => (
-        <View key={index} style={{ marginBottom: 10 }}>
-          <TaskInfoComponent
-            id={task.task_id || 0} // Adjust this accordingly if task_id is of a different type
-            name={task.task_name?.toString() ?? 'N/A'}
-            category={task.task_type || 'N/A'}
-            status={task.task_status || 'N/A'}
-            date={task.start_date ? new Date(task.start_date) : new Date()}
-          />
-        </View>
-      ))}
-    </ScrollView>
-  );
+      // Filter tasks that are overdue
+      const overdue = tasks.filter(
+        (task) => task.end_date && new Date(task.end_date) < currentDate
+      );
+
+      // Filter tasks that were created today
+      const today = currentDate.toISOString().split('T')[0];
+      const createdToday = tasks.filter(
+        (task) => task.created_date && task.created_date.startsWith(today)
+      );
+
+      // Sort tasks by end date
+      dueSoon.sort(
+        (a, b) =>
+          new Date(a.end_date!).getTime() - new Date(b.end_date!).getTime()
+      );
+      overdue.sort(
+        (a, b) =>
+          new Date(a.end_date!).getTime() - new Date(b.end_date!).getTime()
+      );
+      createdToday.sort(
+        (a, b) =>
+          new Date(a.created_date!).getTime() -
+          new Date(b.created_date!).getTime()
+      );
+
+      console.log('Tasks Due Soon:', dueSoon);
+      console.log('Overdue Tasks:', overdue);
+      console.log('Tasks Created Today:', createdToday);
+
+      setDueSoonTasks(dueSoon);
+      setOverdueTasks(overdue);
+      setCreatedTodayTasks(createdToday);
+    }
+  }, [tasks]);
 }
