@@ -8,6 +8,7 @@ import Calendar from '../assets/bottom-nav/calendar.svg';
 import HomeIcon from '../assets/bottom-nav/home.svg';
 import User from '../assets/bottom-nav/user.svg';
 import TimelineCalendarScreen from '../screens/Calendar';
+import FileUploadScreen from '../screens/FileUpload';
 import Home from '../screens/Home';
 import PatientView from '../screens/Profile/PatientView';
 import Profile from '../screens/Profile/Profile';
@@ -87,6 +88,11 @@ export function ProfileNavigation() {
         name="Settings"
         options={{ headerShown: false }}
         component={Settings}
+      />
+      <AppStack.Screen
+        name="FileUploadScreen"
+        options={{ headerShown: false }}
+        component={FileUploadScreen}
       />
     </AppStack.Navigator>
   );
