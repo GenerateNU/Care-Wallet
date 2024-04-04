@@ -1,27 +1,35 @@
 import React from 'react';
 import { SafeAreaView, Text, View } from 'react-native';
 
+import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 
 import Time from '../assets/Time.svg';
 import { HealthStats } from '../components/profile/HealthStats';
 import { useCareWalletContext } from '../contexts/CareWalletContext';
+import { AppStackNavigation } from '../navigation/types';
 import { useTaskByAssigned } from '../services/task';
+import { useUser } from '../services/user';
 import { Task } from '../types/task';
 import { CategoryIconsMap, TypeToCategoryMap } from '../types/type';
 
 export default function Home() {
-  const { user } = useCareWalletContext();
-  const { taskByUser } = useTaskByAssigned(user.userID);
+  const { user: signedInUser } = useCareWalletContext();
+  const { user } = useUser(signedInUser.userID);
+  const { taskByUser } = useTaskByAssigned(signedInUser.userID);
+  const navigation = useNavigation<AppStackNavigation>();
+  const currentTime = moment();
 
   return (
     <SafeAreaView className="flex-1 bg-carewallet-white">
-      <View className="ml-5 mt-5 w-[90vw] flex-1 bg-carewallet-white">
+      <View className="ml-5 mt-8 w-[90vw] flex-1 bg-carewallet-white">
         <View>
           <Text className="font-carewallet-manrope-semibold text-2xl text-carewallet-blue">
-            {moment().format('A') === 'AM'
-              ? 'Good Morning!'
-              : 'Good Afternoon!'}
+            {currentTime.format('A') === 'AM'
+              ? `Good Morning ${user?.first_name}!`
+              : currentTime.hour() >= 12 && currentTime.hour() < 15
+                ? `Good Afternoon ${user?.first_name}!`
+                : `Good Evening ${user?.first_name}!`}
           </Text>
         </View>
         <View>
@@ -29,7 +37,10 @@ export default function Home() {
             <Text className="py-2 pl-2 font-carewallet-manrope-semibold text-lg">
               {`${moment().day(new Date().getDay()).format('dddd')}, ${moment().format('MMMM Do')} - Today`}
             </Text>
-            <View className="ml-auto mr-2 items-center rounded-full border  border-carewallet-lightgray bg-carewallet-white">
+            <View
+              className="ml-auto mr-2 items-center rounded-full border  border-carewallet-lightgray bg-carewallet-white"
+              onTouchEnd={() => navigation.navigate('TaskType')}
+            >
               <Text className="px-2 text-center text-xl text-carewallet-gray">
                 +
               </Text>
@@ -50,7 +61,15 @@ export default function Home() {
                     moment(task.start_date).format('DD MM YYYY')
                 )
                 .map((task) => (
-                  <View key={task.task_id}>
+                  <View
+                    key={task.task_id}
+                    onTouchEnd={() => {
+                      navigation.navigate('CalendarContainer', {
+                        screen: 'TaskDisplay',
+                        params: { id: task.task_id }
+                      });
+                    }}
+                  >
                     <TaskSmallCard task={task} />
                   </View>
                 ))}

@@ -14,7 +14,10 @@ export type AppStackParamList = {
   TaskType: undefined;
   TaskDisplay: { id: number };
   TaskList: undefined;
-  CalendarContainer: { screen: string; params: { screen: string } } | undefined;
+  CalendarContainer:
+    | { screen: string; params: { screen: string } }
+    | { screen: string; params: { id: number } }
+    | undefined;
   CalendarTopNav: undefined;
   TaskCreation: { taskType: string };
   Settings: undefined;
