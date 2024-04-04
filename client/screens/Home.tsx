@@ -1,52 +1,98 @@
-import React, { useState } from 'react';
-import { Pressable, Text, View } from 'react-native';
+import React from 'react';
+import { SafeAreaView, Text, View } from 'react-native';
 
-import { DocPickerButton } from '../components/DocPickerButton';
-import { PopupModal } from '../components/PopupModal';
+import moment from 'moment';
+
+import Time from '../assets/Time.svg';
+import { HealthStats } from '../components/profile/HealthStats';
 import { useCareWalletContext } from '../contexts/CareWalletContext';
-import { useAuth } from '../services/auth';
+import { useTaskByAssigned } from '../services/task';
+import { Task } from '../types/task';
+import { CategoryIconsMap, TypeToCategoryMap } from '../types/type';
 
 export default function Home() {
-  const [userGroupVisible, setUserGroupVisible] = useState<boolean>(false);
-
-  const { user, group } = useCareWalletContext();
-
-  const { signOutMutation } = useAuth();
+  const { user } = useCareWalletContext();
+  const { taskByUser } = useTaskByAssigned(user.userID);
 
   return (
-    <View className="bg-white w-[100vw] flex-1 items-center justify-center">
-      <View className="flex flex-row items-center">
-        <DocPickerButton />
-      </View>
-      <Pressable
-        onPress={() => setUserGroupVisible(true)}
-        className="mb-2 w-80 self-center rounded-md border border-carewallet-gray "
-      >
-        <Text className="self-center text-lg text-carewallet-black">
-          Show User and Group Info
-        </Text>
-      </Pressable>
-      <PopupModal isVisible={userGroupVisible} setVisible={setUserGroupVisible}>
+    <SafeAreaView className="flex-1 bg-carewallet-white">
+      <View className="ml-5 mt-5 w-[90vw] flex-1 bg-carewallet-white">
         <View>
-          <Text className="self-start text-lg">User ID: {user.userID}</Text>
-          <Text className="self-start text-lg">
-            User Email: {user.userEmail}
+          <Text className="font-carewallet-manrope-semibold text-2xl text-carewallet-blue">
+            {moment().format('A') === 'AM'
+              ? 'Good Morning!'
+              : 'Good Afternoon!'}
           </Text>
-          <Text className="self-start text-lg">Group ID: {group.groupID}</Text>
-          <Text className="self-start text-lg">Group Role: {group.role}</Text>
         </View>
-        <Pressable
-          onPress={() => {
-            setUserGroupVisible(false);
-            signOutMutation();
-          }}
-          className="w-20 self-center rounded-md border border-carewallet-gray"
-        >
-          <Text className="self-center text-lg text-carewallet-gray">
-            Sign Out
+        <View>
+          <View className="mt-10 flex flex-row items-center overflow-hidden rounded-t-lg bg-carewallet-blue/10">
+            <Text className="py-2 pl-2 font-carewallet-manrope-semibold text-lg">
+              {`${moment().day(new Date().getDay()).format('dddd')}, ${moment().format('MMMM Do')} - Today`}
+            </Text>
+            <View className="ml-auto mr-2 items-center rounded-full border  border-carewallet-lightgray bg-carewallet-white">
+              <Text className="px-2 text-center text-xl text-carewallet-gray">
+                +
+              </Text>
+            </View>
+          </View>
+
+          {taskByUser &&
+          taskByUser.filter(
+            (task) =>
+              moment().format('DD MM YYYY') ===
+              moment(task.start_date).format('DD MM YYYY')
+          ).length > 0 ? (
+            <View className="rounded-b-lg border border-t-0 border-carewallet-lightgray">
+              {taskByUser
+                .filter(
+                  (task) =>
+                    moment().format('DD MM YYYY') ===
+                    moment(task.start_date).format('DD MM YYYY')
+                )
+                .map((task) => (
+                  <View key={task.task_id}>
+                    <TaskSmallCard task={task} />
+                  </View>
+                ))}
+            </View>
+          ) : (
+            <Text>You have no assigned tasks today.</Text>
+          )}
+        </View>
+        <View className="mt-5 h-[20vh] rounded-lg border border-carewallet-lightgray bg-carewallet-blue/10">
+          <Text className="ml-5 mt-5 font-carewallet-manrope-semibold text-lg">
+            Health Overview
           </Text>
-        </Pressable>
-      </PopupModal>
+          <HealthStats />
+        </View>
+      </View>
+    </SafeAreaView>
+  );
+}
+
+function TaskSmallCard({ task }: { task: Task }) {
+  return (
+    <View className="border-t border-carewallet-lightgray pt-2">
+      <View className="mb-3 flex flex-row items-center justify-center">
+        <Text className="ml-3 mr-auto font-carewallet-manrope-semibold text-base">
+          {task.task_title}
+        </Text>
+      </View>
+      <View className="mb-2 flex flex-row items-center justify-center">
+        <View className="ml-2">
+          <Time width={20} height={20} />
+        </View>
+        <View>
+          <Text className="ml-2 mt-auto font-carewallet-manrope-semibold text-xs">
+            {task.quick_task
+              ? `All Day`
+              : `${moment(task.start_date).format('h:mm A')} - ${moment(task.end_date).format('h:mm A')}`}
+          </Text>
+        </View>
+        <View className="ml-auto mr-4">
+          {CategoryIconsMap[TypeToCategoryMap[task.task_type]]}
+        </View>
+      </View>
     </View>
   );
 }
