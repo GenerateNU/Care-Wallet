@@ -14,16 +14,17 @@ type PgModel struct {
 }
 
 func FileGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
+    files := v1.Group("files")
+    {
+        files.POST("/upload", c.UploadFile)                 
+        files.DELETE("/remove", c.RemoveFile)               
+        files.GET("/get", c.GetFile)                        
+    }
 
-	files := v1.Group("files")
-	{
-		files.POST("/upload", c.UploadFile)
-		files.DELETE("/:fileID", c.RemoveFile) 
-        files.GET("/:fileID", c.GetFile)      
-	}
-
-	return files
+    return files
 }
+
+
 
 // UploadFile godoc
 //
@@ -77,19 +78,26 @@ func (pg *PgModel) UploadFile(c *gin.Context) {
 // RemoveFile godoc
 //
 //	@summary		Remove a file
-//	@description	Remove a file from database and S3 bucket
+//	@description	Remove a file from S3 bucket
 //	@tags			file
 //
-//	@param			fileID	path	string	true	"The fileID of the file to remove"
+//	@param			groupID		query		string	true	"The groupID of the file"
+//	@param			fileName	query		string	true	"The fileName of the file"
 //
 //	@success		200			{object}	string
 //	@failure		400			{object}	string
-//	@router			/files/{fileID} [delete]
+//	@router			/files/remove [delete]
 func (pg *PgModel) RemoveFile(c *gin.Context) {
-    fileID := c.Param("fileID")
-    // You might want to validate fileID here
+    groupID := c.Query("groupID")
+    fileName := c.Query("fileName")
 
-    err := RemoveFile(pg.Conn, fileID)
+    // Validate the input parameters as needed
+    if groupID == "" || fileName == "" {
+        c.JSON(http.StatusBadRequest, "Missing groupID or fileName")
+        return
+    }
+
+    err := RemoveFile(pg.Conn, groupID, fileName)
     if err != nil {
         c.JSON(http.StatusBadRequest, "Failed to remove file: "+err.Error())
         return
@@ -104,16 +112,23 @@ func (pg *PgModel) RemoveFile(c *gin.Context) {
 //	@description	Get a file from S3 bucket
 //	@tags			file
 //
-//	@param			fileID	path	string	true	"The fileID of the file to get"
+//	@param			groupID		query		string	true	"The groupID of the file"
+//	@param			fileName	query		string	true	"The fileName of the file"
 //
-//	@success		200			{object}	string
+//	@success		302			{object}	string
 //	@failure		400			{object}	string
-//	@router			/files/{fileID} [get]
+//	@router			/files/get [get]
 func (pg *PgModel) GetFile(c *gin.Context) {
-    fileID := c.Param("fileID")
-    // You might want to validate fileID here
+    groupID := c.Query("groupID")
+    fileName := c.Query("fileName")
+    
+    // Validate the input parameters as needed
+    if groupID == "" || fileName == "" {
+        c.JSON(http.StatusBadRequest, "Missing groupID or fileName")
+        return
+    }
 
-    url, err := GetFileURL(pg.Conn, fileID)
+    url, err := GetFileURL(pg.Conn, groupID, fileName)
     if err != nil {
         c.JSON(http.StatusBadRequest, "Failed to get file: "+err.Error())
         return
@@ -121,3 +136,4 @@ func (pg *PgModel) GetFile(c *gin.Context) {
 
     c.Redirect(http.StatusTemporaryRedirect, url)
 }
+

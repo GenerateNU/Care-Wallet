@@ -218,6 +218,58 @@ info:
   title: Care-Wallet API
   version: "1.0"
 paths:
+  /files/get:
+    get:
+      description: Get a file from S3 bucket
+      parameters:
+      - description: The groupID of the file
+        in: query
+        name: groupID
+        required: true
+        type: string
+      - description: The fileName of the file
+        in: query
+        name: fileName
+        required: true
+        type: string
+      responses:
+        "302":
+          description: Found
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Get a file
+      tags:
+      - file
+  /files/remove:
+    delete:
+      description: Remove a file from S3 bucket
+      parameters:
+      - description: The groupID of the file
+        in: query
+        name: groupID
+        required: true
+        type: string
+      - description: The fileName of the file
+        in: query
+        name: fileName
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Remove a file
+      tags:
+      - file
   /files/upload:
     post:
       description: Upload a file to database and S3 bucket

@@ -14,6 +14,7 @@ import PatientView from '../screens/Profile/PatientView';
 import Profile from '../screens/Profile/Profile';
 import SingleTaskScreen from '../screens/SingleTask';
 import TaskList from '../screens/TaskList';
+import TestScreen from '../screens/TestScreen';
 import { AppStack } from './types';
 
 const AppStackBottomTab = createBottomTabNavigator();
@@ -52,7 +53,7 @@ export function AppStackBottomTabNavigator() {
           tabBarIcon: ({ color }) => <Bell color={color} />,
           tabBarLabel: () => <Text></Text>
         }}
-        component={MedicationList}
+        component={TestScreen}
       />
       <AppStackBottomTab.Screen
         name="ProfileScreens"
