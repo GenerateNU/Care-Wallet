@@ -14,10 +14,10 @@ import { Event } from 'react-native-calendars/src/timeline/EventBlock';
 import { MarkedDates } from 'react-native-calendars/src/types';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
+import { CalendarTaskListTopNav } from '../components/calendar/CalendarTaskListTopNav';
 import { CWExpanableCalendar } from '../components/calendar/ExpandableCalendar';
 import { QuickTask } from '../components/calendar/QuickTask';
 import { CWTimelineList } from '../components/calendar/TimelineList';
-import { CalendarTaskListTopNav } from '../components/CalendarTaskListTopNav';
 import { useCareWalletContext } from '../contexts/CareWalletContext';
 import { AppStackNavigation } from '../navigation/types';
 import { useFilteredTasks } from '../services/task';

@@ -53,17 +53,3 @@ export function GetStatusPill({ status }: { status: string }) {
     }
   }
 }
-
-/**
- * <View className="h-8 w-fit flex-row items-center justify-center space-x-2 rounded-3xl border border-carewallet-lightgray px-2">
-          <View
-            className={clsx(
-              'h-5 w-5 rounded-full',
-              GetStatus(status)?.color ?? 'border border-carewallet-lightgray'
-            )}
-          />
-          <Text className="font-carewallet-manrope-semibold text-sm">
-            {GetStatus(status)?.status}
-          </Text>
-        </View>
- */

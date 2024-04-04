@@ -3,10 +3,10 @@ import { Text, View } from 'react-native';
 
 import moment from 'moment';
 
-import Calendar from '../assets/Date_today.svg';
-import Time from '../assets/Time.svg';
-import { useTaskById } from '../services/task';
-import { TaskTypeDescriptions } from '../types/type';
+import Calendar from '../../assets/Date_today.svg';
+import Time from '../../assets/Time.svg';
+import { useTaskById } from '../../services/task';
+import { TaskTypeDescriptions } from '../../types/type';
 
 export function TaskInfoComponent({
   name,

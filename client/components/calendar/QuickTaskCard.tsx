@@ -1,8 +1,8 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 
-import { CategoryIconsMap, TypeToCategoryMap } from '../types/type';
-import { GetStatusPill } from '../utils/GetStatus';
+import { CategoryIconsMap, TypeToCategoryMap } from '../../types/type';
+import { GetStatusPill } from '../GetStatusPill';
 
 interface QuickTaskCardProps {
   name: string;
