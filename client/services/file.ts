@@ -1,5 +1,5 @@
-import { useMutation } from '@tanstack/react-query';
-import { HttpStatusCode } from 'axios';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import axios, { HttpStatusCode } from 'axios';
 import { DocumentPickerAsset } from 'expo-document-picker';
 import {
   createUploadTask,
@@ -72,31 +72,11 @@ const getFile = async ({
   groupId,
   fileName
 }: GetFileProps): Promise<string> => {
-  const response = await fetch(
-    `${api_url}/files/get?groupId=${groupId}&fileName=${fileName}`,
-    {
-      method: 'GET'
-    }
+  const response = await axios.get(
+    `${api_url}/files/get?groupId=${groupId}&fileName=${fileName}`
   );
 
-  if (!response.ok) {
-    throw new Error('Failed to get file');
-  }
-
-  // Check the Content-Type header
-  const contentType = response.headers.get('Content-Type');
-
-  if (contentType?.includes('application/json')) {
-    // Handle JSON response
-    const data = await response.json();
-    return data.url; // Assuming it's a JSON containing a URL
-  } else {
-    // Assuming the response is a file - handle accordingly
-    // For direct file response, handling might be different, e.g., downloading the file
-    const blob = await response.blob();
-    const url = URL.createObjectURL(blob);
-    return url; // Returns a local URL to access the file
-  }
+  return response.data; // Returns a local URL to access the file
 };
 
 // Hook to use these operations
@@ -110,7 +90,7 @@ export const useFile = () => {
         console.log('Failed to Upload File...');
       }
     },
-    onError: (error: any) => {
+    onError: (error) => {
       console.log('Server Error: ', error.message);
     }
   });
@@ -120,25 +100,22 @@ export const useFile = () => {
     onSuccess: () => {
       console.log('File Removed...');
     },
-    onError: (error: any) => {
-      console.log('Server Error: ', error.message);
-    }
-  });
-
-  const { mutate: getFileMutation } = useMutation({
-    mutationFn: getFile,
-    onSuccess: (url: string) => {
-      console.log('File URL: ', url);
-      window.location.href = url; // Or handle the URL as needed
-    },
-    onError: (error: any) => {
+    onError: (error) => {
       console.log('Server Error: ', error.message);
     }
   });
 
   return {
     uploadFileMutation,
-    removeFileMutation,
-    getFileMutation
+    removeFileMutation
   };
+};
+
+export const useFileByGroup = (groupId: number, fileName: string) => {
+  const { data: file } = useQuery({
+    queryFn: () => getFile({ groupId, fileName }),
+    queryKey: ['getFile']
+  });
+
+  return { file };
 };

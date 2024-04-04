@@ -71,72 +71,93 @@ func UploadFile(pool *pgxpool.Pool, file models.File, data *multipart.FileHeader
 }
 
 func RemoveFile(pool *pgxpool.Pool, groupID string, fileName string) error {
-    groupIDInt, err := strconv.Atoi(groupID)
-    if err != nil {
-        return fmt.Errorf("invalid groupID: %w", err)
-    }
+	groupIDInt, err := strconv.Atoi(groupID)
+	if err != nil {
+		return fmt.Errorf("invalid groupID: %w", err)
+	}
 
-    var fileID int
-    err = pool.QueryRow(context.Background(), "SELECT file_id FROM files WHERE group_id = $1 AND file_name = $2", groupIDInt, fileName).Scan(&fileID)
-    if err != nil {
-        return fmt.Errorf("file not found in database for deletion: %w", err)
-    }
+	var fileID int
+	err = pool.QueryRow(context.Background(), "SELECT file_id FROM files WHERE group_id = $1 AND file_name = $2", groupIDInt, fileName).Scan(&fileID)
+	if err != nil {
+		return fmt.Errorf("file not found in database for deletion: %w", err)
+	}
 
-    objectKey := fmt.Sprintf("%v-%v-%d", groupIDInt, fileName, fileID) // Match the key format used in upload
+	objectKey := fmt.Sprintf("%v-%v-%d", groupIDInt, fileName, fileID) // Match the key format used in upload
 
-    sess, err := createAWSSession() // Reuse your secure session initialization logic
-    if err != nil {
-        return fmt.Errorf("error creating AWS session: %w", err)
-    }
+	sess, err := createAWSSession() // Reuse your secure session initialization logic
+	if err != nil {
+		return fmt.Errorf("error creating AWS session: %w", err)
+	}
 
-    svc := s3.New(sess)
-    _, err = svc.DeleteObject(&s3.DeleteObjectInput{
-        Bucket: aws.String(AWS_BUCKET_NAME),
-        Key:    aws.String(objectKey),
-    })
-    if err != nil {
-        return fmt.Errorf("error deleting S3 object: %w", err)
-    }
+	svc := s3.New(sess)
+	_, err = svc.DeleteObject(&s3.DeleteObjectInput{
+		Bucket: aws.String(AWS_BUCKET_NAME),
+		Key:    aws.String(objectKey),
+	})
+	if err != nil {
+		return fmt.Errorf("error deleting S3 object: %w", err)
+	}
 
-    _, err = pool.Exec(context.Background(), "DELETE FROM files WHERE file_id = $1", fileID)
-    if err != nil {
-        return fmt.Errorf("error deleting file record from database: %w", err)
-    }
+	_, err = pool.Exec(context.Background(), "DELETE FROM files WHERE file_id = $1", fileID)
+	if err != nil {
+		return fmt.Errorf("error deleting file record from database: %w", err)
+	}
 
-    return nil // Success
+	return nil // Success
 }
 
-
 func GetFileURL(pool *pgxpool.Pool, groupID string, fileName string) (string, error) {
-    // Convert groupID to int for consistency in key construction
-    groupIDInt, err := strconv.Atoi(groupID)
-    if err != nil {
-        return "", fmt.Errorf("invalid groupID: %w", err)
-    }
+	fmt.Println("here")
+	//Convert groupID to int for consistency in key construction
+	groupIDInt, err := strconv.Atoi(groupID)
+	if err != nil {
+		fmt.Println(err.Error())
+		return "", fmt.Errorf("invalid groupID: %w", err)
+	}
 
-    // Assuming FileID is used to create a unique object key
-    var fileID int
-    err = pool.QueryRow(context.Background(), "SELECT file_id FROM files WHERE group_id = $1 AND file_name = $2", groupIDInt, fileName).Scan(&fileID)
-    if err != nil {
-        return "", fmt.Errorf("file not found in database: %w", err)
-    }
+	fmt.Println("here")
+	//Assuming FileID is used to create a unique object key
+	var fileID int
+	err = pool.QueryRow(context.Background(), "SELECT file_id FROM files WHERE group_id = $1 AND file_name = $2", groupIDInt, fileName).Scan(&fileID)
+	if err != nil {
+		fmt.Println(err.Error())
+		return "", fmt.Errorf("file not found in database: %w", err)
+	}
 
-    objectKey := fmt.Sprintf("%v-%v-%d", groupIDInt, fileName, fileID) // Adjust format based on actual key structure
+	fmt.Println("here")
 
-    sess, err := createAWSSession() // Ensure this function securely initializes AWS session
-    if err != nil {
-        return "", fmt.Errorf("error creating AWS session: %w", err)
-    }
+	// Create the AWS object key, upload the file to S3
+	objectKey := fmt.Sprintf("%v-%v", groupID, fileName)
+	dotIndex := strings.LastIndex(objectKey, ".")
+	file_substring := objectKey[:dotIndex]
+	file_extension := objectKey[dotIndex:]
 
-    svc := s3.New(sess)
-    req, _ := svc.GetObjectRequest(&s3.GetObjectInput{
-        Bucket: aws.String(AWS_BUCKET_NAME),
-        Key:    aws.String(objectKey),
-    })
-    urlStr, err := req.Presign(15 * time.Minute) // URL expires after 15 minutes
-    if err != nil {
-        return "", fmt.Errorf("error generating presigned URL: %w", err)
-    }
+	aws_key := file_substring + strconv.Itoa(fileID) + file_extension
 
-    return urlStr, nil
+	sess, err := createAWSSession() // Ensure this function securely initializes AWS session
+	if err != nil {
+		fmt.Println(err.Error())
+		return "", fmt.Errorf("error creating AWS session: %w", err)
+	}
+
+	fmt.Println("here")
+
+	svc := s3.New(sess)
+	req, _ := svc.GetObjectRequest(&s3.GetObjectInput{
+		Bucket: aws.String(AWS_BUCKET_NAME),
+		Key:    aws.String(aws_key),
+	})
+
+	fmt.Println("here")
+
+	expiration := time.Duration(24*time.Hour) * time.Duration(1)
+	urlStr, err := req.Presign(expiration) // URL expires after 15 minutes
+	if err != nil {
+		fmt.Println(err.Error())
+		return "", fmt.Errorf("error generating presigned URL: %w", err)
+	}
+
+	fmt.Println(urlStr)
+
+	return urlStr, nil
 }
