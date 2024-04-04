@@ -33,6 +33,10 @@ definitions:
         type: integer
       group_id:
         type: integer
+      label_name:
+        type: string
+      notes:
+        type: string
       task_id:
         type: integer
       upload_by:
@@ -230,6 +234,15 @@ paths:
         name: group_id
         required: true
         type: integer
+      - description: Notes for the file
+        in: formData
+        name: notes
+        required: true
+        type: string
+      - description: Label name for the file
+        in: formData
+        name: label_name
+        type: string
       responses:
         "200":
           description: OK

@@ -8,6 +8,7 @@ export type AppStackParamList = {
   Profile: undefined;
   PatientView: undefined;
   ProfileScreens: undefined;
+  FileUploadScreen: undefined;
   Landing: undefined;
   Calendar: undefined;
   Notifications: undefined;
