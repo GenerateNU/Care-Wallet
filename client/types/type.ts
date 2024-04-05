@@ -1,3 +1,8 @@
+// import DueSoon from '../assets/DueSoon.svg';
+// import StatusUpdate from '../assets/StatusUpdate.svg';
+// import TaskAccepted from '../assets/TaskAccepted.svg';
+// import TaskConfirmation from '../assets/TaskConfirmation.svg';
+
 export enum TypeOfTask {
   MEDICATION = 'Medication Management',
   APPOINTMENTS = 'Physician Appointments',
@@ -52,3 +57,10 @@ export const TaskTypeDescriptions: Record<string, string> = {
   financial: 'Financial Task',
   other: 'Other Task'
 };
+
+// export const NotificationTypeIconMap: Record<string, JSX.Element> = {
+//   'due_soon': <DueSoon/>,
+//   'status_update': <StatusUpdate />,
+//   'task_confirmation': <TaskConfirmation />,
+//   'task_accepted': <Personal />
+// };

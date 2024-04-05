@@ -20,6 +20,16 @@ export default function Home() {
   return (
     <View className="bg-white w-[100vw] flex-1 items-center justify-center">
       <View className="flex flex-row items-center">
+        <Pressable
+          className="mb-2 ml-2 mt-2 self-center rounded-md border border-carewallet-gray pl-1 pr-1"
+          onPress={() => {
+            navigator.navigate('Notifications');
+          }}
+        >
+          <Text className="self-center text-lg text-carewallet-black">
+            Notifications
+          </Text>
+        </Pressable>
         <DocPickerButton />
         <Pressable
           className="mb-2 ml-2 mt-2 self-center rounded-md border border-carewallet-gray pl-1 pr-1"
