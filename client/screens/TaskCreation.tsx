@@ -7,13 +7,26 @@ import {
   ScrollView
 } from 'react-native-gesture-handler';
 
+import MedicationBg from '../assets/task-creation/big-bg-med.svg';
 import { BackButton } from '../components/nav_buttons/BackButton';
 import { AddressComponent } from '../components/task_creation/AddressComponent';
 import { RadioGroup } from '../components/task_creation/RadioGroup';
 import { TextInputLine } from '../components/task_creation/TextInputLine';
 import { TextInputParagraph } from '../components/task_creation/TextInputParagraph';
 import { TaskCreationJson } from '../types/task-creation-json';
-import { TaskTitleToColorMap } from '../types/type';
+
+const TaskTitleToColorMap: { [key: string]: string } = {
+  'Medication Management': 'carewallet-pink',
+  'Physician Appointments': 'carewallet-pink',
+  Grooming: 'carewallet-purple',
+  'Family Conversations': 'carewallet-purple',
+  'Shopping & Errands': 'carewallet-purple',
+  'Pay Bills': 'carewallet-purple',
+  Diet: 'carewallet-yellow',
+  Activities: 'carewallet-yellow',
+  'Health Insurance': 'carewallet-green',
+  Other: 'carewallet-coral'
+};
 
 type ParamList = {
   mt: {
@@ -54,19 +67,19 @@ export default function TaskCreation() {
   console.log('Theme color:', themeColor);
 
   return (
-    <GestureHandlerRootView className="bg-carewallet-white pt-10">
-      <View className="flex w-full flex-row items-center">
+    <GestureHandlerRootView className="relative">
+      <View className="absolute flex w-full flex-row items-center bg-carewallet-white">
         <BackButton />
         <Text
-          className={`text-${themeColor} mx-auto pr-20 font-carewallet-manrope-bold text-[18px]`}
+          className={`mx-auto pr-20 font-carewallet-manrope-bold text-[18px] text-carewallet-blue`}
         >
           Step 2 of 3
         </Text>
       </View>
-      <View className="my-3 border-b border-carewallet-lightgray" />
+      <View className="absolute top-16 w-full border-t border-carewallet-gray" />
 
-      {/* add background svg */}
-      <ScrollView className="mt-3">
+      <MedicationBg />
+      <ScrollView className="absolute top-20 mt-3 min-h-full min-w-full">
         <Text
           className={`mx-5 font-carewallet-manrope-bold text-2xl font-bold text-${themeColor}`}
         >
