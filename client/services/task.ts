@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 
 import { TaskLabel } from '../types/label';
@@ -45,10 +45,21 @@ const getTaskLabels = async (taskID: string): Promise<TaskLabel[]> => {
   return data;
 };
 
+const addNewTask = async (newTask: Task): Promise<Task> => {
+  const response = await axios.post(`${api_url}/tasks`, newTask);
+  return response.data;
+};
+
+const editTask = async (taskID: string, updatedTask: Task): Promise<Task> => {
+  const response = await axios.put(`${api_url}/tasks/${taskID}`, updatedTask);
+  return response.data;
+};
+
 export const useFilteredTasks = (queryParams: TaskQueryParams) => {
   const { data: tasks, isLoading: tasksIsLoading } = useQuery<Task[]>({
-    queryKey: ['filteredTaskList', queryParams],
-    queryFn: () => getFilteredTasks(queryParams)
+    queryKey: ['filteredTaskList'],
+    queryFn: () => getFilteredTasks(queryParams),
+    refetchInterval: 20000
   });
   return {
     tasks,
@@ -86,4 +97,42 @@ export const useTaskById = (taskId: string) => {
     taskLabels,
     taskLabelsIsLoading
   };
+};
+
+export const addNewTaskMutation = () => {
+  const queryClient = useQueryClient();
+
+  const { mutate: addTaskMutation } = useMutation({
+    mutationFn: (newTask: Task) => addNewTask(newTask),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['filteredTaskList'] });
+    },
+    onError: (err) => {
+      console.error('ERROR: Failed to Add Task. Code:', err);
+    }
+  });
+
+  return addTaskMutation;
+};
+
+export const editTaskMutation = () => {
+  const queryClient = useQueryClient();
+
+  const { mutate: editTaskMutation } = useMutation({
+    mutationFn: ({
+      taskId,
+      updatedTask
+    }: {
+      taskId: string;
+      updatedTask: Task;
+    }) => editTask(taskId, updatedTask),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['filteredTaskList'] });
+    },
+    onError: (err) => {
+      console.error('ERROR: Failed to Edit Task. Code:', err);
+    }
+  });
+
+  return editTaskMutation;
 };

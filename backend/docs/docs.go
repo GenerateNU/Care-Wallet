@@ -121,6 +121,19 @@ const docTemplate = `{
                         "name": "group_id",
                         "in": "formData",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Notes for the file",
+                        "name": "notes",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Label name for the file",
+                        "name": "label_name",
+                        "in": "formData"
                     }
                 ],
                 "responses": {
@@ -576,58 +589,6 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "type": "string"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/medications": {
-            "get": {
-                "description": "get all user medications",
-                "tags": [
-                    "medications"
-                ],
-                "summary": "Get All Meds",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/models.Medication"
-                            }
-                        }
-                    }
-                }
-            },
-            "post": {
-                "description": "add a medication to a users medlist",
-                "tags": [
-                    "medications"
-                ],
-                "summary": "add a medication",
-                "parameters": [
-                    {
-                        "description": "a medication",
-                        "name": "_",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.Medication"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.Medication"
                         }
                     },
                     "400": {
@@ -1301,6 +1262,12 @@ const docTemplate = `{
                 "group_id": {
                     "type": "integer"
                 },
+                "label_name": {
+                    "type": "string"
+                },
+                "notes": {
+                    "type": "string"
+                },
                 "task_id": {
                     "type": "integer"
                 },
@@ -1336,17 +1303,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "label_name": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.Medication": {
-            "type": "object",
-            "properties": {
-                "medication_id": {
-                    "type": "integer"
-                },
-                "medication_name": {
                     "type": "string"
                 }
             }

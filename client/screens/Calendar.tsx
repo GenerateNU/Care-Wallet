@@ -101,10 +101,12 @@ export default function TimelineCalendarScreen() {
             return {} as Event;
           }
 
+          console.log(moment(task.start_date).format('YYYY-MM-DD HH:mm:ss'));
+
           return {
             id: task.task_id.toString(),
-            start: moment(task.start_date).format('YYYY-MM-DD hh:mm:ss'),
-            end: moment(task.end_date).format('YYYY-MM-DD hh:mm:ss'),
+            start: moment(task.start_date).format('YYYY-MM-DD HH:mm:ss'),
+            end: moment(task.end_date).format('YYYY-MM-DD HH:mm:ss'),
             title: task.task_title,
             summary: task.task_status,
             color: '#e6add8'
@@ -201,7 +203,7 @@ export default function TimelineCalendarScreen() {
           showNowIndicator
           scrollToFirst
           initialTime={{
-            hour: parseInt(moment(Date.now()).format('hh')),
+            hour: parseInt(moment(Date.now()).format('HH')),
             minutes: parseInt(moment(Date.now()).format('mm'))
           }}
         />

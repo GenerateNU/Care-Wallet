@@ -8,11 +8,11 @@ import {
 } from 'react-native-gesture-handler';
 
 import { BackButton } from '../components/nav_buttons/BackButton';
-import { AddressComponent } from '../components/task_creation/AddressComponent.tsx';
-import { RadioGroup } from '../components/task_creation/RadioGroup.tsx';
-import { TextInputLine } from '../components/task_creation/TextInputLine.tsx';
-import { TextInputParagraph } from '../components/task_creation/TextInputParagraph.tsx';
-import { TaskCreationJson } from '../types/task-creation-json.ts';
+import { AddressComponent } from '../components/task_creation/AddressComponent';
+import { RadioGroup } from '../components/task_creation/RadioGroup';
+import { TextInputLine } from '../components/task_creation/TextInputLine';
+import { TextInputParagraph } from '../components/task_creation/TextInputParagraph';
+import { TaskCreationJson } from '../types/task-creation-json';
 
 type ParamList = {
   mt: {
@@ -20,7 +20,7 @@ type ParamList = {
   };
 };
 
-export function TaskCreation() {
+export default function TaskCreation() {
   const route = useRoute<RouteProp<ParamList, 'mt'>>();
   const { taskType } = route.params;
 
