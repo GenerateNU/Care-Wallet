@@ -49,7 +49,7 @@ const removeFile = async ({
   fileName
 }: RemoveFileProps): Promise<Response> => {
   const response = await fetch(
-    `${api_url}/files/remove?groupId=${groupId}&fileName=${fileName}`,
+    `${api_url}/files/remove?groupID=${groupId}&fileName=${fileName}`,
     {
       method: 'DELETE'
     }
@@ -73,7 +73,7 @@ const getFile = async ({
   fileName
 }: GetFileProps): Promise<string> => {
   const response = await axios.get(
-    `${api_url}/files/get?groupId=${groupId}&fileName=${fileName}`
+    `${api_url}/files/get?groupID=${groupId}&fileName=${fileName}`
   );
 
   return response.data; // Returns a local URL to access the file

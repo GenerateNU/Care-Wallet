@@ -7,12 +7,12 @@ import { useFile, useFileByGroup } from '../services/file';
 
 function TestScreen() {
   const { removeFileMutation } = useFile();
-  const { file } = useFileByGroup(5, 'test_2.png');
+  const { file } = useFileByGroup(5, 'frame.png');
 
   function handleRemove() {
     removeFileMutation({
       groupId: 5,
-      fileName: 'test_2.png'
+      fileName: 'frame.png'
     });
   }
 
