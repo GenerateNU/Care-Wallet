@@ -7,7 +7,7 @@ import { BottomSheetMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
 
 import { AppStackNavigation } from '../../navigation/types';
 import { Task } from '../../types/task';
-import { QuickTaskCard } from '../QuickTaskCard';
+import { QuickTaskCard } from './QuickTaskCard';
 
 export function QuickTask({
   currentDayTasks,

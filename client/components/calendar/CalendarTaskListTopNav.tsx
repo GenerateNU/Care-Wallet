@@ -3,7 +3,7 @@ import { Text, View } from 'react-native';
 
 import { clsx } from 'clsx';
 
-import { AppStackNavigation } from '../navigation/types';
+import { AppStackNavigation } from '../../navigation/types';
 
 export function CalendarTaskListTopNav({
   navigator,

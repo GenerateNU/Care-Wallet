@@ -15,9 +15,9 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Button } from 'react-native-paper';
 
-import { CalendarTaskListTopNav } from '../components/CalendarTaskListTopNav';
+import { CalendarTaskListTopNav } from '../components/calendar/CalendarTaskListTopNav';
+import { TaskInfoComponent } from '../components/calendar/TaskInfoCard';
 import { CloseButton } from '../components/nav_buttons/CloseButton';
-import { TaskInfoComponent } from '../components/TaskInfoCard';
 import { useCareWalletContext } from '../contexts/CareWalletContext';
 import { AppStackNavigation } from '../navigation/types';
 import { useFilteredTasks } from '../services/task';
