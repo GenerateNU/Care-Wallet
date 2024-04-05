@@ -11,7 +11,6 @@ import User from '../assets/bottom-nav/user.svg';
 import TimelineCalendarScreen from '../screens/Calendar';
 import FileUploadScreen from '../screens/FileUpload';
 import Home from '../screens/Home';
-import NotificationScreen from '../screens/NotificationScreen';
 import PatientView from '../screens/Profile/PatientView';
 import Profile from '../screens/Profile/Profile';
 import Settings from '../screens/Profile/Settings';
