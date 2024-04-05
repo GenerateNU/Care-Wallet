@@ -149,7 +149,6 @@ func GetFileURL(pool *pgxpool.Pool, groupID string, fileName string) (string, er
 	})
 
 
-
 	expiration := time.Duration(24*time.Hour) * time.Duration(1)
 	urlStr, err := req.Presign(expiration) // URL expires after 15 minutes
 	if err != nil {

@@ -3,8 +3,6 @@ import { Button, Dimensions, Image, StyleSheet, View } from 'react-native';
 
 import { useFile, useFileByGroup } from '../services/file';
 
-// Make sure the path is correct for your project structure
-
 function TestScreen() {
   const { removeFileMutation } = useFile();
   const { file } = useFileByGroup(5, 'frame.png');
