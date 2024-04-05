@@ -15,10 +15,14 @@ module.exports = {
       'carewallet-purple': '#990099',
       'carewallet-pink': '#FC2C51'
     },
+
     fontFamily: {
       'carewallet-manrope': ['Manrope_400Regular'],
       'carewallet-manrope-semibold': ['Manrope_600SemiBold'],
-      'carewallet-manrope-bold': ['Manrope_700Bold']
+      'carewallet-manrope-bold': ['Manrope_700Bold'],
+      'carewallet-montserrat': ['Montserrat_400Regular'],
+      'carewallet-montserrat-semibold': ['Montserrat_600SemiBold'],
+      'carewallet-montserrat-bold': ['Montserrat_700Bold']
     }
   },
   plugins: []

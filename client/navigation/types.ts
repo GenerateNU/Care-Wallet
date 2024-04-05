@@ -8,6 +8,7 @@ export type AppStackParamList = {
   Profile: undefined;
   PatientView: undefined;
   ProfileScreens: undefined;
+  FileUploadScreen: undefined;
   Landing: undefined;
   Calendar: undefined;
   Notifications: undefined;
@@ -17,6 +18,7 @@ export type AppStackParamList = {
   CalendarContainer: { screen: string; params: { screen: string } } | undefined;
   CalendarTopNav: undefined;
   TaskCreation: { taskType: string };
+  Settings: undefined;
 };
 
 export type AppStackNavigation = NavigationProp<AppStackParamList>;

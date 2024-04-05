@@ -21,7 +21,7 @@ type ParamList = {
   };
 };
 
-export function TaskCreation() {
+export default function TaskCreation() {
   const route = useRoute<RouteProp<ParamList, 'mt'>>();
   const { taskType } = route.params;
 
