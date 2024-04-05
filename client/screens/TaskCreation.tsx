@@ -24,7 +24,6 @@ type ParamList = {
 export function TaskCreation() {
   const route = useRoute<RouteProp<ParamList, 'mt'>>();
   const { taskType } = route.params;
-  console.log('Task type:', taskType);
 
   const header = TaskCreationJson.types.find((t) =>
     taskType.includes(t.Header)
@@ -50,23 +49,29 @@ export function TaskCreation() {
     console.log('Current values:', values);
   };
 
-  const textColor = TaskTitleToColorMap[taskType];
-  console.log('Text color:', textColor);
+  const themeColor = TaskTitleToColorMap[header as string];
+  console.log('Header:', header);
+  console.log('Theme color:', themeColor);
 
   return (
-    <GestureHandlerRootView>
-      <ScrollView className="mt-10">
-        <View className="flex w-full flex-row items-center justify-center">
-          <View className="mr-[95px]">
-            <BackButton />
-          </View>
-          <Text
-            className={`mr-auto self-center text-center text-${TaskTitleToColorMap[taskType]}`}
-          >
-            Step 2 of 3
-          </Text>
-        </View>
-        <Text className="text-center text-2xl font-bold">{header}</Text>
+    <GestureHandlerRootView className="bg-carewallet-white pt-10">
+      <View className="flex w-full flex-row items-center">
+        <BackButton />
+        <Text
+          className={`text-${themeColor} mx-auto pr-20 font-carewallet-manrope-bold text-[18px]`}
+        >
+          Step 2 of 3
+        </Text>
+      </View>
+      <View className="my-3 border-b border-carewallet-lightgray" />
+
+      {/* add background svg */}
+      <ScrollView className="mt-3">
+        <Text
+          className={`mx-5 font-carewallet-manrope-bold text-2xl font-bold text-${themeColor}`}
+        >
+          {header}
+        </Text>
         {compList.map((item, index) => (
           <View key={index}>
             {item.key === 'Address' && <AddressComponent />}
