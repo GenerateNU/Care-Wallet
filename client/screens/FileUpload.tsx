@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -35,6 +35,10 @@ export default function FileUploadScreen() {
   const handleAdditionalNotesChange = (text: string) => {
     setAdditionalNotes(text);
   };
+
+  useEffect(() => {
+    setFileTitle(pickedFile?.name || '');
+  }, [pickedFile]);
 
   const pickDocument = async () => {
     try {
