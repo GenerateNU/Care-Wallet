@@ -46,6 +46,19 @@ export const CategoryToTypeMap: Record<Category, TypeOfTask[]> = {
   [Category.OTHER]: [TypeOfTask.OTHER]
 };
 
+export const TaskTitleToColorMap: Record<string, string> = {
+  'Medication Management': 'carewallet-pink',
+  'Physician Appointments': 'carewallet-pink',
+  Grooming: 'carewallet-purple',
+  'Family Conversations': 'carewallet-purple',
+  'Shopping & Errands': 'carewallet-purple',
+  'Pay Bills': 'carewallet-purple',
+  Diet: 'carewallet-yellow',
+  Activities: 'carewallet-yellow',
+  'Health Insurance': 'carewallet-green',
+  Other: 'carewallet-coral'
+};
+
 export const TaskTypeDescriptions: Record<string, string> = {
   med_mgmt: 'Medication Management',
   dr_appt: 'Doctor Appointment',
