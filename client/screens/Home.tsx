@@ -38,10 +38,10 @@ export default function Home() {
               {`${moment().day(new Date().getDay()).format('dddd')}, ${moment().format('MMMM Do')} - Today`}
             </Text>
             <View
-              className="ml-auto mr-2 items-center rounded-full border  border-carewallet-lightgray bg-carewallet-white"
+              className="ml-auto mr-2 h-9 w-9 items-center justify-center rounded-full border  border-carewallet-lightgray bg-carewallet-white"
               onTouchEnd={() => navigation.navigate('TaskType')}
             >
-              <Text className="px-2 text-center text-xl text-carewallet-gray">
+              <Text className="font-carewallet-montserrat text-4xl text-carewallet-gray">
                 +
               </Text>
             </View>
@@ -75,7 +75,11 @@ export default function Home() {
                 ))}
             </View>
           ) : (
-            <Text>You have no assigned tasks today.</Text>
+            <View className="h-10 items-center justify-center rounded-b-lg border border-t-0 border-carewallet-lightgray">
+              <Text className="ml-2 font-carewallet-manrope text-sm">
+                You have no assigned tasks today.
+              </Text>
+            </View>
           )}
         </View>
         <View className="mt-5 h-[20vh] rounded-lg border border-carewallet-lightgray bg-carewallet-blue/10">

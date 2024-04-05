@@ -37,9 +37,21 @@ export function CWDropdown({
           )}
         </View>
       </View>
-      <View className="flex w-[90vw] max-w-[90vw] flex-row" />
       {isOpen && (
-        <View className="flex flex-row flex-wrap rounded-b-lg border border-carewallet-blue/20">
+        <View className="absolute top-14 flex flex-row flex-wrap rounded-b-lg border border-carewallet-blue/20 bg-carewallet-white">
+          {selected !== 'Select Label' && (
+            <View
+              className="h-14 w-full justify-center border-t border-carewallet-blue/20"
+              onTouchEnd={() => {
+                setLabel('Select Label');
+                setIsOpen(false);
+              }}
+            >
+              <Text className="w-40 text-ellipsis bg-carewallet-white pl-2 font-carewallet-manrope text-lg">
+                {''}
+              </Text>
+            </View>
+          )}
           {items?.map(
             (item, index) =>
               item !== selected && (
@@ -51,7 +63,7 @@ export function CWDropdown({
                     setIsOpen(false);
                   }}
                 >
-                  <Text className="w-40 text-ellipsis pl-2 font-carewallet-manrope text-lg">
+                  <Text className="w-40 text-ellipsis bg-carewallet-white pl-2 font-carewallet-manrope text-lg">
                     {item}
                   </Text>
                 </View>

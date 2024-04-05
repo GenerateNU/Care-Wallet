@@ -75,7 +75,7 @@ export default function FileUploadScreen() {
   return (
     <SafeAreaView className="flex-1 bg-carewallet-white">
       <ScrollView className="flex flex-col bg-carewallet-white align-middle">
-        <View className="mb-10 ml-6 mr-6 flex items-start bg-carewallet-white">
+        <View className="mb-5 ml-6 mr-6 flex items-start bg-carewallet-white">
           <View className="flex flex-row items-center">
             <BackButton />
             <View className="flex-1 items-center">
@@ -85,7 +85,7 @@ export default function FileUploadScreen() {
             </View>
           </View>
           <ChooseFileButton onPress={pickDocument} picked={pickedFile} />
-          <View className="mt-4 flex flex-row">
+          <View className="relative z-20 mt-4 flex flex-row">
             <View className="mr-4 flex-1">
               <Text className="text-md mb-2 font-carewallet-manrope-bold text-carewallet-black">
                 FILE TITLE
@@ -97,20 +97,18 @@ export default function FileUploadScreen() {
                 onChangeText={handleFileTitleChange}
               />
             </View>
-            <View className="flex-1">
+            <View className="relative z-20 flex-1">
               <Text className="mb-2 font-carewallet-manrope-bold text-carewallet-black">
                 FILE LABEL
               </Text>
-              <View>
-                <CWDropdown
-                  selected={label}
-                  items={labels?.map((label) => label.label_name)}
-                  setLabel={setLabel}
-                />
-              </View>
+              <CWDropdown
+                selected={label}
+                items={labels?.map((label) => label.label_name)}
+                setLabel={setLabel}
+              />
             </View>
           </View>
-          <View className="mt-4 flex flex-row">
+          <View className="relative z-10 mt-4 flex flex-row">
             <View className="flex-1">
               <Text className="mb-2 font-carewallet-manrope-bold text-carewallet-black">
                 ADDITIONAL NOTES
