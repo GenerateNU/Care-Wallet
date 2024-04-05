@@ -2,6 +2,7 @@ package files
 
 import (
 	"carewallet/models"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -14,17 +15,15 @@ type PgModel struct {
 }
 
 func FileGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
-    files := v1.Group("files")
-    {
-        files.POST("/upload", c.UploadFile)                 
-        files.DELETE("/remove", c.RemoveFile)               
-        files.GET("/get", c.GetFile)                        
-    }
+	files := v1.Group("files")
+	{
+		files.POST("/upload", c.UploadFile)
+		files.DELETE("/remove", c.RemoveFile)
+		files.GET("/get", c.GetFile)
+	}
 
-    return files
+	return files
 }
-
-
 
 // UploadFile godoc
 //
@@ -74,7 +73,6 @@ func (pg *PgModel) UploadFile(c *gin.Context) {
 	c.JSON(http.StatusOK, file)
 }
 
-
 // RemoveFile godoc
 //
 //	@summary		Remove a file
@@ -88,22 +86,22 @@ func (pg *PgModel) UploadFile(c *gin.Context) {
 //	@failure		400			{object}	string
 //	@router			/files/remove [delete]
 func (pg *PgModel) RemoveFile(c *gin.Context) {
-    groupID := c.Query("groupID")
-    fileName := c.Query("fileName")
+	groupID := c.Query("groupID")
+	fileName := c.Query("fileName")
 
-    // Validate the input parameters as needed
-    if groupID == "" || fileName == "" {
-        c.JSON(http.StatusBadRequest, "Missing groupID or fileName")
-        return
-    }
+	// Validate the input parameters as needed
+	if groupID == "" || fileName == "" {
+		c.JSON(http.StatusBadRequest, "Missing groupID or fileName")
+		return
+	}
 
-    err := RemoveFile(pg.Conn, groupID, fileName)
-    if err != nil {
-        c.JSON(http.StatusBadRequest, "Failed to remove file: "+err.Error())
-        return
-    }
+	err := RemoveFile(pg.Conn, groupID, fileName)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, "Failed to remove file: "+err.Error())
+		return
+	}
 
-    c.Status(http.StatusOK)
+	c.Status(http.StatusOK)
 }
 
 // GetFile godoc
@@ -119,21 +117,24 @@ func (pg *PgModel) RemoveFile(c *gin.Context) {
 //	@failure		400			{object}	string
 //	@router			/files/get [get]
 func (pg *PgModel) GetFile(c *gin.Context) {
-    groupID := c.Query("groupID")
-    fileName := c.Query("fileName")
-    
-    // Validate the input parameters as needed
-    if groupID == "" || fileName == "" {
-        c.JSON(http.StatusBadRequest, "Missing groupID or fileName")
-        return
-    }
+	groupID := c.Query("groupID")
+	fileName := c.Query("fileName")
 
-    url, err := GetFileURL(pg.Conn, groupID, fileName)
-    if err != nil {
-        c.JSON(http.StatusBadRequest, "Failed to get file: "+err.Error())
-        return
-    }
+	fmt.Println("here")
+	// Validate the input parameters as needed
+	if groupID == "" || fileName == "" {
+		fmt.Println("Missing groupId or fileName")
+		c.JSON(http.StatusBadRequest, "Missing groupID or fileName")
+		return
+	}
 
-    c.Redirect(http.StatusTemporaryRedirect, url)
+	fmt.Println("here")
+
+	url, err := GetFileURL(pg.Conn, groupID, fileName)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, "Failed to get file: "+err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, url)
 }
-

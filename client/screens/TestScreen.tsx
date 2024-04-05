@@ -1,33 +1,33 @@
 import React from 'react';
-import { Button, StyleSheet, View } from 'react-native';
+import { Button, Dimensions, Image, StyleSheet, View } from 'react-native';
 
-import * as DocumentPicker from 'expo-document-picker';
-
-import { useFile } from '../services/file';
+import { useFile, useFileByGroup } from '../services/file';
 
 // Make sure the path is correct for your project structure
 
 function TestScreen() {
-  const { uploadFileMutation, removeFileMutation, getFileMutation } = useFile();
+  const { removeFileMutation } = useFile();
+  const { file } = useFileByGroup(5, 'test_2.png');
 
   function handleRemove() {
     removeFileMutation({
-      groupId: 5, // Replace with actual group ID
-      fileName: '2.png' // Replace with actual file name
-    });
-  }
-
-  function handleGetFile() {
-    getFileMutation({
-      groupId: 5, // Replace with actual group ID
-      fileName: '2.png' // Replace with actual file name
+      groupId: 5,
+      fileName: 'test_2.png'
     });
   }
 
   return (
     <View style={styles.container}>
+      {file && (
+        <Image
+          source={{
+            uri: file,
+            width: Dimensions.get('window').width / 2,
+            height: Dimensions.get('window').height / 3
+          }}
+        />
+      )}
       <Button title="Remove File" onPress={handleRemove} />
-      <Button title="Get File" onPress={handleGetFile} />
     </View>
   );
 }
