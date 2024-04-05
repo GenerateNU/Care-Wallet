@@ -11,7 +11,7 @@ module.exports = {
       'carewallet-blue': '#1A56C4',
       'carewallet-green': '#4DB8A6',
       'carewallet-coral': '#FF6258',
-      'carewallet-yellow': '#FFD9900',
+      'carewallet-yellow': '#FF9900',
       'carewallet-purple': '#990099',
       'carewallet-pink': '#FC2C51'
     },

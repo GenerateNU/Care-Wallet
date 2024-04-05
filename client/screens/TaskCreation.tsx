@@ -13,6 +13,7 @@ import { RadioGroup } from '../components/task_creation/RadioGroup';
 import { TextInputLine } from '../components/task_creation/TextInputLine';
 import { TextInputParagraph } from '../components/task_creation/TextInputParagraph';
 import { TaskCreationJson } from '../types/task-creation-json';
+import { TaskTitleToColorMap } from '../types/type';
 
 type ParamList = {
   mt: {
@@ -23,6 +24,7 @@ type ParamList = {
 export default function TaskCreation() {
   const route = useRoute<RouteProp<ParamList, 'mt'>>();
   const { taskType } = route.params;
+  console.log('Task type:', taskType);
 
   const header = TaskCreationJson.types.find((t) =>
     taskType.includes(t.Header)
@@ -33,7 +35,6 @@ export default function TaskCreation() {
   )?.Body;
 
   const compList: { key: string; value: string }[] = [];
-
   body?.forEach((item) => {
     Object.entries(item).forEach(([key, value]) => {
       compList.push({ key, value });
@@ -41,7 +42,6 @@ export default function TaskCreation() {
   });
 
   const [values, setValues] = useState<{ [key: string]: string }>({});
-
   const handleChange = (key: string, value: string) => {
     setValues((prevValues) => ({
       ...prevValues,
@@ -50,6 +50,9 @@ export default function TaskCreation() {
     console.log('Current values:', values);
   };
 
+  const textColor = TaskTitleToColorMap[taskType];
+  console.log('Text color:', textColor);
+
   return (
     <GestureHandlerRootView>
       <ScrollView className="mt-10">
@@ -57,7 +60,9 @@ export default function TaskCreation() {
           <View className="mr-[95px]">
             <BackButton />
           </View>
-          <Text className="mr-auto self-center text-center text-carewallet-gray">
+          <Text
+            className={`mr-auto self-center text-center text-${TaskTitleToColorMap[taskType]}`}
+          >
             Step 2 of 3
           </Text>
         </View>
