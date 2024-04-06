@@ -153,11 +153,11 @@ export function TaskType() {
 
         <View className="my-2" />
 
-        <View className="flex h-[68vh] w-[90vw] flex-col flex-wrap justify-between p-4">
+        <View className="flex w-[90vw] justify-between p-4">
           {selectedTypes.map((item, index) => (
             <View key={index}>
               <Text className="mx-1 p-2">{getCategoryTitle(item)}</Text>
-              <View className="w-[90vw] flex-col flex-wrap">
+              <View className="w-[90vw] flex-row flex-wrap">
                 {getCards(item).map((item2, index2) => (
                   <View
                     key={index2}
