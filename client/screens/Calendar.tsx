@@ -94,9 +94,14 @@ export default function TimelineCalendarScreen() {
           return {
             id: task.task_id.toString(),
             start: moment(task.start_date).format('YYYY-MM-DD HH:mm:ss'),
-            end: moment(task.end_date).format('YYYY-MM-DD HH:mm:ss'),
+            end:
+              task.end_date !== task.start_date
+                ? moment(task.end_date).format('YYYY-MM-DD HH:mm:ss')
+                : moment(task.start_date)
+                    .add(30, 'minutes')
+                    .format('YYYY-MM-DD HH:mm:ss'),
             title: task.task_title,
-            summary: task.task_status,
+            summary: '',
             color: '#ffffff'
           };
         }),
