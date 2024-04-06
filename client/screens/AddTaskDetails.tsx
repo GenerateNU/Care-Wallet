@@ -11,11 +11,11 @@ import { useNavigation } from '@react-navigation/native';
 
 import { PopupModal } from '../components/PopupModal';
 import { AppStackNavigation } from '../navigation/types';
-import { useTaskByAssigned } from '../services/task';
 import { Task } from '../types/task';
+import { TypeOfTask } from '../types/type';
 
 // const currentUserIDs = [useCareWalletContext().user.userID];
-const currentUserIDs = ['0'];
+//const currentUserIDs = ['0'];
 
 export default function AddNewTask() {
   const navigation = useNavigation<AppStackNavigation>(); // Initialize navigation
@@ -30,17 +30,19 @@ export default function AddNewTask() {
     end_date: '',
     notes: '',
     task_status: '',
-    task_type: ''
+    task_type: TypeOfTask.OTHER,
+    repeating: false,
+    quick_task: false
   });
 
   const [addingTask, setAddingTask] = useState(false);
   console.log(addingTask);
-  const { addTaskMutation: addNewTaskMutation } =
-    useTaskByAssigned(currentUserIDs);
+  // const { addTaskMutation: addNewTaskMutation } =
+  //   useTaskByAssigned(currentUserIDs);
 
   const handleAddTask = async () => {
     setAddingTask(true);
-    await addNewTaskMutation(newTaskState);
+    // await addNewTaskMutation(newTaskState);
     setAddingTask(false);
     navigation.navigate('TaskList'); // Navigate back to TaskList screen
   };

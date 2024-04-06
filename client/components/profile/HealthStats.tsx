@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FlatList, Pressable, Text, View } from 'react-native';
 
 export function HealthStats() {
-  const [canPress, setCanPress] = useState(true);
+  const [, setCanPress] = useState(true);
   const HealthStats: string[] = [];
 
   return HealthStats.length > 0 ? (
@@ -14,12 +14,7 @@ export function HealthStats() {
       showsHorizontalScrollIndicator={false}
       data={HealthStats}
       renderItem={({ index }) => (
-        <Pressable
-          key={index}
-          onTouchEnd={() => {
-            if (canPress) console.log('Pressed');
-          }}
-        >
+        <Pressable key={index} onTouchEnd={() => {}}>
           <View className="items-center px-2">
             <View className="z-10 h-[35vh] w-[40vw] rounded-3xl border border-carewallet-lightgray bg-carewallet-white" />
           </View>
