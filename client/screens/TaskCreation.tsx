@@ -7,7 +7,11 @@ import {
   ScrollView
 } from 'react-native-gesture-handler';
 
-import MedicationBg from '../assets/task-creation/big-bg-med.svg';
+import FinancialBg from '../assets/task-creation/financial-bg.svg';
+import HealthBg from '../assets/task-creation/health-bg.svg';
+import HomeBg from '../assets/task-creation/home-bg.svg';
+import OtherBg from '../assets/task-creation/other-bg.svg';
+import PersonalBg from '../assets/task-creation/personal-bg.svg';
 import { BackButton } from '../components/nav_buttons/BackButton';
 import { AddressComponent } from '../components/task_creation/AddressComponent.tsx';
 import { RadioGroup } from '../components/task_creation/RadioGroup.tsx';
@@ -29,10 +33,32 @@ export function TaskCreation() {
     taskType.includes(t.Header)
   )?.Header;
 
-  // how to render this dynamically
-  // const background = TaskCreationJson.types.find((t) =>
-  //   taskType.includes(t.Header)
-  // )?.Background;
+  const renderBackground = (header: string) => {
+    switch (header) {
+      case 'Medication Management':
+        return <HealthBg />;
+      case 'Physician Appointments':
+        return <HealthBg />;
+      case 'Grooming':
+        return <PersonalBg />;
+      case 'Family Conversations':
+        return <PersonalBg />;
+      case 'Shopping & Errands':
+        return <PersonalBg />;
+      case 'Pay Bills':
+        return <FinancialBg />;
+      case 'Diet':
+        return <HomeBg />;
+      case 'Activities':
+        return <HomeBg />;
+      case 'Health Insurance':
+        return <FinancialBg />;
+      case 'Other':
+        return <OtherBg />;
+      default:
+        return null;
+    }
+  };
 
   const body = TaskCreationJson.types.find((t) =>
     taskType.includes(t.Header)
@@ -67,7 +93,7 @@ export function TaskCreation() {
         </Text>
       </View>
       <View className="absolute top-16 w-full border-t border-carewallet-gray" />
-      <MedicationBg className="" />
+      {renderBackground(header ?? '')}
       <ScrollView className="absolute top-20 mt-3 min-h-full min-w-full">
         <Text className="mx-5 font-carewallet-manrope-bold text-2xl font-bold">
           {header}

@@ -33,6 +33,7 @@ export function RadioGroup({ title, options, onChange }: RadioGroupProps) {
         return <Liquid />;
       case 'Shot':
         return <Shot />;
+      // bathing symbol needs to be fixed
       case 'Bathing':
         return <Bathing />;
       case 'Toileting':
@@ -50,7 +51,7 @@ export function RadioGroup({ title, options, onChange }: RadioGroupProps) {
           return (
             <TouchableOpacity
               key={index}
-              className={`flex h-12 flex-row items-center space-x-2 rounded-md border border-carewallet-gray px-4 py-2 ${option === selectedOption ? 'bg-carewallet-gray' : 'bg-carewallet-white'}`}
+              className={`flex h-12 flex-row items-center space-x-2 rounded-md border border-carewallet-gray px-4 py-2 ${option === selectedOption ? 'bg-carewallet-lightgray' : 'bg-carewallet-white'}`}
               onPress={() => {
                 handleOptionSelect(option);
               }}
