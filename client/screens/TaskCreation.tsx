@@ -9,12 +9,12 @@ import {
 
 import { BackButton } from '../components/nav_buttons/BackButton';
 import { ForwardButton } from '../components/nav_buttons/ForwardButton.tsx';
-import { AddressComponent } from '../components/task_creation/AddressComponent.tsx';
-import { RadioGroup } from '../components/task_creation/RadioGroup.tsx';
-import { TextInputLine } from '../components/task_creation/TextInputLine.tsx';
-import { TextInputParagraph } from '../components/task_creation/TextInputParagraph.tsx';
+import { AddressComponent } from '../components/task_creation/AddressComponent';
+import { RadioGroup } from '../components/task_creation/RadioGroup';
+import { TextInputLine } from '../components/task_creation/TextInputLine';
+import { TextInputParagraph } from '../components/task_creation/TextInputParagraph';
 import { AppStackNavigation } from '../navigation/types.ts';
-import { TaskCreationJson } from '../types/task-creation-json.ts';
+import { TaskCreationJson } from '../types/task-creation-json';
 
 type ParamList = {
   mt: {
@@ -22,7 +22,7 @@ type ParamList = {
   };
 };
 
-export function TaskCreation() {
+export default function TaskCreation() {
   const navigation = useNavigation<AppStackNavigation>();
   const route = useRoute<RouteProp<ParamList, 'mt'>>();
   const { taskType } = route.params;

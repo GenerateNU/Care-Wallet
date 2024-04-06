@@ -2,8 +2,8 @@ import React from 'react';
 
 import AddTaskDetails from '../screens/AddTaskDetails';
 import LoginPage from '../screens/LoginPage';
-import { TaskCreation } from '../screens/TaskCreation';
-import { TaskType } from '../screens/TaskType';
+import TaskCreation from '../screens/TaskCreation';
+import TaskType from '../screens/TaskType';
 import { AppStackBottomTabNavigator } from './AppStackBottomTabNavigator';
 import { AppStack } from './types';
 

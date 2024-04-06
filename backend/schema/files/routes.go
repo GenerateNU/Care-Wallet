@@ -32,6 +32,8 @@ func FileGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 //	@param			file_data	formData	file	true	"Body with file zip"
 //	@param			upload_by	formData	string	true	"The userId of the uploader"
 //	@param			group_id	formData	int		true	"The groupId of the uploader"
+//	@param			notes		formData	string	true	"Notes for the file"
+//	@param			label_name	formData	string	false	"Label name for the file"
 //
 //	@success		200			{object}	models.File
 //	@failure		400			{object}	string
@@ -48,6 +50,8 @@ func (pg *PgModel) UploadFile(c *gin.Context) {
 	fileResponse := form.File["file_data"][0]
 	file.UploadBy = form.Value["upload_by"][0]
 	file.GroupID, err = strconv.Atoi(form.Value["group_id"][0])
+	file.Notes = form.Value["notes"][0]
+	file.LabelName = form.Value["label_name"][0]
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, "Failed to parse groupid")
