@@ -137,17 +137,18 @@ export function TaskType() {
       case Category.OTHER:
         return 'Other';
       default:
-        return ''; // Default case if item doesn't match any category
+        return '';
     }
   }
 
   return (
     <GestureHandlerRootView className="relative">
       <ScrollView>
-        <View className="flex w-full flex-row items-center">
+        <View className="relative flex w-full flex-row items-center bg-carewallet-white">
           <BackButton />
-
-          <Text className="mx-auto pr-20 font-carewallet-manrope-bold text-[18px] text-carewallet-blue">
+          <Text
+            className={`mx-auto pr-20 font-carewallet-manrope-bold text-[18px] text-carewallet-blue`}
+          >
             Step 1 of 3
           </Text>
         </View>
@@ -155,7 +156,7 @@ export function TaskType() {
         <View className="my-2" />
 
         <View className="flex w-full flex-row items-start justify-between px-4">
-          <Text className="font-carewallet-manrope-bold text-[24px]">
+          <Text className="mx-1 font-carewallet-manrope-bold text-[24px]">
             Choose Type of Task
           </Text>
 
@@ -168,26 +169,27 @@ export function TaskType() {
           </Button>
         </View>
 
-        <View className="my-2" />
-
         <View className="flex w-[90vw] justify-between p-3">
           {selectedTypes.map((item, index) => (
             <View key={index}>
-              <Text className="mx-1 p-2">{getCategoryTitle(item)}</Text>
+              <Text className="mx-1 p-2 font-carewallet-montserrat-bold text-[11px] uppercase tracking-wide">
+                {getCategoryTitle(item)}
+              </Text>
               <View className="w-[100vw] flex-row flex-wrap">
                 {getCards(item).map((item2, index2) => (
                   <TouchableOpacity
                     key={index2}
-                    className="border-gray-400 bg-white m-2 h-24 w-40 items-start rounded-lg border p-2"
                     onPress={() =>
                       navigation.navigate('TaskCreation', {
                         taskType: JSON.stringify(item)
                       })
                     }
                   >
-                    <View className="border-gray-400 bg-white m-2 h-24 w-40 items-start rounded-lg border p-2">
+                    <View className="bg-white m-2 h-24 w-40 items-start rounded-lg border border-carewallet-gray p-2">
                       {getCategoryIcon(TypeToCategoryMap[item])}
-                      <Text>{item2}</Text>
+                      <Text className="m-1 mt-3 font-carewallet-manrope-bold">
+                        {item2}
+                      </Text>
                     </View>
                   </TouchableOpacity>
                 ))}
@@ -195,42 +197,44 @@ export function TaskType() {
             </View>
           ))}
         </View>
-
-        <BottomSheet
-          ref={bottomSheetRef}
-          index={-1}
-          snapPoints={bottomSheetSnapPoints}
-          enablePanDownToClose={true}
-          backdropComponent={renderBackdrop}
-        >
-          <View>
-            <View className="flex flex-row justify-between">
-              <Text className="m-5 text-2xl font-bold">Filter</Text>
-              <CloseButton onPress={closeBottomSheet} />
-            </View>
-
-            <DropDownPicker
-              open={open}
-              value={selectedCategory}
-              items={filters}
-              setOpen={setOpen}
-              setValue={setSelectedCategory}
-              placeholder="Category"
-              onSelectItem={() => {
-                closeBottomSheet();
-              }}
-              style={{
-                width: '95%',
-                marginLeft: 'auto',
-                marginRight: 'auto',
-                borderRadius: 0,
-                borderColor: 'transparent',
-                borderBottomColor: 'black'
-              }}
-            />
-          </View>
-        </BottomSheet>
       </ScrollView>
+
+      <BottomSheet
+        ref={bottomSheetRef}
+        index={-1}
+        snapPoints={bottomSheetSnapPoints}
+        enablePanDownToClose={true}
+        backdropComponent={renderBackdrop}
+      >
+        <View>
+          <View className="flex flex-row justify-between">
+            <Text className="carewallet-manrope-bold m-5 text-2xl font-bold">
+              Filter
+            </Text>
+            <CloseButton onPress={closeBottomSheet} />
+          </View>
+
+          <DropDownPicker
+            open={open}
+            value={selectedCategory}
+            items={filters}
+            setOpen={setOpen}
+            setValue={setSelectedCategory}
+            placeholder="Category"
+            onSelectItem={() => {
+              closeBottomSheet();
+            }}
+            style={{
+              width: '95%',
+              marginLeft: 'auto',
+              marginRight: 'auto',
+              borderRadius: 0,
+              borderColor: 'black',
+              borderBottomColor: 'black'
+            }}
+          />
+        </View>
+      </BottomSheet>
     </GestureHandlerRootView>
   );
 }
