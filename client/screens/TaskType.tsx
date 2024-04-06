@@ -13,7 +13,6 @@ import BottomSheet, {
 } from '@gorhom/bottom-sheet';
 import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
 import { useNavigation } from '@react-navigation/native';
-import { List } from 'lodash';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {
   GestureHandlerRootView,
@@ -21,15 +20,15 @@ import {
 } from 'react-native-gesture-handler';
 import { Button, Text } from 'react-native-paper';
 
+import Financial from '../assets/financial.svg';
+import Home from '../assets/home.svg';
+import Other from '../assets/other.svg';
+import Personal from '../assets/personal.svg';
+import RedPill from '../assets/task-type-icon-pill.svg';
 import { BackButton } from '../components/nav_buttons/BackButton';
 import { CloseButton } from '../components/nav_buttons/CloseButton';
 import { AppStackNavigation } from '../navigation/types';
 import { Category, CategoryToTypeMap, TypeOfTask } from '../types/type';
-import RedPill from "../assets/task-type-icon-pill.svg"
-import Personal from "../assets/personal.svg";
-import Home from "../assets/home.svg"
-import Financial from "../assets/financial.svg"
-import Other from "../assets/other.svg"
 
 export function TaskType() {
   const navigation = useNavigation<AppStackNavigation>();
@@ -107,7 +106,7 @@ export function TaskType() {
     }
   }
 
-  function getCategoryIcon(category: Category): JSX.Element | null{
+  function getCategoryIcon(category: Category): JSX.Element | null {
     switch (category) {
       case Category.HEALTH:
         return <RedPill />;
@@ -120,7 +119,7 @@ export function TaskType() {
       case Category.OTHER:
         return <Other />;
       default:
-        return null
+        return null;
     }
   }
 
@@ -143,7 +142,7 @@ export function TaskType() {
   }
 
   return (
-    <GestureHandlerRootView className="bg-carewallet-white pt-10">
+    <GestureHandlerRootView className="relative">
       <ScrollView>
         <View className="flex w-full flex-row items-center">
           <BackButton />
@@ -152,12 +151,14 @@ export function TaskType() {
             Step 1 of 3
           </Text>
         </View>
-        <View className="my-5 border-b border-carewallet-lightgray" />
+        <View className="absolute top-16 w-full border-t border-carewallet-gray" />
+        <View className="my-2" />
 
         <View className="flex w-full flex-row items-start justify-between px-4">
           <Text className="font-carewallet-manrope-bold text-[24px]">
             Choose Type of Task
           </Text>
+
           <Button
             className=" h-14 items-center justify-center rounded-lg bg-carewallet-blue text-carewallet-white"
             textColor="white"
@@ -175,14 +176,20 @@ export function TaskType() {
               <Text className="mx-1 p-2">{getCategoryTitle(item)}</Text>
               <View className="w-[100vw] flex-row flex-wrap">
                 {getCards(item).map((item2, index2) => (
-                  <View
+                  <TouchableOpacity
                     key={index2}
                     className="border-gray-400 bg-white m-2 h-24 w-40 items-start rounded-lg border p-2"
-                    onTouchCancel={() => {}}
+                    onPress={() =>
+                      navigation.navigate('TaskCreation', {
+                        taskType: JSON.stringify(item)
+                      })
+                    }
                   >
-                    {getCategoryIcon(TypeToCategoryMap[item])}
-                    <Text>{item2}</Text>
-                  </View>
+                    <View className="border-gray-400 bg-white m-2 h-24 w-40 items-start rounded-lg border p-2">
+                      {getCategoryIcon(TypeToCategoryMap[item])}
+                      <Text>{item2}</Text>
+                    </View>
+                  </TouchableOpacity>
                 ))}
               </View>
             </View>
