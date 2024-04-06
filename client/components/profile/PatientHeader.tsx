@@ -14,7 +14,7 @@ export function PatientHeader({ user }: { user: User | undefined }) {
           </Text>
           <View className="flex w-[60vw] flex-row pt-2">
             <View className="flex flex-col">
-              <Text className="font-carewallet-montserrat-bold items-center justify-center text-left text-xs text-carewallet-black">
+              <Text className="items-center justify-center text-left font-carewallet-montserrat-bold text-xs text-carewallet-black">
                 PATIENT
               </Text>
               <Text className="items-center justify-center text-left text-xs  text-carewallet-black">

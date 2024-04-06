@@ -59,7 +59,7 @@ export function RadioGroup({ title, options, onChange }: RadioGroupProps) {
               }}
             >
               {renderIcon(option)}
-              <Text className="font-carewallet-manrope-semibold text-[16px]">
+              <Text className="font-carewallet-montserrat-semibold text-[16px]">
                 {option}
               </Text>
             </TouchableOpacity>
