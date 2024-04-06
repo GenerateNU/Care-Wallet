@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Text, View } from 'react-native';
 
 import { RouteProp, useRoute } from '@react-navigation/native';
+import { clsx } from 'clsx';
 import {
   GestureHandlerRootView,
   ScrollView
@@ -42,6 +43,11 @@ export default function TaskCreation() {
     taskType.includes(t.Header)
   )?.Header;
 
+  // how to render this dynamically
+  // const background = TaskCreationJson.types.find((t) =>
+  //   taskType.includes(t.Header)
+  // )?.Background;
+
   const body = TaskCreationJson.types.find((t) =>
     taskType.includes(t.Header)
   )?.Body;
@@ -68,7 +74,7 @@ export default function TaskCreation() {
 
   return (
     <GestureHandlerRootView className="relative">
-      <View className="absolute flex w-full flex-row items-center bg-carewallet-white">
+      <View className="relative flex w-full flex-row items-center bg-carewallet-white">
         <BackButton />
         <Text
           className={`mx-auto pr-20 font-carewallet-manrope-bold text-[18px] text-carewallet-blue`}
@@ -77,11 +83,13 @@ export default function TaskCreation() {
         </Text>
       </View>
       <View className="absolute top-16 w-full border-t border-carewallet-gray" />
-
-      <MedicationBg />
+      <MedicationBg className="" />
       <ScrollView className="absolute top-20 mt-3 min-h-full min-w-full">
         <Text
-          className={`mx-5 font-carewallet-manrope-bold text-2xl font-bold text-${themeColor}`}
+          className={clsx(
+            'mx-5 font-carewallet-manrope-bold text-2xl font-bold',
+            themeColor === '' ? '' : ''
+          )}
         >
           {header}
         </Text>
@@ -103,7 +111,7 @@ export default function TaskCreation() {
             {item.value.startsWith('RadioGroup') && (
               <RadioGroup
                 title={item.key}
-                options={item.value.substring(12).split(', ')}
+                options={item.value.substring(12).split(' ')}
                 onChange={(value) => handleChange(item.key, value)}
               />
             )}
