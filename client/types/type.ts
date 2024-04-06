@@ -1,12 +1,15 @@
+// the order of these matter
 export enum TypeOfTask {
   MEDICATION = 'Medication Management',
-  APPOINTMENTS = 'Physician Appointments',
+  DIET = 'Diet',
+
   GROOMING = 'Grooming',
   CONVERSATIONS = 'Family Conversations',
+  APPOINTMENTS = 'Physician Appointments',
+  ACTIVITIES = 'Activities',
   ERRANDS = 'Shopping & Errands',
   BILLS = 'Pay Bills',
-  DIET = 'Diet',
-  ACTIVITIES = 'Activities',
+
   INSURANCE = 'Health Insurance',
   OTHER = 'Other'
 }
