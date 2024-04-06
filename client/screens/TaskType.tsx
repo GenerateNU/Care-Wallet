@@ -25,6 +25,11 @@ import { BackButton } from '../components/nav_buttons/BackButton';
 import { CloseButton } from '../components/nav_buttons/CloseButton';
 import { AppStackNavigation } from '../navigation/types';
 import { Category, CategoryToTypeMap, TypeOfTask } from '../types/type';
+import RedPill from "../assets/task-type-icon-pill.svg"
+import Personal from "../assets/personal.svg";
+import Home from "../assets/home.svg"
+import Financial from "../assets/financial.svg"
+import Other from "../assets/other.svg"
 
 export function TaskType() {
   const navigation = useNavigation<AppStackNavigation>();
@@ -102,11 +107,22 @@ export function TaskType() {
     }
   }
 
-  const list = {
-    'Health & Medical': ['Medication Management', 'Physician Appointments'],
-    HomeLifestyle: ['Diet', 'Activities'],
-    Personal: ['Grooming', 'Shopping & Errands', 'Family Conversations']
-  };
+  function getCategoryIcon(category: Category): JSX.Element | null{
+    switch (category) {
+      case Category.HEALTH:
+        return <RedPill />;
+      case Category.PERSONAL:
+        return <Personal />;
+      case Category.HOME:
+        return <Home />;
+      case Category.FINANCIAL:
+        return <Financial />;
+      case Category.OTHER:
+        return <Other />;
+      default:
+        return null
+    }
+  }
 
   function getCategoryTitle(item: TypeOfTask): string {
     const category = TypeToCategoryMap[item];
@@ -153,17 +169,18 @@ export function TaskType() {
 
         <View className="my-2" />
 
-        <View className="flex w-[90vw] justify-between p-4">
+        <View className="flex w-[90vw] justify-between p-3">
           {selectedTypes.map((item, index) => (
             <View key={index}>
               <Text className="mx-1 p-2">{getCategoryTitle(item)}</Text>
-              <View className="w-[90vw] flex-row flex-wrap">
+              <View className="w-[100vw] flex-row flex-wrap">
                 {getCards(item).map((item2, index2) => (
                   <View
                     key={index2}
                     className="border-gray-400 bg-white m-2 h-24 w-40 items-start rounded-lg border p-2"
                     onTouchCancel={() => {}}
                   >
+                    {getCategoryIcon(TypeToCategoryMap[item])}
                     <Text>{item2}</Text>
                   </View>
                 ))}
