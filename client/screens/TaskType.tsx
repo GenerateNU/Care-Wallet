@@ -105,7 +105,7 @@ export function TaskType() {
               })
             }
           >
-            <View className="border-gray-400 bg-white flex h-24 w-40 flex-col items-start rounded-lg border p-2">
+            <View className="border-gray-400 bg-white mx-2 flex h-24 w-40 flex-col items-start rounded-lg border p-2">
               <Text className="flex-shrink flex-grow">{item}</Text>
             </View>
           </TouchableOpacity>
