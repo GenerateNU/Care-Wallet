@@ -62,7 +62,13 @@ VALUES
   ('test tile', 5, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', '2024-02-20 23:59:59', '2024-03-29 11:00:00', '2024-03-29 12:00:00', 'Schedule doctor appointment', 'INCOMPLETE', 'med_mgmt', TRUE),
   ('test tile', 5, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', '2024-02-20 23:59:59', '2024-03-29 12:00:00', '2024-03-29 13:00:00', 'Schedule doctor appointment', 'COMPLETE', 'med_mgmt', TRUE),
   ('test tile', 5, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', '2024-02-20 23:59:59', '2024-03-29 13:00:00', '2024-03-29 14:00:00', 'Schedule doctor appointment', 'INPROGRESS', 'med_mgmt', TRUE),
-  ('test tile', 5, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', '2024-02-20 23:59:59', '2024-04-04 19:00:00', '2024-04-04 23:00:00', 'Schedule doctor appointment', 'OVERDUE', 'med_mgmt', TRUE)
+  ('test tile', 5, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', '2024-02-20 23:59:59', '2024-03-29 11:00:00', '2024-03-29 12:00:00', 'Schedule doctor appointment', 'INCOMPLETE', 'med_mgmt', FALSE),
+  ('test tile', 5, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', '2024-02-20 23:59:59', '2024-03-29 12:00:00', '2024-03-29 13:00:00', 'Schedule doctor appointment', 'COMPLETE', 'med_mgmt', FALSE),
+  ('test tile', 5, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', '2024-02-20 23:59:59', '2024-03-29 13:00:00', '2024-03-29 14:00:00', 'Schedule doctor appointment', 'INPROGRESS', 'med_mgmt', FALSE),
+  ('test tile', 5, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', '2024-02-20 23:59:59', '2024-03-29 11:00:00', '2024-03-29 11:00:00', 'Schedule doctor appointment', 'TODO', 'med_mgmt', FALSE),
+  ('test tile', 5, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', '2024-02-20 23:59:59', '2024-03-29 12:00:00', '2024-03-29 13:00:00', 'Schedule doctor appointment', 'TODO', 'med_mgmt', FALSE),
+  ('test tile', 5, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', '2024-02-20 23:59:59', '2024-03-29 13:00:00', '2024-03-29 13:00:00', 'Schedule doctor appointment', 'INPROGRESS', 'med_mgmt', FALSE),
+  ('test tile', 5, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', '2024-02-20 23:59:59', '2024-03-29 19:00:00', '2024-03-29 23:00:00', 'Schedule doctor appointment', 'OVERDUE', 'med_mgmt', TRUE)
 ;
 
 INSERT INTO task_assignees (task_id, user_id, assignment_status, assigned_by, assigned_date)
