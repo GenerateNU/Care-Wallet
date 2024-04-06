@@ -105,7 +105,7 @@ export const addNewTaskMutation = () => {
   const { mutate: addTaskMutation } = useMutation({
     mutationFn: (newTask: Task) => addNewTask(newTask),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['filteredTaskList'] });
+      queryClient.invalidateQueries('filteredTaskList');
     },
     onError: (err) => {
       console.error('ERROR: Failed to Add Task. Code:', err);
@@ -127,7 +127,7 @@ export const editTaskMutation = () => {
       updatedTask: Task;
     }) => editTask(taskId, updatedTask),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['filteredTaskList'] });
+      queryClient.invalidateQueries('filteredTaskList');
     },
     onError: (err) => {
       console.error('ERROR: Failed to Edit Task. Code:', err);

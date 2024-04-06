@@ -22,7 +22,7 @@ import { CloseButton } from '../components/nav_buttons/CloseButton';
 import { AppStackNavigation } from '../navigation/types';
 import { Category, CategoryToTypeMap, TypeOfTask } from '../types/type';
 
-export default function TaskType() {
+export function TaskType() {
   const navigation = useNavigation<AppStackNavigation>();
 
   const [open, setOpen] = useState(false);
@@ -105,7 +105,7 @@ export default function TaskType() {
               })
             }
           >
-            <View className="border-gray-400 bg-white flex h-24 w-40 flex-col items-start rounded-lg border p-2">
+            <View className="border-gray-400 bg-white mx-2 flex h-24 w-40 flex-col items-start rounded-lg border p-2">
               <Text className="flex-shrink flex-grow">{item}</Text>
             </View>
           </TouchableOpacity>

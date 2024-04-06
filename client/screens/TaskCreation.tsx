@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Text, View } from 'react-native';
 
 import { RouteProp, useRoute } from '@react-navigation/native';
-import { clsx } from 'clsx';
 import {
   GestureHandlerRootView,
   ScrollView
@@ -10,24 +9,11 @@ import {
 
 import MedicationBg from '../assets/task-creation/big-bg-med.svg';
 import { BackButton } from '../components/nav_buttons/BackButton';
-import { AddressComponent } from '../components/task_creation/AddressComponent';
-import { RadioGroup } from '../components/task_creation/RadioGroup';
-import { TextInputLine } from '../components/task_creation/TextInputLine';
-import { TextInputParagraph } from '../components/task_creation/TextInputParagraph';
-import { TaskCreationJson } from '../types/task-creation-json';
-
-const TaskTitleToColorMap: { [key: string]: string } = {
-  'Medication Management': 'carewallet-pink',
-  'Physician Appointments': 'carewallet-pink',
-  Grooming: 'carewallet-purple',
-  'Family Conversations': 'carewallet-purple',
-  'Shopping & Errands': 'carewallet-purple',
-  'Pay Bills': 'carewallet-purple',
-  Diet: 'carewallet-yellow',
-  Activities: 'carewallet-yellow',
-  'Health Insurance': 'carewallet-green',
-  Other: 'carewallet-coral'
-};
+import { AddressComponent } from '../components/task_creation/AddressComponent.tsx';
+import { RadioGroup } from '../components/task_creation/RadioGroup.tsx';
+import { TextInputLine } from '../components/task_creation/TextInputLine.tsx';
+import { TextInputParagraph } from '../components/task_creation/TextInputParagraph.tsx';
+import { TaskCreationJson } from '../types/task-creation-json.tsx';
 
 type ParamList = {
   mt: {
@@ -35,7 +21,7 @@ type ParamList = {
   };
 };
 
-export default function TaskCreation() {
+export function TaskCreation() {
   const route = useRoute<RouteProp<ParamList, 'mt'>>();
   const { taskType } = route.params;
 
@@ -53,6 +39,7 @@ export default function TaskCreation() {
   )?.Body;
 
   const compList: { key: string; value: string }[] = [];
+
   body?.forEach((item) => {
     Object.entries(item).forEach(([key, value]) => {
       compList.push({ key, value });
@@ -60,6 +47,7 @@ export default function TaskCreation() {
   });
 
   const [values, setValues] = useState<{ [key: string]: string }>({});
+
   const handleChange = (key: string, value: string) => {
     setValues((prevValues) => ({
       ...prevValues,
@@ -67,10 +55,6 @@ export default function TaskCreation() {
     }));
     console.log('Current values:', values);
   };
-
-  const themeColor = TaskTitleToColorMap[header as string];
-  console.log('Header:', header);
-  console.log('Theme color:', themeColor);
 
   return (
     <GestureHandlerRootView className="relative">
@@ -85,12 +69,7 @@ export default function TaskCreation() {
       <View className="absolute top-16 w-full border-t border-carewallet-gray" />
       <MedicationBg className="" />
       <ScrollView className="absolute top-20 mt-3 min-h-full min-w-full">
-        <Text
-          className={clsx(
-            'mx-5 font-carewallet-manrope-bold text-2xl font-bold',
-            themeColor === '' ? '' : ''
-          )}
-        >
+        <Text className="mx-5 font-carewallet-manrope-bold text-2xl font-bold">
           {header}
         </Text>
         {compList.map((item, index) => (

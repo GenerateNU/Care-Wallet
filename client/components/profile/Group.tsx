@@ -7,7 +7,6 @@ import {
   View
 } from 'react-native';
 
-import { useCareWalletContext } from '../../contexts/CareWalletContext';
 import { GroupRole, Role } from '../../types/group';
 import { User } from '../../types/user';
 
@@ -28,7 +27,6 @@ export function Group({
   setActiveUser,
   activeUser
 }: GroupProps) {
-  const { user: signedInUser } = useCareWalletContext();
   const [canPress, setCanPress] = useState(true);
 
   if (rolesAreLoading || usersAreLoading) {
@@ -60,7 +58,6 @@ export function Group({
         data={users.filter(
           (user) =>
             user.user_id !== activeUser &&
-            user.user_id !== signedInUser.userID &&
             user.user_id !==
               (roles.find((role) => role.role === Role.PATIENT)?.user_id ?? '')
         )}

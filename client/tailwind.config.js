@@ -11,18 +11,14 @@ module.exports = {
       'carewallet-blue': '#1A56C4',
       'carewallet-green': '#4DB8A6',
       'carewallet-coral': '#FF6258',
-      'carewallet-yellow': '#FF9900',
+      'carewallet-yellow': '#FFD9900',
       'carewallet-purple': '#990099',
       'carewallet-pink': '#FC2C51'
     },
-
     fontFamily: {
       'carewallet-manrope': ['Manrope_400Regular'],
       'carewallet-manrope-semibold': ['Manrope_600SemiBold'],
-      'carewallet-manrope-bold': ['Manrope_700Bold'],
-      'carewallet-montserrat': ['Montserrat_400Regular'],
-      'carewallet-montserrat-semibold': ['Montserrat_600SemiBold'],
-      'carewallet-montserrat-bold': ['Montserrat_700Bold']
+      'carewallet-manrope-bold': ['Manrope_700Bold']
     }
   },
   plugins: []

@@ -40,7 +40,7 @@ export const TaskCreationJson = {
     {
       Header: 'Pay Bills',
       Body: [
-        { 'Bill Receiver Name': 'TextInputLine' },
+        { 'Bill Reveicer Name': 'TextInputLine' },
         { Address: '' },
         { 'Proxy Agent': 'TextInputLine' }
       ]

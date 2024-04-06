@@ -30,8 +30,8 @@ func UploadFile(pool *pgxpool.Pool, file models.File, data *multipart.FileHeader
 	}
 
 	// Insert file into database
-	err := pool.QueryRow(context.Background(), "INSERT INTO files (file_name, group_id, upload_by, upload_date, file_size, notes, label_name) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING file_id;",
-		file.FileName, file.GroupID, file.UploadBy, file.UploadDate, data.Size, file.Notes, file.LabelName).Scan(&file.FileID)
+	err := pool.QueryRow(context.Background(), "INSERT INTO files (file_name, group_id, upload_by, upload_date, file_size) VALUES ($1, $2, $3, $4, $5) RETURNING file_id;",
+		file.FileName, file.GroupID, file.UploadBy, file.UploadDate, data.Size).Scan(&file.FileID)
 	if err != nil {
 		fmt.Println(err.Error())
 		return err

@@ -6,14 +6,12 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 
 import Bell from '../assets/bottom-nav/bell.svg';
 import Calendar from '../assets/bottom-nav/calendar.svg';
-import HomeIcon from '../assets/bottom-nav/home.svg';
+import Home from '../assets/bottom-nav/home.svg';
 import User from '../assets/bottom-nav/user.svg';
 import TimelineCalendarScreen from '../screens/Calendar';
-import FileUploadScreen from '../screens/FileUpload';
-import Home from '../screens/Home';
+import MedicationList from '../screens/MedicationList';
 import PatientView from '../screens/Profile/PatientView';
 import Profile from '../screens/Profile/Profile';
-import Settings from '../screens/Profile/Settings';
 import SingleTaskScreen from '../screens/SingleTask';
 import TaskList from '../screens/TaskList';
 import { AppStack } from './types';
@@ -36,10 +34,10 @@ export function AppStackBottomTabNavigator() {
         name="Landing"
         options={{
           headerShown: false,
-          tabBarIcon: ({ color }) => <HomeIcon color={color} />,
+          tabBarIcon: ({ color }) => <Home color={color} />,
           tabBarLabel: () => <Text></Text>
         }}
-        component={Home}
+        component={MedicationList}
       />
       <AppStackBottomTab.Screen
         name="CalendarContainer"
@@ -57,7 +55,7 @@ export function AppStackBottomTabNavigator() {
           tabBarIcon: ({ color }) => <Bell color={color} />,
           tabBarLabel: () => <Text></Text>
         }}
-        component={Home}
+        component={MedicationList}
       />
       <AppStackBottomTab.Screen
         name="ProfileScreens"
@@ -84,16 +82,6 @@ export function ProfileNavigation() {
         name="PatientView"
         options={{ headerShown: false }}
         component={PatientView}
-      />
-      <AppStack.Screen
-        name="Settings"
-        options={{ headerShown: false }}
-        component={Settings}
-      />
-      <AppStack.Screen
-        name="FileUploadScreen"
-        options={{ headerShown: false }}
-        component={FileUploadScreen}
       />
     </AppStack.Navigator>
   );

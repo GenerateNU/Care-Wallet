@@ -5,11 +5,9 @@ export function AddressComponent() {
   return (
     <View>
       <View className="m-4 mb-0">
-        <Text className="mb-2 font-carewallet-montserrat-semibold text-[14px]">
-          STREET ADDRESS
-        </Text>
+        <Text className="mb-2">Street Address</Text>
         <TextInput
-          className="w-full rounded-md border border-carewallet-gray bg-carewallet-white px-4 py-2"
+          className="border-gray-300 w-full rounded-md border px-4 py-2"
           placeholder={'Fill in blank'}
           autoComplete="street-address"
         />
@@ -17,20 +15,16 @@ export function AddressComponent() {
 
       <View className="m-4 mb-0 flex flex-row">
         <View className="w-[49%]">
-          <Text className="mb-2 font-carewallet-montserrat-semibold text-[14px]">
-            CITY
-          </Text>
+          <Text className="mb-2">City</Text>
           <TextInput
-            className="border-gray-300 w-full rounded-md border border-carewallet-gray bg-carewallet-white px-4 py-2"
+            className="border-gray-300 w-full rounded-md border px-4 py-2"
             placeholder={'Fill in blank'}
           />
         </View>
         <View className="ml-2 w-[49%]">
-          <Text className="mb-2 font-carewallet-montserrat-semibold text-[14px]">
-            STATE
-          </Text>
+          <Text className="mb-2">State</Text>
           <TextInput
-            className="border-gray-300 w-full rounded-md border border-carewallet-gray bg-carewallet-white px-4 py-2"
+            className="border-gray-300 w-full rounded-md border px-4 py-2"
             placeholder={'Fill in blank'}
           />
         </View>
@@ -38,22 +32,18 @@ export function AddressComponent() {
 
       <View className="m-4 mb-0 flex flex-row">
         <View className="w-[49%]">
-          <Text className="mb-2 font-carewallet-montserrat-semibold text-[14px]">
-            ZIP CODE
-          </Text>
+          <Text className="mb-2">Zip Code</Text>
           <TextInput
-            className="border-gray-300 w-full rounded-md border border-carewallet-gray bg-carewallet-white px-4 py-2"
+            className="border-gray-300 w-full rounded-md border px-4 py-2"
             placeholder={'Fill in blank'}
             autoComplete="postal-code"
             keyboardType="numeric"
           />
         </View>
         <View className="ml-2 w-[49%]">
-          <Text className="mb-2 font-carewallet-montserrat-semibold text-[14px]">
-            PHONE NUMBER
-          </Text>
+          <Text className="mb-2">Phone Number</Text>
           <TextInput
-            className="border-gray-300 w-full rounded-md border border-carewallet-gray bg-carewallet-white px-4 py-2"
+            className="border-gray-300 w-full rounded-md border px-4 py-2"
             placeholder={'Fill in blank'}
             autoComplete="tel"
             keyboardType="phone-pad"
