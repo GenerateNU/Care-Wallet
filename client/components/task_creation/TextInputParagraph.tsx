@@ -21,7 +21,7 @@ export function TextInputParagraph({
 
   return (
     <View className="m-4 mb-0">
-      <Text className="mb-2 font-carewallet-montserrat-semibold text-[14px]">
+      <Text className="mb-2 font-carewallet-montserrat-semibold">
         {title.toUpperCase()}
       </Text>
       <TextInput

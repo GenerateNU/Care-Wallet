@@ -45,11 +45,10 @@ export default function Profile() {
   }
 
   return (
-    <View className="flex h-[100vh] flex-1 flex-col bg-carewallet-white/80">
+    <View className="flex h-[100vh] flex-1 flex-col bg-carewallet-white/25">
       <Header
         user={users.find((user) => user.user_id === activeUser)}
         role={roles.find((role) => role.user_id === activeUser)}
-        onPress={() => setActiveUser(signedInUser.userID)}
       />
       <View className="h-[70vh] pt-10">
         <Group
@@ -71,32 +70,23 @@ export default function Profile() {
         >
           <UserTaskStatusCard userID={activeUser} />
         </View>
-        {signedInUser.userID === activeUser && (
-          <>
-            <View className="mb-5 items-center">
-              <CircleCard
-                Icon={<Folder />}
-                ButtonText="View Patient Information"
-                onTouchEnd={() => navigation.navigate('PatientView')}
-              />
-            </View>
-            <View className="mb-auto">
-              <View
-                className="h-10 flex-1 items-center"
-                onTouchEnd={() => navigation.navigate('Settings')}
-              >
-                <CircleCard Icon={<Settings />} ButtonText="Settings" />
-              </View>
-            </View>
-            <View className="mb-5 items-center">
-              <CircleCard
-                Icon={<RightArrow />}
-                ButtonText="Log Out"
-                onTouchEnd={() => signOutMutation()}
-              />
-            </View>
-          </>
-        )}
+        <View className="mb-5 items-center">
+          <CircleCard
+            Icon={<Folder />}
+            ButtonText="View Patient Information"
+            onTouchEnd={() => navigation.navigate('PatientView')}
+          />
+        </View>
+        <View className="mb-auto flex-1 items-center">
+          <CircleCard Icon={<Settings />} ButtonText="Settings" />
+        </View>
+        <View className="mb-5 items-center">
+          <CircleCard
+            Icon={<RightArrow />}
+            ButtonText="Log Out"
+            onTouchEnd={() => signOutMutation()}
+          />
+        </View>
       </View>
     </View>
   );

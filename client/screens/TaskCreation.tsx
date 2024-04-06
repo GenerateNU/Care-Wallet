@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Text, View } from 'react-native';
 
 import { RouteProp, useRoute } from '@react-navigation/native';
-import { clsx } from 'clsx';
 import {
   GestureHandlerRootView,
   ScrollView
@@ -39,7 +38,7 @@ type ParamList = {
   };
 };
 
-export default function TaskCreation() {
+export function TaskCreation() {
   const route = useRoute<RouteProp<ParamList, 'mt'>>();
   const { taskType } = route.params;
 
@@ -111,12 +110,7 @@ export default function TaskCreation() {
       <View className="absolute top-16 w-full border-t border-carewallet-gray" />
       {renderBackground(header ?? '')}
       <ScrollView className="absolute top-20 mt-3 min-h-full min-w-full">
-        <Text
-          className={clsx(
-            'mx-5 font-carewallet-manrope-bold text-2xl font-bold',
-            themeColor === '' ? '' : ''
-          )}
-        >
+        <Text className="mx-5 font-carewallet-manrope-bold text-2xl font-bold">
           {header}
         </Text>
         {compList.map((item, index) => (

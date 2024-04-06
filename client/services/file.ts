@@ -13,16 +13,12 @@ interface UploadFileProps {
   file: DocumentPickerAsset;
   userId: string;
   groupId: number;
-  label: string;
-  notes: string;
 }
 
 const uploadFile = async ({
   file,
   userId,
-  groupId,
-  label,
-  notes
+  groupId
 }: UploadFileProps): Promise<FileSystemUploadResult | undefined> => {
   const uploadResumable = createUploadTask(
     `${api_url}/files/upload`,
@@ -33,9 +29,7 @@ const uploadFile = async ({
       fieldName: 'file_data',
       parameters: {
         upload_by: userId,
-        group_id: groupId.toString(),
-        label_name: label,
-        notes: notes
+        group_id: groupId.toString()
       }
     }
   );

@@ -33,10 +33,6 @@ definitions:
         type: integer
       group_id:
         type: integer
-      label_name:
-        type: string
-      notes:
-        type: string
       task_id:
         type: integer
       upload_by:
@@ -60,6 +56,13 @@ definitions:
       label_color:
         type: string
       label_name:
+        type: string
+    type: object
+  models.Medication:
+    properties:
+      medication_id:
+        type: integer
+      medication_name:
         type: string
     type: object
   models.Role:
@@ -234,15 +237,6 @@ paths:
         name: group_id
         required: true
         type: integer
-      - description: Notes for the file
-        in: formData
-        name: notes
-        required: true
-        type: string
-      - description: Label name for the file
-        in: formData
-        name: label_name
-        type: string
       responses:
         "200":
           description: OK
@@ -554,6 +548,40 @@ paths:
       summary: Retrieve a group id given a user id
       tags:
       - group
+  /medications:
+    get:
+      description: get all user medications
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Medication'
+            type: array
+      summary: Get All Meds
+      tags:
+      - medications
+    post:
+      description: add a medication to a users medlist
+      parameters:
+      - description: a medication
+        in: body
+        name: _
+        required: true
+        schema:
+          $ref: '#/definitions/models.Medication'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Medication'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: add a medication
+      tags:
+      - medications
   /tasks:
     post:
       description: Create a new task

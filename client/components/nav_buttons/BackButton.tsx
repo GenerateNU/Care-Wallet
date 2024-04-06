@@ -11,9 +11,9 @@ export function BackButton() {
 
   return (
     <IconButton
-      className="align-center m-2 flex h-[50px] w-[52px] justify-center rounded-xl border border-carewallet-lightgray bg-carewallet-white"
+      className="align-center m-2 flex h-[50px] w-[52px] justify-center rounded-xl bg-carewallet-gray"
       mode="contained"
-      icon={() => <ArrowLeft fill="blue" />}
+      icon={({ color }) => <ArrowLeft fill={color} />}
       onPress={() => navigation.goBack()}
     />
   );
