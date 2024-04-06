@@ -45,7 +45,9 @@ export function RadioGroup({ title, options, onChange }: RadioGroupProps) {
 
   return (
     <View className="m-4 mb-0">
-      <Text className="mb-2">{title}</Text>
+      <Text className="mb-2 font-carewallet-montserrat-semibold">
+        {title.toUpperCase()}
+      </Text>
       <View className="flex flex-row justify-between">
         {options.map((option, index) => {
           return (
@@ -57,7 +59,7 @@ export function RadioGroup({ title, options, onChange }: RadioGroupProps) {
               }}
             >
               {renderIcon(option)}
-              <Text className="font-carewallet-manrope-semibold text-[16px]">
+              <Text className="font-carewallet-montserrat-semibold text-[16px]">
                 {option}
               </Text>
             </TouchableOpacity>
