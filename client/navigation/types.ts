@@ -18,7 +18,7 @@ export type AppStackParamList = {
   CalendarTopNav: undefined;
   TaskCreation: { taskType: string };
   AddTaskDetails: {
-    /* Define any parameters you want to pass */
+    taskCreation: string;
   };
 };
 

@@ -57,12 +57,17 @@ export function TaskCreation() {
     return Object.values(values).every((value) => value.trim() !== '');
   };
 
+  // Function to export user-input values to task-creation json
+  const exportValuesAsJSON = () => {
+    return JSON.stringify(values);
+  };
+
   // Function to handle forward button click
   const handleForwardButtonClick = () => {
     if (allFieldsFilled()) {
-      // Navigate to the AddTaskDetails screen with the necessary parameters
+      // Navigate to the AddTaskDetails screen with the task creation JSON
       navigation.navigate('AddTaskDetails', {
-        /* any parameters you want to pass */
+        taskCreation: exportValuesAsJSON()
       });
     } else {
       console.log('Please fill all fields before proceeding.');
