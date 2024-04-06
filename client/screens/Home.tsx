@@ -37,14 +37,6 @@ export default function Home() {
             <Text className="py-2 pl-2 font-carewallet-manrope-semibold text-lg">
               {`${moment().day(new Date().getDay()).format('dddd')}, ${moment().format('MMMM Do')} - Today`}
             </Text>
-            <View
-              className="ml-auto mr-2 h-9 w-9 items-center justify-center rounded-full border  border-carewallet-lightgray bg-carewallet-white"
-              onTouchEnd={() => navigation.navigate('TaskType')}
-            >
-              <Text className="font-carewallet-montserrat text-4xl text-carewallet-gray">
-                +
-              </Text>
-            </View>
           </View>
 
           {taskByUser &&
