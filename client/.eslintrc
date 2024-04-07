@@ -39,6 +39,8 @@
         "message": "Import/export only modules you need"
       }
     ],
+    // Enforces no named deafult export
+    "import/no-named-as-default": 0,
     // Enforces no default export
     "import/no-default-export": "error",
     // Enforces react not being added to files where it isnt needed

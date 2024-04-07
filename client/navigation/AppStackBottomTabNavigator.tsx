@@ -2,7 +2,6 @@ import React from 'react';
 import { Text } from 'react-native';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
 import Bell from '../assets/bottom-nav/bell.svg';
 import Calendar from '../assets/bottom-nav/calendar.svg';
@@ -17,11 +16,11 @@ import TaskList from '../screens/TaskList';
 import { AppStack } from './types';
 
 const AppStackBottomTab = createBottomTabNavigator();
-const TopTab = createMaterialTopTabNavigator();
 
 export function AppStackBottomTabNavigator() {
   return (
     <AppStackBottomTab.Navigator
+      safeAreaInsets={{ top: 10 }}
       screenOptions={{
         tabBarActiveTintColor: 'white',
         tabBarInactiveTintColor: '#D9D9D9',
@@ -91,9 +90,14 @@ function CalendarNavigationContainer() {
   return (
     <AppStack.Navigator>
       <AppStack.Screen
-        name="CalendarTopNav"
+        name="Calendar"
         options={{ headerShown: false }}
-        component={CalendarTopNav}
+        component={TimelineCalendarScreen}
+      />
+      <AppStack.Screen
+        name="TaskList"
+        options={{ headerShown: false }}
+        component={TaskList}
       />
       <AppStack.Screen
         name="TaskDisplay"
@@ -101,14 +105,5 @@ function CalendarNavigationContainer() {
         component={SingleTaskScreen}
       />
     </AppStack.Navigator>
-  );
-}
-
-function CalendarTopNav() {
-  return (
-    <TopTab.Navigator>
-      <TopTab.Screen name="Calendar" component={TimelineCalendarScreen} />
-      <TopTab.Screen name="TaskList" component={TaskList} />
-    </TopTab.Navigator>
   );
 }

@@ -1,6 +1,11 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ['./App.tsx', './components/**/*.tsx', './screens/**/*.tsx'],
+  content: [
+    './App.tsx',
+    './components/**/*.tsx',
+    './screens/**/*.tsx',
+    './utils/**/*.tsx'
+  ],
   theme: {
     colors: {
       'carewallet-white': '#FFFFFF',
@@ -11,9 +16,10 @@ module.exports = {
       'carewallet-blue': '#1A56C4',
       'carewallet-green': '#4DB8A6',
       'carewallet-coral': '#FF6258',
-      'carewallet-yellow': '#FF9900',
+      'carewallet-yellow': '#FFD910',
       'carewallet-purple': '#990099',
-      'carewallet-pink': '#FC2C51'
+      'carewallet-pink': '#FC2C51',
+      'carewallet-orange': '#FF8310'
     },
     fontFamily: {
       'carewallet-manrope': ['Manrope_400Regular'],
