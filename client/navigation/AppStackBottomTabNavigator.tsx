@@ -54,7 +54,7 @@ export function AppStackBottomTabNavigator() {
       <AppStackBottomTab.Screen
         name="Notifications"
         options={{
-          headerShown: true,
+          headerShown: false,
           tabBarIcon: ({ color }) => <Bell color={color} />,
           tabBarLabel: () => <Text></Text>
         }}

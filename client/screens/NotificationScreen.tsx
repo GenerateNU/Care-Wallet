@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Pressable, ScrollView, View } from 'react-native';
+import { Pressable, ScrollView, Text, View } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -78,7 +78,13 @@ export default function NotificationScreen() {
         onScrollBeginDrag={() => setCanPress(false)}
         onScrollEndDrag={() => setCanPress(true)}
       >
-        <View>
+        <View className="h-[144px] w-[390px] gap-0 border-t border-carewallet-yellow border-opacity-10 p-0 opacity-0">
+          <Text className="bg-white text-blue-500 p-4 font-bold">
+            {'Notifications'}
+          </Text>
+        </View>
+
+        <View className="bg-carewallet-yellow">
           {dueSoonTasks.map((task, index) => (
             <Pressable
               key={index + task.task_id}

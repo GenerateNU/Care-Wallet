@@ -46,14 +46,35 @@ export function NotificationCard({
     }
   };
 
+  /**  <Text className="mt-3 flex flex-row space-x-10">
+  {descriptionText()}
+  </Text>
+  */
+
   return (
-    <View className="bg-white mb-6 rounded-lg border border-carewallet-black p-4">
-      <View className="mb-2 flex flex-col justify-between">
-        <Text className="self-start text-xl">{type_to_text()}</Text>
-        <Text className="mt-3 flex flex-row space-x-10">
+    <View className="mb-6 flex rounded-lg border border-carewallet-lightgray bg-carewallet-white p-10">
+      <View className="flex w-full flex-col justify-between">
+        <Text className="bg-carewallet-yellow font-carewallet-montserrat-bold">
+          {type_to_text()}
+        </Text>
+        <Text className="text-carewallet-blackr mb-2 bg-carewallet-yellow font-carewallet-manrope-bold">
           {descriptionText()}
         </Text>
       </View>
     </View>
   );
 }
+
+/**
+ *   return (
+    <View className="bg-white mb-6 rounded-lg border border-carewallet-yellow p-10">
+      <View className="mb-2 flex flex-col justify-between">
+        <Text className="self-start text-xl">{type_to_text()}</Text>
+        <Text className="mb-2 font-carewallet-manrope-bold text-carewallet-blackr">
+          {descriptionText()}
+        </Text>
+      </View>
+    </View>
+  );
+
+ */
