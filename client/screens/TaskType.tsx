@@ -54,7 +54,7 @@ export function TaskType() {
     value: filter
   }));
 
-  const bottomSheetSnapPoints = useMemo(() => ['60%'], []);
+  const bottomSheetSnapPoints = useMemo(() => ['50%'], []);
 
   const bottomSheetRef = useRef<BottomSheet>(null);
 
@@ -143,7 +143,7 @@ export function TaskType() {
 
   return (
     <GestureHandlerRootView className="relative">
-      <ScrollView>
+      <ScrollView className="h-full">
         <View className="relative flex w-full flex-row items-center bg-carewallet-white">
           <BackButton />
           <Text
