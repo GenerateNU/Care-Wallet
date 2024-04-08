@@ -16,12 +16,12 @@ type PgModel struct {
 func CareGroups(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 	careGroups := v1.Group("")
 	{
-		careGroups.POST("/create/:groupName", c.CreateCareGroups)
+		careGroups.POST("/create/:groupName", c.createCareGroups)
 
 		group := v1.Group("/:groupId")
 		{
-			group.GET("", c.GetGroupByGroupId)
-			group.POST("add", c.AddUserCareGroup)
+			group.GET("", c.getGroupByGroupId)
+			group.POST("add", c.addUserCareGroup)
 		}
 
 	}
@@ -39,9 +39,9 @@ func CareGroups(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 //
 //	@success		200			{object}	int
 //	@router			/group/create/{groupName} [post]
-func (pg *PgModel) CreateCareGroups(c *gin.Context) {
+func (pg *PgModel) createCareGroups(c *gin.Context) {
 	groupName := c.Param("groupName")
-	careGroups, err := CreateCareGroupsFromDB(pg.Conn, groupName)
+	careGroups, err := createCareGroupsFromDB(pg.Conn, groupName)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
@@ -68,7 +68,7 @@ type GroupMember struct {
 //	@success		200			{object}	int
 //	@failure		400			{object}	string
 //	@router			/group/{groupId}/add [post]
-func (pg *PgModel) AddUserCareGroup(c *gin.Context) {
+func (pg *PgModel) addUserCareGroup(c *gin.Context) {
 	var requestBody GroupMember
 	groupId := c.Param("groupId")
 
@@ -78,7 +78,7 @@ func (pg *PgModel) AddUserCareGroup(c *gin.Context) {
 		return
 	}
 
-	id, err := AddUserCareGroupFromDB(pg.Conn, groupId, requestBody)
+	id, err := addUserCareGroupFromDB(pg.Conn, groupId, requestBody)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
@@ -100,9 +100,9 @@ func (pg *PgModel) AddUserCareGroup(c *gin.Context) {
 //	@success		200		{object}	models.CareGroup
 //	@failure		400		{object}	string
 //	@router			/group/{groupId} [get]
-func (pg *PgModel) GetGroupByGroupId(c *gin.Context) {
+func (pg *PgModel) getGroupByGroupId(c *gin.Context) {
 	groupId := c.Param("groupId")
-	group, err := GetGroupFromDB(pg.Conn, groupId)
+	group, err := getGroupFromDB(pg.Conn, groupId)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())

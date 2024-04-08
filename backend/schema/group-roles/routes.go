@@ -15,26 +15,18 @@ type PgModel struct {
 func GroupRolesGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 	groupRoles := v1.Group("")
 	{
-		groupRoles.GET("/:groupId/roles", c.GetGroupRoles)
+		groupRoles.GET("/:groupId/roles", c.getGroupRoles)
 
 		group := v1.Group(":groupId")
 		{
 			user := group.Group(":uid")
 			{
-				user.DELETE("", c.RemoveUserFromGroup)
-				user.PATCH(":role", c.ChangeUserGroupRole)
-				user.PUT(":role", c.AddUserToGroup)
+				user.DELETE("", c.removeUserFromGroup)
+				user.PATCH(":role", c.changeUserGroupRole)
+				user.PUT(":role", c.addUserToGroup)
 			}
 		}
-
-		member := v1.Group("member")
-		{
-			user := member.Group(":uid")
-			{
-				user.GET("", c.GetGroupByUID)
-			}
-		}
-
+		groupRoles.GET("/member/:uid", c.getGroupByUID)
 	}
 
 	return groupRoles
@@ -53,7 +45,7 @@ func GroupRolesGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 //	@success		200		{object}	string
 //	@failure		400		{object}	string
 //	@router			/group/{groupId}/{uid}/{role} [patch]
-func (pg *PgModel) ChangeUserGroupRole(c *gin.Context) {
+func (pg *PgModel) changeUserGroupRole(c *gin.Context) {
 	gid := c.Param("groupId")
 	gidInt, err := strconv.Atoi(gid)
 	uid := c.Param("uid")
@@ -64,7 +56,7 @@ func (pg *PgModel) ChangeUserGroupRole(c *gin.Context) {
 		return
 	}
 
-	err = ChangeUserGroupRoleInDB(pg.Conn, gidInt, uid, role)
+	err = changeUserGroupRoleInDB(pg.Conn, gidInt, uid, role)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
@@ -87,7 +79,7 @@ func (pg *PgModel) ChangeUserGroupRole(c *gin.Context) {
 //	@success		200		{object}	models.GroupRole
 //	@failure		400		{object}	string
 //	@router			/group/{groupId}/{uid}/{role} [put]
-func (pg *PgModel) AddUserToGroup(c *gin.Context) {
+func (pg *PgModel) addUserToGroup(c *gin.Context) {
 	gid := c.Param("groupId")
 	gidInt, err := strconv.Atoi(gid)
 	uid := c.Param("uid")
@@ -98,7 +90,7 @@ func (pg *PgModel) AddUserToGroup(c *gin.Context) {
 		return
 	}
 
-	groupRole, err := AddUserToGroupInDB(pg.Conn, gidInt, uid, role)
+	groupRole, err := addUserToGroupInDB(pg.Conn, gidInt, uid, role)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
@@ -120,7 +112,7 @@ func (pg *PgModel) AddUserToGroup(c *gin.Context) {
 //	@success		200		{object}	models.GroupRole
 //	@failure		400		{object}	string
 //	@router			/group/{groupId}/{uid} [delete]
-func (pg *PgModel) RemoveUserFromGroup(c *gin.Context) {
+func (pg *PgModel) removeUserFromGroup(c *gin.Context) {
 	gid := c.Param("groupId")
 	gidInt, err := strconv.Atoi(gid)
 	uid := c.Param("uid")
@@ -130,7 +122,7 @@ func (pg *PgModel) RemoveUserFromGroup(c *gin.Context) {
 		return
 	}
 
-	err = RemoveUserFromGroupInDB(pg.Conn, gidInt, uid)
+	err = removeUserFromGroupInDB(pg.Conn, gidInt, uid)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
@@ -151,9 +143,9 @@ func (pg *PgModel) RemoveUserFromGroup(c *gin.Context) {
 //	@success		200	{object}	string
 //	@failure		400	{object}	string
 //	@router			/group/member/{uid} [get]
-func (pg *PgModel) GetGroupByUID(c *gin.Context) {
+func (pg *PgModel) getGroupByUID(c *gin.Context) {
 	uid := c.Param("uid")
-	groupRole, err := GetGroupMemberByUIDFromDB(pg.Conn, uid)
+	groupRole, err := getGroupMemberByUIDFromDB(pg.Conn, uid)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
@@ -173,7 +165,7 @@ func (pg *PgModel) GetGroupByUID(c *gin.Context) {
 //
 //	@success		200		{array}	models.GroupRole
 //	@router			/group/{groupId}/roles [get]
-func (pg *PgModel) GetGroupRoles(c *gin.Context) {
+func (pg *PgModel) getGroupRoles(c *gin.Context) {
 	gid := c.Param("groupId")
 	gidInt, err := strconv.Atoi(gid)
 
@@ -182,7 +174,7 @@ func (pg *PgModel) GetGroupRoles(c *gin.Context) {
 		return
 	}
 
-	careGroups, err := GetAllGroupRolesFromDB(pg.Conn, gidInt)
+	careGroups, err := getAllGroupRolesFromDB(pg.Conn, gidInt)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
