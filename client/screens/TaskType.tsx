@@ -13,7 +13,7 @@ import BottomSheet, {
 } from '@gorhom/bottom-sheet';
 import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
 import { useNavigation } from '@react-navigation/native';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {
   GestureHandlerRootView,

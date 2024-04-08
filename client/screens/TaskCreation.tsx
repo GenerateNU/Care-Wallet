@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SafeAreaView, Text, View } from 'react-native';
 
 import { RouteProp, useRoute } from '@react-navigation/native';
+import { clsx } from 'clsx';
 import {
   GestureHandlerRootView,
   ScrollView
@@ -20,16 +21,16 @@ import { TextInputParagraph } from '../components/task_creation/TextInputParagra
 import { TaskCreationJson } from '../types/task-creation-json';
 
 const TaskTitleToColorMap: { [key: string]: string } = {
-  'Medication Management': 'carewallet-pink',
-  'Physician Appointments': 'carewallet-pink',
-  Grooming: 'carewallet-purple',
-  'Family Conversations': 'carewallet-purple',
-  'Shopping & Errands': 'carewallet-purple',
-  'Pay Bills': 'carewallet-purple',
-  Diet: 'carewallet-yellow',
-  Activities: 'carewallet-yellow',
-  'Health Insurance': 'carewallet-green',
-  Other: 'carewallet-coral'
+  'Medication Management': 'text-carewallet-pink',
+  'Physician Appointments': 'text-carewallet-pink',
+  Grooming: 'text-carewallet-purple',
+  'Family Conversations': 'text-carewallet-purple',
+  'Shopping & Errands': 'text-carewallet-purple',
+  'Pay Bills': 'text-carewallet-purple',
+  Diet: 'text-carewallet-yellow',
+  Activities: 'text-carewallet-yellow',
+  'Health Insurance': 'text-carewallet-green',
+  Other: 'text-carewallet-coral'
 };
 
 type ParamList = {
@@ -41,10 +42,17 @@ type ParamList = {
 export default function TaskCreation() {
   const route = useRoute<RouteProp<ParamList, 'mt'>>();
   const { taskType } = route.params;
-
   const header = TaskCreationJson.types.find((t) =>
     taskType.includes(t.Header)
   )?.Header;
+
+  const [themeColor, setThemeColor] = useState(
+    TaskTitleToColorMap[header as string]
+  );
+
+  useEffect(() => {
+    setThemeColor(TaskTitleToColorMap[header as string]);
+  }, [header]);
 
   const renderBackground = (header: string) => {
     switch (header) {
@@ -84,16 +92,13 @@ export default function TaskCreation() {
     });
   });
 
-  const [values, setValues] = useState<{ [key: string]: string }>({});
+  const [, setValues] = useState<{ [key: string]: string }>({});
   const handleChange = (key: string, value: string) => {
     setValues((prevValues) => ({
       ...prevValues,
       [key]: value
     }));
-    console.log('Current values:', values);
   };
-
-  const themeColor = TaskTitleToColorMap[header as string];
 
   return (
     <SafeAreaView className="flex-1 bg-carewallet-white">
@@ -104,10 +109,13 @@ export default function TaskCreation() {
             Step 2 of 3
           </Text>
         </View>
-        {renderBackground(header ?? '')}
-        <ScrollView className="absolute top-20 mt-3 min-h-full min-w-full">
+        <View className="absolute -z-20">{renderBackground(header ?? '')}</View>
+        <ScrollView className="mt-3 min-h-full min-w-full">
           <Text
-            className={`mx-5 text-${themeColor} font-carewallet-manrope-bold text-2xl font-bold`}
+            className={clsx(
+              'mx-5 font-carewallet-manrope-bold text-2xl',
+              themeColor
+            )}
           >
             {header}
           </Text>
