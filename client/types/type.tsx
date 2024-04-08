@@ -5,15 +5,16 @@ import HealthMedical from '../assets/calendar/health&medical.svg';
 import HomeLifestyle from '../assets/calendar/home&lifestyle.svg';
 import Personal from '../assets/calendar/personal.svg';
 
+// the order of these matter
 export enum TypeOfTask {
   MEDICATION = 'Medication Management',
-  APPOINTMENTS = 'Physician Appointments',
+  DIET = 'Diet',
   GROOMING = 'Grooming',
   CONVERSATIONS = 'Family Conversations',
+  APPOINTMENTS = 'Physician Appointments',
+  ACTIVITIES = 'Activities',
   ERRANDS = 'Shopping & Errands',
   BILLS = 'Pay Bills',
-  DIET = 'Diet',
-  ACTIVITIES = 'Activities',
   INSURANCE = 'Health Insurance',
   OTHER = 'Other'
 }

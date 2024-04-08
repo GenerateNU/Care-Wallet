@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View } from 'react-native';
+import { SafeAreaView, Text, View } from 'react-native';
 
 import { RouteProp, useRoute } from '@react-navigation/native';
 import {
@@ -98,46 +98,48 @@ export function TaskCreation() {
   console.log('Theme color:', themeColor);
 
   return (
-    <GestureHandlerRootView className="relative">
-      <View className="relative flex w-full flex-row items-center bg-carewallet-white">
-        <BackButton />
-        <Text
-          className={`mx-auto pr-20 font-carewallet-manrope-bold text-[18px] text-carewallet-blue`}
-        >
-          Step 2 of 3
-        </Text>
-      </View>
-      <View className="absolute top-16 w-full border-t border-carewallet-gray" />
-      {renderBackground(header ?? '')}
-      <ScrollView className="absolute top-20 mt-3 min-h-full min-w-full">
-        <Text className="mx-5 font-carewallet-manrope-bold text-2xl font-bold">
-          {header}
-        </Text>
-        {compList.map((item, index) => (
-          <View key={index}>
-            {item.key === 'Address' && <AddressComponent />}
-            {item.value === 'TextInputLine' && (
-              <TextInputLine
-                title={item.key}
-                onChange={(value) => handleChange(item.key, value)}
-              />
-            )}
-            {item.value === 'TextInputParagraph' && (
-              <TextInputParagraph
-                title={item.key}
-                onChange={(value) => handleChange(item.key, value)}
-              />
-            )}
-            {item.value.startsWith('RadioGroup') && (
-              <RadioGroup
-                title={item.key}
-                options={item.value.substring(12).split(' ')}
-                onChange={(value) => handleChange(item.key, value)}
-              />
-            )}
-          </View>
-        ))}
-      </ScrollView>
-    </GestureHandlerRootView>
+    <SafeAreaView className="flex-1 bg-carewallet-white">
+      <GestureHandlerRootView className="relative">
+        <View className="relative flex w-full flex-row items-center bg-carewallet-white">
+          <BackButton />
+          <Text
+            className={`mx-auto pr-20 font-carewallet-manrope-bold text-[18px] text-carewallet-blue`}
+          >
+            Step 2 of 3
+          </Text>
+        </View>
+        <View className="absolute top-16 w-full border-t border-carewallet-gray" />
+        {renderBackground(header ?? '')}
+        <ScrollView className="absolute top-20 mt-3 min-h-full min-w-full">
+          <Text className="mx-5 font-carewallet-manrope-bold text-2xl font-bold">
+            {header}
+          </Text>
+          {compList.map((item, index) => (
+            <View key={index}>
+              {item.key === 'Address' && <AddressComponent />}
+              {item.value === 'TextInputLine' && (
+                <TextInputLine
+                  title={item.key}
+                  onChange={(value) => handleChange(item.key, value)}
+                />
+              )}
+              {item.value === 'TextInputParagraph' && (
+                <TextInputParagraph
+                  title={item.key}
+                  onChange={(value) => handleChange(item.key, value)}
+                />
+              )}
+              {item.value.startsWith('RadioGroup') && (
+                <RadioGroup
+                  title={item.key}
+                  options={item.value.substring(12).split(' ')}
+                  onChange={(value) => handleChange(item.key, value)}
+                />
+              )}
+            </View>
+          ))}
+        </ScrollView>
+      </GestureHandlerRootView>
+    </SafeAreaView>
   );
 }
