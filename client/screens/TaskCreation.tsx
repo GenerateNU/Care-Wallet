@@ -97,16 +97,13 @@ export default function TaskCreation() {
 
   return (
     <SafeAreaView className="flex-1 bg-carewallet-white">
-      <GestureHandlerRootView className="relative">
-        <View className="relative flex w-full flex-row items-center bg-carewallet-white">
+      <GestureHandlerRootView>
+        <View className="flex w-full flex-row items-center border-b border-carewallet-gray bg-carewallet-white">
           <BackButton />
-          <Text
-            className={`mx-auto pr-20 font-carewallet-manrope-bold text-[18px] text-carewallet-blue`}
-          >
+          <Text className="mx-auto pr-20 font-carewallet-manrope-bold text-lg text-carewallet-blue">
             Step 2 of 3
           </Text>
         </View>
-        <View className="absolute top-16 w-full border-t border-carewallet-gray" />
         {renderBackground(header ?? '')}
         <ScrollView className="absolute top-20 mt-3 min-h-full min-w-full">
           <Text

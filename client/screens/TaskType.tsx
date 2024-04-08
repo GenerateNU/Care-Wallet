@@ -13,6 +13,7 @@ import BottomSheet, {
 } from '@gorhom/bottom-sheet';
 import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
 import { useNavigation } from '@react-navigation/native';
+import clsx from 'clsx';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {
   GestureHandlerRootView,
@@ -37,11 +38,10 @@ export default function TaskType() {
   const [selectedCategory, setSelectedCategory] = useState<null | Category>(
     null
   );
-  const [selectedTypes, setSelectedTypes] = useState<TypeOfTask[]>(
+  const [, setSelectedTypes] = useState<TypeOfTask[]>(
     Object.values(TypeOfTask)
   );
 
-  selectedTypes;
   useEffect(() => {
     setSelectedTypes(
       selectedCategory
@@ -94,6 +94,8 @@ export default function TaskType() {
           'Family Conversations',
           'Pay Bills'
         ];
+      case Category.OTHER:
+        return ['Other'];
       default:
         return [];
     }
@@ -126,8 +128,8 @@ export default function TaskType() {
         return 'Home & Lifestyle';
       case Category.FINANCIAL:
         return 'Financial & Legal';
-      // case Category.OTHER: <- currently no cards so grayed out right now
-      //   return 'Other';
+      case Category.OTHER:
+        return 'Other';
       default:
         return null;
     }
@@ -135,17 +137,14 @@ export default function TaskType() {
 
   return (
     <SafeAreaView className="flex-1 bg-carewallet-white">
-      <GestureHandlerRootView className="relative">
+      <GestureHandlerRootView>
         <ScrollView className="h-full">
-          <View className="relative flex w-full flex-row items-center bg-carewallet-white">
+          <View className="flex w-full flex-row items-center border-b border-carewallet-gray bg-carewallet-white">
             <BackButton />
-            <Text
-              className={`mx-auto pr-20 font-carewallet-manrope-bold text-[18px] text-carewallet-blue`}
-            >
+            <Text className="mx-auto pr-20 font-carewallet-manrope-bold text-lg text-carewallet-blue">
               Step 1 of 3
             </Text>
           </View>
-          <View className="absolute top-16 w-full border-t border-carewallet-gray" />
           <View className="my-2" />
 
           <View className="flex w-full flex-row items-start justify-between px-4">
@@ -166,7 +165,10 @@ export default function TaskType() {
             {Object.values(Category).map((item, index) => (
               <View key={index}>
                 <Text
-                  className={`${index > 0 ? 'p-3' : ''} font-carewallet-montserrat-bold text-[11px] uppercase tracking-wide`}
+                  className={clsx(
+                    'font-carewallet-montserrat-bold text-xs uppercase tracking-wide',
+                    index > 0 ? 'p-3' : ''
+                  )}
                 >
                   {getCategoryTitle(item)}
                 </Text>
@@ -180,7 +182,7 @@ export default function TaskType() {
                         })
                       }
                     >
-                      <View className="bg-white m-2 h-24 w-40 items-start rounded-lg border border-carewallet-gray p-2">
+                      <View className="m-2 h-24 w-40 items-start rounded-lg border border-carewallet-gray p-2">
                         {getCategoryIcon(item)}
                         <Text className="m-1 mt-3 font-carewallet-manrope-bold">
                           {item2}
