@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState
 } from 'react';
-import { FlatList, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 import BottomSheet, {
   BottomSheetBackdrop,
@@ -16,6 +16,7 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
+import { CWDropdown } from '../components/Dropdown.tsx';
 import { BackButton } from '../components/nav_buttons/BackButton';
 import { CloseButton } from '../components/nav_buttons/CloseButton';
 import { TextInputLine } from '../components/task_creation/TextInputLine.tsx';
@@ -25,6 +26,20 @@ import { Category, CategoryToTypeMap, TypeOfTask } from '../types/type';
 
 // import { addNewTaskMutation } from '../services/task';
 // import { Task } from '../types/task';
+
+enum RepeatOptions {
+  NEVER = 'Never',
+  DAILY = 'Daily',
+  WEEKLY = 'Weekly',
+  MONTHLY = 'Monthly'
+}
+
+const RepeatOptionsList: string[] = [
+  RepeatOptions.NEVER,
+  RepeatOptions.DAILY,
+  RepeatOptions.WEEKLY,
+  RepeatOptions.MONTHLY
+];
 
 type ParamList = {
   mt: {
@@ -36,7 +51,8 @@ export default function AddTaskDetails() {
   const navigation = useNavigation<AppStackNavigation>();
   const route = useRoute<RouteProp<ParamList, 'mt'>>();
   const { taskDetails } = route.params;
-
+  const [label, setLabel] = useState('Select Label');
+  console.log(label);
   console.log(taskDetails);
 
   const [open, setOpen] = useState(false);
@@ -46,6 +62,7 @@ export default function AddTaskDetails() {
   const [selectedTypes, setSelectedTypes] = useState<TypeOfTask[]>(
     Object.values(TypeOfTask)
   );
+  console.log(selectedTypes);
 
   useEffect(() => {
     setSelectedTypes(
@@ -104,49 +121,41 @@ export default function AddTaskDetails() {
       </View>
 
       <View className="h-[68vh]">
-        <FlatList
-          className="h-[80vh] scroll-pb-96"
-          data={selectedTypes}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              className="m-2 h-[50px] overflow-hidden rounded-xl"
-              onPress={() =>
-                navigation.navigate('TaskCreation', {
-                  taskType: JSON.stringify(item)
-                })
-              }
-            >
-              <TextInputLine
-                title={'Title'}
-                onChange={(value) => console.log(value)}
-              />
-              <TextInputParagraph
-                title={'Description'}
-                onChange={(value) => console.log(value)}
-              />
-              <TextInputLine
-                title={'Date'}
-                onChange={(value) => console.log(value)}
-              />
-              <TextInputLine
-                title={'Time'}
-                onChange={(value) => console.log(value)}
-              />
-              <TextInputLine
-                title={'Repeat'}
-                onChange={(value) => console.log(value)}
-              />
-              <TextInputLine
-                title={'Label'}
-                onChange={(value) => console.log(value)}
-              />
-              <TextInputLine
-                title={'AssignTask'}
-                onChange={(value) => console.log(value)}
-              />
-            </TouchableOpacity>
-          )}
-        />
+        <TouchableOpacity
+          style={{
+            margin: 2,
+            overflow: 'hidden'
+          }}
+          onPress={() =>
+            navigation.navigate('TaskCreation', {
+              taskType: JSON.stringify(item)
+            })
+          }
+        >
+          <View style={{ flexDirection: 'column' }}>
+            <TextInputLine
+              title={'Title'}
+              onChange={(value) => console.log(value)}
+            />
+            <TextInputParagraph
+              title={'Description'}
+              onChange={(value) => console.log(value)}
+            />
+            <TextInputLine
+              title={'Date'}
+              onChange={(value) => console.log(value)}
+            />
+            <TextInputLine
+              title={'Time'}
+              onChange={(value) => console.log(value)}
+            />
+            <CWDropdown
+              selected={RepeatOptions.NEVER}
+              items={RepeatOptionsList}
+              setLabel={setLabel}
+            />
+          </View>
+        </TouchableOpacity>
       </View>
 
       <BottomSheet

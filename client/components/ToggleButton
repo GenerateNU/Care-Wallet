@@ -1,0 +1,41 @@
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
+
+export default function ToggleButton() {
+  const [selectedButton, setSelectedButton] = useState<'left' | 'right'>('left');
+
+  const handleLeftButtonClick = () => {
+    setSelectedButton('left');
+  };
+
+  const handleRightButtonClick = () => {
+    setSelectedButton('right');
+  };
+/**<Text className="text-center text-carewallet-gray">Step 1 of 2</Text>
+  <View className="flex flex-row items-center justify-center mt-4">
+    <TouchableOpacity
+      style={{
+        backgroundColor: selectedButton === 'left' ? '#FFD700' : '#FFFFFF',
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 8,
+        marginRight: 10,
+      }}
+      onPress={handleLeftButtonClick}
+    >
+      <Text>{'Left Button'}</Text>
+    </TouchableOpacity>
+    <TouchableOpacity
+      style={{
+        backgroundColor: selectedButton === 'right' ? '#FFD700' : '#FFFFFF',
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 8,
+      }}
+      onPress={handleRightButtonClick}
+    >
+      <Text>{'Right Button'}</Text>
+    </TouchableOpacity>
+  </View> */
+  return (<View ></View>);
+}
