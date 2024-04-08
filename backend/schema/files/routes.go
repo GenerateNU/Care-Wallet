@@ -17,7 +17,7 @@ func FileGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 
 	files := v1.Group("files")
 	{
-		files.POST("/upload", c.UploadFile)
+		files.POST("/upload", c.uploadFile)
 	}
 
 	return files
@@ -38,7 +38,7 @@ func FileGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 //	@success		200			{object}	models.File
 //	@failure		400			{object}	string
 //	@router			/files/upload [post]
-func (pg *PgModel) UploadFile(c *gin.Context) {
+func (pg *PgModel) uploadFile(c *gin.Context) {
 	var file models.File
 
 	form, err := c.MultipartForm()
@@ -66,7 +66,7 @@ func (pg *PgModel) UploadFile(c *gin.Context) {
 
 	defer fileData.Close()
 
-	err = UploadFile(pg.Conn, file, fileResponse, fileData)
+	err = uploadFile(pg.Conn, file, fileResponse, fileData)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, "Failed to create file: "+err.Error())
 		return
