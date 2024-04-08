@@ -17,6 +17,7 @@ export type AppStackParamList = {
   CalendarContainer: { screen: string; params: { screen: string } } | undefined;
   CalendarTopNav: undefined;
   TaskCreation: { taskType: string };
+  CareGroup: undefined;
 };
 
 export type AppStackNavigation = NavigationProp<AppStackParamList>;

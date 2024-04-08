@@ -1,6 +1,7 @@
 import React from 'react';
 
 import LoginPage from '../screens/LoginPage';
+import { CareGroup } from '../screens/Profile/CareGroup';
 import { TaskCreation } from '../screens/TaskCreation';
 import { TaskType } from '../screens/TaskType';
 import { AppStackBottomTabNavigator } from './AppStackBottomTabNavigator';
@@ -28,6 +29,11 @@ export function AppNavigation() {
         name="TaskCreation"
         options={{ headerShown: false }}
         component={TaskCreation}
+      />
+      <AppStack.Screen
+        name="CareGroup"
+        options={{ headerShown: false }}
+        component={CareGroup}
       />
     </AppStack.Navigator>
   );

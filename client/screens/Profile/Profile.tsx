@@ -78,7 +78,11 @@ export default function Profile() {
           />
         </View>
         <View className="mb-auto flex-1 items-center">
-          <CircleCard Icon={<Settings />} ButtonText="Settings" />
+          <CircleCard
+            Icon={<Settings />}
+            ButtonText="Settings"
+            onTouchEnd={() => navigation.navigate('CareGroup')}
+          />
         </View>
         <View className="mb-5 items-center">
           <CircleCard

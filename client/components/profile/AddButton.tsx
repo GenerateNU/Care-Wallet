@@ -3,17 +3,17 @@ import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { IconButton } from 'react-native-paper';
 
-import ArrowLeft from '../../assets/arrow-left.svg';
+import Plus from '../../assets/profile/plus.svg';
 import { AppStackNavigation } from '../../navigation/types';
 
-export function BackButton() {
+export function AddButtom() {
   const navigation = useNavigation<AppStackNavigation>();
 
   return (
     <IconButton
-      className="align-center m-2 flex h-[50px] w-[52px] justify-center rounded-xl border border-carewallet-lightgray bg-carewallet-white"
+      className="align-center m-2 flex h-[50px] w-[52px] justify-center rounded-xl bg-carewallet-blue"
       mode="contained"
-      icon={({ color }) => <ArrowLeft fill={color} />}
+      icon={({ color }) => <Plus fill={color} />}
       onPress={() => navigation.goBack()}
     />
   );
