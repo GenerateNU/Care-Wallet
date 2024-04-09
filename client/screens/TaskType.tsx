@@ -48,6 +48,7 @@ export default function TaskType() {
         ? CategoryToTypeMap[selectedCategory]
         : Object.values(TypeOfTask)
     );
+    console.log(selectedCategory);
   }, [selectedCategory]);
 
   const filters = Object.values(Category).map((filter) => ({

@@ -2,7 +2,6 @@ export const TaskCreationJson = {
   types: [
     {
       Header: 'Medication Management',
-      Background: 'client/assets/task-creation/big-bg-med.svg',
       Body: [
         { 'Drug Name': 'TextInputLine' },
         {

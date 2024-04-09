@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 
+import clsx from 'clsx';
+
 import ButtonCircle from '../../assets/radio-button-circle.svg';
 import Bathing from '../../assets/task-creation/bathing.svg';
 import Liquid from '../../assets/task-creation/liquid.svg';
@@ -53,13 +55,18 @@ export function RadioGroup({ title, options, onChange }: RadioGroupProps) {
           return (
             <TouchableOpacity
               key={index}
-              className={`flex h-12 flex-row items-center space-x-2 rounded-md border border-carewallet-gray px-4 py-2 ${option === selectedOption ? 'bg-carewallet-lightgray' : 'bg-carewallet-white'}`}
+              className={clsx(
+                'flex h-12 flex-row items-center space-x-2 rounded-md border border-carewallet-gray px-4 py-2',
+                option === selectedOption
+                  ? 'bg-carewallet-lightgray'
+                  : 'bg-carewallet-white'
+              )}
               onPress={() => {
                 handleOptionSelect(option);
               }}
             >
               {renderIcon(option)}
-              <Text className="font-carewallet-montserrat-semibold text-[16px]">
+              <Text className="font-carewallet-montserrat-semibold text-base">
                 {option}
               </Text>
             </TouchableOpacity>
