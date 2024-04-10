@@ -54,6 +54,41 @@ const docTemplate = `{
                 }
             }
         },
+        "/files/list": {
+            "get": {
+                "description": "List all files from S3 bucket",
+                "tags": [
+                    "file"
+                ],
+                "summary": "List all files",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "The groupID of the file",
+                        "name": "groupID",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/files/remove": {
             "delete": {
                 "description": "Remove a file from S3 bucket",

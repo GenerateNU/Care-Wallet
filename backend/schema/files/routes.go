@@ -20,6 +20,7 @@ func FileGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 		files.POST("/upload", c.UploadFile)
 		files.DELETE("/remove", c.RemoveFile)
 		files.GET("/get", c.GetFile)
+		files.GET("/list", c.ListFiles)
 	}
 
 	return files
@@ -139,6 +140,46 @@ func (pg *PgModel) GetFile(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, "Failed to get file: "+err.Error())
 		return
 	}
+
+	c.JSON(http.StatusOK, url)
+}
+
+type FileDetails struct {
+	FileID    int    `json:"fileId"`
+	FileName  string `json:"fileName"`
+	LabelName string `json:"labelName"`
+	URL       string `json:"url"`
+}
+
+
+// ListFiles godoc
+//
+//	@summary		List all files
+//	@description	List all files from S3 bucket
+//	@tags			file
+//
+//	@param			groupID	query		string	true	"The groupID of the file"
+//
+//	@success		200		{object}	[]string
+//	@failure		400		{object}	string
+//	@router			/files/list [get]
+func (pg *PgModel) ListFiles(c *gin.Context) {
+	groupID := c.Query("groupID")
+
+	fmt.Println("here")
+	// Validate the input parameters as needed
+	if groupID == "" {
+		fmt.Println("Missing groupId")
+		c.JSON(http.StatusBadRequest, "Missing groupID")
+		return
+	}
+
+	url, err := GetAllFileURLs(pg.Conn, groupID)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, "Failed to get file: "+err.Error())
+		return
+	}
+
 
 	c.JSON(http.StatusOK, url)
 }

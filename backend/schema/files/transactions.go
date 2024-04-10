@@ -160,3 +160,68 @@ func GetFileURL(pool *pgxpool.Pool, groupID string, fileName string) (string, er
 
 	return urlStr, nil
 }
+
+func GetAllFileURLs(pool *pgxpool.Pool, groupID string) ([]FileDetails, error) {
+	// Convert groupID to int for consistency in key construction
+	groupIDInt, err := strconv.Atoi(groupID)
+	if err != nil {
+		fmt.Println(err.Error())
+		return nil, fmt.Errorf("invalid groupID: %w", err)
+	}
+
+	// Query the database for all files in the specified group
+	rows, err := pool.Query(context.Background(), "SELECT file_id, file_name, label_name FROM files WHERE group_id = $1", groupIDInt)
+	if err != nil {
+		fmt.Println(err.Error())
+		return nil, fmt.Errorf("error querying database for files: %w", err)
+	}
+	defer rows.Close()
+
+	var files []FileDetails
+	sess, err := createAWSSession() // Ensure this function securely initializes AWS session
+	if err != nil {
+		fmt.Println(err.Error())
+		return nil, fmt.Errorf("error creating AWS session: %w", err)
+	}
+
+	svc := s3.New(sess)
+	expiration := time.Duration(24 * time.Hour) // URL expires after 24 hours
+
+	// Iterate through all the files returned by the query
+	for rows.Next() {
+		var fileDetail FileDetails
+		err := rows.Scan(&fileDetail.FileID, &fileDetail.FileName, &fileDetail.LabelName)
+		if err != nil {
+			fmt.Println(err.Error())
+			return nil, fmt.Errorf("error scanning database rows: %w", err)
+		}
+
+		// Construct the AWS object key for each file
+		objectKey := fmt.Sprintf("%v-%v", groupID, fileDetail.FileName)
+		dotIndex := strings.LastIndex(objectKey, ".")
+		fileSubstring := objectKey[:dotIndex]
+		fileExtension := objectKey[dotIndex:]
+		awsKey := fileSubstring + strconv.Itoa(fileDetail.FileID) + fileExtension
+
+		// Generate a pre-signed URL for the file
+		req, _ := svc.GetObjectRequest(&s3.GetObjectInput{
+			Bucket: aws.String(AWS_BUCKET_NAME),
+			Key:    aws.String(awsKey),
+		})
+
+		urlStr, err := req.Presign(expiration)
+		if err != nil {
+			fmt.Println(err.Error())
+			continue // or return nil, fmt.Errorf("error generating presigned URL: %w", err)
+		}
+
+		fileDetail.URL = urlStr
+		files = append(files, fileDetail)
+	}
+
+	if rows.Err() != nil {
+		return nil, fmt.Errorf("error iterating database rows: %w", rows.Err())
+	}
+
+	return files, nil
+}

@@ -241,6 +241,29 @@ paths:
       summary: Get a file
       tags:
       - file
+  /files/list:
+    get:
+      description: List all files from S3 bucket
+      parameters:
+      - description: The groupID of the file
+        in: query
+        name: groupID
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              type: string
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: List all files
+      tags:
+      - file
   /files/remove:
     delete:
       description: Remove a file from S3 bucket
