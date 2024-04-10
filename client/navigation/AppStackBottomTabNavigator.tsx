@@ -28,7 +28,8 @@ export function AppStackBottomTabNavigator() {
         tabBarInactiveTintColor: '#D9D9D9',
         tabBarStyle: {
           backgroundColor: '#1A56C4'
-        }
+        },
+        unmountOnBlur: true
       }}
     >
       <AppStackBottomTab.Screen
@@ -100,22 +101,14 @@ export function ProfileNavigation() {
 
 function CalendarNavigationContainer() {
   return (
-    <AppStack.Navigator>
-      <AppStack.Screen
-        name="Calendar"
-        options={{ headerShown: false }}
-        component={TimelineCalendarScreen}
-      />
-      <AppStack.Screen
-        name="TaskList"
-        options={{ headerShown: false }}
-        component={TaskList}
-      />
-      <AppStack.Screen
-        name="TaskDisplay"
-        options={{ headerShown: false }}
-        component={SingleTaskScreen}
-      />
+    <AppStack.Navigator
+      screenOptions={{
+        headerShown: false
+      }}
+    >
+      <AppStack.Screen name="Calendar" component={TimelineCalendarScreen} />
+      <AppStack.Screen name="TaskList" component={TaskList} />
+      <AppStack.Screen name="TaskDisplay" component={SingleTaskScreen} />
     </AppStack.Navigator>
   );
 }

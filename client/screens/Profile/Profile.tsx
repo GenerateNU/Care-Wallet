@@ -63,11 +63,10 @@ export default function Profile() {
           />
           <View
             className="mt-5 flex items-center pb-5"
-            onTouchEnd={() => {
-              navigation.navigate('CalendarContainer', {
-                screen: 'CalendarTopNav',
-                params: { screen: 'TaskList' }
-              });
+            onTouchEnd={async () => {
+              navigation.navigate('CalendarContainer');
+              await new Promise((f) => setTimeout(f, 1));
+              navigation.navigate('TaskList');
             }}
           >
             <UserTaskStatusCard userID={activeUser} />

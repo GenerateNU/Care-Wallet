@@ -13,8 +13,8 @@ CREATE TABLE IF NOT EXISTS task (
     group_id integer NOT NULL,
     created_by varchar NOT NULL,
     created_date timestamp NOT NULL, -- add default val with current timestamp?
-    start_date timestamp,
-    end_date timestamp,
+    start_date timestamp NOT NULL,
+    end_date timestamp NOT NULL,
     quick_task BOOLEAN DEFAULT FALSE,
     notes varchar,
     repeating BOOLEAN DEFAULT FALSE,
@@ -44,9 +44,9 @@ CREATE TABLE IF NOT EXISTS task_assignees (
 INSERT INTO task (task_title, group_id, created_by, created_date, start_date, end_date, notes, task_status, task_type, quick_task)
 VALUES
   ('task 1', 1, 'user2', '2024-02-03 10:45:00', '2024-02-05 10:00:00', '2024-02-05 11:00:00', 'Pick up medication from pharmacy', 'INCOMPLETE', 'med_mgmt', FALSE),
-  ('task 2', 2, 'user3', '2024-02-20 23:59:59', '2024-02-10 14:30:00', NULL, 'Schedule doctor appointment', 'INCOMPLETE', 'other', FALSE),
-  ('task 3', 3, 'user4', '2020-02-05 11:00:00', NULL, '2024-02-20 23:59:59', 'Submit insurance claim', 'INPROGRESS', 'financial', FALSE),
-  ('task 4', 4, 'user1', '2006-01-02 15:04:05', NULL, NULL, 'Refill water pitcher', 'COMPLETE', 'other', TRUE),
+  ('task 2', 2, 'user3', '2024-02-20 23:59:59', '2024-02-10 14:30:00', '2024-02-10 14:30:00', 'Schedule doctor appointment', 'INCOMPLETE', 'other', FALSE),
+  ('task 3', 3, 'user4', '2020-02-05 11:00:00', '2024-02-10 14:30:00', '2024-02-20 23:59:59', 'Submit insurance claim', 'INPROGRESS', 'financial', FALSE),
+  ('task 4', 4, 'user1', '2006-01-02 15:04:05', '2024-02-10 14:30:00', '2024-02-10 14:30:00', 'Refill water pitcher', 'COMPLETE', 'other', TRUE),
   ('task 1 - NO LABEL', 1, 'user2', '2024-02-03 10:45:00', '2024-02-05 10:00:00', '2024-02-05 11:00:00', 'Pick up medication from pharmacy', 'INCOMPLETE', 'med_mgmt', FALSE),
   ('task 5', 5, 'user1', '2024-03-19 11:00:00', '2024-03-19 15:00:00', '2024-03-19 19:00:00', 'Get medications', 'INCOMPLETE', 'dr_appt', TRUE),
   ('task 6', 5, 'user2', '2024-03-19 11:00:00', '2024-03-19 11:00:00', '2024-03-19 13:00:00', 'File Papers', 'INCOMPLETE', 'med_mgmt', TRUE),
@@ -54,7 +54,7 @@ VALUES
   ('task 8', 5, 'user1', '2024-03-19 11:00:00', '2024-03-19 15:00:00', '2024-03-19 19:00:00', 'Get medications', 'INCOMPLETE', 'dr_appt', FALSE),
   ('task 9', 5, 'user2', '2024-03-19 11:00:00', '2024-03-19 11:00:00', '2024-03-19 13:00:00', 'File Papers', 'INCOMPLETE', 'med_mgmt', FALSE),
   ('task 10', 5, 'user3', '2024-03-19 11:00:00', '2024-03-19 07:00:00', '2024-03-19 09:00:00', 'Send check to Drs', 'INCOMPLETE', 'financial', FALSE),
-  ('test tile', 5, 'P03ggWcw63N0RSY7ltbkeBoR6bd2', '2020-02-05 11:00:00', NULL, '2024-02-20 23:59:59', 'Submit insurance claim', 'INPROGRESS', 'financial', FALSE),
+  ('test tile', 5, 'P03ggWcw63N0RSY7ltbkeBoR6bd2', '2020-02-05 11:00:00', '2024-02-20 23:59:59', '2024-02-20 23:59:59', 'Submit insurance claim', 'INPROGRESS', 'financial', FALSE),
   ('test tile', 5, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', '2024-02-20 23:59:59', '2024-03-29 07:00:00', '2024-03-29 08:00:00', 'Schedule doctor appointment', 'TODO', 'med_mgmt', TRUE),
   ('test tile', 5, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', '2024-02-20 23:59:59', '2024-03-29 08:00:00', '2024-03-29 09:00:00', 'Schedule doctor appointment', 'INPROGRESS', 'med_mgmt', TRUE),
   ('test tile', 5, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', '2024-02-20 23:59:59', '2024-03-29 09:00:00', '2024-03-29 10:00:00', 'Schedule doctor appointment', 'TODO', 'med_mgmt', TRUE),
@@ -68,7 +68,9 @@ VALUES
   ('test tile', 5, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', '2024-02-20 23:59:59', '2024-03-29 11:00:00', '2024-03-29 11:00:00', 'Schedule doctor appointment', 'TODO', 'med_mgmt', FALSE),
   ('test tile', 5, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', '2024-02-20 23:59:59', '2024-03-29 12:00:00', '2024-03-29 13:00:00', 'Schedule doctor appointment', 'TODO', 'med_mgmt', FALSE),
   ('test tile', 5, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', '2024-02-20 23:59:59', '2024-03-29 13:00:00', '2024-03-29 13:00:00', 'Schedule doctor appointment', 'INPROGRESS', 'med_mgmt', FALSE),
-  ('test tile', 5, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', '2024-02-20 23:59:59', '2024-03-29 19:00:00', '2024-03-29 23:00:00', 'Schedule doctor appointment', 'OVERDUE', 'med_mgmt', TRUE)
+  ('test tile', 5, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', '2024-02-20 23:59:59', '2024-03-29 19:00:00', '2024-04-29 23:00:00', 'Schedule doctor appointment', 'TODO', 'med_mgmt', TRUE),
+  ('test tile', 5, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', '2024-02-20 23:59:59', '2024-04-10 13:00:00', '2024-04-10 13:00:00', 'Schedule doctor appointment', 'INPROGRESS', 'med_mgmt', FALSE),
+  ('test tile', 5, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', '2024-02-20 23:59:59', '2024-04-10 19:00:00', '2024-04-10 23:00:00', 'Schedule doctor appointment', 'TODO', 'med_mgmt', TRUE)
 ;
 
 INSERT INTO task_assignees (task_id, user_id, assignment_status, assigned_by, assigned_date)
@@ -84,5 +86,7 @@ VALUES
   (17, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', 'NOTIFIED', 'user3', NOW()),
   (18, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', 'DECLINED', 'user4', NOW()),
   (19, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', 'ACCEPTED', 'user2', NOW()),
-  (20, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', 'NOTIFIED', 'user3', NOW())
+  (20, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', 'NOTIFIED', 'user3', NOW()),
+  (27, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', 'ACCEPTED', 'user2', NOW()),
+  (28, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', 'NOTIFIED', 'user3', NOW())
 ;

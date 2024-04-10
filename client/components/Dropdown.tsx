@@ -30,10 +30,10 @@ export function CWDropdown({
         <View className="absolute right-3">
           {isOpen ? (
             <View className="rotate-180">
-              <ArrowDown />
+              <ArrowDown color="black" />
             </View>
           ) : (
-            <ArrowDown />
+            <ArrowDown color="black" />
           )}
         </View>
       </View>
