@@ -10,13 +10,14 @@ import HomeIcon from '../assets/bottom-nav/home.svg';
 import User from '../assets/bottom-nav/user.svg';
 import TimelineCalendarScreen from '../screens/Calendar';
 import FileUploadScreen from '../screens/FileUpload';
+import TestScreen from '../screens/FileViewScreen';
+import FileViewScreen from '../screens/FileViewScreen';
 import Home from '../screens/Home';
 import PatientView from '../screens/Profile/PatientView';
 import Profile from '../screens/Profile/Profile';
 import Settings from '../screens/Profile/Settings';
 import SingleTaskScreen from '../screens/SingleTask';
 import TaskList from '../screens/TaskList';
-import TestScreen from '../screens/TestScreen';
 import { AppStack } from './types';
 
 const AppStackBottomTab = createBottomTabNavigator();
@@ -58,7 +59,7 @@ export function AppStackBottomTabNavigator() {
           tabBarIcon: ({ color }) => <Bell color={color} />,
           tabBarLabel: () => <Text></Text>
         }}
-        component={TestScreen}
+        component={Home}
       />
       <AppStackBottomTab.Screen
         name="ProfileScreens"
@@ -95,6 +96,11 @@ export function ProfileNavigation() {
         name="FileUploadScreen"
         options={{ headerShown: false }}
         component={FileUploadScreen}
+      />
+      <AppStack.Screen
+        name="FileViewScreen"
+        options={{ headerShown: false }}
+        component={FileViewScreen}
       />
     </AppStack.Navigator>
   );

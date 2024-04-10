@@ -7,6 +7,7 @@ import {
   FileSystemUploadType
 } from 'expo-file-system';
 
+import { FileViewProps } from '../screens/FileViewScreen';
 import { api_url } from './api-links';
 
 // For uploading files
@@ -85,6 +86,12 @@ const getFile = async ({
   return response.data; // Returns a local URL to access the file
 };
 
+const getAllFile = async (groupId: number): Promise<FileViewProps[]> => {
+  const response = await axios.get(`${api_url}/files/list?groupID=${groupId}`);
+
+  return response.data; // Returns an array of local URLs to access the files
+};
+
 // Hook to use these operations
 export const useFile = () => {
   const { mutate: uploadFileMutation } = useMutation({
@@ -124,4 +131,13 @@ export const useFileByGroup = (groupId: number, fileName: string) => {
   });
 
   return { file };
+};
+
+export const useAllFileByGroup = (groupId: number) => {
+  const { data } = useQuery({
+    queryFn: () => getAllFile(groupId),
+    queryKey: ['getAllFile']
+  });
+
+  return { data };
 };
