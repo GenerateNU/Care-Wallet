@@ -32,7 +32,8 @@ export const useUser = (userId: string) => {
 
   const { data: user, isLoading: userIsLoading } = useQuery<User>({
     queryKey: ['user', userId],
-    queryFn: () => getUser(userId)
+    queryFn: () => getUser(userId),
+    refetchInterval: 10000
   });
 
   const { mutate: updateUserMutation } = useMutation({

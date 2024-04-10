@@ -27,18 +27,16 @@ export default function Home() {
         <View>
           <Text className="font-carewallet-manrope-semibold text-2xl text-carewallet-blue">
             {currentTime.format('A') === 'AM'
-              ? `Good Morning ${user?.first_name}!`
+              ? `Good Morning ${user?.first_name ?? ''}!`
               : currentTime.hour() >= 12 && currentTime.hour() < 15
-                ? `Good Afternoon ${user?.first_name}!`
-                : `Good Evening ${user?.first_name}!`}
+                ? `Good Afternoon ${user?.first_name ?? ''}!`
+                : `Good Evening ${user?.first_name ?? ''}!`}
           </Text>
         </View>
         <View className="mt-10 overflow-hidden rounded-lg border border-carewallet-blue/10">
           <View
             className="flex flex-row items-center overflow-hidden bg-carewallet-blue/10"
             onTouchEnd={async () => {
-              navigation.navigate('CalendarContainer');
-              await new Promise((f) => setTimeout(f, 1));
               navigation.navigate('TaskList');
             }}
           >
