@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState
-} from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { SafeAreaView, View } from 'react-native';
 
 import BottomSheet, {
@@ -29,46 +23,28 @@ import RedPill from '../assets/task-creation/red-pill.svg';
 import { BackButton } from '../components/nav_buttons/BackButton';
 import { CloseButton } from '../components/nav_buttons/CloseButton';
 import { AppStackNavigation } from '../navigation/types';
-import { Category, CategoryToTypeMap, TypeOfTask } from '../types/type';
+import { Category, CategoryToTypeMap } from '../types/type';
 
 export default function TaskType() {
   const navigation = useNavigation<AppStackNavigation>();
-
   const [open, setOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<null | Category>(
     null
   );
-  const [, setSelectedTypes] = useState<TypeOfTask[]>(
-    Object.values(TypeOfTask)
-  );
-
-  useEffect(() => {
-    setSelectedTypes(
-      selectedCategory
-        ? CategoryToTypeMap[selectedCategory]
-        : Object.values(TypeOfTask)
-    );
-    console.log(selectedCategory);
-  }, [selectedCategory]);
-
   const filters = Object.values(Category).map((filter) => ({
     label: filter,
     value: filter
   }));
 
   const bottomSheetSnapPoints = useMemo(() => ['50%'], []);
-
   const bottomSheetRef = useRef<BottomSheet>(null);
-
   const closeBottomSheet = () => {
     if (bottomSheetRef.current) {
-      bottomSheetRef.current.close(); // Close the BottomSheet
+      bottomSheetRef.current.close();
     }
   };
-
   const snapToIndex = (index: number) =>
     bottomSheetRef.current?.snapToIndex(index);
-
   const renderBackdrop = useCallback(
     (props: BottomSheetDefaultBackdropProps) => (
       <BottomSheetBackdrop
@@ -79,28 +55,6 @@ export default function TaskType() {
     ),
     []
   );
-
-  function getCards(category: Category): string[] {
-    switch (category) {
-      case Category.HEALTH:
-        return ['Medication Management', 'Physician Appointments'];
-      case Category.FINANCIAL:
-        return ['Health Insurance'];
-      case Category.HOME:
-        return ['Diet', 'Activities'];
-      case Category.PERSONAL:
-        return [
-          'Grooming',
-          'Shopping & Errands',
-          'Family Conversations',
-          'Pay Bills'
-        ];
-      case Category.OTHER:
-        return ['Other'];
-      default:
-        return [];
-    }
-  }
 
   function getCategoryIcon(category: Category): JSX.Element | null {
     switch (category) {
@@ -114,23 +68,6 @@ export default function TaskType() {
         return <Financial />;
       case Category.OTHER:
         return <Other />;
-      default:
-        return null;
-    }
-  }
-
-  function getCategoryTitle(category: Category): string | null {
-    switch (category) {
-      case Category.HEALTH:
-        return 'Health & Medical';
-      case Category.PERSONAL:
-        return 'Personal';
-      case Category.HOME:
-        return 'Home & Lifestyle';
-      case Category.FINANCIAL:
-        return 'Financial & Legal';
-      case Category.OTHER:
-        return 'Other';
       default:
         return null;
     }
@@ -163,18 +100,18 @@ export default function TaskType() {
           </View>
 
           <View className="flex w-[90vw] justify-between p-3">
-            {Object.values(Category).map((item, index) => (
-              <View key={index}>
+            {selectedCategory ? (
+              <View>
                 <Text
                   className={clsx(
                     'font-carewallet-montserrat-bold text-xs uppercase tracking-wide',
-                    index > 0 ? 'p-3' : ''
+                    'p-3'
                   )}
                 >
-                  {getCategoryTitle(item)}
+                  {selectedCategory}
                 </Text>
                 <View className="w-[100vw] flex-row flex-wrap">
-                  {getCards(item).map((item2, index2) => (
+                  {CategoryToTypeMap[selectedCategory].map((item2, index2) => (
                     <TouchableOpacity
                       key={index2}
                       onPress={() =>
@@ -184,7 +121,7 @@ export default function TaskType() {
                       }
                     >
                       <View className="m-2 h-24 w-40 items-start rounded-lg border border-carewallet-gray p-2">
-                        {getCategoryIcon(item)}
+                        {getCategoryIcon(selectedCategory)}
                         <Text className="m-1 mt-3 font-carewallet-manrope-bold">
                           {item2}
                         </Text>
@@ -193,7 +130,39 @@ export default function TaskType() {
                   ))}
                 </View>
               </View>
-            ))}
+            ) : (
+              Object.values(Category).map((item, index) => (
+                <View key={index}>
+                  <Text
+                    className={clsx(
+                      'font-carewallet-montserrat-bold text-xs uppercase tracking-wide',
+                      index > 0 ? 'p-3' : ''
+                    )}
+                  >
+                    {item}
+                  </Text>
+                  <View className="w-[100vw] flex-row flex-wrap">
+                    {CategoryToTypeMap[item].map((item2, index2) => (
+                      <TouchableOpacity
+                        key={index2}
+                        onPress={() =>
+                          navigation.navigate('TaskCreation', {
+                            taskType: JSON.stringify(item2)
+                          })
+                        }
+                      >
+                        <View className="m-2 h-24 w-40 items-start rounded-lg border border-carewallet-gray p-2">
+                          {getCategoryIcon(item)}
+                          <Text className="m-1 mt-3 font-carewallet-manrope-bold">
+                            {item2}
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                </View>
+              ))
+            )}
           </View>
         </ScrollView>
 
