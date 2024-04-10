@@ -15,9 +15,9 @@ func TaskGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 
 	tasks := v1.Group(":tid/labels")
 	{
-		tasks.POST("", c.AddLabelToTask)
-		tasks.DELETE("", c.RemoveLabelFromTask)
-		tasks.GET("", c.GetLabelsByTask)
+		tasks.POST("", c.addLabelToTask)
+		tasks.DELETE("", c.removeLabelFromTask)
+		tasks.GET("", c.getLabelsByTask)
 	}
 
 	return tasks
@@ -34,8 +34,8 @@ func TaskGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 //	@success		200	{array}		models.Task_Label
 //	@failure		400	{object}	string
 //	@router			/tasks/{tid}/labels [GET]
-func (pg *PgModel) GetLabelsByTask(c *gin.Context) {
-	taskLabels, err := GetLabelsByTaskInDB(pg.Conn, c.Param("tid"))
+func (pg *PgModel) getLabelsByTask(c *gin.Context) {
+	taskLabels, err := getLabelsByTaskInDB(pg.Conn, c.Param("tid"))
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
@@ -62,7 +62,7 @@ type LabelData struct {
 //	@success		200			{object}	models.Task_Label
 //	@failure		400			{object}	string
 //	@router			/tasks/{tid}/labels [POST]
-func (pg *PgModel) AddLabelToTask(c *gin.Context) {
+func (pg *PgModel) addLabelToTask(c *gin.Context) {
 	var requestBody LabelData
 
 	if err := c.BindJSON(&requestBody); err != nil {
@@ -70,7 +70,7 @@ func (pg *PgModel) AddLabelToTask(c *gin.Context) {
 		return
 	}
 
-	updatedTaskLabel, err := AddLabelToTaskInDB(pg.Conn, requestBody, c.Param("tid"))
+	updatedTaskLabel, err := addLabelToTaskInDB(pg.Conn, requestBody, c.Param("tid"))
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
@@ -92,7 +92,7 @@ func (pg *PgModel) AddLabelToTask(c *gin.Context) {
 //	@success		200			{object}	string
 //	@failure		400			{object}	string
 //	@router			/tasks/{tid}/labels [DELETE]
-func (pg *PgModel) RemoveLabelFromTask(c *gin.Context) {
+func (pg *PgModel) removeLabelFromTask(c *gin.Context) {
 	var requestBody LabelData
 
 	if err := c.BindJSON(&requestBody); err != nil {
@@ -100,7 +100,7 @@ func (pg *PgModel) RemoveLabelFromTask(c *gin.Context) {
 		return
 	}
 
-	err := RemoveLabelFromTaskInDB(pg.Conn, requestBody, c.Param("tid"))
+	err := removeLabelFromTaskInDB(pg.Conn, requestBody, c.Param("tid"))
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
