@@ -97,8 +97,10 @@ export default function TaskListScreen() {
       return null;
     }
     return (
-      <View>
-        <Text className="text-lg text-carewallet-black">{title}</Text>
+      <View className="mb-5 mt-3">
+        <Text className="mb-3 font-carewallet-manrope-bold text-lg text-carewallet-black">
+          {title}
+        </Text>
         {tasks.map((task, index) => {
           return (
             <Pressable
@@ -133,8 +135,8 @@ export default function TaskListScreen() {
         >
           <View className="mb-5 flex-row items-center">
             <TextInput
-              className="mr-4 h-10 flex-1 overflow-hidden rounded-full border-2 border-carewallet-gray px-2"
-              placeholder="Search..."
+              className="mr-4 h-14 flex-1 overflow-hidden rounded-md border border-carewallet-gray px-2 font-carewallet-montserrat text-carewallet-black"
+              placeholder="Search"
               onChangeText={(text) => {
                 setSearchQuery(text);
               }}
@@ -150,16 +152,12 @@ export default function TaskListScreen() {
               </Button>
             </View>
           </View>
-          <Text className="text-xl font-bold text-carewallet-black">
-            Task List (all tasks of all time)
-          </Text>
-          {filteredTasks && renderSection(filteredTasks, 'All Tasks')}
-          {pastDueTasks && renderSection(pastDueTasks, 'Past Due')}
-          {inProgressTasks && renderSection(inProgressTasks, 'In Progress')}
-          {inFutureTasks && renderSection(inFutureTasks, 'Future')}
-          {completeTasks && renderSection(completeTasks, 'Done')}
-          {incompleteTasks &&
-            renderSection(incompleteTasks, 'Marked as Incomplete')}
+          {filteredTasks && renderSection(filteredTasks, '')}
+          {pastDueTasks && renderSection(pastDueTasks, 'PAST DUE')}
+          {inProgressTasks && renderSection(inProgressTasks, 'IN PROGRESS')}
+          {inFutureTasks && renderSection(inFutureTasks, 'FUTURE')}
+          {completeTasks && renderSection(completeTasks, 'DONE')}
+          {incompleteTasks && renderSection(incompleteTasks, 'INCOMPLETE')}
         </ScrollView>
         <BottomSheet
           ref={bottomSheetRef}
