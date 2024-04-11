@@ -1,15 +1,21 @@
-import React, { useState } from 'react';
-import { ActivityIndicator, Text, TextInput, View } from 'react-native';
+import React from 'react';
+import { ActivityIndicator, SafeAreaView, Text, View } from 'react-native';
 
 import { RouteProp, useRoute } from '@react-navigation/native';
 import moment from 'moment';
-import DropDownPicker from 'react-native-dropdown-picker';
+import { IconButton } from 'react-native-paper';
 
 import CheckMark from '../assets/checkmark.svg';
+import Date from '../assets/Date_today.svg';
+import Edit from '../assets/profile/edit.svg';
+import Clock from '../assets/profile/settings/clock.svg';
 import Reject from '../assets/reject.svg';
+import Repeating from '../assets/repeating.svg';
+import { GetLabelPill } from '../components/GetLabelPill';
+import { GetStatusPill } from '../components/GetStatusPill';
 import { BackButton } from '../components/nav_buttons/BackButton';
+import { NoteButton } from '../components/NoteButton';
 import { useTaskById } from '../services/task';
-import { TaskTypeDescriptions, TypeToCategoryMap } from '../types/type';
 
 type ParamList = {
   mt: {
@@ -20,9 +26,9 @@ type ParamList = {
 export default function SingleTaskScreen() {
   const route = useRoute<RouteProp<ParamList, 'mt'>>();
   const { id } = route.params;
-  const [open, setOpen] = useState(false);
-  const { task, taskIsLoading, taskLabels, taskLabelsIsLoading } =
-    useTaskById(id);
+  const { task, taskIsLoading, taskLabelsIsLoading } = useTaskById(id);
+
+  const repeat = task?.repeating;
 
   if (taskIsLoading || taskLabelsIsLoading)
     return (
@@ -39,66 +45,60 @@ export default function SingleTaskScreen() {
   }
 
   return (
-    <View className="flex h-full flex-col items-start bg-carewallet-white p-4">
-      <View className="w-[100vw] flex-row items-center">
-        <BackButton />
-        <View className="relative z-20 ml-auto mr-10 mt-4 w-24">
-          <DropDownPicker
-            open={open}
-            value="value"
-            items={[
-              { label: 'Incomplete', value: 'INCOMPLETE' },
-              { label: 'Complete', value: 'COMPLETE' },
-              { label: 'Partial', value: 'PARTIAL' }
-            ]}
-            setOpen={setOpen}
-            setValue={() => ''}
-            placeholder="To-Do"
-            style={{
-              backgroundColor: 'lightgray',
-              borderColor: 'gray',
-              position: 'relative',
-              zIndex: 10
-            }}
+    <SafeAreaView className="bg-carewallet-lightergrey flex-1">
+      <View className="flex h-[100vh] bg-carewallet-white/80">
+        <View className="mx-1 mt-4 flex flex-row items-start justify-between border-b border-carewallet-lightergray bg-carewallet-white">
+          <BackButton />
+          <IconButton
+            className="mb-4 h-[50px] w-[50px] rounded-xl border border-carewallet-lightgray bg-carewallet-white"
+            mode="contained"
+            icon={() => <Edit color={'blue'} />}
           />
         </View>
-      </View>
-      <View className="mt-4">
-        <Text className="font-inter text-2xl font-semibold text-carewallet-black">
+        <View className="mb-3 ml-3 mt-4 h-20 w-20 rounded-full border border-carewallet-blue bg-carewallet-white" />
+        <Text className="font-inter ml-5 font-carewallet-manrope-bold text-2xl text-carewallet-black">
           {task?.task_title}
         </Text>
-        <Text className="font-inter pt-5 text-2xl font-semibold text-carewallet-black">
-          {moment(task?.start_date).format('hh:mm A')}
-          {task?.end_date && `- ${moment(task?.end_date).format('hh:mm A')}`}
-        </Text>
-        {taskLabels?.map((label) => (
-          <Text key={label.task_id + label.label_name} className="text-base">
-            {label.label_name || ''}
-          </Text>
-        ))}
-        <Text className="text-base ">
-          {task &&
-            `${TypeToCategoryMap[task.task_type]} | ${TaskTypeDescriptions[task.task_type]}`}
-        </Text>
-      </View>
-      <View className="mt-4"></View>
+        <View className="ml-2 flex flex-col items-start">
+          <View className="flex flex-row items-start pt-5">
+            <Date />
+            <Text className="pt-1 font-carewallet-manrope text-xs">
+              {moment(task?.start_date).format('MM/DD/YYYY')}
+            </Text>
+            <Clock />
+            {repeat && <Repeating />}
+            <Text className="pt-1 font-carewallet-manrope text-xs font-semibold text-carewallet-black">
+              {moment(task?.start_date).format('hh:mm A')}
+              {task?.end_date &&
+                `- ${moment(task?.end_date).format('hh:mm A')}`}
+            </Text>
+          </View>
+          <View className="flex flex-row items-start pt-3">
+            <GetStatusPill status={task?.task_status}> </GetStatusPill>
+            <GetLabelPill category={task?.task_type} />
+          </View>
+          <NoteButton note={task?.notes}></NoteButton>
+          <View className="mt-4"></View>
 
-      <View className="mt-2">
-        <Text className="text-black font-inter mb-4 text-base font-normal">
-          {task?.notes}
-        </Text>
-        <Text className="text-black font-inter text-xl">Additional Notes</Text>
-        <TextInput className="border-black mb-2 h-32 w-80 rounded-lg border-2" />
-      </View>
+          <View className="mt-2">
+            <Text className="text-black font-carewallet-manrope text-sm">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+              enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat.{' '}
+            </Text>
+          </View>
+        </View>
 
-      <View className="ml-auto mt-auto flex-1 flex-row space-x-4">
-        <View className="mt-auto rounded-lg bg-carewallet-gray p-2">
-          <CheckMark />
-        </View>
-        <View className="mt-auto rounded-lg bg-carewallet-gray p-2">
-          <Reject />
+        <View className="ml-auto mt-auto flex-1 flex-row space-x-4">
+          <View className="mt-auto rounded-lg bg-carewallet-gray p-2">
+            <CheckMark />
+          </View>
+          <View className="mt-auto rounded-lg bg-carewallet-gray p-2">
+            <Reject />
+          </View>
         </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
