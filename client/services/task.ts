@@ -32,6 +32,7 @@ const getTaskByAssigned = async (userId: string): Promise<Task[]> => {
 const getFilteredTasks = async (
   queryParams: TaskQueryParams
 ): Promise<Task[]> => {
+  if (!queryParams) [];
   if (!queryParams.groupID) [];
   const { data } = await axios.get(`${api_url}/tasks/filtered`, {
     params: queryParams

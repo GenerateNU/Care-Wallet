@@ -7,7 +7,7 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-func GetLabelsByTaskInDB(conn *pgxpool.Pool, taskId string) ([]models.Task_Label, error) {
+func getLabelsByTaskInDB(conn *pgxpool.Pool, taskId string) ([]models.Task_Label, error) {
 	rows, err := conn.Query(context.Background(), "SELECT * FROM task_labels WHERE task_id = $1", taskId)
 
 	if err != nil {
@@ -34,7 +34,7 @@ func GetLabelsByTaskInDB(conn *pgxpool.Pool, taskId string) ([]models.Task_Label
 	return results, nil
 }
 
-func AddLabelToTaskInDB(conn *pgxpool.Pool, requestBody LabelData, taskid string) (models.Task_Label, error) {
+func addLabelToTaskInDB(conn *pgxpool.Pool, requestBody LabelData, taskid string) (models.Task_Label, error) {
 	var task_label models.Task_Label
 	err := conn.QueryRow(context.Background(), "INSERT INTO task_labels (task_id, group_id, label_name) VALUES ($1, $2, $3) RETURNING *;",
 		taskid, requestBody.GroupID, requestBody.LabelName).Scan(&task_label.TaskId, &task_label.GroupId, &task_label.LabelName)
@@ -47,7 +47,7 @@ func AddLabelToTaskInDB(conn *pgxpool.Pool, requestBody LabelData, taskid string
 	return task_label, nil
 }
 
-func RemoveLabelFromTaskInDB(conn *pgxpool.Pool, requestBody LabelData, taskId string) error {
+func removeLabelFromTaskInDB(conn *pgxpool.Pool, requestBody LabelData, taskId string) error {
 	_, err := conn.Exec(context.Background(), "DELETE FROM task_labels WHERE task_id = $1 AND group_id = $2 AND label_name = $3", taskId, requestBody.GroupID, requestBody.LabelName)
 
 	if err != nil {

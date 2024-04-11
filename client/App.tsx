@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 import {
   Manrope_400Regular,
@@ -41,12 +41,9 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <CareWalletProvider>
         <View className="absolute -z-10 h-20 w-[100vw] bg-carewallet-white" />
-        <SafeAreaView className="h-[100vh] flex-1">
-          <PaperProvider>
-            <Router />
-          </PaperProvider>
-        </SafeAreaView>
-        <View className="absolute -z-20 h-full w-[100vw] bg-carewallet-blue" />
+        <PaperProvider>
+          <Router />
+        </PaperProvider>
       </CareWalletProvider>
     </QueryClientProvider>
   );

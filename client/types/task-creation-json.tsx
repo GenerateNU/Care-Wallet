@@ -5,7 +5,7 @@ export const TaskCreationJson = {
       Body: [
         { 'Drug Name': 'TextInputLine' },
         {
-          'Drug Form': 'RadioGroup: Pills, Liquid, Shot'
+          'Drug Form': 'RadioGroup: Pills Liquid Shot'
         },
         { Diagnosis: 'TextInputLine' },
         { 'Prescribing Physician': 'TextInputLine' },
@@ -24,7 +24,7 @@ export const TaskCreationJson = {
     {
       Header: 'Grooming',
       Body: [
-        { 'Grooming Type': 'RadioGroup: Bathing, Toileting' },
+        { 'Grooming Type': 'RadioGroup: Bathing Toileting' },
         { 'Care Instructions': 'TextInputParagraph' }
       ]
     },
@@ -39,7 +39,7 @@ export const TaskCreationJson = {
     {
       Header: 'Pay Bills',
       Body: [
-        { 'Bill Reveicer Name': 'TextInputLine' },
+        { 'Bill Receiver Name': 'TextInputLine' },
         { Address: '' },
         { 'Proxy Agent': 'TextInputLine' }
       ]

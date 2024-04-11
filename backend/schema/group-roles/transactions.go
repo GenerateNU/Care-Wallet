@@ -8,14 +8,18 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-func ChangeUserGroupRoleInDB(pool *pgxpool.Pool, gid int, uid string, role string) error {
-	fmt.Println(role)
+func changeUserGroupRoleInDB(pool *pgxpool.Pool, gid int, uid string, role string) error {
 	_, err := pool.Exec(context.Background(), "UPDATE group_roles SET role = $1 WHERE group_id = $2 AND user_id = $3", role, gid, uid)
 
-	return err
+	if err != nil {
+		fmt.Printf("Error changing group role: %v", err)
+		return err
+	}
+
+	return nil
 }
 
-func AddUserToGroupInDB(pool *pgxpool.Pool, gid int, uid string, role string) (models.GroupRole, error) {
+func addUserToGroupInDB(pool *pgxpool.Pool, gid int, uid string, role string) (models.GroupRole, error) {
 	var groupMember models.GroupRole
 	err := pool.QueryRow(context.Background(), "INSERT into group_roles (group_id, user_id, role) VALUES ($1, $2, $3) RETURNING *", gid, uid, role).Scan(&groupMember.GroupID, &groupMember.UserID, &groupMember.Role)
 
@@ -27,7 +31,7 @@ func AddUserToGroupInDB(pool *pgxpool.Pool, gid int, uid string, role string) (m
 	return groupMember, nil
 }
 
-func RemoveUserFromGroupInDB(pool *pgxpool.Pool, gid int, uid string) error {
+func removeUserFromGroupInDB(pool *pgxpool.Pool, gid int, uid string) error {
 	_, err := pool.Exec(context.Background(), "DELETE from group_roles WHERE group_id = $1 AND user_id = $2", gid, uid)
 
 	if err != nil {
@@ -39,7 +43,7 @@ func RemoveUserFromGroupInDB(pool *pgxpool.Pool, gid int, uid string) error {
 }
 
 // GetGroupIDByUIDFromDB returns the groupID of a user given their UID
-func GetGroupMemberByUIDFromDB(pool *pgxpool.Pool, uid string) (models.GroupRole, error) {
+func getGroupMemberByUIDFromDB(pool *pgxpool.Pool, uid string) (models.GroupRole, error) {
 	var groupMember models.GroupRole
 	err := pool.QueryRow(context.Background(), "SELECT * FROM group_roles WHERE user_id = $1", uid).Scan(&groupMember.GroupID, &groupMember.UserID, &groupMember.Role)
 
@@ -52,7 +56,7 @@ func GetGroupMemberByUIDFromDB(pool *pgxpool.Pool, uid string) (models.GroupRole
 }
 
 // Get all group roles from the DB
-func GetAllGroupRolesFromDB(pool *pgxpool.Pool, gid int) ([]models.GroupRole, error) {
+func getAllGroupRolesFromDB(pool *pgxpool.Pool, gid int) ([]models.GroupRole, error) {
 	rows, err := pool.Query(context.Background(), "SELECT group_id, user_id, role FROM group_roles WHERE group_id = $1;", gid)
 
 	if err != nil {

@@ -8,7 +8,7 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-func GetLabelsByGroupFromDB(pool *pgxpool.Pool, groupID string) ([]models.Label, error) {
+func getLabelsByGroupFromDB(pool *pgxpool.Pool, groupID string) ([]models.Label, error) {
 	groupIDInt, err := strconv.Atoi(groupID)
 	if err != nil {
 		return nil, err
@@ -37,7 +37,7 @@ func GetLabelsByGroupFromDB(pool *pgxpool.Pool, groupID string) ([]models.Label,
 
 }
 
-func CreateNewLabelInDB(pool *pgxpool.Pool, groupID int, requestBody LabelData) (models.Label, error) {
+func createNewLabelInDB(pool *pgxpool.Pool, groupID int, requestBody LabelData) (models.Label, error) {
 	labelName := requestBody.LabelName
 	labelColor := requestBody.LabelColor
 
@@ -56,7 +56,7 @@ func CreateNewLabelInDB(pool *pgxpool.Pool, groupID int, requestBody LabelData) 
 	return label, nil
 }
 
-func DeleteLabelFromDB(pool *pgxpool.Pool, groupID string, labelName string) error {
+func deleteLabelFromDB(pool *pgxpool.Pool, groupID string, labelName string) error {
 	groupIDInt, err := strconv.Atoi(groupID)
 	if err != nil {
 		return err
@@ -70,7 +70,7 @@ func DeleteLabelFromDB(pool *pgxpool.Pool, groupID string, labelName string) err
 	return nil
 }
 
-func EditLabelInDB(pool *pgxpool.Pool, groupID string, labelName string, data LabelData) (models.Label, error) {
+func editLabelInDB(pool *pgxpool.Pool, groupID string, labelName string, data LabelData) (models.Label, error) {
 	groupIDInt, err := strconv.Atoi(groupID)
 	if err != nil {
 		return models.Label{}, err

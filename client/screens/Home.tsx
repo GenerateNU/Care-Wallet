@@ -1,16 +1,12 @@
 import React, { useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 
-import { useNavigation } from '@react-navigation/core';
-
 import { DocPickerButton } from '../components/DocPickerButton';
 import { PopupModal } from '../components/PopupModal';
 import { useCareWalletContext } from '../contexts/CareWalletContext';
-import { AppStackNavigation } from '../navigation/types';
 import { useAuth } from '../services/auth';
 
 export default function Home() {
-  const navigator = useNavigation<AppStackNavigation>();
   const [userGroupVisible, setUserGroupVisible] = useState<boolean>(false);
 
   const { user, group } = useCareWalletContext();
@@ -21,16 +17,6 @@ export default function Home() {
     <View className="bg-white w-[100vw] flex-1 items-center justify-center">
       <View className="flex flex-row items-center">
         <DocPickerButton />
-        <Pressable
-          className="mb-2 ml-2 mt-2 self-center rounded-md border border-carewallet-gray pl-1 pr-1"
-          onPress={() => {
-            navigator.navigate('TaskType');
-          }}
-        >
-          <Text className="self-center text-lg text-carewallet-black">
-            Add New Task
-          </Text>
-        </Pressable>
       </View>
       <Pressable
         onPress={() => setUserGroupVisible(true)}
