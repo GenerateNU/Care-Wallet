@@ -2,6 +2,7 @@ import React from 'react';
 import { Text, View } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
+import { toUpper } from 'lodash';
 import moment from 'moment';
 
 import Chevron from '../../assets/filledarrowdown.svg';
@@ -25,8 +26,8 @@ export function TaskList() {
           navigation.navigate('TaskList');
         }}
       >
-        <Text className="py-2 pl-2 font-carewallet-manrope-semibold text-sm text-carewallet-blue">
-          {`${moment().day(new Date().getDay()).format('dddd')}, ${moment().format('MMMM Do')} - Today`}
+        <Text className="py-2 pl-2 font-carewallet-montserrat-semibold text-xs text-carewallet-blue">
+          {`${toUpper(moment().day(new Date().getDay()).format('dddd'))}, ${toUpper(moment().format('MMM Do'))} - TODAY`}
         </Text>
         <View className="ml-auto mr-1">
           <Text className="ml-auto py-4 pr-2 text-center font-carewallet-manrope text-xs text-carewallet-blue">

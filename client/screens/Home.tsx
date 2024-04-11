@@ -21,7 +21,7 @@ export default function Home() {
         <Header user={user} />
         <TaskList />
         <View className="mt-5 h-[20vh] rounded-lg border border-carewallet-blue/10 bg-carewallet-blue/10">
-          <Text className="ml-5 mt-5 font-carewallet-manrope-semibold text-lg">
+          <Text className="ml-5 mt-5 font-carewallet-montserrat-bold text-base">
             Health Overview
           </Text>
           <HealthStats />
