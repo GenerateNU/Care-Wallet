@@ -136,7 +136,7 @@ export const useFileByGroup = (groupId: number, fileName: string) => {
 export const useAllFileByGroup = (groupId: number) => {
   const queryResult = useQuery({
     queryFn: () => getAllFile(groupId),
-    queryKey: ['getAllFile']
+    queryKey: ['getAllFile', groupID]
   });
 
 
