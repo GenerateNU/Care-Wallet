@@ -9,7 +9,6 @@ import HomeIcon from '../assets/bottom-nav/home.svg';
 import User from '../assets/bottom-nav/user.svg';
 import TimelineCalendarScreen from '../screens/Calendar';
 import FileUploadScreen from '../screens/FileUpload';
-import TestScreen from '../screens/FileViewScreen';
 import FileViewScreen from '../screens/FileViewScreen';
 import Home from '../screens/Home';
 import PatientView from '../screens/Profile/PatientView';
