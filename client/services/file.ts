@@ -88,10 +88,14 @@ export const useFile = () => {
   const { mutate: uploadFileMutation } = useMutation({
     mutationFn: uploadFile,
     onSuccess: (result) => {
+      // This is needed for file upload since it seems to use fetch instead of axios
+      // axios results in error if the status is 400+
       if (result && result.status === HttpStatusCode.Ok) {
         console.log('File Uploaded...');
-      } else {
-        console.log('Failed to Upload File...');
+      } else if (result && result.status !== HttpStatusCode.Ok) {
+        console.log(
+          `Files did not upload. Unexpected status: ${result.status}`
+        );
       }
     },
     onError: (error) => {
@@ -125,11 +129,14 @@ export const useFileByGroup = (groupId: number, fileName: string) => {
 };
 
 export const useAllFileByGroup = (groupId: number) => {
-  const  { data, refetch, isFetching } = useQuery({
+  const {
+    data: groupFiles,
+    refetch: reloadFiles,
+    isLoading
+  } = useQuery({
     queryFn: () => getAllFile(groupId),
-    queryKey: ['getAllFile', groupID]
+    queryKey: ['getAllFile', groupId]
   });
 
-
-  return { groupFiles, refetchGroupFiles, isFetching };
+  return { groupFiles, reloadFiles, isLoading };
 };

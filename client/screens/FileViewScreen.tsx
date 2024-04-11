@@ -19,30 +19,35 @@ type RenderItemProps = {
 
 export default function FileViewScreen() {
   const { group } = useCareWalletContext();
-  const { data, refetch, isFetching } = useAllFileByGroup(group.groupID);
+  const { groupFiles, reloadFiles, isLoading } = useAllFileByGroup(
+    group.groupID
+  );
 
   const onRefresh = useCallback(() => {
-    refetch();
-  }, [refetch]);
+    reloadFiles();
+  }, [reloadFiles]);
 
   const renderItem = ({ item }: RenderItemProps) => (
     <FileTile name={item.fileName} label={item.labelName} url={item.url} />
   );
 
-  const keyExtractor = (item: FileViewProps) =>
-    item.fileID?.toString() ?? 'unknown';
+  const keyExtractor = (item: FileViewProps) => {
+    return item.fileID
+      ? item.fileID.toString()
+      : `${item.fileName}-${item.url}`;
+  };
 
   return (
     <View className="bg-carewallet-white/80">
       <Header />
-      {data && data.length > 0 ? (
+      {groupFiles && groupFiles.length > 0 ? (
         <FlatList
-          data={data}
+          data={groupFiles}
           renderItem={renderItem}
           keyExtractor={keyExtractor}
           className="min-h-[80vh] overflow-y-auto"
           refreshControl={
-            <RefreshControl refreshing={isFetching} onRefresh={onRefresh} />
+            <RefreshControl refreshing={isLoading} onRefresh={onRefresh} />
           }
         />
       ) : (
@@ -55,4 +60,3 @@ export default function FileViewScreen() {
     </View>
   );
 }
-
