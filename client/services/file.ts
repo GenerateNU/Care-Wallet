@@ -127,7 +127,7 @@ export const useFile = () => {
 export const useFileByGroup = (groupId: number, fileName: string) => {
   const { data: file } = useQuery({
     queryFn: () => getFile({ groupId, fileName }),
-    queryKey: ['getFile']
+    queryKey: ['getFile', groupId, fileName]
   });
 
   return { file };
