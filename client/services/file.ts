@@ -134,10 +134,12 @@ export const useFileByGroup = (groupId: number, fileName: string) => {
 };
 
 export const useAllFileByGroup = (groupId: number) => {
-  const { data } = useQuery({
+  const queryResult = useQuery({
     queryFn: () => getAllFile(groupId),
     queryKey: ['getAllFile']
   });
 
-  return { data };
+  const { data, refetch, isFetching } = queryResult;
+
+  return { data, refetch, isFetching };
 };

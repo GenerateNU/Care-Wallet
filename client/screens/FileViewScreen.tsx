@@ -1,5 +1,5 @@
-import React from 'react';
-import { FlatList, Text, View } from 'react-native';
+import React, { useCallback } from 'react';
+import { FlatList, RefreshControl, Text, View } from 'react-native';
 
 import FileTile from '../components/file_management/FileTile';
 import Header from '../components/file_management/Header';
@@ -19,27 +19,34 @@ type RenderItemProps = {
 
 function FileViewScreen() {
   const { group } = useCareWalletContext();
-  const { data } = useAllFileByGroup(group.groupID);
+  const { data, refetch, isFetching } = useAllFileByGroup(group.groupID);
+
+  const onRefresh = useCallback(() => {
+    refetch();
+  }, [refetch]);
 
   const renderItem = ({ item }: RenderItemProps) => (
     <FileTile name={item.fileName} label={item.labelName} url={item.url} />
   );
 
-  // Adjusted keyExtractor to handle potentially undefined fileID
   const keyExtractor = (item: FileViewProps) =>
     item.fileID?.toString() ?? 'unknown';
 
   return (
-    <View>
+    <View className="bg-carewallet-white/80">
       <Header />
       {data && data.length > 0 ? (
         <FlatList
           data={data}
           renderItem={renderItem}
           keyExtractor={keyExtractor}
+          className="min-h-[75vh] overflow-y-auto"
+          refreshControl={
+            <RefreshControl refreshing={isFetching} onRefresh={onRefresh} />
+          }
         />
       ) : (
-        <View className="flex h-[50vh] items-center justify-center">
+        <View className="flex h-[75vh] items-center justify-center">
           <Text>No files have been uploaded.</Text>
         </View>
       )}
