@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
 import { FlatList, RefreshControl, Text, View } from 'react-native';
 
-import FileTile from '../components/file_management/FileTile';
-import Header from '../components/file_management/Header';
+import { FileTile } from '../components/file_management/FileTile';
+import { Header } from '../components/file_management/Header';
 import { useCareWalletContext } from '../contexts/CareWalletContext';
 import { useAllFileByGroup } from '../services/file';
 
@@ -40,14 +40,16 @@ function FileViewScreen() {
           data={data}
           renderItem={renderItem}
           keyExtractor={keyExtractor}
-          className="min-h-[75vh] overflow-y-auto"
+          className="min-h-[80vh] overflow-y-auto"
           refreshControl={
             <RefreshControl refreshing={isFetching} onRefresh={onRefresh} />
           }
         />
       ) : (
-        <View className="flex h-[75vh] items-center justify-center">
-          <Text>No files have been uploaded.</Text>
+        <View className="flex h-[80vh] items-center justify-center">
+          <Text className="text-xl text-carewallet-black">
+            No files have been uploaded.
+          </Text>
         </View>
       )}
     </View>

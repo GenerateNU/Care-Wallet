@@ -1,12 +1,12 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 
-import WebView from 'react-native-webview';
+import { WebView } from 'react-native-webview';
 
 interface FileTileProps {
-  name: String;
-  label: String;
-  url: String;
+  name: string;
+  label: string;
+  url: string;
 }
 
 export function FileTile({ name, label, url }: FileTileProps): JSX.Element {
@@ -27,5 +27,3 @@ export function FileTile({ name, label, url }: FileTileProps): JSX.Element {
     </View>
   );
 }
-
-export default FileTile;

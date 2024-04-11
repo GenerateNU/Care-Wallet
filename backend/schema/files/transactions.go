@@ -115,7 +115,6 @@ func GetFileURL(pool *pgxpool.Pool, groupID string, fileName string) (string, er
 		return "", fmt.Errorf("invalid groupID: %w", err)
 	}
 
-
 	//Assuming FileID is used to create a unique object key
 	var fileID int
 	err = pool.QueryRow(context.Background(), "SELECT file_id FROM files WHERE group_id = $1 AND file_name = $2", groupIDInt, fileName).Scan(&fileID)
@@ -123,8 +122,6 @@ func GetFileURL(pool *pgxpool.Pool, groupID string, fileName string) (string, er
 		fmt.Println(err.Error())
 		return "", fmt.Errorf("file not found in database: %w", err)
 	}
-
-
 
 	// Create the AWS object key, upload the file to S3
 	objectKey := fmt.Sprintf("%v-%v", groupID, fileName)
@@ -140,14 +137,11 @@ func GetFileURL(pool *pgxpool.Pool, groupID string, fileName string) (string, er
 		return "", fmt.Errorf("error creating AWS session: %w", err)
 	}
 
-
-
 	svc := s3.New(sess)
 	req, _ := svc.GetObjectRequest(&s3.GetObjectInput{
 		Bucket: aws.String(AWS_BUCKET_NAME),
 		Key:    aws.String(aws_key),
 	})
-
 
 	expiration := time.Duration(24*time.Hour) * time.Duration(1)
 	urlStr, err := req.Presign(expiration) // URL expires after 15 minutes
