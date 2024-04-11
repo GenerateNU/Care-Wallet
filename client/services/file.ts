@@ -139,7 +139,6 @@ export const useAllFileByGroup = (groupId: number) => {
     queryKey: ['getAllFile']
   });
 
-  const { data, refetch, isFetching } = queryResult;
 
   return { groupFiles, refetchGroupFiles, isFetching };
 };
