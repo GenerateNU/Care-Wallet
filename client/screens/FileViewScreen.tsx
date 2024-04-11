@@ -17,7 +17,7 @@ type RenderItemProps = {
   item: FileViewProps;
 };
 
-function FileViewScreen() {
+export default function FileViewScreen() {
   const { group } = useCareWalletContext();
   const { data, refetch, isFetching } = useAllFileByGroup(group.groupID);
 
