@@ -118,19 +118,18 @@ export const useFile = () => {
 export const useFileByGroup = (groupId: number, fileName: string) => {
   const { data: file } = useQuery({
     queryFn: () => getFile({ groupId, fileName }),
-    queryKey: ['getFile']
+    queryKey: ['getFile', groupId, fileName]
   });
 
   return { file };
 };
 
 export const useAllFileByGroup = (groupId: number) => {
-  const queryResult = useQuery({
+  const  { data, refetch, isFetching } = useQuery({
     queryFn: () => getAllFile(groupId),
-    queryKey: ['getAllFile']
+    queryKey: ['getAllFile', groupID]
   });
 
-  const { data, refetch, isFetching } = queryResult;
 
-  return { data, refetch, isFetching };
+  return { groupFiles, refetchGroupFiles, isFetching };
 };
