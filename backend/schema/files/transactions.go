@@ -19,6 +19,13 @@ import (
 
 var AWS_BUCKET_NAME = "care-wallet-storage"
 
+type FileDetails struct {
+	FileID    int    `json:"fileId"`
+	FileName  string `json:"fileName"`
+	LabelName string `json:"labelName"`
+	URL       string `json:"url"`
+}
+
 func uploadFile(pool *pgxpool.Pool, file models.File, data *multipart.FileHeader, reader io.Reader) error {
 	file.FileName = data.Filename
 	file.UploadDate = time.Now().Format("2006-01-02 15:04:05")

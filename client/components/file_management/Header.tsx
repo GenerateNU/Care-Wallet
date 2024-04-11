@@ -1,7 +1,6 @@
 import React from 'react';
 import { SafeAreaView, Text, View } from 'react-native';
 
-import Plus from '../../assets/plus.svg';
 import { BackButton } from '../nav_buttons/BackButton';
 
 export function Header() {
@@ -14,8 +13,10 @@ export function Header() {
         <Text className="mx-auto font-carewallet-montserrat-semibold text-xl text-carewallet-blue">
           View Files
         </Text>
-        <View className="pr-1">
-          <Plus />
+        <View className="">
+          <View className="right-3 h-12 w-12 items-center justify-center rounded-xl bg-carewallet-blue">
+            <Text className="text-4xl text-carewallet-white">+</Text>
+          </View>
         </View>
       </View>
     </SafeAreaView>

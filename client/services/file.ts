@@ -54,19 +54,12 @@ interface RemoveFileProps {
 const removeFile = async ({
   groupId,
   fileName
-}: RemoveFileProps): Promise<Response> => {
-  const response = await fetch(
-    `${api_url}/files/remove?groupID=${groupId}&fileName=${fileName}`,
-    {
-      method: 'DELETE'
-    }
+}: RemoveFileProps): Promise<string> => {
+  const response = await axios.delete(
+    `${api_url}/files/${groupId}/${fileName}`
   );
 
-  if (!response.ok) {
-    throw new Error('Failed to remove file');
-  }
-
-  return response;
+  return response.data;
 };
 
 // For getting files
@@ -79,17 +72,15 @@ const getFile = async ({
   groupId,
   fileName
 }: GetFileProps): Promise<string> => {
-  const response = await axios.get(
-    `${api_url}/files/get?groupID=${groupId}&fileName=${fileName}`
-  );
+  const response = await axios.get(`${api_url}/files/${groupId}/${fileName}`);
 
-  return response.data; // Returns a local URL to access the file
+  return response.data;
 };
 
 const getAllFile = async (groupId: number): Promise<FileViewProps[]> => {
-  const response = await axios.get(`${api_url}/files/list?groupID=${groupId}`);
+  const response = await axios.get(`${api_url}/files/${groupId}`);
 
-  return response.data; // Returns an array of local URLs to access the files
+  return response.data;
 };
 
 // Hook to use these operations

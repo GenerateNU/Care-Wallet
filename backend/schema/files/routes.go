@@ -18,13 +18,14 @@ func FileGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 	files := v1.Group("files")
 	{
 		files.POST("/upload", c.uploadFile)
-		files.DELETE("/remove", c.removeFile)
-		files.GET("/get", c.getFile)
-		files.GET("/list", c.listFiles)
+		files.DELETE("/:groupId/:fileName", c.removeFile)
+		files.GET("/:groupId/:fileName", c.getFile)
+		files.GET("/:groupId", c.listFiles)
 	}
 
 	return files
 }
+
 
 // UploadFile godoc
 //
@@ -78,21 +79,21 @@ func (pg *PgModel) uploadFile(c *gin.Context) {
 	c.JSON(http.StatusOK, file)
 }
 
-// removeFile godoc
+// RemoveFile godoc
 //
 //	@summary		Remove a file
 //	@description	Remove a file from S3 bucket
 //	@tags			file
 //
-//	@param			groupID		query		string	true	"The groupID of the file"
-//	@param			fileName	query		string	true	"The fileName of the file"
+//	@param			groupId		path		string	true	"The groupID of the file"
+//	@param			fileName	path		string	true	"The fileName of the file"
 //
 //	@success		200			{object}	string
 //	@failure		400			{object}	string
-//	@router			/files/remove [delete]
+//	@router			/files/{groupId}/{fileName} [delete]
 func (pg *PgModel) removeFile(c *gin.Context) {
-	groupID := c.Query("groupID")
-	fileName := c.Query("fileName")
+	groupID := c.Param("groupId")
+	fileName := c.Param("fileName")
 
 	// Validate the input parameters as needed
 	if groupID == "" || fileName == "" {
@@ -115,15 +116,15 @@ func (pg *PgModel) removeFile(c *gin.Context) {
 //	@description	Get a file from S3 bucket
 //	@tags			file
 //
-//	@param			groupID		query		string	true	"The groupID of the file"
-//	@param			fileName	query		string	true	"The fileName of the file"
+//	@param			groupId		path		string	true	"The groupID of the file"
+//	@param			fileName	path		string	true	"The fileName of the file"
 //
-//	@success		302			{object}	string
+//	@success		200			{object}	string
 //	@failure		400			{object}	string
-//	@router			/files/get [get]
+//	@router			/files/{groupId}/{fileName} [get]
 func (pg *PgModel) getFile(c *gin.Context) {
-	groupID := c.Query("groupID")
-	fileName := c.Query("fileName")
+	groupID := c.Param("groupId")
+	fileName := c.Param("fileName")
 
 	fmt.Println("here")
 	// Validate the input parameters as needed
@@ -144,12 +145,7 @@ func (pg *PgModel) getFile(c *gin.Context) {
 	c.JSON(http.StatusOK, url)
 }
 
-type FileDetails struct {
-	FileID    int    `json:"fileId"`
-	FileName  string `json:"fileName"`
-	LabelName string `json:"labelName"`
-	URL       string `json:"url"`
-}
+
 
 // listFiles godoc
 //
@@ -157,13 +153,13 @@ type FileDetails struct {
 //	@description	List all files from S3 bucket
 //	@tags			file
 //
-//	@param			groupID	query		string	true	"The groupID of the file"
+//	@param			groupId	path		string	true	"The groupID of the file"
 //
-//	@success		200		{object}	[]string
+//	@success		200		{object}	[]FileDetails
 //	@failure		400		{object}	string
-//	@router			/files/list [get]
+//	@router			/files/{groupId} [get]
 func (pg *PgModel) listFiles(c *gin.Context) {
-	groupID := c.Query("groupID")
+	groupID := c.Param("groupId")
 
 	fmt.Println("here")
 	// Validate the input parameters as needed
