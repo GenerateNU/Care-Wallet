@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ActivityIndicator, Text, View } from 'react-native';
+import { ActivityIndicator, SafeAreaView, Text, View } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 
@@ -45,59 +45,61 @@ export default function Profile() {
   }
 
   return (
-    <View className="flex h-[100vh] flex-1 flex-col bg-carewallet-white/80">
-      <Header
-        user={users.find((user) => user.user_id === activeUser)}
-        role={roles.find((role) => role.user_id === activeUser)}
-        onPress={() => setActiveUser(signedInUser.userID)}
-      />
-      <View className="h-[70vh] pt-10">
-        <Group
-          users={users ?? []}
-          usersAreLoading={usersAreLoading}
-          setActiveUser={setActiveUser}
-          activeUser={activeUser}
-          roles={roles ?? []}
-          rolesAreLoading={rolesAreLoading}
+    <SafeAreaView className="flex-1 bg-carewallet-white">
+      <View className="flex h-[100vh] flex-1 flex-col bg-carewallet-white/80">
+        <Header
+          user={users.find((user) => user.user_id === activeUser)}
+          role={roles.find((role) => role.user_id === activeUser)}
+          onPress={() => setActiveUser(signedInUser.userID)}
         />
-        <View
-          className="mt-5 flex items-center pb-5"
-          onTouchEnd={() => {
-            navigation.navigate('CalendarContainer', {
-              screen: 'CalendarTopNav',
-              params: { screen: 'TaskList' }
-            });
-          }}
-        >
-          <UserTaskStatusCard userID={activeUser} />
-        </View>
-        {signedInUser.userID === activeUser && (
-          <>
-            <View className="mb-5 items-center">
-              <CircleCard
-                Icon={<Folder />}
-                ButtonText="View Patient Information"
-                onTouchEnd={() => navigation.navigate('PatientView')}
-              />
-            </View>
-            <View className="mb-auto">
-              <View
-                className="h-10 flex-1 items-center"
-                onTouchEnd={() => navigation.navigate('Settings')}
-              >
-                <CircleCard Icon={<Settings />} ButtonText="Settings" />
+        <View className="h-[70vh] pt-10">
+          <Group
+            users={users ?? []}
+            usersAreLoading={usersAreLoading}
+            setActiveUser={setActiveUser}
+            activeUser={activeUser}
+            roles={roles ?? []}
+            rolesAreLoading={rolesAreLoading}
+          />
+          <View
+            className="mt-5 flex items-center pb-5"
+            onTouchEnd={() => {
+              navigation.navigate('CalendarContainer', {
+                screen: 'CalendarTopNav',
+                params: { screen: 'TaskList' }
+              });
+            }}
+          >
+            <UserTaskStatusCard userID={activeUser} />
+          </View>
+          {signedInUser.userID === activeUser && (
+            <>
+              <View className="mb-5 items-center">
+                <CircleCard
+                  Icon={<Folder />}
+                  ButtonText="View Patient Information"
+                  onTouchEnd={() => navigation.navigate('PatientView')}
+                />
               </View>
-            </View>
-            <View className="mb-5 items-center">
-              <CircleCard
-                Icon={<RightArrow />}
-                ButtonText="Log Out"
-                onTouchEnd={() => signOutMutation()}
-              />
-            </View>
-          </>
-        )}
+              <View className="mb-auto">
+                <View
+                  className="h-10 flex-1 items-center"
+                  onTouchEnd={() => navigation.navigate('Settings')}
+                >
+                  <CircleCard Icon={<Settings />} ButtonText="Settings" />
+                </View>
+              </View>
+              <View className="mb-5 items-center">
+                <CircleCard
+                  Icon={<RightArrow />}
+                  ButtonText="Log Out"
+                  onTouchEnd={() => signOutMutation()}
+                />
+              </View>
+            </>
+          )}
+        </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }

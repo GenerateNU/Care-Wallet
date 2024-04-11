@@ -1,3 +1,10 @@
+import React from 'react';
+
+import FinancialLegal from '../assets/calendar/financial&legal.svg';
+import HealthMedical from '../assets/calendar/health&medical.svg';
+import HomeLifestyle from '../assets/calendar/home&lifestyle.svg';
+import Personal from '../assets/calendar/personal.svg';
+
 export enum TypeOfTask {
   MEDICATION = 'Medication Management',
   APPOINTMENTS = 'Physician Appointments',
@@ -51,4 +58,11 @@ export const TaskTypeDescriptions: Record<string, string> = {
   dr_appt: 'Doctor Appointment',
   financial: 'Financial Task',
   other: 'Other Task'
+};
+
+export const CategoryIconsMap: Record<string, JSX.Element> = {
+  'Financial & Legal': <FinancialLegal />,
+  'Health & Medical': <HealthMedical />,
+  'Home & Lifestyle': <HomeLifestyle />,
+  Personal: <Personal />
 };

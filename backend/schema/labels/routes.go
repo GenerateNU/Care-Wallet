@@ -17,10 +17,10 @@ func LabelGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 
 	labels := v1.Group(":groupId/labels")
 	{
-		labels.POST("", c.CreateNewLabel)
-		labels.GET("", c.GetLabelsByGroup)
-		labels.DELETE(":lname", c.DeleteLabel)
-		labels.PATCH(":lname", c.EditLabel)
+		labels.POST("", c.createNewLabel)
+		labels.GET("", c.getLabelsByGroup)
+		labels.DELETE(":lname", c.deleteLabel)
+		labels.PATCH(":lname", c.editLabel)
 	}
 
 	return labels
@@ -37,10 +37,10 @@ func LabelGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 //	@success		200		{array}		models.Label
 //	@failure		400		{object}	string
 //	@router			/group/{groupId}/labels [GET]
-func (pg *PgModel) GetLabelsByGroup(c *gin.Context) {
+func (pg *PgModel) getLabelsByGroup(c *gin.Context) {
 	group_id := c.Param("groupId")
 
-	labels, err := GetLabelsByGroupFromDB(pg.Conn, group_id)
+	labels, err := getLabelsByGroupFromDB(pg.Conn, group_id)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
 		return
@@ -66,7 +66,7 @@ type LabelData struct {
 //	@success		200		{object}	models.Label
 //	@failure		400		{object}	string
 //	@router			/group/{groupId}/labels [POST]
-func (pg *PgModel) CreateNewLabel(c *gin.Context) {
+func (pg *PgModel) createNewLabel(c *gin.Context) {
 	var requestBody LabelData
 	group_id := c.Param("groupId")
 
@@ -78,7 +78,7 @@ func (pg *PgModel) CreateNewLabel(c *gin.Context) {
 
 	id, _ := strconv.Atoi(group_id)
 
-	label, err := CreateNewLabelInDB(pg.Conn, id, requestBody)
+	label, err := createNewLabelInDB(pg.Conn, id, requestBody)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
 		return
@@ -99,11 +99,11 @@ func (pg *PgModel) CreateNewLabel(c *gin.Context) {
 //	@success		200		{object}	string
 //	@failure		400		{object}	string
 //	@router			/group/{groupId}/labels/{lname} [DELETE]
-func (pg *PgModel) DeleteLabel(c *gin.Context) {
+func (pg *PgModel) deleteLabel(c *gin.Context) {
 	group_id := c.Param("groupId")
 	label_name := c.Param("lname")
 
-	err := DeleteLabelFromDB(pg.Conn, group_id, label_name)
+	err := deleteLabelFromDB(pg.Conn, group_id, label_name)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
 		return
@@ -125,7 +125,7 @@ func (pg *PgModel) DeleteLabel(c *gin.Context) {
 //	@success		200		{object}	models.Label
 //	@failure		400		{object}	string
 //	@router			/group/{groupId}/labels/{lname} [PATCH]
-func (pg *PgModel) EditLabel(c *gin.Context) {
+func (pg *PgModel) editLabel(c *gin.Context) {
 	group_id := c.Param("groupId")
 	label_name := c.Param("lname")
 
@@ -136,7 +136,7 @@ func (pg *PgModel) EditLabel(c *gin.Context) {
 		return
 	}
 
-	label, err := EditLabelInDB(pg.Conn, group_id, label_name, requestBody)
+	label, err := editLabelInDB(pg.Conn, group_id, label_name, requestBody)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
 		return

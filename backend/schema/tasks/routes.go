@@ -19,18 +19,18 @@ type PgModel struct {
 func TaskGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 	tasks := v1.Group("")
 	{
-		tasks.GET("/filtered", c.GetFilteredTasks)
-		tasks.GET("/assigned", c.GetTasksByAssignedUsers)
-		tasks.POST("", c.CreateTask)
+		tasks.GET("/filtered", c.getFilteredTasks)
+		tasks.GET("/assigned", c.getTasksByAssignedUsers)
+		tasks.POST("", c.createTask)
 
 		byId := tasks.Group("/:tid")
 		{
-			byId.GET("", c.GetTaskByID)
-			byId.DELETE("", c.DeleteTask)
-			byId.PUT("", c.UpdateTaskInfo)
-			byId.GET("/assigned", c.GetUsersAssignedToTask)
-			byId.POST("/assign", c.AssignUsersToTask)
-			byId.DELETE("/remove", c.RemoveUsersFromTask)
+			byId.GET("", c.getTaskByID)
+			byId.DELETE("", c.deleteTask)
+			byId.PUT("", c.updateTaskInfo)
+			byId.GET("/assigned", c.getUsersAssignedToTask)
+			byId.POST("/assign", c.assignUsersToTask)
+			byId.DELETE("/remove", c.removeUsersFromTask)
 		}
 	}
 	return tasks
@@ -47,13 +47,13 @@ func TaskGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 //	@success		200	{object}	models.Task
 //	@failure		400	{object}	string
 //	@router			/tasks/{tid} [GET]
-func (pg *PgModel) GetTaskByID(c *gin.Context) {
+func (pg *PgModel) getTaskByID(c *gin.Context) {
 	taskID, err := strconv.Atoi(c.Param("tid"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
-	task, err := GetTaskByID(pg.Conn, taskID)
+	task, err := getTaskByID(pg.Conn, taskID)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
 		return
@@ -84,14 +84,14 @@ type TaskQuery struct {
 //	@success		200	{array}		models.Task
 //	@failure		400	{object}	string
 //	@router			/tasks/filtered [get]
-func (pg *PgModel) GetFilteredTasks(c *gin.Context) {
+func (pg *PgModel) getFilteredTasks(c *gin.Context) {
 	var filterQuery TaskQuery
 	if err := c.ShouldBindQuery(&filterQuery); err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
 
-	tasks, err := GetTasksByQueryFromDB(pg.Conn, filterQuery)
+	tasks, err := getTasksByQueryFromDB(pg.Conn, filterQuery)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
@@ -117,13 +117,13 @@ type Assignment struct {
 //	@success		200	{array}		models.TaskUser
 //	@failure		400	{object}	string
 //	@router			/tasks/{tid}/assign [post]
-func (pg *PgModel) AssignUsersToTask(c *gin.Context) {
+func (pg *PgModel) assignUsersToTask(c *gin.Context) {
 	var requestBody Assignment
 	if err := c.BindJSON(&requestBody); err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
-	assignedUsers, err := AssignUsersToTaskInDB(pg.Conn, requestBody.UserIDs, c.Param("tid"), requestBody.Assigner)
+	assignedUsers, err := assignUsersToTaskInDB(pg.Conn, requestBody.UserIDs, c.Param("tid"), requestBody.Assigner)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
 		return
@@ -147,13 +147,13 @@ type Removal struct {
 //	@success		200	{array}		models.TaskUser
 //	@failure		400	{object}	string
 //	@router			/tasks/{tid}/remove [delete]
-func (pg *PgModel) RemoveUsersFromTask(c *gin.Context) {
+func (pg *PgModel) removeUsersFromTask(c *gin.Context) {
 	var requestBody Removal
 	if err := c.BindJSON(&requestBody); err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
-	removedUsers, err := RemoveUsersFromTaskInDB(pg.Conn, requestBody.UserIDs, c.Param("tid"))
+	removedUsers, err := removeUsersFromTaskInDB(pg.Conn, requestBody.UserIDs, c.Param("tid"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
 		return
@@ -176,12 +176,12 @@ type AssignedQuery struct {
 //	@success		200	{array}		models.Task
 //	@failure		400	{object}	string
 //	@router			/tasks/assigned [get]
-func (pg *PgModel) GetTasksByAssignedUsers(c *gin.Context) {
+func (pg *PgModel) getTasksByAssignedUsers(c *gin.Context) {
 	userIDs := c.Query("userIDs")
 	assignedQuery := AssignedQuery{
 		UserIDs: strings.Split(userIDs, ","),
 	}
-	tasks, err := GetTasksByAssignedFromDB(pg.Conn, assignedQuery.UserIDs)
+	tasks, err := getTasksByAssignedFromDB(pg.Conn, assignedQuery.UserIDs)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
 		return
@@ -215,7 +215,7 @@ type TaskBody struct {
 //
 //	@success		201				{object}	models.Task	"Created Task"
 //	@router			/tasks [post]
-func (pg *PgModel) CreateTask(c *gin.Context) {
+func (pg *PgModel) createTask(c *gin.Context) {
 	// Bind the request body to the CreateTaskRequest struct
 	var requestBody models.Task
 	if err := c.BindJSON(&requestBody); err != nil {
@@ -225,7 +225,7 @@ func (pg *PgModel) CreateTask(c *gin.Context) {
 	}
 
 	// Create the new task in the database
-	newTaskID, err := CreateTaskInDB(pg.Conn, requestBody)
+	newTaskID, err := createTaskInDB(pg.Conn, requestBody)
 	if err != nil {
 		fmt.Println("error creating task in the database:", err)
 		c.JSON(http.StatusBadRequest, err.Error())
@@ -233,7 +233,7 @@ func (pg *PgModel) CreateTask(c *gin.Context) {
 	}
 
 	// Fetch the created task from the database
-	createdTask, err := GetTaskByID(pg.Conn, newTaskID)
+	createdTask, err := getTaskByID(pg.Conn, newTaskID)
 	if err != nil {
 		fmt.Println("error fetching created task from the database:", err)
 		c.JSON(http.StatusBadRequest, err.Error())
@@ -251,7 +251,7 @@ func (pg *PgModel) CreateTask(c *gin.Context) {
 //	@param			tid	path	int	true	"Task ID"
 //	@success		204	"No Content"
 //	@router			/tasks/{tid} [delete]
-func (pg *PgModel) DeleteTask(c *gin.Context) {
+func (pg *PgModel) deleteTask(c *gin.Context) {
 	// Extract task ID from the path parameter
 	taskID, err := strconv.Atoi(c.Param("tid"))
 	if err != nil {
@@ -260,13 +260,13 @@ func (pg *PgModel) DeleteTask(c *gin.Context) {
 	}
 
 	// Check if the task exists before attempting to delete
-	if _, err := GetTaskByID(pg.Conn, taskID); err != nil {
+	if _, err := getTaskByID(pg.Conn, taskID); err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
 
 	// Delete the task from the database
-	if err := DeleteTaskInDB(pg.Conn, taskID); err != nil {
+	if err := deleteTaskInDB(pg.Conn, taskID); err != nil {
 		fmt.Println("error deleting task from the database:", err)
 		c.JSON(http.StatusBadRequest, err.Error())
 		return
@@ -284,7 +284,7 @@ func (pg *PgModel) DeleteTask(c *gin.Context) {
 //	@param			request_body	body		TaskBody	true	"Update Task Info Request"
 //	@success		200				{object}	models.Task	"Updated Task"
 //	@router			/tasks/{tid} [put]
-func (pg *PgModel) UpdateTaskInfo(c *gin.Context) {
+func (pg *PgModel) updateTaskInfo(c *gin.Context) {
 	// Extract task ID from the path parameter
 	taskID, err := strconv.Atoi(c.Param("tid"))
 	if err != nil {
@@ -302,14 +302,14 @@ func (pg *PgModel) UpdateTaskInfo(c *gin.Context) {
 	}
 
 	// Update the task_info field in the database
-	if err := UpdateTaskInfoInDB(pg.Conn, taskID, requestBody); err != nil {
+	if err := updateTaskInfoInDB(pg.Conn, taskID, requestBody); err != nil {
 		fmt.Println("error updating task info in the database:", err)
 		c.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
 
 	// Fetch the updated task from the database
-	updatedTask, err := GetTaskByID(pg.Conn, taskID)
+	updatedTask, err := getTaskByID(pg.Conn, taskID)
 	if err != nil {
 		fmt.Println("error fetching updated task from the database:", err)
 		c.JSON(http.StatusBadRequest, err.Error())
@@ -333,7 +333,7 @@ type TaskUser struct {
 //	@success		200	{array}		string	"List of user IDs assigned to the task"
 //	@failure		400	{object}	string
 //	@router			/tasks/{tid}/assigned [get]
-func (pg *PgModel) GetUsersAssignedToTask(c *gin.Context) {
+func (pg *PgModel) getUsersAssignedToTask(c *gin.Context) {
 	// Extract task ID from the path parameter
 	taskIDStr := c.Param("tid")
 	taskID, err := strconv.Atoi(taskIDStr)
@@ -343,7 +343,7 @@ func (pg *PgModel) GetUsersAssignedToTask(c *gin.Context) {
 	}
 
 	// Get list of users assigned to the task
-	userIDs, err := GetUsersAssignedToTaskFromDB(pg.Conn, taskID)
+	userIDs, err := getUsersAssignedToTaskFromDB(pg.Conn, taskID)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
 		return

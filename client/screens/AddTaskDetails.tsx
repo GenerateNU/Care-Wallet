@@ -16,11 +16,11 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-import { CWDropdown } from '../components/Dropdown.tsx';
+import { CWDropdown } from '../components/Dropdown';
 import { BackButton } from '../components/nav_buttons/BackButton';
 import { CloseButton } from '../components/nav_buttons/CloseButton';
-import { TextInputLine } from '../components/task_creation/TextInputLine.tsx';
-import { TextInputParagraph } from '../components/task_creation/TextInputParagraph.tsx';
+import { TextInputLine } from '../components/task_creation/TextInputLine';
+import { TextInputParagraph } from '../components/task_creation/TextInputParagraph';
 import { AppStackNavigation } from '../navigation/types';
 import { Category, CategoryToTypeMap, TypeOfTask } from '../types/type';
 

@@ -1,20 +1,37 @@
-import React, { useState } from 'react';
-import { Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { SafeAreaView, Text, View } from 'react-native';
 
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { RouteProp, useRoute } from '@react-navigation/native';
+import { clsx } from 'clsx';
 import {
   GestureHandlerRootView,
   ScrollView
 } from 'react-native-gesture-handler';
 
+import FinancialBg from '../assets/task-creation/financial-bg.svg';
+import HealthBg from '../assets/task-creation/health-bg.svg';
+import HomeBg from '../assets/task-creation/home-bg.svg';
+import OtherBg from '../assets/task-creation/other-bg.svg';
+import PersonalBg from '../assets/task-creation/personal-bg.svg';
 import { BackButton } from '../components/nav_buttons/BackButton';
-import { ForwardButton } from '../components/nav_buttons/ForwardButton.tsx';
 import { AddressComponent } from '../components/task_creation/AddressComponent';
 import { RadioGroup } from '../components/task_creation/RadioGroup';
 import { TextInputLine } from '../components/task_creation/TextInputLine';
 import { TextInputParagraph } from '../components/task_creation/TextInputParagraph';
-import { AppStackNavigation } from '../navigation/types.ts';
 import { TaskCreationJson } from '../types/task-creation-json';
+
+const TaskTitleToColorMap: { [key: string]: string } = {
+  'Medication Management': 'text-carewallet-pink',
+  'Physician Appointments': 'text-carewallet-pink',
+  Grooming: 'text-carewallet-purple',
+  'Family Conversations': 'text-carewallet-purple',
+  'Shopping & Errands': 'text-carewallet-purple',
+  'Pay Bills': 'text-carewallet-purple',
+  Diet: 'text-carewallet-yellow',
+  Activities: 'text-carewallet-yellow',
+  'Health Insurance': 'text-carewallet-green',
+  Other: 'text-carewallet-coral'
+};
 
 type ParamList = {
   mt: {
@@ -23,28 +40,59 @@ type ParamList = {
 };
 
 export default function TaskCreation() {
-  const navigation = useNavigation<AppStackNavigation>();
   const route = useRoute<RouteProp<ParamList, 'mt'>>();
   const { taskType } = route.params;
-
   const header = TaskCreationJson.types.find((t) =>
     taskType.includes(t.Header)
   )?.Header;
+
+  const [themeColor, setThemeColor] = useState(
+    TaskTitleToColorMap[header as string]
+  );
+
+  useEffect(() => {
+    setThemeColor(TaskTitleToColorMap[header as string]);
+  }, [header]);
+
+  const renderBackground = (header: string) => {
+    switch (header) {
+      case 'Medication Management':
+        return <HealthBg />;
+      case 'Physician Appointments':
+        return <HealthBg />;
+      case 'Grooming':
+        return <PersonalBg />;
+      case 'Family Conversations':
+        return <PersonalBg />;
+      case 'Shopping & Errands':
+        return <PersonalBg />;
+      case 'Pay Bills':
+        return <FinancialBg />;
+      case 'Diet':
+        return <HomeBg />;
+      case 'Activities':
+        return <HomeBg />;
+      case 'Health Insurance':
+        return <FinancialBg />;
+      case 'Other':
+        return <OtherBg />;
+      default:
+        return null;
+    }
+  };
 
   const body = TaskCreationJson.types.find((t) =>
     taskType.includes(t.Header)
   )?.Body;
 
   const compList: { key: string; value: string }[] = [];
-
   body?.forEach((item) => {
     Object.entries(item).forEach(([key, value]) => {
       compList.push({ key, value });
     });
   });
 
-  const [values, setValues] = useState<{ [key: string]: string }>({});
-
+  const [, setValues] = useState<{ [key: string]: string }>({});
   const handleChange = (key: string, value: string) => {
     setValues((prevValues) => ({
       ...prevValues,
@@ -52,71 +100,51 @@ export default function TaskCreation() {
     }));
   };
 
-  // Function to check if all fields are filled
-  const allFieldsFilled = () => {
-    return Object.values(values).every((value) => value.trim() !== '');
-  };
-
-  // Function to export user-input values to task-creation json
-  const exportValuesAsJSON = () => {
-    return JSON.stringify(values);
-  };
-
-  // Function to handle forward button click
-  const handleForwardButtonClick = () => {
-    if (allFieldsFilled()) {
-      // Navigate to the AddTaskDetails screen with the task creation JSON
-      navigation.navigate('AddTaskDetails', {
-        taskCreation: exportValuesAsJSON()
-      });
-    } else {
-      console.log('Please fill all fields before proceeding.');
-    }
-  };
-
   return (
-    <GestureHandlerRootView>
-      <ScrollView className="mt-10">
-        <View className="flex w-full flex-row items-center justify-center">
-          <View className="mr-[95px]">
-            <BackButton />
-          </View>
-          <Text className="mr-auto self-center text-center text-carewallet-gray">
-            Step 1 of 2
+    <SafeAreaView className="flex-1 bg-carewallet-white">
+      <GestureHandlerRootView>
+        <View className="flex w-full flex-row items-center border-b border-carewallet-gray bg-carewallet-white">
+          <BackButton />
+          <Text className="mx-auto pr-20 font-carewallet-manrope-bold text-lg text-carewallet-blue">
+            Step 2 of 3
           </Text>
         </View>
-        <Text className="text-center text-2xl font-bold">{header}</Text>
-        {compList.map((item, index) => (
-          <View key={index}>
-            {item.key === 'Address' && <AddressComponent />}
-            {item.value === 'TextInputLine' && (
-              <TextInputLine
-                title={item.key}
-                onChange={(value) => handleChange(item.key, value)}
-              />
+        <View className="absolute -z-20">{renderBackground(header ?? '')}</View>
+        <ScrollView className="mt-3 min-h-full min-w-full">
+          <Text
+            className={clsx(
+              'mx-5 font-carewallet-manrope-bold text-2xl',
+              themeColor
             )}
-            {item.value === 'TextInputParagraph' && (
-              <TextInputParagraph
-                title={item.key}
-                onChange={(value) => handleChange(item.key, value)}
-              />
-            )}
-            {item.value.startsWith('RadioGroup') && (
-              <RadioGroup
-                title={item.key}
-                options={item.value.substring(12).split(', ')}
-                onChange={(value) => handleChange(item.key, value)}
-              />
-            )}
-          </View>
-        ))}
-        <View className="flex-row justify-end">
-          {/* Render ForwardButton component conditionally */}
-          {allFieldsFilled() && (
-            <ForwardButton onPress={handleForwardButtonClick} />
-          )}
-        </View>
-      </ScrollView>
-    </GestureHandlerRootView>
+          >
+            {header}
+          </Text>
+          {compList.map((item, index) => (
+            <View key={index}>
+              {item.key === 'Address' && <AddressComponent />}
+              {item.value === 'TextInputLine' && (
+                <TextInputLine
+                  title={item.key}
+                  onChange={(value) => handleChange(item.key, value)}
+                />
+              )}
+              {item.value === 'TextInputParagraph' && (
+                <TextInputParagraph
+                  title={item.key}
+                  onChange={(value) => handleChange(item.key, value)}
+                />
+              )}
+              {item.value.startsWith('RadioGroup') && (
+                <RadioGroup
+                  title={item.key}
+                  options={item.value.substring(12).split(' ')}
+                  onChange={(value) => handleChange(item.key, value)}
+                />
+              )}
+            </View>
+          ))}
+        </ScrollView>
+      </GestureHandlerRootView>
+    </SafeAreaView>
   );
 }
