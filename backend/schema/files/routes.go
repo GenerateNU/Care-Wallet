@@ -26,7 +26,6 @@ func FileGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 	return files
 }
 
-
 // UploadFile godoc
 //
 //	@summary		Upload a file
@@ -144,8 +143,6 @@ func (pg *PgModel) getFile(c *gin.Context) {
 
 	c.JSON(http.StatusOK, url)
 }
-
-
 
 // listFiles godoc
 //
