@@ -141,5 +141,5 @@ export const useAllFileByGroup = (groupId: number) => {
 
   const { data, refetch, isFetching } = queryResult;
 
-  return { data, refetch, isFetching };
+  return { groupFiles, refetchGroupFiles, isFetching };
 };
