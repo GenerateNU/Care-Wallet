@@ -151,7 +151,6 @@ type FileDetails struct {
 	URL       string `json:"url"`
 }
 
-
 // listFiles godoc
 //
 //	@summary		List all files
@@ -179,7 +178,6 @@ func (pg *PgModel) listFiles(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, "Failed to get file: "+err.Error())
 		return
 	}
-
 
 	c.JSON(http.StatusOK, url)
 }
