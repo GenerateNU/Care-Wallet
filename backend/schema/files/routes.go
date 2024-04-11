@@ -17,10 +17,10 @@ type PgModel struct {
 func FileGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 	files := v1.Group("files")
 	{
-		files.POST("/upload", c.UploadFile)
-		files.DELETE("/remove", c.RemoveFile)
-		files.GET("/get", c.GetFile)
-		files.GET("/list", c.ListFiles)
+		files.POST("/upload", c.uploadFile)
+		files.DELETE("/remove", c.removeFile)
+		files.GET("/get", c.getFile)
+		files.GET("/list", c.listFiles)
 	}
 
 	return files
@@ -78,7 +78,7 @@ func (pg *PgModel) uploadFile(c *gin.Context) {
 	c.JSON(http.StatusOK, file)
 }
 
-// RemoveFile godoc
+// removeFile godoc
 //
 //	@summary		Remove a file
 //	@description	Remove a file from S3 bucket
@@ -90,7 +90,7 @@ func (pg *PgModel) uploadFile(c *gin.Context) {
 //	@success		200			{object}	string
 //	@failure		400			{object}	string
 //	@router			/files/remove [delete]
-func (pg *PgModel) RemoveFile(c *gin.Context) {
+func (pg *PgModel) removeFile(c *gin.Context) {
 	groupID := c.Query("groupID")
 	fileName := c.Query("fileName")
 
@@ -109,7 +109,7 @@ func (pg *PgModel) RemoveFile(c *gin.Context) {
 	c.Status(http.StatusOK)
 }
 
-// GetFile godoc
+// getFile godoc
 //
 //	@summary		Get a file
 //	@description	Get a file from S3 bucket
@@ -121,7 +121,7 @@ func (pg *PgModel) RemoveFile(c *gin.Context) {
 //	@success		302			{object}	string
 //	@failure		400			{object}	string
 //	@router			/files/get [get]
-func (pg *PgModel) GetFile(c *gin.Context) {
+func (pg *PgModel) getFile(c *gin.Context) {
 	groupID := c.Query("groupID")
 	fileName := c.Query("fileName")
 
@@ -152,7 +152,7 @@ type FileDetails struct {
 }
 
 
-// ListFiles godoc
+// listFiles godoc
 //
 //	@summary		List all files
 //	@description	List all files from S3 bucket
@@ -163,7 +163,7 @@ type FileDetails struct {
 //	@success		200		{object}	[]string
 //	@failure		400		{object}	string
 //	@router			/files/list [get]
-func (pg *PgModel) ListFiles(c *gin.Context) {
+func (pg *PgModel) listFiles(c *gin.Context) {
 	groupID := c.Query("groupID")
 
 	fmt.Println("here")
