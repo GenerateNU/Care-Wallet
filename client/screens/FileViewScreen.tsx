@@ -56,4 +56,3 @@ export default function FileViewScreen() {
   );
 }
 
-export default FileViewScreen;
