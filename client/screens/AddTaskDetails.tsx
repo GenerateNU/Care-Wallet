@@ -77,7 +77,7 @@ export default function AddTaskDetails() {
       date.toLocaleTimeString('en-US', {
         hour: 'numeric',
         minute: 'numeric'
-      }) + '*'
+      })
     );
     setStartTimePickerVisible(false);
   };
@@ -150,14 +150,13 @@ export default function AddTaskDetails() {
   const onConfirmTaskDate = (output: { date: Date; dateString: string }) => {
     setShowTaskDatePicker(false);
     handleChange('Date', output.dateString);
-    const formattedDate =
-      output.date
-        .toLocaleDateString('en-US', {
-          month: 'long',
-          day: 'numeric',
-          year: 'numeric'
-        })
-        .toUpperCase() + '*';
+    const formattedDate = output.date
+      .toLocaleDateString('en-US', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric'
+      })
+      .toUpperCase();
     setTaskDate(formattedDate);
   };
 
@@ -210,7 +209,7 @@ export default function AddTaskDetails() {
           {/* If Quick Task is selected */}
           {values['Schedule Type'] === 'Quick Task' && (
             <DateTimeDisplay
-              title={'Date'}
+              title={'Date*'}
               elements={[taskDate]}
               actions={[openTaskDatePicker]}
             />
@@ -219,12 +218,12 @@ export default function AddTaskDetails() {
           {values['Schedule Type'] === 'Event' && (
             <View>
               <DateTimeDisplay
-                title={'Date'}
+                title={'Date*'}
                 elements={[taskDate]}
                 actions={[openTaskDatePicker]}
               />
               <DateTimeDisplay
-                title={'Time'}
+                title={'Time*'}
                 elements={[displayedStartTime, displayedEndTime]}
                 actions={[
                   () => setStartTimePickerVisible(true),
@@ -251,7 +250,7 @@ export default function AddTaskDetails() {
               />
             </View>
           )}
-          <View className="mx-4 mb-0 mt-1">
+          <View className="mx-4 mb-0 mt-4">
             <Text className="mb-2 font-carewallet-montserrat-semibold">
               {'LABEL'}
             </Text>
@@ -284,7 +283,7 @@ export default function AddTaskDetails() {
                   // TODO: where to navigate to after task creation?
                   navigation.navigate('TaskList');
                   // TODO: create new task in database, assign to 'Assigned To'
-                  // task is added to calendar and task list by proxy?
+                  // is task automatically added to calendar & task list?
                 }
 
                 console.log(
