@@ -115,8 +115,11 @@ export default function TaskCreation() {
             Step 2 of 3
           </Text>
         </View>
-        <View className="absolute -z-20">{renderBackground(header ?? '')}</View>
+
         <ScrollView className="mt-3 min-h-full min-w-full">
+          <View className="absolute -z-20">
+            {renderBackground(header ?? '')}
+          </View>
           <Text
             className={clsx(
               'mx-5 font-carewallet-manrope-bold text-2xl',

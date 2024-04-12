@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
 
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
@@ -11,6 +11,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { CWDropdown } from '../components/Dropdown';
 import { BackButton } from '../components/nav_buttons/BackButton';
 import { ForwardButton } from '../components/nav_buttons/ForwardButton';
+import { StyledDatePicker } from '../components/task_creation/DatePicker';
+import { DateTimeDisplay } from '../components/task_creation/DateTimeDisplay';
 import { RadioGroup } from '../components/task_creation/RadioGroup';
 import { TextInputLine } from '../components/task_creation/TextInputLine';
 import { TextInputParagraph } from '../components/task_creation/TextInputParagraph';
@@ -44,8 +46,59 @@ export default function AddTaskDetails() {
   };
 
   const [repeat, setRepeat] = useState('NONE');
+  useEffect(() => {
+    handleChange('Repeat', repeat);
+  }, [repeat]);
+  const [showEndRepeatDatePicker, setShowEndRepeatDatePicker] = useState(false);
+  const openEndRepeatDatePicker = () => setShowEndRepeatDatePicker(true);
+  const [endRepeatDate, setEndRepeatDate] = useState('SELECT DATE');
+  const onCancelEndRepeatDate = () => {
+    setShowEndRepeatDatePicker(false);
+  };
+  const onConfirmEndRepeatDate = (output: {
+    date: Date;
+    dateString: string;
+  }) => {
+    setShowEndRepeatDatePicker(false);
+    handleChange('End Repeat', output.dateString);
+    const formattedDate = output.date
+      .toLocaleDateString('en-US', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric'
+      })
+      .toUpperCase();
+    setEndRepeatDate(formattedDate);
+  };
+
   const [label, setLabel] = useState('SELECT');
+  useEffect(() => {
+    handleChange('Label', label);
+  }, [label]);
+
   const [assignedTo, setAssignedTo] = useState('SELECT');
+  useEffect(() => {
+    handleChange('Assigned To', assignedTo);
+  }, [assignedTo]);
+
+  const [showTaskDatePicker, setShowTaskDatePicker] = useState(false);
+  const openTaskDatePicker = () => setShowTaskDatePicker(true);
+  const [taskDate, setTaskDate] = useState('SELECT DATE');
+  const onCancelTaskDate = () => {
+    setShowTaskDatePicker(false);
+  };
+  const onConfirmTaskDate = (output: { date: Date; dateString: string }) => {
+    setShowTaskDatePicker(false);
+    handleChange('Date', output.dateString);
+    const formattedDate = output.date
+      .toLocaleDateString('en-US', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric'
+      })
+      .toUpperCase();
+    setTaskDate(formattedDate);
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-carewallet-white">
@@ -56,7 +109,7 @@ export default function AddTaskDetails() {
             Step 3 of 3
           </Text>
         </View>
-        <ScrollView className="h-full">
+        <ScrollView className="h-[90%]">
           <Text className="mt-3 px-4 font-carewallet-manrope-bold text-[24px]">
             Task Details
           </Text>
@@ -74,6 +127,21 @@ export default function AddTaskDetails() {
             options={['Quick Task', 'Scheduled']}
             onChange={(value) => handleChange('Schedule Type', value)}
           />
+          <View className="mx-4 mt-3">
+            <DateTimeDisplay
+              title={'Date'}
+              elements={[taskDate]}
+              onPress={openTaskDatePicker}
+            />
+          </View>
+          <View className="mx-4 mt-3">
+            <DateTimeDisplay
+              title={'Time'}
+              elements={['SELECT START', 'SELECT END']}
+              onPress={() => null}
+            />
+          </View>
+
           <View className="m-4 mb-0">
             <Text className="mb-2 font-carewallet-montserrat-semibold">
               {'REPEAT'}
@@ -81,11 +149,15 @@ export default function AddTaskDetails() {
             <CWDropdown
               selected={repeat}
               items={Object.values(RepeatOptions)}
-              setLabel={() => {
-                setRepeat;
-                values['Repeat'] = repeat;
-              }}
+              setLabel={setRepeat}
             />
+            {values['Repeat'] !== 'NONE' && (
+              <DateTimeDisplay
+                title={'End Repeat'}
+                elements={[endRepeatDate]}
+                onPress={openEndRepeatDatePicker}
+              />
+            )}
           </View>
           <View className="flex flex-row">
             <View className="mb-0 ml-4 mr-2 mt-1 w-[45%]">
@@ -96,10 +168,7 @@ export default function AddTaskDetails() {
                 selected={label}
                 // TODO: Get labels for this group
                 items={[]}
-                setLabel={() => {
-                  setLabel;
-                  values['Label'] = label;
-                }}
+                setLabel={setLabel}
               />
             </View>
             <View className="mb-0 mr-4 mt-1 w-[45%]">
@@ -110,10 +179,7 @@ export default function AddTaskDetails() {
                 selected={assignedTo}
                 // TODO: Get members for this group
                 items={[]}
-                setLabel={() => {
-                  setAssignedTo;
-                  values['Assigned To'] = assignedTo;
-                }}
+                setLabel={setAssignedTo}
               />
             </View>
           </View>
@@ -145,6 +211,16 @@ export default function AddTaskDetails() {
           </View>
         </ScrollView>
       </GestureHandlerRootView>
+      <StyledDatePicker
+        isVisible={showTaskDatePicker}
+        onCancel={onCancelTaskDate}
+        onConfirm={onConfirmTaskDate}
+      />
+      <StyledDatePicker
+        isVisible={showEndRepeatDatePicker}
+        onCancel={onCancelEndRepeatDate}
+        onConfirm={onConfirmEndRepeatDate}
+      />
     </SafeAreaView>
   );
 }
