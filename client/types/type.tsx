@@ -39,7 +39,6 @@ export const CategoryToTypeMap: Record<Category, TypeOfTask[]> = {
   [Category.HEALTH]: [
     TypeOfTask.MEDICATION,
     TypeOfTask.APPOINTMENTS,
-    TypeOfTask.GROOMING,
     TypeOfTask.DIET
   ],
   [Category.PERSONAL]: [

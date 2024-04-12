@@ -5,20 +5,26 @@ import clsx from 'clsx';
 
 import ButtonCircle from '../../assets/radio-button-circle.svg';
 import Bathing from '../../assets/task-creation/bathing.svg';
+import EventIcon from '../../assets/task-creation/event.svg';
 import Liquid from '../../assets/task-creation/liquid.svg';
 import Pill from '../../assets/task-creation/pill.svg';
 import QuickTaskIcon from '../../assets/task-creation/quick-task.svg';
-import ScheduledTaskIcon from '../../assets/task-creation/scheduled-task.svg';
 import Shot from '../../assets/task-creation/shot.svg';
 import Toileting from '../../assets/task-creation/toileting.svg';
 
 interface RadioGroupProps {
   title: string;
   options: string[];
+  themeColor?: string;
   onChange?: (value: string) => void;
 }
 
-export function RadioGroup({ title, options, onChange }: RadioGroupProps) {
+export function RadioGroup({
+  title,
+  options,
+  themeColor,
+  onChange
+}: RadioGroupProps) {
   const [selectedOption, setSelectedOption] = useState('');
 
   const handleOptionSelect = (option: string) => {
@@ -42,16 +48,16 @@ export function RadioGroup({ title, options, onChange }: RadioGroupProps) {
         return <Toileting />;
       case 'Quick Task':
         return <QuickTaskIcon />;
-      case 'Scheduled':
-        return <ScheduledTaskIcon />;
+      case 'Event':
+        return <EventIcon />;
       default:
         return <ButtonCircle />;
     }
   };
 
   return (
-    <View className="m-4 mb-0">
-      <Text className="mb-2 font-carewallet-montserrat-semibold">
+    <View className="m-2 mb-0">
+      <Text className="m-2 font-carewallet-montserrat-semibold">
         {title.toUpperCase()}
       </Text>
       <View className="flex flex-row justify-between">
@@ -60,9 +66,11 @@ export function RadioGroup({ title, options, onChange }: RadioGroupProps) {
             <TouchableOpacity
               key={index}
               className={clsx(
-                'flex h-12 flex-row items-center space-x-2 rounded-md border border-carewallet-gray px-4 py-2',
+                'm-2 flex h-12 flex-1 flex-row items-center space-x-2 rounded-md border border-carewallet-gray px-4 py-2',
                 option === selectedOption
-                  ? 'bg-carewallet-lightgray'
+                  ? themeColor
+                    ? 'bg-' + themeColor
+                    : 'bg-carewallet-blue/20'
                   : 'bg-carewallet-white'
               )}
               onPress={() => {
@@ -70,7 +78,14 @@ export function RadioGroup({ title, options, onChange }: RadioGroupProps) {
               }}
             >
               {renderIcon(option)}
-              <Text className="font-carewallet-montserrat-semibold text-base">
+              <Text
+                className={clsx(
+                  'font-carewallet-montserrat-semibold text-base',
+                  option === selectedOption
+                    ? 'text-carewallet-black'
+                    : 'text-carewallet-black'
+                )}
+              >
                 {option}
               </Text>
             </TouchableOpacity>

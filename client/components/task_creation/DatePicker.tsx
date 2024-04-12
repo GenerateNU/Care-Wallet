@@ -19,6 +19,7 @@ export function StyledDatePicker({
       mode={'single'}
       onCancel={onCancel}
       onConfirm={(arg) => onConfirm(arg as { date: Date; dateString: string })}
+      minDate={new Date(new Date().setDate(new Date().getDate() - 1))}
       colorOptions={{
         headerColor: '#ffffff',
         headerTextColor: '#1A56C4',

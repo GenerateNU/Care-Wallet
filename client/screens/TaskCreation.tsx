@@ -23,16 +23,16 @@ import { AppStackNavigation } from '../navigation/types';
 import { TaskCreationJson } from '../types/task-creation-json';
 
 const TaskTitleToColorMap: { [key: string]: string } = {
-  'Medication Management': 'text-carewallet-pink',
-  'Physician Appointments': 'text-carewallet-pink',
-  Grooming: 'text-carewallet-purple',
-  'Family Conversations': 'text-carewallet-purple',
-  'Shopping & Errands': 'text-carewallet-purple',
-  'Pay Bills': 'text-carewallet-purple',
-  Diet: 'text-carewallet-yellow',
-  Activities: 'text-carewallet-yellow',
-  'Health Insurance': 'text-carewallet-green',
-  Other: 'text-carewallet-coral'
+  'Medication Management': 'carewallet-pink',
+  'Physician Appointments': 'carewallet-pink',
+  Grooming: 'carewallet-purple',
+  'Family Conversations': 'carewallet-purple',
+  'Shopping & Errands': 'carewallet-purple',
+  'Pay Bills': 'carewallet-purple',
+  Diet: 'carewallet-yellow',
+  Activities: 'carewallet-yellow',
+  'Health Insurance': 'carewallet-green',
+  Other: 'carewallet-coral'
 };
 
 type ParamList = {
@@ -123,7 +123,7 @@ export default function TaskCreation() {
           <Text
             className={clsx(
               'mx-5 font-carewallet-manrope-bold text-2xl',
-              themeColor
+              'text-' + themeColor
             )}
           >
             {header}
@@ -148,6 +148,7 @@ export default function TaskCreation() {
                 <RadioGroup
                   title={item.key}
                   options={item.value.substring(12).split(' ')}
+                  themeColor={'bg-' + themeColor}
                   onChange={(value) => handleChange(item.key, value)}
                 />
               )}
