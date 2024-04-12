@@ -74,17 +74,25 @@ export default function NotificationScreen() {
   return (
     <GestureHandlerRootView>
       <ScrollView
-        className="mb-0 flex w-[100vw] pl-4 pr-4 pt-4"
+        className="flex w-full"
         onScrollBeginDrag={() => setCanPress(false)}
         onScrollEndDrag={() => setCanPress(true)}
       >
-        <View className="h-[144px] w-[390px] gap-0 border-t border-carewallet-yellow border-opacity-10 p-0 opacity-0">
-          <Text className="bg-white text-blue-500 p-4 font-bold">
-            {'Notifications'}
+        {/* White section at the top */}
+        <View className="relative flex h-32 w-full items-center justify-center border-b border-carewallet-gray bg-carewallet-white">
+          {/* Notifications header */}
+
+          <Text
+            className="text-center font-carewallet-montserrat-bold text-lg font-bold text-carewallet-blue"
+            style={{ fontSize: '18px' }}
+          >
+            Notifications
           </Text>
         </View>
 
-        <View className="bg-carewallet-yellow">
+        <View className="mt-4"></View>
+
+        <View className="bg-carewallet-yellow p-4">
           {dueSoonTasks.map((task, index) => (
             <Pressable
               key={index + task.task_id}

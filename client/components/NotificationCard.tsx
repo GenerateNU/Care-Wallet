@@ -7,7 +7,7 @@ export function NotificationCard({
   notification_type,
   title,
   due_date,
-  task_id //delete task_id, we dont need it for navigation anymore cause its done on the screen
+  task_id // delete task_id, we dont need it for navigation anymore cause its done on the screen
 }: {
   notification_type: string;
   title: string;
@@ -33,10 +33,10 @@ export function NotificationCard({
 
   const type_to_text = () => {
     if (notification_type === 'due_soon') {
-      return 'Task Due Soon';
+      return 'TASK DUE SOON';
     }
     if (notification_type === 'status_update') {
-      return 'Status Update';
+      return 'STATUS UPDATE';
     }
     // if (notification_type === 'created_today') {
     //   return TaskTypeDescriptions[TaskTypeDescriptions['created_today']];
@@ -52,12 +52,12 @@ export function NotificationCard({
   */
 
   return (
-    <View className="mb-6 flex rounded-lg border border-carewallet-lightgray bg-carewallet-white p-10">
-      <View className="flex w-full flex-col justify-between">
-        <Text className="bg-carewallet-yellow font-carewallet-montserrat-bold">
+    <View className="mb-6 flex rounded-lg border border-carewallet-lightgray bg-carewallet-white p-4">
+      <View className="flex w-full flex-col items-start justify-between">
+        <Text className="mb-2 bg-carewallet-yellow text-center font-carewallet-montserrat-bold">
           {type_to_text()}
         </Text>
-        <Text className="text-carewallet-blackr mb-2 bg-carewallet-yellow font-carewallet-manrope-bold">
+        <Text className="mb-2 bg-carewallet-yellow text-center font-carewallet-montserrat text-carewallet-black">
           {descriptionText()}
         </Text>
       </View>
