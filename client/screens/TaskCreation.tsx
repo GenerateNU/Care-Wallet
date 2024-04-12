@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, Text, View } from 'react-native';
 
-import { RouteProp, useRoute } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { clsx } from 'clsx';
 import {
   GestureHandlerRootView,
@@ -14,10 +14,12 @@ import HomeBg from '../assets/task-creation/home-bg.svg';
 import OtherBg from '../assets/task-creation/other-bg.svg';
 import PersonalBg from '../assets/task-creation/personal-bg.svg';
 import { BackButton } from '../components/nav_buttons/BackButton';
+import { ForwardButton } from '../components/nav_buttons/ForwardButton';
 import { AddressComponent } from '../components/task_creation/AddressComponent';
 import { RadioGroup } from '../components/task_creation/RadioGroup';
 import { TextInputLine } from '../components/task_creation/TextInputLine';
 import { TextInputParagraph } from '../components/task_creation/TextInputParagraph';
+import { AppStackNavigation } from '../navigation/types';
 import { TaskCreationJson } from '../types/task-creation-json';
 
 const TaskTitleToColorMap: { [key: string]: string } = {
@@ -41,6 +43,7 @@ type ParamList = {
 
 export default function TaskCreation() {
   const route = useRoute<RouteProp<ParamList, 'mt'>>();
+  const navigation = useNavigation<AppStackNavigation>();
   const { taskType } = route.params;
   const header = TaskCreationJson.types.find((t) =>
     taskType.includes(t.Header)
@@ -92,7 +95,10 @@ export default function TaskCreation() {
     });
   });
 
-  const [, setValues] = useState<{ [key: string]: string }>({});
+  const [values, setValues] = useState<{ [key: string]: string }>({
+    Type: header ?? ''
+    // TODO: Add value for task category
+  });
   const handleChange = (key: string, value: string) => {
     setValues((prevValues) => ({
       ...prevValues,
@@ -105,7 +111,7 @@ export default function TaskCreation() {
       <GestureHandlerRootView>
         <View className="flex w-full flex-row items-center border-b border-carewallet-gray bg-carewallet-white">
           <BackButton />
-          <Text className="mx-auto pr-20 font-carewallet-manrope-bold text-lg text-carewallet-blue">
+          <Text className="mx-auto my-7 pr-20 font-carewallet-manrope-bold text-lg text-carewallet-blue">
             Step 2 of 3
           </Text>
         </View>
@@ -121,6 +127,7 @@ export default function TaskCreation() {
           </Text>
           {compList.map((item, index) => (
             <View key={index}>
+              {/* TODO: implement on change for AddressComponent */}
               {item.key === 'Address' && <AddressComponent />}
               {item.value === 'TextInputLine' && (
                 <TextInputLine
@@ -143,6 +150,15 @@ export default function TaskCreation() {
               )}
             </View>
           ))}
+          <View className="m-2 flex flex-row justify-end">
+            <ForwardButton
+              onPress={() => {
+                navigation.navigate('AddTaskDetails', {
+                  taskCreation: JSON.stringify(values)
+                });
+              }}
+            />
+          </View>
         </ScrollView>
       </GestureHandlerRootView>
     </SafeAreaView>

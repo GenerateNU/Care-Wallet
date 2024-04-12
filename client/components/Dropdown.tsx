@@ -24,7 +24,7 @@ export function CWDropdown({
         )}
         onTouchEnd={() => setIsOpen(!isOpen)}
       >
-        <Text className="w-40 pl-2 font-carewallet-manrope text-lg">
+        <Text className="w-40 pl-2 font-carewallet-montserrat-semibold text-sm text-carewallet-blue">
           {selected}
         </Text>
         <View className="absolute right-3">
@@ -51,7 +51,7 @@ export function CWDropdown({
                     setIsOpen(false);
                   }}
                 >
-                  <Text className="w-40 text-ellipsis pl-2 font-carewallet-manrope text-lg">
+                  <Text className="w-40 text-ellipsis pl-2 font-carewallet-montserrat-semibold text-sm text-carewallet-blue">
                     {item}
                   </Text>
                 </View>

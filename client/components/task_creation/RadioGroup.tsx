@@ -7,6 +7,8 @@ import ButtonCircle from '../../assets/radio-button-circle.svg';
 import Bathing from '../../assets/task-creation/bathing.svg';
 import Liquid from '../../assets/task-creation/liquid.svg';
 import Pill from '../../assets/task-creation/pill.svg';
+import QuickTaskIcon from '../../assets/task-creation/quick-task.svg';
+import ScheduledTaskIcon from '../../assets/task-creation/scheduled-task.svg';
 import Shot from '../../assets/task-creation/shot.svg';
 import Toileting from '../../assets/task-creation/toileting.svg';
 
@@ -21,7 +23,6 @@ export function RadioGroup({ title, options, onChange }: RadioGroupProps) {
 
   const handleOptionSelect = (option: string) => {
     setSelectedOption(option);
-    console.log('Selected option:', option);
     if (onChange) {
       onChange(option);
     }
@@ -35,11 +36,14 @@ export function RadioGroup({ title, options, onChange }: RadioGroupProps) {
         return <Liquid />;
       case 'Shot':
         return <Shot />;
-      // bathing symbol needs to be fixed
       case 'Bathing':
         return <Bathing />;
       case 'Toileting':
         return <Toileting />;
+      case 'Quick Task':
+        return <QuickTaskIcon />;
+      case 'Scheduled':
+        return <ScheduledTaskIcon />;
       default:
         return <ButtonCircle />;
     }
