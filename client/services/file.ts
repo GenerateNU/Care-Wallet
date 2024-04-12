@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios, { HttpStatusCode } from 'axios';
 import { DocumentPickerAsset } from 'expo-document-picker';
 import {
@@ -85,13 +85,17 @@ const getAllFile = async (groupId: number): Promise<FileViewProps[]> => {
 
 // Hook to use these operations
 export const useFile = () => {
+  const queryClient = useQueryClient();
   const { mutate: uploadFileMutation } = useMutation({
     mutationFn: uploadFile,
-    onSuccess: (result) => {
+    onSuccess: (result, variables) => {
       // This is needed for file upload since it seems to use fetch instead of axios
       // axios results in error if the status is 400+
       if (result && result.status === HttpStatusCode.Ok) {
         console.log('File Uploaded...');
+        queryClient.invalidateQueries({
+          queryKey: ['getAllFile', variables.groupId]
+        });
       } else if (result && result.status !== HttpStatusCode.Ok) {
         console.log(
           `Files did not upload. Unexpected status: ${result.status}`

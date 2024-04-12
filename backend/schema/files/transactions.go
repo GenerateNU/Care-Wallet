@@ -77,7 +77,7 @@ func uploadFile(pool *pgxpool.Pool, file models.File, data *multipart.FileHeader
 	return nil
 }
 
-func RemoveFile(pool *pgxpool.Pool, groupID string, fileName string) error {
+func removeFile(pool *pgxpool.Pool, groupID string, fileName string) error {
 	groupIDInt, err := strconv.Atoi(groupID)
 	if err != nil {
 		return fmt.Errorf("invalid groupID: %w", err)
@@ -113,7 +113,7 @@ func RemoveFile(pool *pgxpool.Pool, groupID string, fileName string) error {
 	return nil // Success
 }
 
-func GetFileURL(pool *pgxpool.Pool, groupID string, fileName string) (string, error) {
+func getFileURL(pool *pgxpool.Pool, groupID string, fileName string) (string, error) {
 
 	//Convert groupID to int for consistency in key construction
 	groupIDInt, err := strconv.Atoi(groupID)
@@ -162,7 +162,7 @@ func GetFileURL(pool *pgxpool.Pool, groupID string, fileName string) (string, er
 	return urlStr, nil
 }
 
-func GetAllFileURLs(pool *pgxpool.Pool, groupID string) ([]FileDetails, error) {
+func getAllFileURLs(pool *pgxpool.Pool, groupID string) ([]FileDetails, error) {
 	// Convert groupID to int for consistency in key construction
 	groupIDInt, err := strconv.Atoi(groupID)
 	if err != nil {

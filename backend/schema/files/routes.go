@@ -100,7 +100,7 @@ func (pg *PgModel) removeFile(c *gin.Context) {
 		return
 	}
 
-	err := RemoveFile(pg.Conn, groupID, fileName)
+	err := removeFile(pg.Conn, groupID, fileName)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, "Failed to remove file: "+err.Error())
 		return
@@ -135,7 +135,7 @@ func (pg *PgModel) getFile(c *gin.Context) {
 
 	fmt.Println("here")
 
-	url, err := GetFileURL(pg.Conn, groupID, fileName)
+	url, err := getFileURL(pg.Conn, groupID, fileName)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, "Failed to get file: "+err.Error())
 		return
@@ -166,7 +166,7 @@ func (pg *PgModel) listFiles(c *gin.Context) {
 		return
 	}
 
-	url, err := GetAllFileURLs(pg.Conn, groupID)
+	url, err := getAllFileURLs(pg.Conn, groupID)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, "Failed to get file: "+err.Error())
 		return

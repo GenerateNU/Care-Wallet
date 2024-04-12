@@ -10,7 +10,7 @@ export function Header() {
   const navigation = useNavigation<AppStackNavigation>();
   return (
     <SafeAreaView className="bg-carewallet-white/80">
-      <View className="flex flex-row items-center justify-between border-b border-carewallet-lightgray bg-carewallet-white">
+      <View className="flex flex-row items-center justify-between border-b border-carewallet-lightgray bg-carewallet-white pb-4">
         <View className="pl-1">
           <BackButton />
         </View>

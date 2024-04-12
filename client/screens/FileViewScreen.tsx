@@ -45,13 +45,13 @@ export default function FileViewScreen() {
           data={groupFiles}
           renderItem={renderItem}
           keyExtractor={keyExtractor}
-          className="min-h-[80vh] overflow-y-auto"
+          className="h-5/6 bg-carewallet-white/80"
           refreshControl={
             <RefreshControl refreshing={isLoading} onRefresh={onRefresh} />
           }
         />
       ) : (
-        <View className="flex h-[80vh] items-center justify-center">
+        <View className="flex h-[80vh] items-center justify-center bg-carewallet-white/80">
           <Text className="text-xl text-carewallet-black">
             No files have been uploaded.
           </Text>
