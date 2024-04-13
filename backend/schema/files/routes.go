@@ -2,6 +2,7 @@ package files
 
 import (
 	"carewallet/models"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -14,10 +15,12 @@ type PgModel struct {
 }
 
 func FileGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
-
 	files := v1.Group("files")
 	{
 		files.POST("/upload", c.uploadFile)
+		files.DELETE("/:groupId/:fileName", c.removeFile)
+		files.GET("/:groupId/:fileName", c.getFile)
+		files.GET("/:groupId", c.listFiles)
 	}
 
 	return files
@@ -73,4 +76,101 @@ func (pg *PgModel) uploadFile(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, file)
+}
+
+// RemoveFile godoc
+//
+//	@summary		Remove a file
+//	@description	Remove a file from S3 bucket
+//	@tags			file
+//
+//	@param			groupId		path		string	true	"The groupID of the file"
+//	@param			fileName	path		string	true	"The fileName of the file"
+//
+//	@success		200			{object}	string
+//	@failure		400			{object}	string
+//	@router			/files/{groupId}/{fileName} [delete]
+func (pg *PgModel) removeFile(c *gin.Context) {
+	groupID := c.Param("groupId")
+	fileName := c.Param("fileName")
+
+	// Validate the input parameters as needed
+	if groupID == "" || fileName == "" {
+		c.JSON(http.StatusBadRequest, "Missing groupID or fileName")
+		return
+	}
+
+	err := removeFile(pg.Conn, groupID, fileName)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, "Failed to remove file: "+err.Error())
+		return
+	}
+
+	c.Status(http.StatusOK)
+}
+
+// getFile godoc
+//
+//	@summary		Get a file
+//	@description	Get a file from S3 bucket
+//	@tags			file
+//
+//	@param			groupId		path		string	true	"The groupID of the file"
+//	@param			fileName	path		string	true	"The fileName of the file"
+//
+//	@success		200			{object}	string
+//	@failure		400			{object}	string
+//	@router			/files/{groupId}/{fileName} [get]
+func (pg *PgModel) getFile(c *gin.Context) {
+	groupID := c.Param("groupId")
+	fileName := c.Param("fileName")
+
+	fmt.Println("here")
+	// Validate the input parameters as needed
+	if groupID == "" || fileName == "" {
+		fmt.Println("Missing groupId or fileName")
+		c.JSON(http.StatusBadRequest, "Missing groupID or fileName")
+		return
+	}
+
+	fmt.Println("here")
+
+	url, err := getFileURL(pg.Conn, groupID, fileName)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, "Failed to get file: "+err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, url)
+}
+
+// listFiles godoc
+//
+//	@summary		List all files
+//	@description	List all files from S3 bucket
+//	@tags			file
+//
+//	@param			groupId	path		string	true	"The groupID of the file"
+//
+//	@success		200		{object}	[]FileDetails
+//	@failure		400		{object}	string
+//	@router			/files/{groupId} [get]
+func (pg *PgModel) listFiles(c *gin.Context) {
+	groupID := c.Param("groupId")
+
+	fmt.Println("here")
+	// Validate the input parameters as needed
+	if groupID == "" {
+		fmt.Println("Missing groupId")
+		c.JSON(http.StatusBadRequest, "Missing groupID")
+		return
+	}
+
+	url, err := getAllFileURLs(pg.Conn, groupID)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, "Failed to get file: "+err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, url)
 }
