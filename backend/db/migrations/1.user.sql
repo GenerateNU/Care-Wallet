@@ -31,6 +31,7 @@ VALUES
   ('5JgN2PQxCRM9VoCiiFPlQPNqkL32', 'Linwood', 'Blaisdell', 'blaisdell.l@northeastern.edu', '', ''),
   ('P03ggWcw63N0RSY7ltbkeBoR6bd2', 'Chris', 'Wyatt', 'wyatt.c@northeastern.edu', '', ''),
   ('9rIMSUo6qNf8ToTABkCfNqnByRv1', 'Haley', 'Martin', 'martin.hal@northeastern.edu', '', '')
+  ('t0uRwW4XANOPFGHtromKHkJ90Tz2', 'Adharsh', 'Kandula', 'kandula.a@northeastern.edu', '', '')
 
   -- End Care-Wallet Team
 ;
