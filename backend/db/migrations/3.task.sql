@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS task_assignees (
 INSERT INTO task (task_title, group_id, created_by, created_date, start_date, end_date, notes, task_status, task_type, quick_task)
 VALUES
   ('task 1', 1, 'user2', '2024-02-03 10:45:00', '2024-02-05 10:00:00', '2024-02-05 11:00:00', 'Pick up medication from pharmacy', 'INCOMPLETE', 'med_mgmt', FALSE),
-  ('task 2', 2, 'user3', '2024-02-20 23:59:59', '2024-02-10 14:30:00', '2024-02-10 14:30:00', 'Schedule doctor appointment', 'INCOMPLETE', 'other', FALSE),
+  ('task 2', 2, 'user3', '2024-02-20 23:59:59', '2024-02-10 14:30:00', '2024-02-10 14:30:00', 'Schedule doctor appointment', 'TODO', 'other', FALSE),
   ('task 3', 3, 'user4', '2020-02-05 11:00:00', '2024-02-10 14:30:00', '2024-02-20 23:59:59', 'Submit insurance claim', 'INPROGRESS', 'financial', FALSE),
   ('task 4', 4, 'user1', '2006-01-02 15:04:05', '2024-02-10 14:30:00', '2024-02-10 14:30:00', 'Refill water pitcher', 'COMPLETE', 'other', TRUE),
   ('task 1 - NO LABEL', 1, 'user2', '2024-02-03 10:45:00', '2024-02-05 10:00:00', '2024-02-05 11:00:00', 'Pick up medication from pharmacy', 'INCOMPLETE', 'med_mgmt', FALSE),
