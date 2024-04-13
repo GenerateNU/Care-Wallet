@@ -52,7 +52,7 @@ export function TaskInfoComponent({
           </View>
         </View>
 
-        <View className="mt-3 flex flex-row space-x-3">
+        <View className="mt-3 flex flex-row space-x-2">
           <View className="flex flex-row items-center space-x-2">
             <Calendar />
             <Text className="font-carewallet-manrope">

@@ -15,6 +15,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Button } from 'react-native-paper';
 
+import Search from '../assets/calendar/search.svg';
 import { CalendarTaskListTopNav } from '../components/calendar/CalendarTaskListTopNav';
 import { TaskInfoComponent } from '../components/calendar/TaskInfoCard';
 import { CloseButton } from '../components/nav_buttons/CloseButton';
@@ -135,12 +136,15 @@ export default function TaskListScreen() {
         >
           <View className="mb-5 flex-row items-center">
             <TextInput
-              className="mr-4 h-14 flex-1 overflow-hidden rounded-md border border-carewallet-gray px-2 font-carewallet-montserrat text-carewallet-black"
+              className="mr-4 h-14 flex-1 overflow-hidden rounded-md border border-carewallet-gray px-8 font-carewallet-montserrat text-carewallet-black"
               placeholder="Search"
               onChangeText={(text) => {
                 setSearchQuery(text);
               }}
             />
+            <View className="pointer-events-none absolute inset-y-5 ml-3 flex items-center pr-3">
+              <Search />
+            </View>
             <View className="mr-2 flex flex-row justify-end">
               <Button
                 className="h-[40px] items-center justify-center rounded-xl bg-carewallet-gray text-sm"
