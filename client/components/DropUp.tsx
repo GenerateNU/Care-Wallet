@@ -2,23 +2,17 @@ import React, { useState } from 'react';
 import { Text, View } from 'react-native';
 
 import { clsx } from 'clsx';
-import { ItemType } from 'react-native-dropdown-picker';
 
 import ArrowDown from '../assets/filledarrowdown.svg';
-import { Status } from '../types/type';
 
-export function DropUp({
+export function CWDropdown({
   selected,
   items,
   setLabel
 }: {
-  selected: ItemType<Status | null>;
-  items: ItemType<Status | null>[];
-
-  setLabel: (
-    label: ItemType<Status | null>,
-    value: ItemType<Status | null>
-  ) => void;
+  selected: string;
+  items?: string[];
+  setLabel: (label: string) => void;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   return (
@@ -31,21 +25,33 @@ export function DropUp({
         onTouchEnd={() => setIsOpen(!isOpen)}
       >
         <Text className="w-40 pl-2 font-carewallet-manrope text-lg">
-          {selected.value}
+          {selected}
         </Text>
         <View className="absolute right-3">
           {isOpen ? (
             <View className="rotate-180">
-              <ArrowDown />
+              <ArrowDown color="black" />
             </View>
           ) : (
-            <ArrowDown />
+            <ArrowDown color="black" />
           )}
         </View>
       </View>
-      <View className="flex w-[90vw] max-w-[90vw] flex-row" />
       {isOpen && (
-        <View className="flex flex-row flex-wrap rounded-b-lg border border-carewallet-blue/20">
+        <View className="absolute top-14 flex flex-row flex-wrap rounded-b-lg border border-carewallet-blue/20 bg-carewallet-white">
+          {selected !== 'Select Label' && (
+            <View
+              className="h-14 w-full justify-center border-t border-carewallet-blue/20"
+              onTouchEnd={() => {
+                setLabel('Select Label');
+                setIsOpen(false);
+              }}
+            >
+              <Text className="w-40 text-ellipsis bg-carewallet-white pl-2 font-carewallet-manrope text-lg">
+                {''}
+              </Text>
+            </View>
+          )}
           {items?.map(
             (item, index) =>
               item !== selected && (
@@ -53,12 +59,12 @@ export function DropUp({
                   key={index}
                   className="h-14 w-full justify-center border-t border-carewallet-blue/20"
                   onTouchEnd={() => {
-                    setLabel(item, item);
+                    setLabel(item);
                     setIsOpen(false);
                   }}
                 >
-                  <Text className="w-40 text-ellipsis pl-2 font-carewallet-manrope text-lg">
-                    {item.value}
+                  <Text className="w-40 text-ellipsis bg-carewallet-white pl-2 font-carewallet-manrope text-lg">
+                    {item}
                   </Text>
                 </View>
               )

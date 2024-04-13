@@ -116,7 +116,7 @@ export default function SingleTaskScreen() {
               setOpen={setOpen}
               setValue={setSelectedStatus}
               placeholder={task?.task_status}
-              onPress={() => {
+              onSelectItem={() => {
                 navigation.navigate('FileUploadScreen');
               }}
             />
