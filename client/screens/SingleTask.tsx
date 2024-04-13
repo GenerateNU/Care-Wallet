@@ -1,21 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ActivityIndicator, SafeAreaView, Text, View } from 'react-native';
 
-import { RouteProp, useRoute } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import moment from 'moment';
+import DropDownPicker from 'react-native-dropdown-picker';
 import { IconButton } from 'react-native-paper';
 
-import CheckMark from '../assets/checkmark.svg';
 import Date from '../assets/Date_today.svg';
 import Edit from '../assets/profile/edit.svg';
 import Clock from '../assets/profile/settings/clock.svg';
-import Reject from '../assets/reject.svg';
 import Repeating from '../assets/repeating.svg';
 import { GetLabelPill } from '../components/GetLabelPill';
 import { GetStatusPill } from '../components/GetStatusPill';
 import { BackButton } from '../components/nav_buttons/BackButton';
 import { NoteButton } from '../components/NoteButton';
+import { AppStackNavigation } from '../navigation/types';
 import { useTaskById } from '../services/task';
+import { Status } from '../types/type';
 
 type ParamList = {
   mt: {
@@ -27,6 +28,16 @@ export default function SingleTaskScreen() {
   const route = useRoute<RouteProp<ParamList, 'mt'>>();
   const { id } = route.params;
   const { task, taskIsLoading, taskLabelsIsLoading } = useTaskById(id);
+  const navigation = useNavigation<AppStackNavigation>();
+
+  const [selectedStatus, setSelectedStatus] = useState<Status | null>(null);
+
+  const [open, setOpen] = useState(false);
+
+  const filters = Object.values(Status).map((filter) => ({
+    label: filter,
+    value: filter
+  }));
 
   const repeat = task?.repeating;
 
@@ -45,8 +56,8 @@ export default function SingleTaskScreen() {
   }
 
   return (
-    <SafeAreaView className="bg-carewallet-lightergrey flex-1">
-      <View className="flex h-[100vh] bg-carewallet-white/80">
+    <SafeAreaView className=" flex-1">
+      <View className="flex h-[100vh] bg-carewallet-white">
         <View className="mx-1 mt-4 flex flex-row items-start justify-between border-b border-carewallet-lightergray bg-carewallet-white">
           <BackButton />
           <IconButton
@@ -55,7 +66,7 @@ export default function SingleTaskScreen() {
             icon={() => <Edit color={'blue'} />}
           />
         </View>
-        <View className="mb-3 ml-3 mt-4 h-20 w-20 rounded-full border border-carewallet-blue bg-carewallet-white" />
+        <View className="mb-3 ml-3 mt-4 h-20 w-20 rounded-full border border-[#B4B3B3] bg-carewallet-white" />
         <Text className="font-inter ml-5 font-carewallet-manrope-bold text-2xl text-carewallet-black">
           {task?.task_title}
         </Text>
@@ -91,12 +102,25 @@ export default function SingleTaskScreen() {
         </View>
 
         <View className="ml-auto mt-auto flex-1 flex-row space-x-4">
-          <View className="mt-auto rounded-lg bg-carewallet-gray p-2">
+          {/* <View className="mt-auto rounded-lg bg-carewallet-gray p-2">
             <CheckMark />
           </View>
           <View className="mt-auto rounded-lg bg-carewallet-gray p-2">
             <Reject />
-          </View>
+          </View> */}
+          {
+            <DropDownPicker
+              open={open}
+              value={selectedStatus}
+              items={filters}
+              setOpen={setOpen}
+              setValue={setSelectedStatus}
+              placeholder={task?.task_status}
+              onPress={() => {
+                navigation.navigate('FileUploadScreen');
+              }}
+            />
+          }
         </View>
       </View>
     </SafeAreaView>
