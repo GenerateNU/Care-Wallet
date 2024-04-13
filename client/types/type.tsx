@@ -7,7 +7,7 @@ import Personal from '../assets/calendar/personal.svg';
 
 export enum TypeOfTask {
   MEDICATION = 'Medication Management',
-  APPOINTMENTS = 'Physician Appointments',
+  APPOINTMENTS = 'Doctor Appointments',
   GROOMING = 'Grooming',
   CONVERSATIONS = 'Family Conversations',
   ERRANDS = 'Shopping & Errands',

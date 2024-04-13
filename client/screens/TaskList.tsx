@@ -145,14 +145,14 @@ export default function TaskListScreen() {
             <View className="pointer-events-none absolute inset-y-5 ml-3 flex items-center pr-3">
               <Search />
             </View>
-            <View className="mr-2 flex flex-row justify-end">
+            <View className=" flex flex-row justify-end">
               <Button
-                className="h-[40px] items-center justify-center rounded-xl bg-carewallet-gray text-sm"
+                className="mr-4 h-14 items-center justify-center rounded-xl border-carewallet-gray font-carewallet-montserrat text-sm"
                 textColor="black"
                 mode="outlined"
                 onPress={() => snapToIndex(0)}
               >
-                Filter
+                FILTER
               </Button>
             </View>
           </View>

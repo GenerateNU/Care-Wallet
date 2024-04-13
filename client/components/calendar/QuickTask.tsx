@@ -58,7 +58,7 @@ export function QuickTask({
           >
             <QuickTaskCard
               name={item.notes}
-              label={item.task_type}
+              type={item.task_type}
               status={item.task_status}
             />
           </Pressable>

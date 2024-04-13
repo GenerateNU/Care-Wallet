@@ -6,13 +6,13 @@ import { GetStatusPill } from '../GetStatusPill';
 
 interface QuickTaskCardProps {
   name: string;
-  label: string;
+  type: string;
   status: string;
 }
 
 export function QuickTaskCard({
   name,
-  label,
+  type,
   status
 }: QuickTaskCardProps): JSX.Element {
   return (
@@ -24,7 +24,7 @@ export function QuickTaskCard({
           </Text>
         </View>
         <View className="mr-2 mt-2">
-          {CategoryIconsMap[TypeToCategoryMap[label]]}
+          {CategoryIconsMap[TypeToCategoryMap[type]]}
         </View>
       </View>
       <View className="mb-2 ml-2 mr-auto mt-auto">
