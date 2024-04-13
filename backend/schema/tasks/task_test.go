@@ -88,13 +88,13 @@ func TestTaskGroup(t *testing.T) {
 				CreatedBy:         "user3",
 				CreatedDate:       time.Date(2024, 2, 20, 23, 59, 59, 0, time.UTC),
 				StartDate:         &start_date_1,
-				EndDate:           nil,
+				EndDate:           &start_date_1,
 				QuickTask:         false,
 				Notes:             &notes_1,
 				Repeating:         false,
 				RepeatingInterval: nil,
 				RepeatingEndDate:  nil,
-				TaskStatus:        "INCOMPLETE",
+				TaskStatus:        "OVERDUE",
 				TaskType:          "other",
 				TaskInfo:          nil,
 			},
@@ -104,8 +104,8 @@ func TestTaskGroup(t *testing.T) {
 				GroupID:           4,
 				CreatedBy:         "user1",
 				CreatedDate:       time.Date(2006, 1, 2, 15, 4, 5, 0, time.UTC),
-				StartDate:         nil,
-				EndDate:           nil,
+				StartDate:         &start_date_1,
+				EndDate:           &start_date_1,
 				Repeating:         false,
 				RepeatingInterval: nil,
 				RepeatingEndDate:  nil,
@@ -215,6 +215,7 @@ func TestTaskGroup(t *testing.T) {
 		}
 
 		note := "Refill water pitcher"
+		start_date_1 := time.Date(2024, 2, 10, 14, 30, 0, 0, time.UTC)
 		expectedTasks := []models.Task{
 			{
 				TaskID:            4,
@@ -222,8 +223,8 @@ func TestTaskGroup(t *testing.T) {
 				GroupID:           4,
 				CreatedBy:         "user1",
 				CreatedDate:       time.Date(2006, 1, 2, 15, 4, 5, 0, time.UTC),
-				StartDate:         nil,
-				EndDate:           nil,
+				StartDate:         &start_date_1,
+				EndDate:           &start_date_1,
 				QuickTask:         true,
 				Notes:             &note,
 				Repeating:         false,
@@ -257,6 +258,7 @@ func TestTaskGroup(t *testing.T) {
 		}
 
 		note := "Refill water pitcher"
+		start_date_1 := time.Date(2024, 2, 10, 14, 30, 0, 0, time.UTC)
 		expectedTasks := []models.Task{
 			{
 				TaskID:            4,
@@ -264,8 +266,8 @@ func TestTaskGroup(t *testing.T) {
 				GroupID:           4,
 				CreatedBy:         "user1",
 				CreatedDate:       time.Date(2006, 1, 2, 15, 4, 5, 0, time.UTC),
-				StartDate:         nil,
-				EndDate:           nil,
+				StartDate:         &start_date_1,
+				EndDate:           &start_date_1,
 				Notes:             &note,
 				Repeating:         false,
 				RepeatingInterval: nil,

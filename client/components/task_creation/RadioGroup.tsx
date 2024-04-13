@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 
 import ButtonCircle from '../../assets/radio-button-circle.svg';
 import Bathing from '../../assets/task-creation/bathing.svg';
