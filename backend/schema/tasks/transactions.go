@@ -308,7 +308,7 @@ func setTasksOverdue(tasks []models.Task) ([]models.Task, error) {
 
 	for i, task := range tasks {
 		// Check if the current date is greater than the end date of the task and isnt complete
-		if currentDate.After(*task.EndDate) && task.TaskStatus != "COMPLETE" {
+		if currentDate.After(*task.EndDate) && task.TaskStatus != "COMPLETE" && task.TaskStatus != "INCOMPLETE" {
 			// If it is, set the task status to "OVERDUE"
 			tasks[i].TaskStatus = "OVERDUE"
 		}
