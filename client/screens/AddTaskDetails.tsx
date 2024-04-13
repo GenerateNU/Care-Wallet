@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
 
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import moment from 'moment';
 import {
   GestureHandlerRootView,
   ScrollView
@@ -19,7 +20,11 @@ import { TextInputLine } from '../components/task_creation/TextInputLine';
 import { TextInputParagraph } from '../components/task_creation/TextInputParagraph';
 import { useCareWalletContext } from '../contexts/CareWalletContext';
 import { AppStackNavigation } from '../navigation/types';
+import { useGroup } from '../services/group';
 import { useLabelsByGroup } from '../services/label';
+import { addNewTaskMutation } from '../services/task';
+import { useUsers } from '../services/user';
+import { Task } from '../types/task';
 
 enum RepeatOptions {
   NONE = 'NONE',
@@ -35,11 +40,14 @@ type ParamList = {
 };
 
 export default function AddTaskDetails() {
-  const { group } = useCareWalletContext();
+  const { user, group } = useCareWalletContext();
   const { labels } = useLabelsByGroup(group.groupID);
   const route = useRoute<RouteProp<ParamList, 'mt'>>();
   const navigation = useNavigation<AppStackNavigation>();
   const { taskCreation } = route.params;
+  const { roles } = useGroup(group.groupID);
+  const { users } = useUsers(roles?.map((role) => role.user_id) ?? []);
+  const addTaskMutation = addNewTaskMutation();
 
   const [values, setValues] = useState<{ [key: string]: string }>({});
   const handleChange = (key: string, value: string) => {
@@ -56,9 +64,9 @@ export default function AddTaskDetails() {
 
   const handleConfirmStartTime = (date: Date) => {
     setStartTime(date);
-    values['Start time'] = date.toLocaleTimeString();
+    values['Start Time'] = date.toLocaleTimeString();
 
-    if (!values['End time']) {
+    if (!values['End Time']) {
       const oneHourLater = new Date(date.getTime() + 60 * 60 * 1000);
 
       setDisplayedEndTime(
@@ -67,7 +75,7 @@ export default function AddTaskDetails() {
           minute: 'numeric'
         })
       );
-      values['End time'] = oneHourLater.toLocaleTimeString('en-US', {
+      values['End Time'] = oneHourLater.toLocaleTimeString('en-US', {
         hour: 'numeric',
         minute: 'numeric'
       });
@@ -89,7 +97,7 @@ export default function AddTaskDetails() {
 
   const handleConfirmEndTime = (date: Date) => {
     setEndTime(date);
-    values['End time'] = date.toLocaleTimeString();
+    values['End Time'] = date.toLocaleTimeString();
     setDisplayedEndTime(
       date.toLocaleTimeString('en-US', {
         hour: 'numeric',
@@ -144,9 +152,11 @@ export default function AddTaskDetails() {
   const [showTaskDatePicker, setShowTaskDatePicker] = useState(false);
   const openTaskDatePicker = () => setShowTaskDatePicker(true);
   const [taskDate, setTaskDate] = useState('SELECT DATE');
+
   const onCancelTaskDate = () => {
     setShowTaskDatePicker(false);
   };
+
   const onConfirmTaskDate = (output: { date: Date; dateString: string }) => {
     setShowTaskDatePicker(false);
     handleChange('Date', output.dateString);
@@ -158,6 +168,67 @@ export default function AddTaskDetails() {
       })
       .toUpperCase();
     setTaskDate(formattedDate);
+  };
+
+  const createNewTask = (
+    typeSpecificFields: string,
+    taskDetails: { [key: string]: string }
+  ): Task => {
+    console.log('taskDetails:', taskDetails);
+    console.log('typeSpecificFields:', typeSpecificFields);
+
+    const title = taskDetails['Title'];
+    const groupId = 5;
+    console.log('group:', groupId);
+    const createdBy = user.userID;
+    const startDate = moment(new Date(taskDetails['Date'])).format();
+    const notes = taskDetails['Description'];
+    const repeating = taskDetails['Repeat'] !== 'NONE';
+    let repeatingInterval = undefined;
+    let repeatingEndDate = undefined;
+    if (repeating) {
+      repeatingInterval = taskDetails['Repeat'];
+      repeatingEndDate = moment(new Date(taskDetails['End Repeat'])).format();
+    }
+    const quickTask = taskDetails['Schedule Type'] === 'Quick Task';
+    const type = 'other';
+    const label = taskDetails['Label']; // TODO: where are labels and assigned to stored?
+    const assignedTo = taskDetails['Assigned To'];
+
+    const taskInfo = typeSpecificFields; // TODO: need to parse this?
+
+    const newTask: Task = {
+      task_title: title,
+      group_id: groupId,
+      created_by: createdBy,
+      start_date: startDate, // date
+      end_date: null, // date
+      quick_task: quickTask,
+      notes: notes,
+      repeating: repeating,
+      repeating_interval: repeatingInterval,
+      repeating_end_date: repeatingEndDate,
+      task_status: 'INCOMPLETE',
+      task_type: type,
+      task_info: taskInfo,
+      // what to do with label, assigned
+      label: label,
+      assigned_to: assignedTo
+    };
+    console.log('task:', newTask);
+    return newTask;
+  };
+
+  const addTask = async (
+    typeSpecificFields: string,
+    taskDetails: { [key: string]: string }
+  ) => {
+    try {
+      const newTask: Task = createNewTask(typeSpecificFields, taskDetails);
+      addTaskMutation(newTask);
+    } catch (error) {
+      console.error('Failed to add task:', error);
+    }
   };
 
   return (
@@ -181,24 +252,24 @@ export default function AddTaskDetails() {
             title={'Description'}
             onChange={(value) => handleChange('Description', value)}
           />
-          <View className="m-4 mb-0">
-            <Text className="mb-2 font-carewallet-montserrat-semibold">
-              {'REPEAT*'}
-            </Text>
+          <Text className="m-4 mb-2 font-carewallet-montserrat-semibold">
+            {'REPEAT*'}
+          </Text>
+          <View className="mx-4">
             <CWDropdown
               selected={repeat}
               items={Object.values(RepeatOptions)}
               setLabel={setRepeat}
             />
-            {values['Repeat'] !== 'NONE' && (
-              <DateTimeDisplay
-                title={'End Repeat'}
-                elements={[endRepeatDate]}
-                actions={[openEndRepeatDatePicker]}
-              />
-            )}
           </View>
 
+          {values['Repeat'] !== 'NONE' && (
+            <DateTimeDisplay
+              title={'End Repeat'}
+              elements={[endRepeatDate]}
+              actions={[openEndRepeatDatePicker]}
+            />
+          )}
           <RadioGroup
             title={'SCHEDULE TYPE*'}
             options={['Quick Task', 'Event']}
@@ -228,7 +299,7 @@ export default function AddTaskDetails() {
                 actions={[
                   () => setStartTimePickerVisible(true),
                   () => {
-                    if (values['Start time'] !== 'SELECT START') {
+                    if (displayedStartTime !== 'SELECT START') {
                       setEndTimePickerVisible(true);
                     }
                   }
@@ -256,7 +327,6 @@ export default function AddTaskDetails() {
             </Text>
             <CWDropdown
               selected={label}
-              // TODO: Check this
               items={labels?.map((label) => label.label_name) || []}
               setLabel={setLabel}
             />
@@ -267,8 +337,10 @@ export default function AddTaskDetails() {
             </Text>
             <CWDropdown
               selected={assignedTo}
-              // TODO: Get members for this group
-              items={[]}
+              items={
+                users?.map((user) => user.first_name + ' ' + user.last_name) ||
+                []
+              }
               setLabel={setAssignedTo}
             />
           </View>
@@ -278,19 +350,13 @@ export default function AddTaskDetails() {
                 if (
                   values['Schedule Type'] &&
                   values['Date'] &&
-                  (values['Schedule Type'] === 'Quick Task' || values['Time'])
+                  (values['Schedule Type'] === 'Quick Task' ||
+                    (values['Start Time'] && values['End Time']))
                 ) {
-                  // TODO: where to navigate to after task creation?
+                  // TODO: invalidating tasks should re-render calendar and task list
+                  addTask(taskCreation, values);
                   navigation.navigate('TaskList');
-                  // TODO: create new task in database, assign to 'Assigned To'
-                  // is task automatically added to calendar & task list?
                 }
-
-                console.log(
-                  'Task fields: ',
-                  taskCreation,
-                  JSON.stringify(values)
-                );
               }}
             />
           </View>

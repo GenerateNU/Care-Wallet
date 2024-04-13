@@ -26,6 +26,7 @@ export function RadioGroup({
   onChange
 }: RadioGroupProps) {
   const [selectedOption, setSelectedOption] = useState('');
+  console.log('themeColor', themeColor);
 
   const handleOptionSelect = (option: string) => {
     setSelectedOption(option);
@@ -68,9 +69,7 @@ export function RadioGroup({
               className={clsx(
                 'm-2 flex h-12 flex-1 flex-row items-center space-x-2 rounded-md border border-carewallet-gray px-4 py-2',
                 option === selectedOption
-                  ? themeColor
-                    ? 'bg-' + themeColor
-                    : 'bg-carewallet-blue/20'
+                  ? 'bg-carewallet-blue/20'
                   : 'bg-carewallet-white'
               )}
               onPress={() => {

@@ -97,7 +97,6 @@ export default function TaskCreation() {
 
   const [values, setValues] = useState<{ [key: string]: string }>({
     Type: header ?? ''
-    // TODO: Add value for task category
   });
   const handleChange = (key: string, value: string) => {
     setValues((prevValues) => ({
@@ -116,7 +115,7 @@ export default function TaskCreation() {
           </Text>
         </View>
 
-        <ScrollView className="mt-3 min-h-full min-w-full">
+        <ScrollView className="mt-3 h-full min-w-full">
           <View className="absolute -z-20">
             {renderBackground(header ?? '')}
           </View>

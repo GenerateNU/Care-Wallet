@@ -106,6 +106,7 @@ export const addNewTaskMutation = () => {
   const { mutate: addTaskMutation } = useMutation({
     mutationFn: (newTask: Task) => addNewTask(newTask),
     onSuccess: () => {
+      console.log('Task Added Successfully');
       queryClient.invalidateQueries({ queryKey: ['filteredTaskList'] });
     },
     onError: (err) => {
