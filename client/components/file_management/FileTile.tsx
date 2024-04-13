@@ -16,7 +16,7 @@ export function FileTile({ name, label, url }: FileTileProps): JSX.Element {
         <View className="mr-4 h-[7vh] w-[7vh]">
           <WebView
             source={{ uri: url }}
-            className="h-full w-full flex-1 rounded-md border"
+            className="h-full w-full flex-1 rounded-md border border-carewallet-gray"
           />
         </View>
         <View className="flex-grow">
