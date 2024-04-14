@@ -26,7 +26,6 @@ export function RadioGroup({
   onChange
 }: RadioGroupProps) {
   const [selectedOption, setSelectedOption] = useState('');
-  console.log('themeColor', themeColor);
 
   const handleOptionSelect = (option: string) => {
     setSelectedOption(option);
@@ -38,19 +37,39 @@ export function RadioGroup({
   const renderIcon = (option: string) => {
     switch (option) {
       case 'Pills':
-        return <Pill />;
+        return (
+          <Pill color={option === selectedOption ? '#FFFFFF' : '#FC2C51'} />
+        );
       case 'Liquid':
-        return <Liquid />;
+        return (
+          <Liquid color={option === selectedOption ? '#FFFFFF' : '#FC2C51'} />
+        );
       case 'Shot':
-        return <Shot />;
+        return (
+          <Shot color={option === selectedOption ? '#FFFFFF' : '#FC2C51'} />
+        );
       case 'Bathing':
-        return <Bathing />;
+        return (
+          <Bathing color={option === selectedOption ? '#FFFFFF' : '#990099'} />
+        );
       case 'Toileting':
-        return <Toileting />;
+        return (
+          <Toileting
+            color={option === selectedOption ? '#FFFFFF' : '#990099'}
+          />
+        );
       case 'Quick Task':
-        return <QuickTaskIcon />;
+        return (
+          <QuickTaskIcon
+            color={option === selectedOption ? '#FFFFFF' : '#1A56C4'}
+          />
+        );
       case 'Event':
-        return <EventIcon />;
+        return (
+          <EventIcon
+            color={option === selectedOption ? '#FFFFFF' : '#1A56C4'}
+          />
+        );
       default:
         return <ButtonCircle />;
     }
@@ -68,9 +87,7 @@ export function RadioGroup({
               key={index}
               className={clsx(
                 'm-2 flex h-12 flex-1 flex-row items-center space-x-2 rounded-md border border-carewallet-gray px-4 py-2',
-                option === selectedOption
-                  ? 'bg-carewallet-blue/20'
-                  : 'bg-carewallet-white'
+                option === selectedOption ? themeColor : 'bg-carewallet-white'
               )}
               onPress={() => {
                 handleOptionSelect(option);
@@ -81,7 +98,7 @@ export function RadioGroup({
                 className={clsx(
                   'font-carewallet-montserrat-semibold text-base',
                   option === selectedOption
-                    ? 'text-carewallet-black'
+                    ? 'text-carewallet-white'
                     : 'text-carewallet-black'
                 )}
               >
