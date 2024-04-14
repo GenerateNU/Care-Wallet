@@ -148,7 +148,7 @@ definitions:
       phone:
         type: string
       profile_picture:
-        type: integer
+        type: string
       push_notification_enabled:
         type: boolean
       user_id:
@@ -298,6 +298,29 @@ paths:
           schema:
             type: string
       summary: Get a file
+      tags:
+      - file
+  /files/profile/{fileName}:
+    get:
+      description: List all files from S3 bucket
+      parameters:
+      - description: The groupID of the file
+        in: path
+        name: fileName
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/files.FileDetails'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: List all files
       tags:
       - file
   /files/upload:

@@ -45,6 +45,12 @@ const uploadFile = async ({
   return await uploadResumable.uploadAsync();
 };
 
+const getProfilePhoto = async (fileName: string): Promise<string> => {
+  const { data } = await axios.get(`${api_url}/files/profile/${fileName}`);
+
+  return data;
+};
+
 // For removing files
 interface RemoveFileProps {
   groupId: number;
@@ -141,4 +147,13 @@ export const useAllFileByGroup = (groupId: number) => {
   });
 
   return { groupFiles, reloadFiles, isLoading };
+};
+
+export const useProfileFile = (fileName: string) => {
+  const { data: file } = useQuery({
+    queryFn: () => getProfilePhoto(fileName),
+    queryKey: ['getProfileFile', fileName]
+  });
+
+  return { file };
 };

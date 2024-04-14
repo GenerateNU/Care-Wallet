@@ -21,6 +21,7 @@ func FileGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 		files.DELETE("/:groupId/:fileName", c.removeFile)
 		files.GET("/:groupId/:fileId", c.getFile)
 		files.GET("/:groupId", c.listFiles)
+		files.GET("/profile/:fileName", c.getProfilePhoto)
 	}
 
 	return files
@@ -163,6 +164,36 @@ func (pg *PgModel) listFiles(c *gin.Context) {
 	}
 
 	url, err := getAllFileURLs(pg.Conn, groupID)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, "Failed to get file: "+err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, url)
+}
+
+// listFiles godoc
+//
+//	@summary		List all files
+//	@description	List all files from S3 bucket
+//	@tags			file
+//
+//	@param			fileName	path		string	true	"The groupID of the file"
+//
+//	@success		200			{object}	[]FileDetails
+//	@failure		400			{object}	string
+//	@router			/files/profile/{fileName} [get]
+func (pg *PgModel) getProfilePhoto(c *gin.Context) {
+	fileName := c.Param("fileName")
+
+	// Validate the input parameters as needed
+	if fileName == "" {
+		fmt.Println("Missing fileName")
+		c.JSON(http.StatusBadRequest, "Missing fileName")
+		return
+	}
+
+	url, err := getProfilePhotoURL(fileName)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, "Failed to get file: "+err.Error())
 		return

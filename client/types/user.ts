@@ -5,7 +5,7 @@ export interface User {
   email: string;
   phone: string;
   address: string;
-  profile_picture: number;
+  profile_picture: string;
   device_id: string;
   push_notification_enabled: boolean;
 }

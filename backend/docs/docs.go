@@ -15,6 +15,41 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/files/profile/{fileName}": {
+            "get": {
+                "description": "List all files from S3 bucket",
+                "tags": [
+                    "file"
+                ],
+                "summary": "List all files",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "The groupID of the file",
+                        "name": "fileName",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/files.FileDetails"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/files/upload": {
             "post": {
                 "description": "Upload a file to database and S3 bucket",
@@ -1468,7 +1503,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "profile_picture": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "push_notification_enabled": {
                     "type": "boolean"

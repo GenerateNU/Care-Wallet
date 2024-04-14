@@ -226,3 +226,29 @@ func getAllFileURLs(pool *pgxpool.Pool, groupID string) ([]FileDetails, error) {
 
 	return files, nil
 }
+
+func getProfilePhotoURL(fileName string) (string, error) {
+	// Create the AWS object key, upload the file to S3
+	objectKey := fileName
+
+	sess, err := createAWSSession() // Ensure this function securely initializes AWS session
+	if err != nil {
+		fmt.Println(err.Error())
+		return "", fmt.Errorf("error creating AWS session: %w", err)
+	}
+
+	svc := s3.New(sess)
+	req, _ := svc.GetObjectRequest(&s3.GetObjectInput{
+		Bucket: aws.String(AWS_BUCKET_NAME),
+		Key:    aws.String(objectKey),
+	})
+
+	expiration := time.Duration(24*time.Hour) * time.Duration(1)
+	urlStr, err := req.Presign(expiration) // URL expires after 15 minutes
+	if err != nil {
+		fmt.Println(err.Error())
+		return "", fmt.Errorf("error generating presigned URL: %w", err)
+	}
+
+	return urlStr, nil
+}

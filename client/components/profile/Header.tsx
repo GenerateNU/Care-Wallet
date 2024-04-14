@@ -2,11 +2,11 @@ import React from 'react';
 import { Text, View } from 'react-native';
 
 import { IconButton } from 'react-native-paper';
-import WebView from 'react-native-webview';
+import { WebView } from 'react-native-webview';
 
 import Edit from '../../assets/profile/edit.svg';
 import { useCareWalletContext } from '../../contexts/CareWalletContext';
-import { useFileByGroup } from '../../services/file';
+import { useProfileFile } from '../../services/file';
 import { GroupRole, Role } from '../../types/group';
 import { User } from '../../types/user';
 import { BackButton } from '../nav_buttons/BackButton';
@@ -19,13 +19,13 @@ interface HeaderProps {
 }
 
 export function Header({ user, role, onPress }: HeaderProps) {
-  const { user: signedInUser, group } = useCareWalletContext();
+  const { user: signedInUser } = useCareWalletContext();
   if (!user) return null;
-  const { file } = useFileByGroup(group.groupID, user?.profile_picture ?? -1);
+  const { file } = useProfileFile(user.profile_picture);
 
   return signedInUser.userID === user.user_id ? (
     <View className="flex flex-row items-center border-b border-carewallet-lightgray bg-carewallet-white">
-      {file ? (
+      {user?.profile_picture ? (
         <View className="ml-2 h-20 w-20">
           <WebView
             source={{ uri: file }}
@@ -91,7 +91,7 @@ export function Header({ user, role, onPress }: HeaderProps) {
               </Text>
             </View>
           </View>
-          {file ? (
+          {user?.profile_picture ? (
             <View className="ml-2 mr-2 h-20 w-20">
               <WebView
                 source={{ uri: file }}

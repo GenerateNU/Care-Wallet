@@ -4,7 +4,7 @@ import { ActivityIndicator, FlatList, Text, View } from 'react-native';
 import { WebView } from 'react-native-webview';
 
 import { useCareWalletContext } from '../../contexts/CareWalletContext';
-import { useFileByGroup } from '../../services/file';
+import { useProfileFile } from '../../services/file';
 import { GroupRole, Role } from '../../types/group';
 import { User } from '../../types/user';
 
@@ -80,11 +80,10 @@ export function Group({
 }
 
 function SmallProfileImage({ user }: { user: User }) {
-  const { group } = useCareWalletContext();
-  const { file } = useFileByGroup(group.groupID, user?.profile_picture ?? -1);
+  const { file } = useProfileFile(user.profile_picture);
   return (
     <View>
-      {file ? (
+      {user?.profile_picture ? (
         <View className="mb-1 h-14 w-14">
           <WebView
             source={{ uri: file }}

@@ -3,16 +3,14 @@ import { Text, View } from 'react-native';
 
 import { WebView } from 'react-native-webview';
 
-import { useCareWalletContext } from '../../contexts/CareWalletContext';
-import { useFileByGroup } from '../../services/file';
+import { useProfileFile } from '../../services/file';
 import { User } from '../../types/user';
 
 export function PatientHeader({ user }: { user: User | undefined }) {
-  const { group } = useCareWalletContext();
-  const { file } = useFileByGroup(group.groupID, user?.profile_picture ?? -1);
+  const { file } = useProfileFile(user?.profile_picture ?? '');
   return (
     <View className="mx-auto mt-2 flex flex-row items-center">
-      {file ? (
+      {user?.profile_picture ? (
         <View className="mr-4 h-[10vh] w-[10vh]">
           <WebView
             source={{ uri: file }}
