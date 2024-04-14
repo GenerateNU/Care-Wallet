@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 import { onAuthStateChanged } from '@firebase/auth';
 import { useNavigation } from '@react-navigation/native';
 import Constants from 'expo-constants';
 
 import Carewallet from '../../assets/Carewallet.svg';
-import { Background } from '../../components/Background';
 import { auth } from '../../firebase.config';
+import { MainLayout } from '../../layouts/MainLayout';
 import { AppStackNavigation } from '../../navigation/types';
 import { registerForPushNotificationsAsync } from '../../services/notifications';
 
@@ -35,8 +35,7 @@ export default function Dashboard() {
     navigation.navigate('Dashboard');
   });
   return (
-    <SafeAreaView className="flex-1">
-      <Background />
+    <MainLayout>
       <View className="h-[90vh] items-center justify-center">
         <View className="flex-center mb-10 items-center">
           <Carewallet className="h-20 w-20" />
@@ -61,6 +60,6 @@ export default function Dashboard() {
           </Text>
         </View>
       </View>
-    </SafeAreaView>
+    </MainLayout>
   );
 }
