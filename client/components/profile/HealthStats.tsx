@@ -7,7 +7,7 @@ export function HealthStats() {
 
   return HealthStats.length > 0 ? (
     <FlatList
-      className="mt-10 h-fit max-h-fit flex-grow-0"
+      className="mt-2 h-fit max-h-fit"
       onScrollBeginDrag={() => setCanPress(false)}
       onScrollEndDrag={() => setCanPress(true)}
       horizontal
@@ -15,15 +15,15 @@ export function HealthStats() {
       data={HealthStats}
       renderItem={({ index }) => (
         <Pressable key={index} onTouchEnd={() => {}}>
-          <View className="items-center px-2">
-            <View className="z-10 h-[35vh] w-[40vw] rounded-3xl border border-carewallet-lightgray bg-carewallet-white" />
-          </View>
+          <View className="mx-2 h-[80vh] w-[40vw] items-center"></View>
         </Pressable>
       )}
     />
   ) : (
-    <Text className="my-auto text-center font-carewallet-manrope">
-      There are no health stats to view.
-    </Text>
+    <View className="mt-2 h-[45vh] items-center justify-center rounded-xl border border-carewallet-lightgray">
+      <Text className="font-carewallet-manrope">
+        There are no health stats to view.
+      </Text>
+    </View>
   );
 }

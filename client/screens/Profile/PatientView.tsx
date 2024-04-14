@@ -27,8 +27,8 @@ export default function PatientView() {
           user={users?.find((user) => user.user_id === patientId)}
           role={roles?.find((role) => role.user_id === patientId)}
         />
-        <View className="mt-3 h-[50vh] w-[80vw] self-center rounded-xl border border-carewallet-lightgray bg-carewallet-white">
-          <Text className="pt-2 text-center font-carewallet-manrope text-lg font-semibold text-carewallet-black">
+        <View className="mt-3 h-[50vh] w-[80vw] self-center bg-carewallet-white">
+          <Text className="pt-2 text-center font-carewallet-manrope-bold text-lg text-carewallet-black">
             View Health Stats
           </Text>
           <HealthStats />

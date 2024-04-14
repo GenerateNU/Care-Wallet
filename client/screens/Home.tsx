@@ -5,7 +5,6 @@ import { useNavigation } from '@react-navigation/native';
 
 import { Header } from '../components/home/Header';
 import { TaskList } from '../components/home/TaskList';
-import { HealthStats } from '../components/profile/HealthStats';
 import { useCareWalletContext } from '../contexts/CareWalletContext';
 import { AppStackNavigation } from '../navigation/types';
 import { useUser } from '../services/user';
@@ -24,7 +23,9 @@ export default function Home() {
           <Text className="ml-5 mt-5 font-carewallet-montserrat-bold text-base">
             Health Overview
           </Text>
-          <HealthStats />
+          <Text className="my-auto text-center">
+            There are no health stats to view.
+          </Text>
         </View>
         <View className="mt-10 overflow-hidden rounded-lg border border-carewallet-blue/10">
           <View
