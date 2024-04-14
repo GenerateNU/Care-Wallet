@@ -7,7 +7,6 @@ import FileDock from '../../assets/profile/filedock.svg';
 import Upload from '../../assets/profile/upload.svg';
 import { Header } from '../../components/profile/Header';
 import { HealthStats } from '../../components/profile/HealthStats';
-import { PatientHeader } from '../../components/profile/PatientHeader';
 import { useCareWalletContext } from '../../contexts/CareWalletContext';
 import { AppStackNavigation } from '../../navigation/types';
 import { useGroup } from '../../services/group';
@@ -27,9 +26,6 @@ export default function PatientView() {
         <Header
           user={users?.find((user) => user.user_id === patientId)}
           role={roles?.find((role) => role.user_id === patientId)}
-        />
-        <PatientHeader
-          user={users?.find((user) => user.user_id === patientId)}
         />
         <View className="mt-3 h-[50vh] w-[80vw] self-center rounded-xl border border-carewallet-lightgray bg-carewallet-white">
           <Text className="pt-2 text-center font-carewallet-manrope text-lg font-semibold text-carewallet-black">

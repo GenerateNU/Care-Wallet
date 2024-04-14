@@ -1,10 +1,9 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 
-import { IconButton } from 'react-native-paper';
+import _ from 'lodash';
 import { WebView } from 'react-native-webview';
 
-import Edit from '../../assets/profile/edit.svg';
 import { useCareWalletContext } from '../../contexts/CareWalletContext';
 import { useProfileFile } from '../../services/file';
 import { GroupRole, Role } from '../../types/group';
@@ -20,94 +19,62 @@ interface HeaderProps {
 
 export function Header({ user, role, onPress }: HeaderProps) {
   const { user: signedInUser } = useCareWalletContext();
-  if (!user) return null;
-  const { file } = useProfileFile(user.profile_picture);
-
-  return signedInUser.userID === user.user_id ? (
-    <View className="flex flex-row items-center border-b border-carewallet-lightgray bg-carewallet-white">
-      {user?.profile_picture ? (
-        <View className="ml-2 h-20 w-20">
-          <WebView
-            source={{ uri: file }}
-            className="flex-1 rounded-full border border-carewallet-gray"
-          />
+  const { file } = useProfileFile(user?.profile_picture ?? '');
+  return (
+    <View>
+      <View className="flex h-[10vh] flex-row items-center border-b border-carewallet-lightgray">
+        <View className="absolute">
+          {role?.role === Role.PATIENT ? (
+            <BackButton />
+          ) : (
+            signedInUser.userID !== user?.user_id &&
+            onPress && <NavigationLeftArrow onPress={onPress} />
+          )}
         </View>
-      ) : (
-        <View className="mb-3 ml-3 h-20 w-20 rounded-full bg-carewallet-lightergray">
-          <Text className="my-auto items-center text-center font-carewallet-manrope-bold text-carewallet-blue">
-            {user.first_name.charAt(0)}
-            {user.last_name.charAt(0)}
-          </Text>
-        </View>
-      )}
-      <View className="mt-5 flex h-fit max-h-fit min-h-fit flex-row items-center">
-        <View className="mb-5 ml-8">
-          <Text className="flex-wrap text-left text-xl font-bold text-carewallet-blue">
-            {user.first_name} {user.last_name}
-          </Text>
-          <View className="flex w-[60vw] flex-row pt-3">
-            <View className="flex flex-col">
-              <Text className="items-center justify-center text-left text-xs font-semibold text-carewallet-black">
-                {`${role?.role} ${role?.role !== Role.PATIENT ? 'CARETAKER' : ''}`}
-              </Text>
-              <Text className="items-center justify-center text-left text-xs  text-carewallet-black">
-                {user.phone ? user.phone : user.email}
-              </Text>
-            </View>
-            <IconButton
-              className="absolute -bottom-5 -right-3 ml-auto h-[50px] w-[50px] self-end rounded-xl border border-carewallet-lightgray bg-carewallet-white"
-              mode="contained"
-              icon={() => <Edit color={'blue'} />}
+        <Text
+          className={
+            'mx-auto my-auto font-carewallet-montserrat-bold text-lg text-carewallet-blue'
+          }
+        >
+          {role?.role === Role.PATIENT ? 'Patient Information' : 'Profile'}
+        </Text>
+      </View>
+      <View className="mx-auto mt-2 flex flex-row items-center">
+        {user?.profile_picture ? (
+          <View className="mr-4 h-28 w-28">
+            <WebView
+              source={{ uri: file }}
+              className="flex-1 rounded-full border border-carewallet-gray"
             />
           </View>
-        </View>
-      </View>
-    </View>
-  ) : (
-    <View className="flex flex-row items-center border-b border-carewallet-lightgray bg-carewallet-white">
-      <View className="my-auto">
-        {role?.role === Role.PATIENT ? (
-          <BackButton />
         ) : (
-          onPress && <NavigationLeftArrow onPress={onPress} />
+          <View className="mr-4 h-28 w-28 rounded-full bg-carewallet-lightergray">
+            <Text className="my-auto items-center text-center font-carewallet-manrope-bold text-carewallet-blue">
+              {user?.first_name.charAt(0)}
+              {user?.last_name.charAt(0)}
+            </Text>
+          </View>
         )}
-      </View>
-      {role?.role === Role.PATIENT ? (
-        <Text className="mx-auto pr-10 font-carewallet-montserrat-semibold text-xl text-carewallet-blue">
-          Patient Information
-        </Text>
-      ) : (
-        <>
-          <View className="mx-auto mt-2 flex h-fit max-h-fit min-h-fit flex-row items-center">
-            <View className="mb-5 ml-8">
-              <Text className="flex-wrap text-center text-xl font-bold text-carewallet-blue">
-                {user.first_name} {user.last_name}
-              </Text>
-              <Text className="mt-3 text-center text-xs font-semibold text-carewallet-black">
-                {`${role?.role} CARETAKER`}
-              </Text>
-              <Text className="text-center text-xs  text-carewallet-black">
-                {user.phone ? user.phone : user.email}
-              </Text>
+        <View className="mt-5 flex h-fit max-h-fit min-h-fit flex-row items-center">
+          <View className="mb-5 ml-2">
+            <Text className="flex-wrap text-left font-carewallet-manrope-bold text-xl text-carewallet-blue">
+              {user?.first_name} {user?.last_name}
+            </Text>
+            <View className="flex w-[60vw] flex-row">
+              <View className="flex flex-col">
+                <Text className="items-center justify-center text-left font-carewallet-montserrat-bold text-xs text-carewallet-black">
+                  {role?.role === Role.PATIENT
+                    ? 'PATIENT'
+                    : `${_.toUpper(role?.role)} CARETAKER`}
+                </Text>
+                <Text className="items-center justify-center text-left text-xs  text-carewallet-black">
+                  {user?.phone ? user.phone : user?.email}
+                </Text>
+              </View>
             </View>
           </View>
-          {user?.profile_picture ? (
-            <View className="ml-2 mr-2 h-20 w-20">
-              <WebView
-                source={{ uri: file }}
-                className="flex-1 rounded-full border border-carewallet-gray"
-              />
-            </View>
-          ) : (
-            <View className="ml-3 mr-2 h-20 w-20 rounded-full bg-carewallet-lightergray">
-              <Text className="my-auto items-center text-center font-carewallet-manrope-bold text-carewallet-blue">
-                {user.first_name.charAt(0)}
-                {user.last_name.charAt(0)}
-              </Text>
-            </View>
-          )}
-        </>
-      )}
+        </View>
+      </View>
     </View>
   );
 }
