@@ -11,13 +11,14 @@ export type AppStackParamList = {
   PatientView: undefined;
   ProfileScreens: undefined;
   FileUploadScreen: undefined;
+  FileViewScreen: undefined;
   Landing: undefined;
   Calendar: undefined;
   Notifications: undefined;
   TaskType: undefined;
   TaskDisplay: { id: number };
   TaskList: undefined;
-  CalendarContainer: { screen: string; params: { screen: string } } | undefined;
+  CalendarContainer: undefined;
   CalendarTopNav: undefined;
   TaskCreation: { taskType: string };
   Settings: undefined;

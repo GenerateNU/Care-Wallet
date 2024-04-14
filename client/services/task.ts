@@ -17,6 +17,7 @@ type TaskQueryParams = {
 };
 
 const getTask = async (taskID: string): Promise<Task> => {
+  if (!parseInt(taskID)) return {} as Task;
   const { data } = await axios.get(`${api_url}/tasks/${taskID}`);
   return data;
 };
@@ -42,6 +43,7 @@ const getFilteredTasks = async (
 };
 
 const getTaskLabels = async (taskID: string): Promise<TaskLabel[]> => {
+  if (!parseInt(taskID)) return [] as TaskLabel[];
   const { data } = await axios.get(`${api_url}/tasks/${taskID}/labels`);
   return data;
 };
