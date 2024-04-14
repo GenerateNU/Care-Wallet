@@ -10,7 +10,6 @@ import { User } from '../../types/user';
 export function PatientHeader({ user }: { user: User | undefined }) {
   const { group } = useCareWalletContext();
   const { file } = useFileByGroup(group.groupID, user?.profile_picture ?? -1);
-  console.log(file);
   return (
     <View className="mx-auto mt-2 flex flex-row items-center">
       {file ? (

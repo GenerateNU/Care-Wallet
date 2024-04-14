@@ -22,7 +22,6 @@ export function Header({ user, role, onPress }: HeaderProps) {
   const { user: signedInUser, group } = useCareWalletContext();
   if (!user) return null;
   const { file } = useFileByGroup(group.groupID, user?.profile_picture ?? -1);
-  console.log(file);
 
   return signedInUser.userID === user.user_id ? (
     <View className="flex flex-row items-center border-b border-carewallet-lightgray bg-carewallet-white">
@@ -34,7 +33,7 @@ export function Header({ user, role, onPress }: HeaderProps) {
           />
         </View>
       ) : (
-        <View className="mb-3 ml-3 h-14 w-14 rounded-full bg-carewallet-lightergray">
+        <View className="mb-3 ml-3 h-20 w-20 rounded-full bg-carewallet-lightergray">
           <Text className="my-auto items-center text-center font-carewallet-manrope-bold text-carewallet-blue">
             {user.first_name.charAt(0)}
             {user.last_name.charAt(0)}
@@ -100,7 +99,7 @@ export function Header({ user, role, onPress }: HeaderProps) {
               />
             </View>
           ) : (
-            <View className="mb-3 ml-3 h-14 w-14 rounded-full bg-carewallet-lightergray">
+            <View className="ml-3 mr-2 h-20 w-20 rounded-full bg-carewallet-lightergray">
               <Text className="my-auto items-center text-center font-carewallet-manrope-bold text-carewallet-blue">
                 {user.first_name.charAt(0)}
                 {user.last_name.charAt(0)}

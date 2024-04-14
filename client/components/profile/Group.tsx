@@ -82,7 +82,6 @@ export function Group({
 function SmallProfileImage({ user }: { user: User }) {
   const { group } = useCareWalletContext();
   const { file } = useFileByGroup(group.groupID, user?.profile_picture ?? -1);
-  console.log(file);
   return (
     <View>
       {file ? (
