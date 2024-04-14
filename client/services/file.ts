@@ -65,14 +65,11 @@ const removeFile = async ({
 // For getting files
 interface GetFileProps {
   groupId: number;
-  fileName: string;
+  fileId: number;
 }
 
-const getFile = async ({
-  groupId,
-  fileName
-}: GetFileProps): Promise<string> => {
-  const response = await axios.get(`${api_url}/files/${groupId}/${fileName}`);
+const getFile = async ({ groupId, fileId }: GetFileProps): Promise<string> => {
+  const response = await axios.get(`${api_url}/files/${groupId}/${fileId}`);
 
   return response.data;
 };
@@ -123,10 +120,10 @@ export const useFile = () => {
   };
 };
 
-export const useFileByGroup = (groupId: number, fileName: string) => {
+export const useFileByGroup = (groupId: number, fileId: number) => {
   const { data: file } = useQuery({
-    queryFn: () => getFile({ groupId, fileName }),
-    queryKey: ['getFile', groupId, fileName]
+    queryFn: () => getFile({ groupId, fileId }),
+    queryKey: ['getFile', groupId, fileId]
   });
 
   return { file };

@@ -145,10 +145,10 @@ definitions:
         type: string
       last_name:
         type: string
-      pfp_s3_url:
-        type: string
       phone:
         type: string
+      profile_picture:
+        type: integer
       push_notification_enabled:
         type: boolean
       user_id:
@@ -283,9 +283,9 @@ paths:
         name: groupId
         required: true
         type: string
-      - description: The fileName of the file
+      - description: The fileId of the file
         in: path
-        name: fileName
+        name: fileId
         required: true
         type: string
       responses:

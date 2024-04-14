@@ -7,7 +7,7 @@ type User struct {
 	Email                  string `json:"email"`
 	Phone                  string `json:"phone,omitempty"`
 	Address                string `json:"address,omitempty"`
-	ProfilePictureS3URL    string `json:"pfp_s3_url,omitempty"`
+	ProfilePicture         *int   `json:"profile_picture,omitempty"`
 	DeviceID               string `json:"device_id,omitempty"`
 	PushNotificationEnable bool   `json:"push_notification_enabled"`
 }

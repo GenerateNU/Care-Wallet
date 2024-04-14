@@ -19,7 +19,7 @@ func FileGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 	{
 		files.POST("/upload", c.uploadFile)
 		files.DELETE("/:groupId/:fileName", c.removeFile)
-		files.GET("/:groupId/:fileName", c.getFile)
+		files.GET("/:groupId/:fileId", c.getFile)
 		files.GET("/:groupId", c.listFiles)
 	}
 
@@ -115,27 +115,24 @@ func (pg *PgModel) removeFile(c *gin.Context) {
 //	@description	Get a file from S3 bucket
 //	@tags			file
 //
-//	@param			groupId		path		string	true	"The groupID of the file"
-//	@param			fileName	path		string	true	"The fileName of the file"
+//	@param			groupId	path		string	true	"The groupID of the file"
+//	@param			fileId	path		string	true	"The fileId of the file"
 //
-//	@success		200			{object}	string
-//	@failure		400			{object}	string
+//	@success		200		{object}	string
+//	@failure		400		{object}	string
 //	@router			/files/{groupId}/{fileName} [get]
 func (pg *PgModel) getFile(c *gin.Context) {
 	groupID := c.Param("groupId")
-	fileName := c.Param("fileName")
+	fileId := c.Param("fileId")
 
-	fmt.Println("here")
 	// Validate the input parameters as needed
-	if groupID == "" || fileName == "" {
+	if groupID == "" || fileId == "" {
 		fmt.Println("Missing groupId or fileName")
 		c.JSON(http.StatusBadRequest, "Missing groupID or fileName")
 		return
 	}
 
-	fmt.Println("here")
-
-	url, err := getFileURL(pg.Conn, groupID, fileName)
+	url, err := getFileURL(pg.Conn, groupID, fileId)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, "Failed to get file: "+err.Error())
 		return
@@ -158,7 +155,6 @@ func (pg *PgModel) getFile(c *gin.Context) {
 func (pg *PgModel) listFiles(c *gin.Context) {
 	groupID := c.Param("groupId")
 
-	fmt.Println("here")
 	// Validate the input parameters as needed
 	if groupID == "" {
 		fmt.Println("Missing groupId")

@@ -15,3 +15,11 @@ CREATE TABLE IF NOT EXISTS files (
     FOREIGN KEY (upload_by) REFERENCES users (user_id),
     FOREIGN KEY (task_id) REFERENCES task (task_id)
 );
+
+
+INSERT INTO files (file_name, group_id, upload_by, file_size)
+VALUES
+  ('IMG_6884.jpeg', 5, 'user1', '202'),
+  ('IMG_1384.jpeg', 5, 'user1', '202'),
+  ('IMG_5068.jpeg', 5, 'user1', '202')
+;

@@ -7,7 +7,10 @@ import {
   View
 } from 'react-native';
 
+import WebView from 'react-native-webview';
+
 import { useCareWalletContext } from '../../contexts/CareWalletContext';
+import { useFileByGroup } from '../../services/file';
 import { GroupRole, Role } from '../../types/group';
 import { User } from '../../types/user';
 
@@ -64,22 +67,38 @@ export function Group({
             user.user_id !==
               (roles.find((role) => role.role === Role.PATIENT)?.user_id ?? '')
         )}
-        renderItem={({ item, index }) => (
-          <Pressable
-            key={index}
-            onTouchEnd={() => {
-              if (canPress) setActiveUser(item.user_id);
-            }}
-          >
-            <View className="items-center px-2">
-              <View className="z-10 h-14 w-14 rounded-full  bg-carewallet-lightergray" />
-              <Text className="text-center font-carewallet-manrope-semibold text-xs">
-                {item.first_name}
-              </Text>
-            </View>
-          </Pressable>
-        )}
+        renderItem={({ item, index }) => {
+          return (
+            <Pressable
+              key={index}
+              onTouchEnd={() => {
+                if (canPress) setActiveUser(item.user_id);
+              }}
+            >
+              <SmallProfileImage user={item} />
+            </Pressable>
+          );
+        }}
       />
+    </View>
+  );
+}
+
+function SmallProfileImage({ user }: { user: User }) {
+  const { group } = useCareWalletContext();
+  const { file } = useFileByGroup(group.groupID, user?.profile_picture ?? -1);
+  console.log(file);
+  return (
+    <View className="items-center px-2">
+      <View className="ml-2 h-14 w-14">
+        <WebView
+          source={{ uri: file }}
+          className="flex-1 rounded-full border border-carewallet-gray"
+        />
+      </View>
+      <Text className="text-center font-carewallet-manrope-semibold text-xs">
+        {user.first_name}
+      </Text>
     </View>
   );
 }

@@ -126,8 +126,8 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "The fileName of the file",
-                        "name": "fileName",
+                        "description": "The fileId of the file",
+                        "name": "fileId",
                         "in": "path",
                         "required": true
                     }
@@ -1464,11 +1464,11 @@ const docTemplate = `{
                 "last_name": {
                     "type": "string"
                 },
-                "pfp_s3_url": {
-                    "type": "string"
-                },
                 "phone": {
                     "type": "string"
+                },
+                "profile_picture": {
+                    "type": "integer"
                 },
                 "push_notification_enabled": {
                     "type": "boolean"
