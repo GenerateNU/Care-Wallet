@@ -26,12 +26,21 @@ export function Header({ user, role, onPress }: HeaderProps) {
 
   return signedInUser.userID === user.user_id ? (
     <View className="flex flex-row items-center border-b border-carewallet-lightgray bg-carewallet-white">
-      <View className="ml-2 h-[10vh] w-[10vh]">
-        <WebView
-          source={{ uri: file }}
-          className="flex-1 rounded-full border border-carewallet-gray"
-        />
-      </View>
+      {file ? (
+        <View className="ml-2 h-20 w-20">
+          <WebView
+            source={{ uri: file }}
+            className="flex-1 rounded-full border border-carewallet-gray"
+          />
+        </View>
+      ) : (
+        <View className="mb-3 ml-3 h-14 w-14 rounded-full bg-carewallet-lightergray">
+          <Text className="my-auto items-center text-center font-carewallet-manrope-bold text-carewallet-blue">
+            {user.first_name.charAt(0)}
+            {user.last_name.charAt(0)}
+          </Text>
+        </View>
+      )}
       <View className="mt-5 flex h-fit max-h-fit min-h-fit flex-row items-center">
         <View className="mb-5 ml-8">
           <Text className="flex-wrap text-left text-xl font-bold text-carewallet-blue">
@@ -83,7 +92,21 @@ export function Header({ user, role, onPress }: HeaderProps) {
               </Text>
             </View>
           </View>
-          <View className="mb-3 ml-auto mr-3 h-20 w-20 rounded-full bg-carewallet-lightergray" />
+          {file ? (
+            <View className="ml-2 mr-2 h-20 w-20">
+              <WebView
+                source={{ uri: file }}
+                className="flex-1 rounded-full border border-carewallet-gray"
+              />
+            </View>
+          ) : (
+            <View className="mb-3 ml-3 h-14 w-14 rounded-full bg-carewallet-lightergray">
+              <Text className="my-auto items-center text-center font-carewallet-manrope-bold text-carewallet-blue">
+                {user.first_name.charAt(0)}
+                {user.last_name.charAt(0)}
+              </Text>
+            </View>
+          )}
         </>
       )}
     </View>

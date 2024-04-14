@@ -1,13 +1,7 @@
 import React, { useState } from 'react';
-import {
-  ActivityIndicator,
-  FlatList,
-  Pressable,
-  Text,
-  View
-} from 'react-native';
+import { ActivityIndicator, FlatList, Text, View } from 'react-native';
 
-import WebView from 'react-native-webview';
+import { WebView } from 'react-native-webview';
 
 import { useCareWalletContext } from '../../contexts/CareWalletContext';
 import { useFileByGroup } from '../../services/file';
@@ -69,14 +63,15 @@ export function Group({
         )}
         renderItem={({ item, index }) => {
           return (
-            <Pressable
+            <View
               key={index}
+              className="mx-2 items-center"
               onTouchEnd={() => {
                 if (canPress) setActiveUser(item.user_id);
               }}
             >
               <SmallProfileImage user={item} />
-            </Pressable>
+            </View>
           );
         }}
       />
@@ -89,13 +84,22 @@ function SmallProfileImage({ user }: { user: User }) {
   const { file } = useFileByGroup(group.groupID, user?.profile_picture ?? -1);
   console.log(file);
   return (
-    <View className="items-center px-2">
-      <View className="ml-2 h-14 w-14">
-        <WebView
-          source={{ uri: file }}
-          className="flex-1 rounded-full border border-carewallet-gray"
-        />
-      </View>
+    <View>
+      {file ? (
+        <View className="mb-1 h-14 w-14">
+          <WebView
+            source={{ uri: file }}
+            className="flex-1 rounded-full border border-carewallet-gray"
+          />
+        </View>
+      ) : (
+        <View className="mb-1 h-14 w-14 rounded-full bg-carewallet-lightergray">
+          <Text className="my-auto items-center text-center font-carewallet-manrope-bold text-carewallet-blue">
+            {user.first_name.charAt(0)}
+            {user.last_name.charAt(0)}
+          </Text>
+        </View>
+      )}
       <Text className="text-center font-carewallet-manrope-semibold text-xs">
         {user.first_name}
       </Text>

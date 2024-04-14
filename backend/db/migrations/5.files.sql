@@ -19,7 +19,11 @@ CREATE TABLE IF NOT EXISTS files (
 
 INSERT INTO files (file_name, group_id, upload_by, file_size)
 VALUES
-  ('IMG_6884.jpeg', 5, 'user1', '202'),
+  ('IMG_6884.jpg', 5, 'user1', '202'),
   ('IMG_1384.jpeg', 5, 'user1', '202'),
-  ('IMG_5068.jpeg', 5, 'user1', '202')
+  ('IMG_5068.jpeg', 5, 'user1', '202'),
+  ('IMG_1777.JPG', 5, 'user1', '202'),
+  ('IMG_1777.JPG', 5, 'user1', '202'),
+  ('IMG_0585.jpg', 5, 'user1', '202'),
+  ('IMG_1597.jpeg', 5, 'user1', '202')
 ;

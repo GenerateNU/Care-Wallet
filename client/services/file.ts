@@ -69,6 +69,7 @@ interface GetFileProps {
 }
 
 const getFile = async ({ groupId, fileId }: GetFileProps): Promise<string> => {
+  if (fileId === -1) return '';
   const response = await axios.get(`${api_url}/files/${groupId}/${fileId}`);
 
   return response.data;
