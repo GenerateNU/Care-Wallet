@@ -1,20 +1,19 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ActivityIndicator, SafeAreaView, Text, View } from 'react-native';
 
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { RouteProp, useRoute } from '@react-navigation/native';
 import moment from 'moment';
-import DropDownPicker from 'react-native-dropdown-picker';
 import { IconButton } from 'react-native-paper';
 
 import Date from '../assets/Date_today.svg';
 import Edit from '../assets/profile/edit.svg';
 import Clock from '../assets/profile/settings/clock.svg';
 import Repeating from '../assets/repeating.svg';
+import { DropUp } from '../components/DropUp';
 import { GetLabelPill } from '../components/GetLabelPill';
 import { GetStatusPill } from '../components/GetStatusPill';
 import { BackButton } from '../components/nav_buttons/BackButton';
 import { NoteButton } from '../components/NoteButton';
-import { AppStackNavigation } from '../navigation/types';
 import { useTaskById } from '../services/task';
 import { Status } from '../types/type';
 
@@ -28,11 +27,6 @@ export default function SingleTaskScreen() {
   const route = useRoute<RouteProp<ParamList, 'mt'>>();
   const { id } = route.params;
   const { task, taskIsLoading, taskLabelsIsLoading } = useTaskById(id);
-  const navigation = useNavigation<AppStackNavigation>();
-
-  const [selectedStatus, setSelectedStatus] = useState<Status | null>(null);
-
-  const [open, setOpen] = useState(false);
 
   const filters = Object.values(Status).map((filter) => ({
     label: filter,
@@ -109,17 +103,18 @@ export default function SingleTaskScreen() {
             <Reject />
           </View> */}
           {
-            <DropDownPicker
-              open={open}
-              value={selectedStatus}
-              items={filters}
-              setOpen={setOpen}
-              setValue={setSelectedStatus}
-              placeholder={task?.task_status}
-              onSelectItem={() => {
-                navigation.navigate('FileUploadScreen');
-              }}
-            />
+            // <DropDownPicker
+            //   open={open}
+            //   value={selectedStatus}
+            //   items={filters}
+            //   setOpen={setOpen}
+            //   setValue={setSelectedStatus}
+            //   placeholder={task?.task_status}
+            //   onSelectItem={() => {
+            //     navigation.navigate('FileUploadScreen');
+            //   }}
+            // />
+            <DropUp selected="Actions" items={filters} />
           }
         </View>
       </View>
