@@ -17,15 +17,15 @@ const docTemplate = `{
     "paths": {
         "/files/profile/{fileName}": {
             "get": {
-                "description": "List all files from S3 bucket",
+                "description": "get profile photo from S3 bucket",
                 "tags": [
                     "file"
                 ],
-                "summary": "List all files",
+                "summary": "get profile photo",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "The groupID of the file",
+                        "description": "the file name of the profile photo",
                         "name": "fileName",
                         "in": "path",
                         "required": true
@@ -35,10 +35,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/files.FileDetails"
-                            }
+                            "type": "string"
                         }
                     },
                     "400": {

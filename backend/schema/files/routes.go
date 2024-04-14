@@ -172,15 +172,15 @@ func (pg *PgModel) listFiles(c *gin.Context) {
 	c.JSON(http.StatusOK, url)
 }
 
-// listFiles godoc
+// getProfilePhoto godoc
 //
-//	@summary		List all files
-//	@description	List all files from S3 bucket
+//	@summary		get profile photo
+//	@description	get profile photo from S3 bucket
 //	@tags			file
 //
-//	@param			fileName	path		string	true	"The groupID of the file"
+//	@param			fileName	path		string	true	"the file name of the profile photo"
 //
-//	@success		200			{object}	[]FileDetails
+//	@success		200			{object}	string
 //	@failure		400			{object}	string
 //	@router			/files/profile/{fileName} [get]
 func (pg *PgModel) getProfilePhoto(c *gin.Context) {

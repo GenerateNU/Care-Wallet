@@ -302,9 +302,9 @@ paths:
       - file
   /files/profile/{fileName}:
     get:
-      description: List all files from S3 bucket
+      description: get profile photo from S3 bucket
       parameters:
-      - description: The groupID of the file
+      - description: the file name of the profile photo
         in: path
         name: fileName
         required: true
@@ -313,14 +313,12 @@ paths:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/files.FileDetails'
-            type: array
+            type: string
         "400":
           description: Bad Request
           schema:
             type: string
-      summary: List all files
+      summary: get profile photo
       tags:
       - file
   /files/upload:
