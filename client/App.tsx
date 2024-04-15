@@ -4,7 +4,8 @@ import { Text, View } from 'react-native';
 import {
   Manrope_400Regular,
   Manrope_600SemiBold,
-  Manrope_700Bold
+  Manrope_700Bold,
+  Manrope_800ExtraBold
 } from '@expo-google-fonts/manrope';
 import {
   Montserrat_400Regular,
@@ -24,6 +25,7 @@ export default function App() {
     Manrope_400Regular,
     Manrope_600SemiBold,
     Manrope_700Bold,
+    Manrope_800ExtraBold,
     Montserrat_400Regular,
     Montserrat_600SemiBold,
     Montserrat_700Bold

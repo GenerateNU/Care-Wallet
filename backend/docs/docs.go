@@ -15,6 +15,38 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/files/profile/{fileName}": {
+            "get": {
+                "description": "get profile photo from S3 bucket",
+                "tags": [
+                    "file"
+                ],
+                "summary": "get profile photo",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "the file name of the profile photo",
+                        "name": "fileName",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/files/upload": {
             "post": {
                 "description": "Upload a file to database and S3 bucket",
@@ -126,8 +158,8 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "The fileName of the file",
-                        "name": "fileName",
+                        "description": "The fileId of the file",
+                        "name": "fileId",
                         "in": "path",
                         "required": true
                     }
@@ -1464,10 +1496,10 @@ const docTemplate = `{
                 "last_name": {
                     "type": "string"
                 },
-                "pfp_s3_url": {
+                "phone": {
                     "type": "string"
                 },
-                "phone": {
+                "profile_picture": {
                     "type": "string"
                 },
                 "push_notification_enabled": {
