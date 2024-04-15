@@ -113,7 +113,7 @@ func removeFile(pool *pgxpool.Pool, groupID string, fileName string) error {
 	return nil // Success
 }
 
-func getFileURL(pool *pgxpool.Pool, groupID string, fileName string) (string, error) {
+func getFileURL(pool *pgxpool.Pool, groupID string, fileId string) (string, error) {
 
 	//Convert groupID to int for consistency in key construction
 	groupIDInt, err := strconv.Atoi(groupID)
@@ -123,8 +123,8 @@ func getFileURL(pool *pgxpool.Pool, groupID string, fileName string) (string, er
 	}
 
 	//Assuming FileID is used to create a unique object key
-	var fileID int
-	err = pool.QueryRow(context.Background(), "SELECT file_id FROM files WHERE group_id = $1 AND file_name = $2", groupIDInt, fileName).Scan(&fileID)
+	var fileName string
+	err = pool.QueryRow(context.Background(), "SELECT file_name FROM files WHERE group_id = $1 AND file_id = $2", groupIDInt, fileId).Scan(&fileName)
 	if err != nil {
 		fmt.Println(err.Error())
 		return "", fmt.Errorf("file not found in database: %w", err)
@@ -136,7 +136,7 @@ func getFileURL(pool *pgxpool.Pool, groupID string, fileName string) (string, er
 	file_substring := objectKey[:dotIndex]
 	file_extension := objectKey[dotIndex:]
 
-	aws_key := file_substring + strconv.Itoa(fileID) + file_extension
+	aws_key := file_substring + fileId + file_extension
 
 	sess, err := createAWSSession() // Ensure this function securely initializes AWS session
 	if err != nil {
@@ -225,4 +225,30 @@ func getAllFileURLs(pool *pgxpool.Pool, groupID string) ([]FileDetails, error) {
 	}
 
 	return files, nil
+}
+
+func getProfilePhotoURL(fileName string) (string, error) {
+	// Create the AWS object key, upload the file to S3
+	objectKey := fileName
+
+	sess, err := createAWSSession() // Ensure this function securely initializes AWS session
+	if err != nil {
+		fmt.Println(err.Error())
+		return "", fmt.Errorf("error creating AWS session: %w", err)
+	}
+
+	svc := s3.New(sess)
+	req, _ := svc.GetObjectRequest(&s3.GetObjectInput{
+		Bucket: aws.String(AWS_BUCKET_NAME),
+		Key:    aws.String(objectKey),
+	})
+
+	expiration := time.Duration(24*time.Hour) * time.Duration(1)
+	urlStr, err := req.Presign(expiration) // URL expires after 15 minutes
+	if err != nil {
+		fmt.Println(err.Error())
+		return "", fmt.Errorf("error generating presigned URL: %w", err)
+	}
+
+	return urlStr, nil
 }

@@ -34,7 +34,7 @@ func updateUserInDB(conn *pgxpool.Pool, requestBody UserInfoBody) (models.User, 
 
 func getUserInDB(conn *pgxpool.Pool, uid string) (models.User, error) {
 	var user models.User
-	err := conn.QueryRow(context.Background(), "SELECT user_id, first_name, last_name, phone, email, address FROM users WHERE user_id = $1", uid).Scan(&user.UserID, &user.FirstName, &user.LastName, &user.Phone, &user.Email, &user.Address)
+	err := conn.QueryRow(context.Background(), "SELECT user_id, first_name, last_name, phone, email, address, profile_picture FROM users WHERE user_id = $1", uid).Scan(&user.UserID, &user.FirstName, &user.LastName, &user.Phone, &user.Email, &user.Address, &user.ProfilePicture)
 
 	if err != nil {
 		print(err.Error(), "from transactions err ")
