@@ -5,6 +5,8 @@ export type AppStackParamList = {
   Main: undefined;
   Home: undefined;
   Login: undefined;
+  Dashboard: undefined;
+  Register: undefined;
   Profile: undefined;
   PatientView: undefined;
   ProfileScreens: undefined;
