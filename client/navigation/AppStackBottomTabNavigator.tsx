@@ -14,6 +14,7 @@ import Home from '../screens/Home';
 import PatientView from '../screens/Profile/PatientView';
 import Profile from '../screens/Profile/Profile';
 import Settings from '../screens/Profile/Settings';
+import SingleFile from '../screens/SingleFile';
 import SingleTaskScreen from '../screens/SingleTask';
 import TaskList from '../screens/TaskList';
 import { AppStack } from './types';
@@ -99,6 +100,11 @@ export function ProfileNavigation() {
         name="FileViewScreen"
         options={{ headerShown: false }}
         component={FileViewScreen}
+      />
+      <AppStack.Screen
+        name="SingleFile"
+        options={{ headerShown: false }}
+        component={SingleFile}
       />
     </AppStack.Navigator>
   );
