@@ -47,8 +47,19 @@ const getTaskLabels = async (taskID: string): Promise<TaskLabel[]> => {
 };
 
 const addNewTask = async (newTask: Task): Promise<Task> => {
-  const response = await axios.post(`${api_url}/tasks`, newTask);
-  return response.data;
+  const task_response = await axios.post(`${api_url}/tasks`, newTask);
+  console.log('Added task: ', task_response.data);
+  const label_body = {
+    group_id: newTask.group_id, // Adjust the group_id as needed
+    label_name: newTask.label // Adjust the label_name as needed
+  };
+  const label_response = await axios.post(
+    `${api_url}/tasks/${task_response.data['task_id']}/labels`,
+    label_body
+  );
+  console.log('Added label: ', label_response.data);
+  // const assigned_to_response = await axios.post(`${api_url}/tasks/${task_response.data['id']}/`, newTask.assigned_to);
+  return label_response.data;
 };
 
 const editTask = async (taskID: string, updatedTask: Task): Promise<Task> => {
