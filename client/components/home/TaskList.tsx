@@ -5,7 +5,6 @@ import { useNavigation } from '@react-navigation/native';
 import { toUpper } from 'lodash';
 import moment from 'moment';
 
-import Chevron from '../../assets/filledarrowdown.svg';
 import Time from '../../assets/Time.svg';
 import { useCareWalletContext } from '../../contexts/CareWalletContext';
 import { AppStackNavigation } from '../../navigation/types';
@@ -30,12 +29,9 @@ export function TaskList() {
           {`${toUpper(moment().day(new Date().getDay()).format('dddd'))}, ${toUpper(moment().format('MMM Do'))} - TODAY`}
         </Text>
         <View className="ml-auto mr-1">
-          <Text className="ml-auto py-4 pr-2 text-center font-carewallet-manrope text-xs text-carewallet-blue">
+          <Text className="ml-auto py-4 pr-2 text-center font-carewallet-manrope-bold text-xs text-carewallet-blue underline underline-offset-2">
             View All
           </Text>
-        </View>
-        <View className="mr-2 -rotate-90">
-          <Chevron color={'blue'} />
         </View>
       </View>
       {taskByUser &&
