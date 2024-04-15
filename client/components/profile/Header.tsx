@@ -22,7 +22,7 @@ export function Header({ user, role, onPress }: HeaderProps) {
   const { file } = useProfileFile(user?.profile_picture ?? '');
   return (
     <View>
-      <View className="flex h-[10vh] flex-row items-center border-b border-carewallet-lightgray">
+      <View className="flex h-[10vh] flex-row items-center border-b border-carewallet-lightgray bg-carewallet-white">
         <View className="absolute">
           {role?.role === Role.PATIENT ? (
             <BackButton />
