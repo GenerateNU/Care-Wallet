@@ -21,10 +21,10 @@ VALUES
   ('user4', 'Emily', 'Garcia', 'emily.garcia@example.com', '555-1212', '789 Oak Ave', NULL),
   -- Care-Wallet Team
   ('fIoFY26mJnYWH8sNdfuVoxpnVnr1', 'Matt', 'McCoy', 'mattcmccoy01@gmail.com', '', '', 'fIoFY26mJnYWH8sNdfuVoxpnVnr1-IMG_1384.jpeg'),
-  ('JamnX6TZf0dt6juozMRzNG5LMQd2', 'Andy', 'Cap', 'caplan.and@northeastern.edu', '', '', NULL),
+  ('JamnX6TZf0dt6juozMRzNG5LMQd2', 'Andy', 'Cap', 'caplan.and@northeastern.edu', '', '', 'JamnX6TZf0dt6juozMRzNG5LMQd2-IMG_0916.HEIC'),
   ('BLq3MXk4rVg4RKuYiMd7aEmMhsz1', 'Ansh', 'Patel', 'anshrpatel22@gmail.com', '', '', 'BLq3MXk4rVg4RKuYiMd7aEmMhsz1-IMG_0585.jpg'),
   ('mPeo3d3MiXfnpPJADWgFD9ZcB2M2', 'Olivia', 'Sedarski', 'olivia@gmail.com', '', '', 'mPeo3d3MiXfnpPJADWgFD9ZcB2M2-IMG_5068.jpeg'),
-  ('onrQs8HVGBVMPNz4Fk1uE94bSxg1', 'Danny', 'Rollo', 'dannyrollo4@gmail.com', '', '', NULL),
+  ('onrQs8HVGBVMPNz4Fk1uE94bSxg1', 'Danny', 'Rollo', 'dannyrollo4@gmail.com', '', '', 'onrQs8HVGBVMPNz4Fk1uE94bSxg1-IMG_3341.jpg'),
   ('8Sy7xBkGiGQv4ZKphcQfY8PxAqw1', 'Narayan', 'Sharma', 'sharma.na@northeastern.edu', '', '', '8Sy7xBkGiGQv4ZKphcQfY8PxAqw1-IMG_1777.JPG'),
   ('iL7PnjS4axQffmlPceobjUUZ9DF2', 'Caitlin', 'Flynn', 'flynn.ca@northeastern.edu', '', '', NULL),
   ('5JgN2PQxCRM9VoCiiFPlQPNqkL32', 'Linwood', 'Blaisdell', 'blaisdell.l@northeastern.edu', '', '', '5JgN2PQxCRM9VoCiiFPlQPNqkL32-IMG_6884.jpg'),

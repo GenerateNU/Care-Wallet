@@ -84,21 +84,21 @@ function SmallProfileImage({ user }: { user: User }) {
   return (
     <View>
       {user?.profile_picture ? (
-        <View className="mb-1 h-20 w-20">
+        <View className="mb-1 h-14 w-14">
           <WebView
             source={{ uri: file }}
             className="flex-1 rounded-full border border-carewallet-gray"
           />
         </View>
       ) : (
-        <View className="mb-1 h-20 w-20 rounded-full bg-carewallet-lightergray">
+        <View className="mb-1 h-14 w-14 rounded-full bg-carewallet-lightergray">
           <Text className="my-auto items-center text-center font-carewallet-manrope-bold text-carewallet-blue">
             {user.first_name.charAt(0)}
             {user.last_name.charAt(0)}
           </Text>
         </View>
       )}
-      <Text className="text-center font-carewallet-manrope-semibold text-sm">
+      <Text className="text-center font-carewallet-manrope-semibold text-xs">
         {user.first_name}
       </Text>
     </View>
