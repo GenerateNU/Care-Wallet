@@ -64,5 +64,6 @@ export const CategoryIconsMap: Record<string, JSX.Element> = {
   'Financial & Legal': <FinancialLegal />,
   'Health & Medical': <HealthMedical />,
   'Home & Lifestyle': <HomeLifestyle />,
+  Other: <Personal />,
   Personal: <Personal />
 };

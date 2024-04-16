@@ -11,41 +11,31 @@ import {
 import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
 import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
 import { useNavigation } from '@react-navigation/native';
-import DropDownPicker from 'react-native-dropdown-picker';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Button } from 'react-native-paper';
 
 import Search from '../assets/calendar/search.svg';
 import { CalendarTaskListTopNav } from '../components/calendar/CalendarTaskListTopNav';
 import { TaskInfoComponent } from '../components/calendar/TaskInfoCard';
-import { CloseButton } from '../components/nav_buttons/CloseButton';
+import { FilterBottomSheet } from '../components/filter/FilterBottomSheet';
 import { useCareWalletContext } from '../contexts/CareWalletContext';
 import { AppStackNavigation } from '../navigation/types';
+import { useGroup } from '../services/group';
 import { useFilteredTasks } from '../services/task';
+import { useUsers } from '../services/user';
 import { Task } from '../types/task';
 
 export default function TaskListScreen() {
-  const { group } = useCareWalletContext();
+  const { group: userGroup } = useCareWalletContext();
   const navigator = useNavigation<AppStackNavigation>();
   const [canPress, setCanPress] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  const { tasks } = useFilteredTasks({ groupID: group.groupID });
+  const { tasks } = useFilteredTasks({ groupID: userGroup.groupID });
 
   const snapToIndex = (index: number) =>
     bottomSheetRef.current?.snapToIndex(index);
-  const [open, setOpen] = useState(false);
-  const [selectedLabel, setSelectedLabel] = useState<null | string>('Test');
-  const filters = Object.values('Temp' || {}).map((filter) => ({
-    label: filter[0],
-    value: filter[0]
-  }));
   const snapPoints = useMemo(() => ['60%'], []);
   const bottomSheetRef = useRef<BottomSheet>(null);
-  const closeBottomSheet = () => {
-    if (bottomSheetRef.current) {
-      bottomSheetRef.current.close();
-    }
-  };
   const renderBackdrop = useCallback(
     (props: BottomSheetDefaultBackdropProps) => (
       <BottomSheetBackdrop
@@ -56,6 +46,8 @@ export default function TaskListScreen() {
     ),
     []
   );
+  const { roles } = useGroup(userGroup.groupID);
+  const { users } = useUsers(roles?.map((role) => role.user_id) || []);
 
   // Filter tasks based on search query in multiple fields and labels
   const filteredTasks = tasks?.filter((task) => {
@@ -136,7 +128,7 @@ export default function TaskListScreen() {
         >
           <View className="mb-5 flex-row items-center">
             <TextInput
-              className="mr-4 h-14 flex-1 overflow-hidden rounded-md border border-carewallet-gray px-8 font-carewallet-montserrat text-carewallet-black"
+              className="mr-4 h-14 flex-1 overflow-hidden rounded-md border border-carewallet-gray bg-carewallet-white px-8 font-carewallet-montserrat text-carewallet-black"
               placeholder="Search"
               onChangeText={(text) => {
                 setSearchQuery(text);
@@ -147,7 +139,7 @@ export default function TaskListScreen() {
             </View>
             <View className=" flex flex-row justify-end">
               <Button
-                className="mr-4 h-14 items-center justify-center rounded-xl border-carewallet-gray font-carewallet-montserrat text-sm"
+                className="mr-4 h-14 items-center justify-center rounded-xl border-carewallet-gray bg-carewallet-white font-carewallet-montserrat text-sm"
                 textColor="black"
                 mode="outlined"
                 onPress={() => snapToIndex(0)}
@@ -163,38 +155,13 @@ export default function TaskListScreen() {
           {completeTasks && renderSection(completeTasks, 'DONE')}
           {incompleteTasks && renderSection(incompleteTasks, 'INCOMPLETE')}
         </ScrollView>
-        <BottomSheet
-          ref={bottomSheetRef}
-          index={-1}
+        <FilterBottomSheet
+          bottomSheetRef={bottomSheetRef}
+          renderBackdrop={renderBackdrop}
           snapPoints={snapPoints}
-          enablePanDownToClose={true}
-          backdropComponent={renderBackdrop}
-          style={{ flex: 1, width: '100%' }}
-        >
-          <View>
-            <View className="flex flex-row justify-between">
-              <Text className="m-5 text-2xl font-bold">Filter</Text>
-              <CloseButton onPress={closeBottomSheet} />
-            </View>
-
-            <DropDownPicker
-              open={open}
-              value={selectedLabel}
-              items={filters}
-              setOpen={setOpen}
-              setValue={setSelectedLabel}
-              placeholder="Labels"
-              style={{
-                width: '95%',
-                marginLeft: 'auto',
-                marginRight: 'auto',
-                borderRadius: 0,
-                borderColor: 'transparent',
-                borderBottomColor: 'black'
-              }}
-            />
-          </View>
-        </BottomSheet>
+          users={users ?? []}
+          statuses={['Complete', 'Incomplete', 'Partial']}
+        />
       </GestureHandlerRootView>
     </SafeAreaView>
   );

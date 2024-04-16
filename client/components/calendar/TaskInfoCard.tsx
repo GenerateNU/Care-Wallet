@@ -23,22 +23,37 @@ function statusToString(status: string) {
     case 'OVERDUE':
       return 'bg-carewallet-orange';
     default:
-      return 'bg-care-wallet-gray';
+      return 'border border-carewallet-gray bg-care-wallet-gray';
   }
 }
 
 function categoryToColor(category: string) {
   switch (TaskTypeDescriptions[category]) {
     case 'Medication Management':
-      return 'bg-carewallet-coral';
+      return 'carewallet-pink';
     case 'Doctor Appointment':
-      return 'bg-carewallet-yellow';
+      return 'carewallet-pink';
     case 'Financial Task':
-      return 'bg-carewallet-green';
+      return 'carewallet-green';
     case 'OTHER':
-      return 'bg-carewallet-blue';
+      return 'carewallet-white';
     default:
-      return 'bg-carewallet-gray';
+      return 'carewallet-white';
+  }
+}
+
+function categoryToBGColor(category: string) {
+  switch (TaskTypeDescriptions[category]) {
+    case 'Medication Management':
+      return 'carewallet-pink/20';
+    case 'Doctor Appointment':
+      return 'carewallet-pink/20';
+    case 'Financial Task':
+      return 'carewallet-green/10';
+    case 'OTHER':
+      return 'carewallet-white';
+    default:
+      return 'carewallet-white';
   }
 }
 
@@ -61,7 +76,7 @@ export function TaskInfoComponent({
   console.log(task?.task_type);
 
   return (
-    <View className="bg-white mb-6 rounded-2xl border border-carewallet-gray p-4">
+    <View className="mb-6 rounded-2xl border border-carewallet-gray bg-carewallet-white p-4">
       <View className="mb-2 flex flex-col justify-between">
         <View className="flex-row items-center">
           <View className="flex flex-row items-center space-x-2">
@@ -94,12 +109,14 @@ export function TaskInfoComponent({
       </View>
       <View className="space-y-2">
         <View
-          className={`mr-auto flex flex-row items-center space-x-2 rounded-full border ${categoryToColor(category)} border-carewallet-lightgray px-2 py-1`}
+          className={`mr-auto flex flex-row items-center space-x-2 rounded-full border bg-${categoryToBGColor(category)} border-carewallet-lightgray px-2 py-1`}
         >
           <View>
-            {CategoryIconsMap[TypeToCategoryMap[task?.task_type ?? 'OTHER']]}
+            {CategoryIconsMap[TypeToCategoryMap[task?.task_type ?? 'Other']]}
           </View>
-          <Text className="font-carewallet-manrope">
+          <Text
+            className={`font-carewallet-manrope text-${categoryToColor(category)}`}
+          >
             {TaskTypeDescriptions[category]}
           </Text>
         </View>
