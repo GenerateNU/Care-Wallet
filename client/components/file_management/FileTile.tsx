@@ -11,7 +11,7 @@ interface FileTileProps {
 
 export function FileTile({ name, label, url }: FileTileProps): JSX.Element {
   return (
-    <View className="px-5 py-3">
+    <View className="mx-5 my-3 bg-carewallet-white">
       <View className="flex-1 flex-row rounded-md border border-carewallet-gray p-4">
         <View className="mr-4 h-[7vh] w-[7vh]">
           <WebView

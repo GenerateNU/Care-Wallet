@@ -3,7 +3,6 @@ import { Text, View } from 'react-native';
 
 import { Header } from '../components/home/Header';
 import { TaskList } from '../components/home/TaskList';
-import { HealthStats } from '../components/profile/HealthStats';
 import { useCareWalletContext } from '../contexts/CareWalletContext';
 import { MainLayout } from '../layouts/MainLayout';
 import { useUser } from '../services/user';
@@ -22,7 +21,9 @@ export default function Home() {
         <Text className="ml-5 mt-5 font-carewallet-montserrat-bold text-base">
           Health Overview
         </Text>
-        <HealthStats />
+        <Text className="my-auto text-center">
+          There are no health stats to view.
+        </Text>
       </View>
       <View className="mx-auto mt-10 w-[90vw] overflow-hidden rounded-lg border border-carewallet-blue/10">
         <View className="h-10 items-center justify-center">
