@@ -30,12 +30,12 @@ export default function LoginPage() {
 
   return (
     <MainLayout>
-      <View className="h-[93vh]">
-        <View className="mt-auto h-[60vh] w-[100vw] rounded-3xl bg-carewallet-white shadow-lg ">
+      <View className="h-[100vh]">
+        <View className="mt-auto h-[60vh] w-[100vw] rounded-3xl bg-carewallet-white shadow-lg">
           <View className="absolute -top-16 left-8">
             <Carrie className="h-20 w-20" />
           </View>
-          <SafeAreaView className="flex-1">
+          <SafeAreaView>
             <View className="mx-auto my-10 w-[80vw]">
               <Text className="mb-10 font-carewallet-manrope-bold text-xl text-carewallet-blue">
                 Log in to your account
