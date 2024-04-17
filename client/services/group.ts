@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
 import { GroupRole } from '../types/group';
@@ -11,6 +11,19 @@ const getUserGroup = async (userId: string): Promise<GroupRole> => {
 
 const getGroupRoles = async (groupId: number): Promise<GroupRole[]> => {
   const { data } = await axios.get(`${api_url}/group/${groupId}/roles`);
+  return data;
+};
+
+const addUserToGroup = async (
+  userId: string,
+  groupId: number,
+  role: string
+) => {
+  const { data } = await axios.post(`${api_url}/group/${groupId}/add`, {
+    user_id: userId,
+    role
+  });
+
   return data;
 };
 
@@ -30,4 +43,13 @@ export const useGroup = (groupId: number) => {
   });
 
   return { roles, rolesAreLoading };
+};
+
+export const useGroupMutation = (groupId: number) => {
+  const { mutate: addUserToGroupMutation } = useMutation({
+    mutationFn: ({ userId, role }: { userId: string; role: string }) =>
+      addUserToGroup(userId, groupId, role)
+  });
+
+  return { addUserToGroupMutation };
 };
