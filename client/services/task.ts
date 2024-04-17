@@ -15,7 +15,6 @@ type TaskQueryParams = {
   endDate?: string;
   quickTask?: boolean;
 };
-
 const getTask = async (taskID: string): Promise<Task> => {
   if (!parseInt(taskID)) return {} as Task;
   const { data } = await axios.get(`${api_url}/tasks/${taskID}`);
@@ -81,6 +80,28 @@ export const useTaskByAssigned = (userId: string) => {
   return { taskByUser, taskByUserIsLoading };
 };
 
+export const useTaskByStatus = (taskId: string) => {
+  const {
+    data: task,
+    status: newStatus,
+    refetch
+  } = useQuery<Task>({
+    queryKey: ['taskStatus', taskId],
+    queryFn: () => getTask(taskId)
+  });
+
+  const taskStatus = task ? task.task_status : null;
+
+  const setTaskStatus = async (newTaskStatus: string) => {
+    const updatedTask = { ...task, task_status: newTaskStatus };
+    await editTask(taskId, updatedTask);
+    // Refetch the task data to reflect the updated status
+    refetch();
+  };
+
+  return { taskStatus, newStatus, setTaskStatus };
+};
+
 export const useTaskById = (taskId: string) => {
   const { data: task, isLoading: taskIsLoading } = useQuery<Task>({
     queryKey: ['task', taskId],
@@ -131,6 +152,7 @@ export const editTaskMutation = () => {
     }) => editTask(taskId, updatedTask),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['filteredTaskList'] });
+      queryClient.invalidateQueries({ queryKey: ['taskStatus'] });
     },
     onError: (err) => {
       console.error('ERROR: Failed to Edit Task. Code:', err);

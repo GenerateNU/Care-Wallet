@@ -14,7 +14,7 @@ import { GetLabelPill } from '../components/GetLabelPill';
 import { GetStatusPill } from '../components/GetStatusPill';
 import { BackButton } from '../components/nav_buttons/BackButton';
 import { NoteButton } from '../components/NoteButton';
-import { useTaskById } from '../services/task';
+import { useTaskById, useTaskByStatus } from '../services/task';
 import { Status } from '../types/type';
 
 type ParamList = {
@@ -27,6 +27,9 @@ export default function SingleTaskScreen() {
   const route = useRoute<RouteProp<ParamList, 'mt'>>();
   const { id } = route.params;
   const { task, taskIsLoading, taskLabelsIsLoading } = useTaskById(id);
+
+  const { taskStatus } = useTaskByStatus(id);
+  console.log(taskStatus);
 
   const filters = Object.values(Status).map((filter) => ({
     label: filter,
@@ -79,7 +82,7 @@ export default function SingleTaskScreen() {
             </Text>
           </View>
           <View className="flex flex-row items-start pt-3">
-            <GetStatusPill status={task?.task_status}> </GetStatusPill>
+            <GetStatusPill status={taskStatus}> </GetStatusPill>
             <GetLabelPill category={task?.task_type} />
           </View>
           <NoteButton note={task?.notes}></NoteButton>
@@ -114,7 +117,7 @@ export default function SingleTaskScreen() {
             //     navigation.navigate('FileUploadScreen');
             //   }}
             // />
-            <DropUp selected="Actions" items={filters} />
+            <DropUp selected="Actions" items={filters} taskId={id} />
           }
         </View>
       </View>
