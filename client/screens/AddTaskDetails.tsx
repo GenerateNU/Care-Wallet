@@ -26,12 +26,20 @@ import { addNewTaskMutation } from '../services/task';
 import { useUsers } from '../services/user';
 import { Task } from '../types/task';
 import { TaskTypeToBackendTypeMap } from '../types/type';
+import { User } from '../types/user';
 
 enum RepeatOptions {
   NONE = 'NONE',
   DAILY = 'DAILY',
   WEEKLY = 'WEEKLY',
   MONTHLY = 'MONTHLY'
+}
+
+function findUserByName(users: User[], searchName: string): User['user_id'] {
+  return users.find((user) => {
+    const userFullName = user.first_name + ' ' + user.last_name;
+    return userFullName.toLowerCase() === searchName.toLowerCase(); // Case-insensitive comparison
+  })?.user_id;
 }
 
 type ParamList = {
@@ -203,6 +211,12 @@ export default function AddTaskDetails() {
       console.log('No end time selected, defaulting to start time');
     }
 
+    const usersList = users ?? []; // Use an empty array if users is undefined
+    const assignedToUserId = findUserByName(
+      usersList,
+      taskDetails['Assigned To']
+    );
+
     const newTask: Task = {
       task_title: taskDetails['Title'],
       group_id: 5, // hard coded group ID
@@ -218,7 +232,8 @@ export default function AddTaskDetails() {
       task_type: TaskTypeToBackendTypeMap[taskSpecificsMap['Type']],
       task_info: typeSpecificFields,
       label: taskDetails['Label'],
-      assigned_to: taskDetails['Assigned To'] // TODO: Parse user ID from first & last name
+      assigned_to: assignedToUserId
+      // assigned_to: taskDetails['Assigned To'] // TODO: Parse user ID from first & last name
     };
     console.log('task:', newTask);
     return newTask;
