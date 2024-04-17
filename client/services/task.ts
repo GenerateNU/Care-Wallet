@@ -60,10 +60,13 @@ const addNewTask = async (newTask: Task): Promise<Task> => {
     label_body
   );
   console.log('Added label: ', label_response.data);
+
   const assigned_to_body = {
     assigner: newTask.created_by,
     userIDs: [newTask.assigned_to]
   };
+
+  console.log('Assigning task to user: ', newTask.assigned_to);
   const assigned_to_response = await axios.post(
     `${api_url}/tasks/${task_response.data['task_id']}/assign`,
     assigned_to_body

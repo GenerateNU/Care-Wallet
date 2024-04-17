@@ -12,5 +12,7 @@ export interface Task {
   task_status: string;
   task_type: string;
   task_info?: string | null;
+  label: string;
+  assigned_to: string;
   [key: string]: string | number | boolean | null | undefined; // Index signature for string indexing
 }

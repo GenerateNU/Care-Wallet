@@ -175,49 +175,50 @@ export default function AddTaskDetails() {
     typeSpecificFields: string,
     taskDetails: { [key: string]: string }
   ): Task => {
-    const taskDetailsMap: { [key: string]: string } =
+    const taskSpecificsMap: { [key: string]: string } =
       JSON.parse(typeSpecificFields);
 
-    const title = taskDetails['Title'];
-    const groupId = 5;
-    const createdBy = user.userID;
-    const date = moment(new Date(taskDetails['Date']));
+    // Combine day & time for start date
+    const startDate = moment(new Date(taskDetails['Date']));
     const time = moment(taskDetails['Start Time'], 'hh:mm:ss A');
-    date.set({
+    startDate.set({
       hour: time.get('hour'),
       minute: time.get('minute')
     });
-    const startDate = date.format();
-    console.log('Start date ', startDate);
-    const notes = taskDetails['Description'] || '';
-    const repeating = taskDetails['Repeat'] !== 'NONE';
-    let repeatingInterval = null;
-    let repeatingEndDate = null;
-    if (repeating) {
-      repeatingInterval = taskDetails['Repeat'];
-      repeatingEndDate = moment(new Date(taskDetails['End Repeat'])).format();
-    }
-    const quickTask = taskDetails['Schedule Type'] === 'Quick Task';
-    const type = TaskTypeToBackendTypeMap[taskDetailsMap['Type']];
-    const label = taskDetails['Label'];
 
-    const taskInfo = typeSpecificFields;
+    const repeating = taskDetails['Repeat'] !== 'NONE';
+
+    // Combine day & time for end date (default to start day if no end date is selected)
+    const repeatingInterval = repeating ? taskDetails['Repeat'] : '';
+
+    const repeatingEndDate = moment(new Date(taskDetails['Date'])); // Default to start date if no repeat end date
+    // Add end time to end date if it exists, otherwise same time as start time
+    if (taskDetails['End Time'] !== 'SELECT END') {
+      const endTime = moment(taskDetails['End Time'], 'hh:mm:ss A');
+      repeatingEndDate.set({
+        hour: endTime.get('hour'),
+        minute: endTime.get('minute')
+      });
+    } else {
+      console.log('No end time selected, defaulting to start time');
+    }
 
     const newTask: Task = {
-      task_title: title,
-      group_id: groupId,
-      created_by: createdBy,
-      start_date: startDate, // date
-      end_date: repeatingEndDate, // date
-      quick_task: quickTask,
-      notes: notes,
+      task_title: taskDetails['Title'],
+      group_id: 5, // hard coded group ID
+      created_by: user.userID,
+      start_date: startDate.format(),
+      end_date: repeatingEndDate.format(),
+      quick_task: taskDetails['Schedule Type'] === 'Quick Task',
+      notes: taskDetails['Description'] || taskSpecificsMap['Notes'] || '',
       repeating: repeating,
       repeating_interval: repeatingInterval,
-      repeating_end_date: repeatingEndDate,
+      repeating_end_date: repeatingEndDate.format(),
       task_status: 'INCOMPLETE',
-      task_type: type,
-      task_info: taskInfo,
-      label: label
+      task_type: TaskTypeToBackendTypeMap[taskSpecificsMap['Type']],
+      task_info: typeSpecificFields,
+      label: taskDetails['Label'],
+      assigned_to: taskDetails['Assigned To'] // TODO: Parse user ID from first & last name
     };
     console.log('task:', newTask);
     return newTask;
