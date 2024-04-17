@@ -25,6 +25,7 @@ import { useLabelsByGroup } from '../services/label';
 import { addNewTaskMutation } from '../services/task';
 import { useUsers } from '../services/user';
 import { Task } from '../types/task';
+import { TaskTypeToBackendTypeMap } from '../types/type';
 
 enum RepeatOptions {
   NONE = 'NONE',
@@ -174,35 +175,40 @@ export default function AddTaskDetails() {
     typeSpecificFields: string,
     taskDetails: { [key: string]: string }
   ): Task => {
-    console.log('taskDetails:', taskDetails);
-    console.log('typeSpecificFields:', typeSpecificFields);
+    const taskDetailsMap: { [key: string]: string } =
+      JSON.parse(typeSpecificFields);
 
     const title = taskDetails['Title'];
     const groupId = 5;
-    console.log('group:', groupId);
     const createdBy = user.userID;
-    const startDate = moment(new Date(taskDetails['Date'])).format();
-    const notes = taskDetails['Description'];
+    const date = moment(new Date(taskDetails['Date']));
+    const time = moment(taskDetails['Start Time'], 'hh:mm:ss A');
+    date.set({
+      hour: time.get('hour'),
+      minute: time.get('minute')
+    });
+    const startDate = date.format();
+    console.log('Start date ', startDate);
+    const notes = taskDetails['Description'] || '';
     const repeating = taskDetails['Repeat'] !== 'NONE';
-    let repeatingInterval = undefined;
-    let repeatingEndDate = undefined;
+    let repeatingInterval = null;
+    let repeatingEndDate = null;
     if (repeating) {
       repeatingInterval = taskDetails['Repeat'];
       repeatingEndDate = moment(new Date(taskDetails['End Repeat'])).format();
     }
     const quickTask = taskDetails['Schedule Type'] === 'Quick Task';
-    const type = 'other';
-    const label = taskDetails['Label']; // TODO: where are labels and assigned to stored?
-    const assignedTo = taskDetails['Assigned To'];
+    const type = TaskTypeToBackendTypeMap[taskDetailsMap['Type']];
+    const label = taskDetails['Label'];
 
-    const taskInfo = typeSpecificFields; // TODO: need to parse this?
+    const taskInfo = typeSpecificFields;
 
     const newTask: Task = {
       task_title: title,
       group_id: groupId,
       created_by: createdBy,
       start_date: startDate, // date
-      end_date: null, // date
+      end_date: repeatingEndDate, // date
       quick_task: quickTask,
       notes: notes,
       repeating: repeating,
@@ -211,9 +217,7 @@ export default function AddTaskDetails() {
       task_status: 'INCOMPLETE',
       task_type: type,
       task_info: taskInfo,
-      // what to do with label, assigned
-      label: label,
-      assigned_to: assignedTo
+      label: label
     };
     console.log('task:', newTask);
     return newTask;
@@ -245,15 +249,15 @@ export default function AddTaskDetails() {
             Task Details
           </Text>
           <TextInputLine
-            title={'Title'}
+            title={'Title*'}
             onChange={(value) => handleChange('Title', value)}
           />
           <TextInputParagraph
-            title={'Description'}
+            title={'Description*'}
             onChange={(value) => handleChange('Description', value)}
           />
           <Text className="m-4 mb-2 font-carewallet-montserrat-semibold">
-            {'REPEAT*'}
+            {'REPEAT'}
           </Text>
           <View className="mx-4">
             <CWDropdown
@@ -323,7 +327,7 @@ export default function AddTaskDetails() {
           )}
           <View className="mx-4 mb-0 mt-4">
             <Text className="mb-2 font-carewallet-montserrat-semibold">
-              {'LABEL'}
+              {'LABEL*'}
             </Text>
             <CWDropdown
               selected={label}
@@ -348,12 +352,13 @@ export default function AddTaskDetails() {
             <ForwardButton
               onPress={() => {
                 if (
+                  values['Title'] &&
                   values['Schedule Type'] &&
                   values['Date'] &&
+                  values['Label'] &&
                   (values['Schedule Type'] === 'Quick Task' ||
                     (values['Start Time'] && values['End Time']))
                 ) {
-                  // TODO: invalidating tasks should re-render calendar and task list
                   addTask(taskCreation, values);
                   navigation.navigate('TaskList');
                 }

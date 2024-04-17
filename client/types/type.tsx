@@ -54,9 +54,28 @@ export const CategoryToTypeMap: Record<Category, TypeOfTask[]> = {
 
 export const TaskTypeDescriptions: Record<string, string> = {
   med_mgmt: 'Medication Management',
-  dr_appt: 'Doctor Appointment',
-  financial: 'Financial Task',
-  other: 'Other Task'
+  dr_appt: 'Physician Appointment',
+  diet: 'Diet',
+  grmg: 'Grooming',
+  fml_convos: 'Family Conversations',
+  shpping: 'Shopping & Errands',
+  activities: 'Activities',
+  hlth_ins: 'Health Insurance',
+  financial: 'Pay Bills',
+  other: 'Other'
+};
+
+export const TaskTypeToBackendTypeMap: Record<string, string> = {
+  'Medication Management': 'med_mgmt',
+  'Physician Appointments': 'dr_appt',
+  Grooming: 'grmg',
+  'Family Conversations': 'fml_convos',
+  'Shopping & Errands': 'shpping',
+  'Pay Bills': 'financial',
+  Diet: 'diet',
+  Activities: 'activities',
+  'Health Insurance': 'hlth_ins',
+  Other: 'other'
 };
 
 export const CategoryIconsMap: Record<string, JSX.Element> = {

@@ -23,7 +23,7 @@ func getTasksByQueryFromDB(pool *pgxpool.Pool, filterQuery TaskQuery) ([]models.
 		filterQuery.EndDate,
 		filterQuery.QuickTask}
 
-	field_names := []string{"task_id =", "task_title =", "group_id =", "created_by =", "task_status =", "task_type =", "start_date >=", "end_date <=", "quick_task ="}
+	field_names := []string{"task_id=", "task_title=", "group_id=", "created_by=", "task_status=", "task_type=", "start_date>=", "end_date<=", "quick_task="}
 	var query string
 	var args []interface{}
 
@@ -32,12 +32,15 @@ func getTasksByQueryFromDB(pool *pgxpool.Pool, filterQuery TaskQuery) ([]models.
 			if query != "" {
 				query += " AND "
 			}
-			query += fmt.Sprintf("%s $%d", field_names[i], len(args)+1)
+			query += fmt.Sprintf("%s$%d", field_names[i], len(args)+1)
 			args = append(args, field)
 		}
 	}
 
-	queryString := "SELECT * FROM task WHERE " + query
+	queryString := "SELECT * FROM task"
+	if query != "" {
+		queryString += " WHERE " + query
+	}
 
 	rows, err := pool.Query(context.Background(), queryString, args...)
 
