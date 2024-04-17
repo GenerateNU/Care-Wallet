@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import {
+  ActivityIndicator,
   Pressable,
   SafeAreaView,
   ScrollView,
@@ -21,6 +22,7 @@ import { FilterBottomSheet } from '../components/filter/FilterBottomSheet';
 import { useCareWalletContext } from '../contexts/CareWalletContext';
 import { AppStackNavigation } from '../navigation/types';
 import { useGroup } from '../services/group';
+import { useLabelsByTasks } from '../services/label';
 import { useFilteredTasks } from '../services/task';
 import { useUsers } from '../services/user';
 import { Task } from '../types/task';
@@ -31,7 +33,12 @@ export default function TaskListScreen() {
   const navigator = useNavigation<AppStackNavigation>();
   const [canPress, setCanPress] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  const { tasks } = useFilteredTasks({ groupID: userGroup.groupID });
+  const { tasks, tasksIsLoading } = useFilteredTasks({
+    groupID: userGroup.groupID
+  });
+  const { labels, labelsIsLoading } = useLabelsByTasks(
+    tasks?.map((task) => task.task_id) ?? []
+  );
 
   const snapToIndex = (index: number) =>
     bottomSheetRef.current?.snapToIndex(index);
@@ -105,11 +112,10 @@ export default function TaskListScreen() {
               }}
             >
               <TaskInfoComponent
-                id={task.task_id}
-                name={task?.task_title}
-                category={task?.task_type}
-                status={task?.task_status}
-                date={task?.start_date ? new Date(task.start_date) : new Date()}
+                task={task}
+                taskLabels={labels?.filter(
+                  (label) => label.task_id === task.task_id
+                )}
               />
             </Pressable>
           );
@@ -117,6 +123,15 @@ export default function TaskListScreen() {
       </View>
     );
   };
+
+  if (tasksIsLoading || labelsIsLoading) {
+    return (
+      <View className="w-full flex-1 items-center justify-center bg-carewallet-white text-3xl">
+        <ActivityIndicator size="large" />
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
 
   return (
     <SafeAreaView style={{ flex: 1 }}>

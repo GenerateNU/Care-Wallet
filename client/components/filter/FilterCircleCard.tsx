@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Text, View } from 'react-native';
 
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 
 export function FilterCircleCard({
   selected,
