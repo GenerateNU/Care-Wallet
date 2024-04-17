@@ -8,15 +8,51 @@ import ArrowDown from '../assets/filledarrowdown.svg';
 export function CWDropdown({
   selected,
   items,
-  setLabel
+  setLabel,
+  top
 }: {
+  top?: boolean;
   selected: string;
   items?: string[];
   setLabel: (label: string) => void;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <View className="mb-3">
+    <View className="mb-3 bg-carewallet-white">
+      {top && isOpen && (
+        <View className="absolute bottom-14 z-50 flex flex-row flex-wrap rounded-b-lg border border-carewallet-blue/20 bg-carewallet-white">
+          {selected !== 'Select Label' && (
+            <View
+              className="h-14 w-full justify-center border-t border-carewallet-blue/20"
+              onTouchEnd={() => {
+                setLabel('Select Label');
+                setIsOpen(false);
+              }}
+            >
+              <Text className="w-40 text-ellipsis bg-carewallet-white pl-2 font-carewallet-manrope text-lg">
+                {''}
+              </Text>
+            </View>
+          )}
+          {items?.map(
+            (item, index) =>
+              item !== selected && (
+                <View
+                  key={index}
+                  className="h-14 w-full justify-center border-t border-carewallet-blue/20 bg-carewallet-white"
+                  onTouchEnd={() => {
+                    setLabel(item);
+                    setIsOpen(false);
+                  }}
+                >
+                  <Text className="w-40 text-ellipsis bg-carewallet-white pl-2 font-carewallet-montserrat-semibold text-sm text-carewallet-blue">
+                    {item}
+                  </Text>
+                </View>
+              )
+          )}
+        </View>
+      )}
       <View
         className={clsx(
           'flex h-14 w-full flex-row items-center rounded-lg bg-carewallet-blue/20',
@@ -37,8 +73,8 @@ export function CWDropdown({
           )}
         </View>
       </View>
-      {isOpen && (
-        <View className="absolute top-14 flex flex-row flex-wrap rounded-b-lg border border-carewallet-blue/20 bg-carewallet-white">
+      {!top && isOpen && (
+        <View className="absolute top-14 z-50 flex flex-row flex-wrap rounded-b-lg border border-carewallet-blue/20 bg-carewallet-white">
           {selected !== 'Select Label' && (
             <View
               className="h-14 w-full justify-center border-t border-carewallet-blue/20"
@@ -57,7 +93,7 @@ export function CWDropdown({
               item !== selected && (
                 <View
                   key={index}
-                  className="h-14 w-full justify-center border-t border-carewallet-blue/20"
+                  className="h-14 w-full justify-center border-t border-carewallet-blue/20 bg-carewallet-white"
                   onTouchEnd={() => {
                     setLabel(item);
                     setIsOpen(false);

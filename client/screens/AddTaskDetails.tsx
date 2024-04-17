@@ -259,7 +259,7 @@ export default function AddTaskDetails() {
           <Text className="m-4 mb-2 font-carewallet-montserrat-semibold">
             {'REPEAT'}
           </Text>
-          <View className="mx-4">
+          <View className="relative z-20 mx-4">
             <CWDropdown
               selected={repeat}
               items={Object.values(RepeatOptions)}
@@ -325,21 +325,23 @@ export default function AddTaskDetails() {
               />
             </View>
           )}
-          <View className="mx-4 mb-0 mt-4">
+          <View className="relative z-20 mx-4 mb-0 mt-4">
             <Text className="mb-2 font-carewallet-montserrat-semibold">
               {'LABEL*'}
             </Text>
             <CWDropdown
+              top
               selected={label}
               items={labels?.map((label) => label.label_name) || []}
               setLabel={setLabel}
             />
           </View>
-          <View className="mx-4 mb-0 mt-1">
+          <View className="relative z-40 mx-4 mb-0 mt-1">
             <Text className="mb-2 font-carewallet-montserrat-semibold">
               {'ASSIGN'}
             </Text>
             <CWDropdown
+              top
               selected={assignedTo}
               items={
                 users?.map((user) => user.first_name + ' ' + user.last_name) ||
