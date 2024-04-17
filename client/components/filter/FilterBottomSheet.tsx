@@ -14,14 +14,26 @@ export function FilterBottomSheet({
   snapPoints,
   renderBackdrop,
   users,
-  statuses
+  statuses,
+  setSortBy
+  // setTaskStatus,
+  // setAssignedTo
 }: {
   bottomSheetRef: React.RefObject<BottomSheetMethods>;
   snapPoints: string[];
   renderBackdrop: (props: BottomSheetDefaultBackdropProps) => React.JSX.Element;
   users: User[];
   statuses: string[];
+  setSortBy: (sortBy: string) => void;
+  // setTaskStatus: (taskStatus: string[]) => void;
+  // setAssignedTo: (assignedTo: string[]) => void;
 }) {
+  // Event handlers for filter options
+  const handleSortByChange = (sortBy: string) => {
+    setSortBy(sortBy);
+    console.log('Selected Sort By:', sortBy);
+  };
+
   return (
     <BottomSheet
       ref={bottomSheetRef}
@@ -43,17 +55,23 @@ export function FilterBottomSheet({
             items={[
               {
                 title: 'All Tasks',
-                element: <FilterCircleCard selected={true} title="All Tasks" />
+                element: (
+                  <FilterCircleCard
+                    selected={true}
+                    title="All Tasks"
+                    onPress={() => handleSortByChange('All Tasks')}
+                  />
+                )
               },
               {
                 title: 'Quick Tasks',
                 element: (
-                  <FilterCircleCard selected={false} title="Quick Tasks" />
+                  <FilterCircleCard
+                    selected={false}
+                    title="Quick Tasks"
+                    onPress={() => handleSortByChange('Quick Tasks')}
+                  />
                 )
-              },
-              {
-                title: 'Tasks',
-                element: <FilterCircleCard selected={false} title="Tasks" />
               }
             ]}
           />

@@ -5,15 +5,18 @@ import clsx from 'clsx';
 
 export function FilterCircleCard({
   selected,
-  title
+  title,
+  onPress
 }: {
   selected: boolean;
   title: string;
+  onPress?: () => void;
 }) {
   const [isSelected, setIsSelected] = useState(selected);
 
   const handleSelect = () => {
     setIsSelected(!isSelected);
+    onPress && onPress();
   };
 
   const circleClasses = clsx(
@@ -25,10 +28,7 @@ export function FilterCircleCard({
   );
 
   return (
-    <View
-      className={circleClasses}
-      onTouchEnd={handleSelect} // Handle onPress event
-    >
+    <View className={circleClasses} onTouchEnd={handleSelect}>
       <Text className="mr-auto pl-3 font-carewallet-manrope">{title}</Text>
     </View>
   );

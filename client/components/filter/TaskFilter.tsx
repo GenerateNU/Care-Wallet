@@ -28,7 +28,7 @@ export function TaskListFilter({
           ))}
         </View>
       )}
-      <View className="border-t-0.5 mx-auto mt-2 flex w-[95vw] max-w-[95vw] flex-row border border-carewallet-gray" />
+      <View className="border-t-0.5 mx-auto mt-2 flex w-[95vw] max-w-[95vw] flex-row border-carewallet-gray" />
     </View>
   );
 }

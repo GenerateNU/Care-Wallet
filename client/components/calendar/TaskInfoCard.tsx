@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 
+import clsx from 'clsx';
 import moment from 'moment';
 
 import Calendar from '../../assets/Date_today.svg';
@@ -45,15 +46,15 @@ function categoryToColor(category: string) {
 function categoryToBGColor(category: string) {
   switch (TaskTypeDescriptions[category]) {
     case 'Medication Management':
-      return 'carewallet-pink/20';
+      return 'bg-carewallet-pink/20';
     case 'Doctor Appointment':
-      return 'carewallet-pink/20';
+      return 'bg-carewallet-pink/20';
     case 'Financial Task':
-      return 'carewallet-green/10';
+      return 'bg-carewallet-green/10';
     case 'OTHER':
-      return 'carewallet-white';
+      return 'bg-carewallet-white';
     default:
-      return 'carewallet-white';
+      return 'bg-carewallet-white';
   }
 }
 
@@ -109,7 +110,10 @@ export function TaskInfoComponent({
       </View>
       <View className="space-y-2">
         <View
-          className={`mr-auto flex flex-row items-center space-x-2 rounded-full border bg-${categoryToBGColor(category)} border-carewallet-lightgray px-2 py-1`}
+          className={clsx(
+            'mr-auto flex flex-row items-center space-x-2 rounded-full border border-carewallet-lightgray px-2 py-1',
+            categoryToBGColor(category)
+          )}
         >
           <View>
             {CategoryIconsMap[TypeToCategoryMap[task?.task_type ?? 'Other']]}

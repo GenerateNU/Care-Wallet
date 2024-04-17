@@ -25,13 +25,17 @@ import { useFilteredTasks } from '../services/task';
 import { useUsers } from '../services/user';
 import { Task } from '../types/task';
 
-// Screen
 export default function TaskListScreen() {
   const { group: userGroup } = useCareWalletContext();
   const navigator = useNavigation<AppStackNavigation>();
   const [canPress, setCanPress] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const { tasks } = useFilteredTasks({ groupID: userGroup.groupID });
+  // State variables for selected filter options
+  const [sortBy, setSortBy] = useState('All Tasks');
+  console.log(sortBy);
+  // const [taskStatus, setTaskStatus] = useState<string[]>([]);
+  // const [assignedTo, setAssignedTo] = useState<string[]>([]);
 
   const snapToIndex = (index: number) =>
     bottomSheetRef.current?.snapToIndex(index);
@@ -162,6 +166,9 @@ export default function TaskListScreen() {
           snapPoints={snapPoints}
           users={users ?? []}
           statuses={['Complete', 'Incomplete', 'Partial']}
+          setSortBy={setSortBy}
+          // setTaskStatus={(taskStatus: string[]) => setTaskStatus(taskStatus)}
+          // setAssignedTo={(assignedTo: string[]) => setAssignedTo(assignedTo)}
         />
       </GestureHandlerRootView>
     </SafeAreaView>
