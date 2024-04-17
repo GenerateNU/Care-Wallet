@@ -55,6 +55,8 @@ export default function TaskListScreen() {
   );
   const { roles } = useGroup(userGroup.groupID);
   const { users } = useUsers(roles?.map((role) => role.user_id) || []);
+  const [sortBy, setSortBy] = useState('All Tasks');
+  console.log(sortBy);
 
   // Filter tasks based on search query in multiple fields and labels
   const filteredTasks = tasks?.filter((task) => {

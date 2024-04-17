@@ -100,7 +100,10 @@ export function TaskInfoComponent({
       </View>
       <View className="space-y-2">
         <View
-          className={`mr-auto flex flex-row items-center space-x-2 rounded-full border bg-${categoryToBGColor(category)} border-carewallet-lightgray px-2 py-1`}
+          className={clsx(
+            'mr-auto flex flex-row items-center space-x-2 rounded-full border border-carewallet-lightgray px-2 py-1',
+            categoryToBGColor(task?.task_type ?? 'Other')
+          )}
         >
           <View>
             {CategoryIconsMap[TypeToCategoryMap[task?.task_type ?? 'Other']]}
