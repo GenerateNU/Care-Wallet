@@ -18,7 +18,7 @@ export function TaskListFilter({
         className="border-bottom border-1px ml-5 mt-3 flex flex-row items-center border-carewallet-gray border-opacity-5"
         onTouchEnd={() => setIsOpen(!isOpen)}
       >
-        <Text className="mr-auto font-carewallet-montserrat">{title}</Text>
+        <Text className="mb-1 mr-auto font-carewallet-montserrat">{title}</Text>
         <View className="mr-10">{isOpen ? <ArrowUp /> : <ArrowDown />}</View>
       </View>
       {isOpen && (

@@ -23,7 +23,7 @@ import { useCareWalletContext } from '../contexts/CareWalletContext';
 import { AppStackNavigation } from '../navigation/types';
 import { useGroup } from '../services/group';
 import { useLabelsByTasks } from '../services/label';
-import { useFilteredTasks } from '../services/task';
+import { TaskQueryParams, useFilteredTasks } from '../services/task';
 import { useUsers } from '../services/user';
 import { Task } from '../types/task';
 
@@ -32,9 +32,13 @@ export default function TaskListScreen() {
   const navigator = useNavigation<AppStackNavigation>();
   const [canPress, setCanPress] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  const { tasks, tasksIsLoading } = useFilteredTasks({
+  const [filters, setFilters] = useState<TaskQueryParams>({
     groupID: userGroup.groupID
   });
+  const [temporaryFilter, setTemporaryFilter] = useState<TaskQueryParams>({
+    groupID: userGroup.groupID
+  });
+  const { tasks, tasksIsLoading } = useFilteredTasks(filters);
   const { labels, labelsIsLoading } = useLabelsByTasks(
     tasks?.map((task) => task.task_id) ?? []
   );
@@ -55,8 +59,11 @@ export default function TaskListScreen() {
   );
   const { roles } = useGroup(userGroup.groupID);
   const { users } = useUsers(roles?.map((role) => role.user_id) || []);
-  const [sortBy, setSortBy] = useState('All Tasks');
-  console.log(sortBy);
+
+  function handleFilterClose(): void {
+    setFilters({ ...temporaryFilter, groupID: userGroup.groupID });
+    console.log('Filter closed', filters);
+  }
 
   // Filter tasks based on search query in multiple fields and labels
   const filteredTasks = tasks?.filter((task) => {
@@ -177,10 +184,12 @@ export default function TaskListScreen() {
           renderBackdrop={renderBackdrop}
           snapPoints={snapPoints}
           users={users ?? []}
+          categories={[...new Set(tasks?.map((task) => task.task_type))]}
+          labels={[...new Set(labels?.map((label) => label.label_name))]}
           statuses={['Complete', 'Incomplete', 'Partial']}
-          setSortBy={setSortBy}
-          // setTaskStatus={(taskStatus: string[]) => setTaskStatus(taskStatus)}
-          // setAssignedTo={(assignedTo: string[]) => setAssignedTo(assignedTo)}
+          filters={temporaryFilter}
+          setFilters={setTemporaryFilter}
+          onFilterClose={handleFilterClose}
         />
       </GestureHandlerRootView>
     </SafeAreaView>

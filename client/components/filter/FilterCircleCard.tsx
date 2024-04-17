@@ -20,7 +20,7 @@ export function FilterCircleCard({
   };
 
   const circleClasses = clsx(
-    'h-34 ml-2 mb-2 mt-3 py-2 flex w-fit flex-row items-center rounded-full pr-3',
+    'h-34 ml-2 mb-1 mt-1 py-2 mr-2 flex w-fit flex-row items-center rounded-full pr-3',
     {
       'border border-carewallet-blue': isSelected,
       'border border-carewallet-gray': !isSelected
