@@ -39,17 +39,15 @@ export function DropUp({
   console.log(items);
 
   return (
-    <View className="relative mb-3">
+    <View className="mb-3">
       <View
         className={clsx(
-          'flex h-14 w-full flex-row items-center rounded-lg bg-carewallet-blue/20',
+          'flex h-14 w-full flex-row items-center rounded-lg border border-carewallet-lightgray',
           isOpen ? 'rounded-b-none' : 'rounded-t-lg'
         )}
         onTouchEnd={() => setIsOpen(!isOpen)}
       >
-        <Text className="w-40 pl-2 font-carewallet-manrope text-lg">
-          {selected}
-        </Text>
+        <Text className="pl-5 font-carewallet-manrope text-lg">{selected}</Text>
         <View className="absolute right-3">
           {isOpen ? (
             <View className="rotate-180">
@@ -61,14 +59,14 @@ export function DropUp({
         </View>
       </View>
       {isOpen && (
-        <View className="absolute bottom-full flex flex-col-reverse flex-wrap rounded-b-lg border border-carewallet-blue/20 bg-carewallet-white">
+        <View className="absolute bottom-full flex rounded-b-lg border border-carewallet-blue/20 bg-carewallet-white">
           {items?.map((item, index) => (
             <View
               key={index}
               className="h-14 w-full justify-center border-t border-carewallet-blue/20"
               onTouchEnd={() => handleSelectItem(item.label)}
             >
-              <Text className="w-40 text-ellipsis bg-carewallet-white pl-2 font-carewallet-manrope text-lg">
+              <Text className="w-40 bg-carewallet-white pl-2 font-carewallet-manrope text-lg">
                 {item.label}
               </Text>
             </View>

@@ -53,8 +53,8 @@ export default function SingleTaskScreen() {
   }
 
   return (
-    <SafeAreaView className=" flex-1">
-      <View className="flex h-[100vh] bg-carewallet-white">
+    <SafeAreaView className="flex-1 bg-carewallet-white">
+      <View className="ml-2 mr-2 flex h-[100vh] flex-1 flex-col bg-carewallet-white">
         <View className="mx-1 mt-4 flex flex-row items-start justify-between border-b border-carewallet-lightergray bg-carewallet-white">
           <BackButton />
           <IconButton
@@ -97,29 +97,9 @@ export default function SingleTaskScreen() {
             </Text>
           </View>
         </View>
-
-        <View className="ml-auto mt-auto flex-1 flex-row space-x-4">
-          {/* <View className="mt-auto rounded-lg bg-carewallet-gray p-2">
-            <CheckMark />
-          </View>
-          <View className="mt-auto rounded-lg bg-carewallet-gray p-2">
-            <Reject />
-          </View> */}
-          {
-            // <DropDownPicker
-            //   open={open}
-            //   value={selectedStatus}
-            //   items={filters}
-            //   setOpen={setOpen}
-            //   setValue={setSelectedStatus}
-            //   placeholder={task?.task_status}
-            //   onSelectItem={() => {
-            //     navigation.navigate('FileUploadScreen');
-            //   }}
-            // />
-            <DropUp selected="Actions" items={filters} taskId={id} />
-          }
-        </View>
+      </View>
+      <View className="ml-3 mr-3">
+        <DropUp selected="Actions" items={filters} taskId={id} />
       </View>
     </SafeAreaView>
   );
