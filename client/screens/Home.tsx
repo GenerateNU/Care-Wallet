@@ -1,52 +1,37 @@
-import React, { useState } from 'react';
-import { Pressable, Text, View } from 'react-native';
+import React from 'react';
+import { Text, View } from 'react-native';
 
-import { DocPickerButton } from '../components/DocPickerButton';
-import { PopupModal } from '../components/PopupModal';
+import { Header } from '../components/home/Header';
+import { TaskList } from '../components/home/TaskList';
 import { useCareWalletContext } from '../contexts/CareWalletContext';
-import { useAuth } from '../services/auth';
+import { MainLayout } from '../layouts/MainLayout';
+import { useUser } from '../services/user';
 
 export default function Home() {
-  const [userGroupVisible, setUserGroupVisible] = useState<boolean>(false);
-
-  const { user, group } = useCareWalletContext();
-
-  const { signOutMutation } = useAuth();
+  const { user: signedInUser } = useCareWalletContext();
+  const { user } = useUser(signedInUser.userID);
 
   return (
-    <View className="bg-white w-[100vw] flex-1 items-center justify-center">
-      <View className="flex flex-row items-center">
-        <DocPickerButton />
+    <MainLayout>
+      <View className="mx-auto mt-10 w-[90vw]">
+        <Header user={user} />
+        <TaskList />
       </View>
-      <Pressable
-        onPress={() => setUserGroupVisible(true)}
-        className="mb-2 w-80 self-center rounded-md border border-carewallet-gray "
-      >
-        <Text className="self-center text-lg text-carewallet-black">
-          Show User and Group Info
+      <View className="mx-auto mt-5 h-[20vh] w-[90vw] rounded-lg border border-carewallet-blue/10 bg-carewallet-blue/10">
+        <Text className="ml-5 mt-5 font-carewallet-montserrat-bold text-base">
+          Health Overview
         </Text>
-      </Pressable>
-      <PopupModal isVisible={userGroupVisible} setVisible={setUserGroupVisible}>
-        <View>
-          <Text className="self-start text-lg">User ID: {user.userID}</Text>
-          <Text className="self-start text-lg">
-            User Email: {user.userEmail}
+        <Text className="my-auto text-center">
+          There are no health stats to view.
+        </Text>
+      </View>
+      <View className="mx-auto mt-10 w-[90vw] overflow-hidden rounded-lg border border-carewallet-blue/10">
+        <View className="h-10 items-center justify-center">
+          <Text className="ml-2 font-carewallet-manrope text-sm">
+            You have no recent notifications.
           </Text>
-          <Text className="self-start text-lg">Group ID: {group.groupID}</Text>
-          <Text className="self-start text-lg">Group Role: {group.role}</Text>
         </View>
-        <Pressable
-          onPress={() => {
-            setUserGroupVisible(false);
-            signOutMutation();
-          }}
-          className="w-20 self-center rounded-md border border-carewallet-gray"
-        >
-          <Text className="self-center text-lg text-carewallet-gray">
-            Sign Out
-          </Text>
-        </Pressable>
-      </PopupModal>
-    </View>
+      </View>
+    </MainLayout>
   );
 }

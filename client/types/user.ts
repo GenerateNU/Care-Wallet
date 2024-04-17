@@ -5,7 +5,7 @@ export interface User {
   email: string;
   phone: string;
   address: string;
-  pfp_s3_url: string;
+  profile_picture: string;
   device_id: string;
   push_notification_enabled: boolean;
 }

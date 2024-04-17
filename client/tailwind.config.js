@@ -7,6 +7,11 @@ module.exports = {
     './utils/**/*.tsx'
   ],
   theme: {
+    extend: {
+      fontSize: {
+        '2xs': '10px'
+      }
+    },
     colors: {
       'carewallet-white': '#FFFFFF',
       'carewallet-black': '#000000',
@@ -26,6 +31,7 @@ module.exports = {
       'carewallet-manrope': ['Manrope_400Regular'],
       'carewallet-manrope-semibold': ['Manrope_600SemiBold'],
       'carewallet-manrope-bold': ['Manrope_700Bold'],
+      'carewallet-manrope-extrabold': ['Manrope_800ExtraBold'],
       'carewallet-montserrat': ['Montserrat_400Regular'],
       'carewallet-montserrat-semibold': ['Montserrat_600SemiBold'],
       'carewallet-montserrat-bold': ['Montserrat_700Bold']

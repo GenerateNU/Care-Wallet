@@ -47,7 +47,6 @@ VALUES
   (5, '5JgN2PQxCRM9VoCiiFPlQPNqkL32', 'PATIENT'),
   (5, 'BLq3MXk4rVg4RKuYiMd7aEmMhsz1', 'SECONDARY'),
   (5, 'mPeo3d3MiXfnpPJADWgFD9ZcB2M2', 'SECONDARY'),
-  (5, 'onrQs8HVGBVMPNz4Fk1uE94bSxg1', 'SECONDARY'),
   (5, 'pTBhZsE9BaOxltkGUfoBAUDote43', 'SECONDARY'),
   (5, '8Sy7xBkGiGQv4ZKphcQfY8PxAqw1', 'SECONDARY'),
   (5, 'iL7PnjS4axQffmlPceobjUUZ9DF2', 'SECONDARY'),
