@@ -58,8 +58,16 @@ const addNewTask = async (newTask: Task): Promise<Task> => {
     label_body
   );
   console.log('Added label: ', label_response.data);
-  // const assigned_to_response = await axios.post(`${api_url}/tasks/${task_response.data['id']}/`, newTask.assigned_to);
-  return label_response.data;
+  const assigned_to_body = {
+    assigner: newTask.created_by,
+    userIDs: [newTask.assigned_to]
+  };
+  const assigned_to_response = await axios.post(
+    `${api_url}/tasks/${task_response.data['task_id']}/assign`,
+    assigned_to_body
+  );
+  console.log('Assigned task to user: ', assigned_to_response.data);
+  return assigned_to_response.data;
 };
 
 const editTask = async (taskID: string, updatedTask: Task): Promise<Task> => {
