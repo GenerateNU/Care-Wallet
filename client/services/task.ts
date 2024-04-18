@@ -74,8 +74,7 @@ export const useFilteredTasks = (queryParams: TaskQueryParams) => {
     refetch: refetchTask
   } = useQuery<Task[]>({
     queryKey: ['filteredTaskList'],
-    queryFn: () => getFilteredTasks(queryParams),
-    refetchInterval: 20000
+    queryFn: () => getFilteredTasks(queryParams)
   });
   return {
     tasks,

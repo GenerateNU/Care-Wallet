@@ -12,7 +12,6 @@ import {
 
 import Time from '../../assets/Time.svg';
 import { AppStackNavigation } from '../../navigation/types';
-import { useTaskById } from '../../services/task';
 import { Task } from '../../types/task';
 import { CategoryIconsMap, TypeToCategoryMap } from '../../types/type';
 
@@ -34,7 +33,7 @@ export function CWTimelineList({
       <Timeline
         {...timelineProps}
         renderEvent={(item) => {
-          const { task } = useTaskById(item.id ?? '');
+          const task = tasks.find((t) => `${t.task_id}` === item.id);
           // if same just show start, if both same time frame (AM/PM) show time frame at end otherwise show all
           const time = `${
             moment(task?.start_date).format('HH DD YYYY') ===

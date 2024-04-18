@@ -12,7 +12,8 @@ export function AppNavigation() {
   return (
     <AppStack.Navigator
       screenOptions={{
-        headerShown: false
+        headerShown: false,
+        freezeOnBlur: true
       }}
     >
       <AppStack.Screen name="Dashboard" component={Dashboard} />

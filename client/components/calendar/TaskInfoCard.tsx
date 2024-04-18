@@ -32,15 +32,15 @@ function statusToString(status: string) {
 function categoryToColor(category: string) {
   switch (TaskTypeDescriptions[category]) {
     case 'Medication Management':
-      return 'carewallet-pink';
+      return 'text-carewallet-pink';
     case 'Doctor Appointment':
-      return 'carewallet-pink';
+      return 'text-carewallet-pink';
     case 'Financial Task':
-      return 'carewallet-green';
-    case 'OTHER':
-      return 'carewallet-white';
+      return 'text-carewallet-green';
+    case 'Other Task':
+      return 'text-carewallet-coral';
     default:
-      return 'carewallet-white';
+      return 'text-carewallet-white';
   }
 }
 
@@ -52,8 +52,8 @@ function categoryToBGColor(category: string) {
       return 'bg-carewallet-pink/20';
     case 'Financial Task':
       return 'bg-carewallet-green/10';
-    case 'OTHER':
-      return 'bg-carewallet-white';
+    case 'Other Task':
+      return 'bg-carewallet-coral/20';
     default:
       return 'bg-carewallet-white';
   }
@@ -70,7 +70,7 @@ export function TaskInfoComponent({
     <View className="mb-6 rounded-2xl border border-carewallet-gray bg-carewallet-white p-4">
       <View className="mb-2 flex flex-col justify-between">
         <View className="flex-row items-center">
-          <View className="flex flex-row items-center space-x-2">
+          <View className="flex w-[60vw] flex-row flex-wrap items-center space-x-2">
             <Text className="font-carewallet-manrope-semibold text-xl">
               {task.task_title}
             </Text>
@@ -109,7 +109,7 @@ export function TaskInfoComponent({
             {CategoryIconsMap[TypeToCategoryMap[task?.task_type ?? 'Other']]}
           </View>
           <Text
-            className={`font-carewallet-manrope text-${categoryToColor(task.task_type)}`}
+            className={`font-carewallet-manrope ${categoryToColor(task?.task_type ?? 'Other Task')}`}
           >
             {TaskTypeDescriptions[task.task_type]}
           </Text>
