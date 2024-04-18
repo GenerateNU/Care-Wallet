@@ -5,7 +5,7 @@ DROP TABLE IF EXISTS task_labels;
 CREATE TYPE task_assignment_status AS ENUM ('ACCEPTED', 'DECLINED', 'NOTIFIED');
 CREATE TYPE task_status AS ENUM ('INCOMPLETE', 'COMPLETE', 'INPROGRESS',
 'OVERDUE', 'TODO');
-CREATE TYPE task_type AS ENUM ('med_mgmt', 'dr_appt', 'financial', 'other');
+CREATE TYPE task_type AS ENUM ('med_mgmt', 'dr_appt', 'diet', 'grmg', 'fml_convos', 'shpping', 'activities', 'hlth_ins', 'financial', 'other');
 
 CREATE TABLE IF NOT EXISTS task (
     task_id serial NOT NULL,

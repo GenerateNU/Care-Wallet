@@ -2,14 +2,18 @@ import React from 'react';
 
 import { IconButton } from 'react-native-paper';
 
-import Close from '../../assets/close.svg';
+import ArrowRightIcon from '../../assets/arrow-right.svg';
 
-export function CloseButton({ onPress }: { onPress: () => void }) {
+interface ForwardButtonProps {
+  onPress: () => void;
+}
+
+export function ForwardButton({ onPress }: ForwardButtonProps) {
   return (
     <IconButton
       className="align-center m-2 flex h-[50px] w-[52px] justify-center rounded-xl bg-carewallet-blue"
       mode="contained"
-      icon={Close}
+      icon={({ color }) => <ArrowRightIcon fill={color} />}
       onPress={onPress}
     />
   );

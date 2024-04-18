@@ -21,7 +21,7 @@ export default function FileUploadScreen() {
   const { user, group } = useCareWalletContext();
   const { uploadFileMutation } = useFile();
   const [fileTitle, setFileTitle] = useState('');
-  const [label, setLabel] = useState('Select Label');
+  const [label, setLabel] = useState({ label: 'Select Label', value: '' });
   const [additionalNotes, setAdditionalNotes] = useState('');
   const [pickedFile, setPickedFile] = useState<DocumentPickerAsset | null>(
     null
@@ -62,12 +62,12 @@ export default function FileUploadScreen() {
           file: pickedFile,
           userId: user.userID,
           groupId: group.groupID,
-          label: label === 'Select Label' ? '' : label,
+          label: label.value,
           notes: additionalNotes
         });
 
         setFileTitle('');
-        setLabel('Select Label');
+        setLabel({ label: 'Select Label', value: '' });
         setAdditionalNotes('');
         setPickedFile(null);
       }
@@ -110,8 +110,11 @@ export default function FileUploadScreen() {
                   FILE LABEL
                 </Text>
                 <CWDropdown
-                  selected={label}
-                  items={labels?.map((label) => label.label_name)}
+                  selected={label.label}
+                  items={labels?.map((label) => ({
+                    label: label.label_name,
+                    value: label.label_name
+                  }))}
                   setLabel={setLabel}
                 />
               </View>
