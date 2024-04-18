@@ -5,6 +5,7 @@ import { User } from '../types/user';
 import { api_url } from './api-links';
 
 const getUser = async (userId: string): Promise<User> => {
+  if (!userId) return {} as User;
   const { data } = await axios.get(`${api_url}/user/${userId}`);
   return data;
 };
@@ -32,7 +33,8 @@ export const useUser = (userId: string) => {
 
   const { data: user, isLoading: userIsLoading } = useQuery<User>({
     queryKey: ['user', userId],
-    queryFn: () => getUser(userId)
+    queryFn: () => getUser(userId),
+    refetchInterval: 10000
   });
 
   const { mutate: updateUserMutation } = useMutation({

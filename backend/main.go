@@ -8,7 +8,6 @@ import (
 	groupRoles "carewallet/schema/group-roles"
 	"carewallet/schema/groups"
 	"carewallet/schema/labels"
-	"carewallet/schema/medication"
 	"carewallet/schema/task_labels"
 	"carewallet/schema/tasks"
 	"carewallet/schema/user"
@@ -51,8 +50,6 @@ func main() {
 
 	v1 := r.Group("/")
 	{
-		medication.GetMedicationGroup(v1, &medication.PgModel{Conn: conn})
-
 		files.FileGroup(v1, &files.PgModel{Conn: conn})
 
 		user.UserGroup(v1, &user.PgModel{Conn: conn})

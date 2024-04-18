@@ -1,15 +1,17 @@
 import React from 'react';
-import { SafeAreaView, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 import {
-  Manrope_200ExtraLight,
-  Manrope_300Light,
   Manrope_400Regular,
-  Manrope_500Medium,
   Manrope_600SemiBold,
   Manrope_700Bold,
   Manrope_800ExtraBold
 } from '@expo-google-fonts/manrope';
+import {
+  Montserrat_400Regular,
+  Montserrat_600SemiBold,
+  Montserrat_700Bold
+} from '@expo-google-fonts/montserrat';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useFonts } from 'expo-font';
 import { ActivityIndicator, PaperProvider } from 'react-native-paper';
@@ -20,13 +22,13 @@ import { Router } from './navigation/Router';
 export default function App() {
   const queryClient = new QueryClient();
   const [fontsLoaded] = useFonts({
-    Manrope_200ExtraLight,
-    Manrope_300Light,
     Manrope_400Regular,
-    Manrope_500Medium,
     Manrope_600SemiBold,
     Manrope_700Bold,
-    Manrope_800ExtraBold
+    Manrope_800ExtraBold,
+    Montserrat_400Regular,
+    Montserrat_600SemiBold,
+    Montserrat_700Bold
   });
 
   if (!fontsLoaded)
@@ -41,12 +43,9 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <CareWalletProvider>
         <View className="absolute -z-10 h-20 w-[100vw] bg-carewallet-white" />
-        <SafeAreaView className="h-[100vh] flex-1">
-          <PaperProvider>
-            <Router />
-          </PaperProvider>
-        </SafeAreaView>
-        <View className="absolute -z-20 h-full w-[100vw] bg-carewallet-blue" />
+        <PaperProvider>
+          <Router />
+        </PaperProvider>
       </CareWalletProvider>
     </QueryClientProvider>
   );

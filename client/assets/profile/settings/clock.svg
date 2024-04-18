@@ -1,0 +1,8 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g id="Clock">
+    <circle id="Ellipse 54" cx="12" cy="12" r="7" stroke="black" stroke-width="2"/>
+    <path id="Ellipse 55" d="M5.96472 3.1363C5.2865 3.31803 4.66807 3.67508 4.17157 4.17157C3.67508 4.66807 3.31803 5.2865 3.1363 5.96472" stroke="black" stroke-width="2" stroke-linecap="round"/>
+    <path id="Ellipse 56" d="M18.0353 3.1363C18.7135 3.31803 19.3319 3.67508 19.8284 4.17157C20.3249 4.66807 20.682 5.2865 20.8637 5.96472" stroke="black" stroke-width="2" stroke-linecap="round"/>
+    <path id="Vector 64" d="M12 8V11.75C12 11.8881 12.1119 12 12.25 12H15" stroke="black" stroke-width="2" stroke-linecap="round"/>
+  </g>
+</svg>

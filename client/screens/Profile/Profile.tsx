@@ -11,6 +11,7 @@ import { Group } from '../../components/profile/Group';
 import { Header } from '../../components/profile/Header';
 import { UserTaskStatusCard } from '../../components/profile/UserTaskStatusCard';
 import { useCareWalletContext } from '../../contexts/CareWalletContext';
+import { MainLayout } from '../../layouts/MainLayout';
 import { AppStackNavigation } from '../../navigation/types';
 import { useAuth } from '../../services/auth';
 import { useGroup } from '../../services/group';
@@ -45,53 +46,62 @@ export default function Profile() {
   }
 
   return (
-    <View className="flex h-[100vh] flex-1 flex-col bg-carewallet-white/25">
-      <Header
-        user={users.find((user) => user.user_id === activeUser)}
-        role={roles.find((role) => role.user_id === activeUser)}
-      />
-      <View className="h-[70vh] pt-10">
-        <Group
-          users={users ?? []}
-          usersAreLoading={usersAreLoading}
-          setActiveUser={setActiveUser}
-          activeUser={activeUser}
-          roles={roles ?? []}
-          rolesAreLoading={rolesAreLoading}
+    <View>
+      <View className="h-[8vh] bg-carewallet-white" />
+
+      <MainLayout>
+        <Header
+          user={users.find((user) => user.user_id === activeUser)}
+          role={roles.find((role) => role.user_id === activeUser)}
+          onPress={() => setActiveUser(signedInUser.userID)}
         />
-        <View
-          className="mt-5 flex items-center pb-5"
-          onTouchEnd={() => {
-            navigation.navigate('CalendarContainer', {
-              screen: 'CalendarTopNav',
-              params: { screen: 'TaskList' }
-            });
-          }}
-        >
-          <UserTaskStatusCard userID={activeUser} />
-        </View>
-        <View className="mb-5 items-center">
-          <CircleCard
-            Icon={<Folder />}
-            ButtonText="View Patient Information"
-            onTouchEnd={() => navigation.navigate('PatientView')}
+        <View>
+          <Group
+            users={users ?? []}
+            usersAreLoading={usersAreLoading}
+            setActiveUser={setActiveUser}
+            activeUser={activeUser}
+            roles={roles ?? []}
+            rolesAreLoading={rolesAreLoading}
           />
+          <View
+            className="mt-5 items-center pb-5"
+            onTouchEnd={async () => {
+              navigation.navigate('TaskList');
+            }}
+          >
+            <UserTaskStatusCard userID={activeUser} />
+          </View>
+          {signedInUser.userID === activeUser && (
+            <View className="h-[22vh]">
+              <View>
+                <View className="mb-5 items-center">
+                  <CircleCard
+                    Icon={<Folder />}
+                    ButtonText="View Patient Information"
+                    onTouchEnd={() => navigation.navigate('PatientView')}
+                  />
+                </View>
+                <View>
+                  <View
+                    className="items-center"
+                    onTouchEnd={() => navigation.navigate('Settings')}
+                  >
+                    <CircleCard Icon={<Settings />} ButtonText="Settings" />
+                  </View>
+                </View>
+              </View>
+              <View className="mt-auto items-center">
+                <CircleCard
+                  Icon={<RightArrow />}
+                  ButtonText="Log Out"
+                  onTouchEnd={() => signOutMutation()}
+                />
+              </View>
+            </View>
+          )}
         </View>
-        <View className="mb-auto flex-1 items-center">
-          <CircleCard
-            Icon={<Settings />}
-            ButtonText="Settings"
-            onTouchEnd={() => navigation.navigate('CareGroup')}
-          />
-        </View>
-        <View className="mb-5 items-center">
-          <CircleCard
-            Icon={<RightArrow />}
-            ButtonText="Log Out"
-            onTouchEnd={() => signOutMutation()}
-          />
-        </View>
-      </View>
+      </MainLayout>
     </View>
   );
 }

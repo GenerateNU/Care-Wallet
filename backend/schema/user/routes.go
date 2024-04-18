@@ -16,10 +16,10 @@ type PgModel struct {
 func UserGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 	userGroup := v1.Group("user")
 	{
-		userGroup.GET("/:uid", c.GetUser)
-		userGroup.GET("", c.GetUsers)
-		userGroup.POST("/:uid", c.CreateUser)
-		userGroup.PUT("/:uid", c.UpdateUser)
+		userGroup.GET("/:uid", c.getUser)
+		userGroup.GET("", c.getUsers)
+		userGroup.POST("/:uid", c.createUser)
+		userGroup.PUT("/:uid", c.updateUser)
 	}
 
 	return userGroup
@@ -45,7 +45,7 @@ type UserInfoBody struct {
 //	@success		200			{object}	models.User
 //	@failure		400			{object}	string
 //	@router			/user/{uid} [POST]
-func (pg *PgModel) CreateUser(c *gin.Context) {
+func (pg *PgModel) createUser(c *gin.Context) {
 	var requestBody UserInfoBody
 
 	if err := c.BindJSON(&requestBody); err != nil {
@@ -53,7 +53,7 @@ func (pg *PgModel) CreateUser(c *gin.Context) {
 		return
 	}
 
-	user, err := CreateUserInDB(pg.Conn, c.Param("uid"), requestBody)
+	user, err := createUserInDB(pg.Conn, c.Param("uid"), requestBody)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
@@ -74,8 +74,8 @@ func (pg *PgModel) CreateUser(c *gin.Context) {
 //	@success		200	{object}	models.User
 //	@failure		400	{object}	string
 //	@router			/user/{uid} [GET]
-func (pg *PgModel) GetUser(c *gin.Context) {
-	user, err := GetUserInDB(pg.Conn, c.Param("uid"))
+func (pg *PgModel) getUser(c *gin.Context) {
+	user, err := getUserInDB(pg.Conn, c.Param("uid"))
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
@@ -100,7 +100,7 @@ type UsersQuery struct {
 //	@success		200		{array}		models.User
 //	@failure		400		{object}	string
 //	@router			/user [GET]
-func (pg *PgModel) GetUsers(c *gin.Context) {
+func (pg *PgModel) getUsers(c *gin.Context) {
 
 	userIDs := c.Query("userIDs")
 	userQuery := UsersQuery{
@@ -110,7 +110,7 @@ func (pg *PgModel) GetUsers(c *gin.Context) {
 	var users []models.User
 
 	for _, element := range userQuery.UserIDs {
-		user, err := GetUserInDB(pg.Conn, element)
+		user, err := getUserInDB(pg.Conn, element)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, err.Error())
 			return
@@ -133,7 +133,7 @@ func (pg *PgModel) GetUsers(c *gin.Context) {
 //	@success		200			{object}	models.User
 //	@failure		400			{object}	string
 //	@router			/user/{uid} [PUT]
-func (pg *PgModel) UpdateUser(c *gin.Context) {
+func (pg *PgModel) updateUser(c *gin.Context) {
 	var requestBody UserInfoBody
 
 	if err := c.BindJSON(&requestBody); err != nil {
@@ -141,7 +141,7 @@ func (pg *PgModel) UpdateUser(c *gin.Context) {
 		return
 	}
 
-	user, err := UpdateUserInDB(pg.Conn, c.Param("uid"), requestBody)
+	user, err := updateUserInDB(pg.Conn, requestBody)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())

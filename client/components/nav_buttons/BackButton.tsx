@@ -13,7 +13,7 @@ export function BackButton() {
     <IconButton
       className="align-center m-2 flex h-[50px] w-[52px] justify-center rounded-xl border border-carewallet-lightgray bg-carewallet-white"
       mode="contained"
-      icon={({ color }) => <ArrowLeft fill={color} />}
+      icon={() => <ArrowLeft fill="blue" />}
       onPress={() => navigation.goBack()}
     />
   );

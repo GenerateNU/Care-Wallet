@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
-import {
-  ActivityIndicator,
-  FlatList,
-  Pressable,
-  Text,
-  View
-} from 'react-native';
+import { ActivityIndicator, FlatList, Text, View } from 'react-native';
 
+import { WebView } from 'react-native-webview';
+
+import { useCareWalletContext } from '../../contexts/CareWalletContext';
+import { useProfileFile } from '../../services/file';
 import { GroupRole, Role } from '../../types/group';
 import { User } from '../../types/user';
 
@@ -27,6 +25,7 @@ export function Group({
   setActiveUser,
   activeUser
 }: GroupProps) {
+  const { user: signedInUser } = useCareWalletContext();
   const [canPress, setCanPress] = useState(true);
 
   if (rolesAreLoading || usersAreLoading) {
@@ -58,25 +57,50 @@ export function Group({
         data={users.filter(
           (user) =>
             user.user_id !== activeUser &&
+            user.user_id !== signedInUser.userID &&
             user.user_id !==
               (roles.find((role) => role.role === Role.PATIENT)?.user_id ?? '')
         )}
-        renderItem={({ item, index }) => (
-          <Pressable
-            key={index}
-            onTouchEnd={() => {
-              if (canPress) setActiveUser(item.user_id);
-            }}
-          >
-            <View className="items-center px-2">
-              <View className="z-10 h-14 w-14 rounded-full  bg-carewallet-lightergray" />
-              <Text className="text-center font-carewallet-manrope-semibold text-xs">
-                {item.first_name}
-              </Text>
+        renderItem={({ item, index }) => {
+          return (
+            <View
+              key={index}
+              className="mx-2 items-center"
+              onTouchEnd={() => {
+                if (canPress) setActiveUser(item.user_id);
+              }}
+            >
+              <SmallProfileImage user={item} />
             </View>
-          </Pressable>
-        )}
+          );
+        }}
       />
+    </View>
+  );
+}
+
+function SmallProfileImage({ user }: { user: User }) {
+  const { file } = useProfileFile(user.profile_picture);
+  return (
+    <View>
+      {user?.profile_picture ? (
+        <View className="mb-1 h-20 w-20">
+          <WebView
+            source={{ uri: file }}
+            className="flex-1 rounded-full border border-carewallet-gray"
+          />
+        </View>
+      ) : (
+        <View className="mb-1 h-20 w-20 rounded-full bg-carewallet-lightergray">
+          <Text className="my-auto items-center text-center font-carewallet-manrope-bold text-carewallet-blue">
+            {user.first_name.charAt(0)}
+            {user.last_name.charAt(0)}
+          </Text>
+        </View>
+      )}
+      <Text className="text-center font-carewallet-manrope-semibold text-base">
+        {user.first_name}
+      </Text>
     </View>
   );
 }

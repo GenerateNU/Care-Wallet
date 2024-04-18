@@ -8,4 +8,6 @@ type File struct {
 	UploadDate string `json:"upload_date"`
 	FileSize   int64  `json:"file_size"`
 	TaskID     int    `json:"task_id"`
+	Notes      string `json:"notes"`
+	LabelName  string `json:"label_name"`
 }

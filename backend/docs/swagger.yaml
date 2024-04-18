@@ -1,5 +1,16 @@
 basePath: /
 definitions:
+  files.FileDetails:
+    properties:
+      fileId:
+        type: integer
+      fileName:
+        type: string
+      labelName:
+        type: string
+      url:
+        type: string
+    type: object
   groups.GroupMember:
     properties:
       role:
@@ -33,6 +44,10 @@ definitions:
         type: integer
       group_id:
         type: integer
+      label_name:
+        type: string
+      notes:
+        type: string
       task_id:
         type: integer
       upload_by:
@@ -56,13 +71,6 @@ definitions:
       label_color:
         type: string
       label_name:
-        type: string
-    type: object
-  models.Medication:
-    properties:
-      medication_id:
-        type: integer
-      medication_name:
         type: string
     type: object
   models.Role:
@@ -137,9 +145,9 @@ definitions:
         type: string
       last_name:
         type: string
-      pfp_s3_url:
-        type: string
       phone:
+        type: string
+      profile_picture:
         type: string
       push_notification_enabled:
         type: boolean
@@ -218,6 +226,101 @@ info:
   title: Care-Wallet API
   version: "1.0"
 paths:
+  /files/{groupId}:
+    get:
+      description: List all files from S3 bucket
+      parameters:
+      - description: The groupID of the file
+        in: path
+        name: groupId
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/files.FileDetails'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: List all files
+      tags:
+      - file
+  /files/{groupId}/{fileName}:
+    delete:
+      description: Remove a file from S3 bucket
+      parameters:
+      - description: The groupID of the file
+        in: path
+        name: groupId
+        required: true
+        type: string
+      - description: The fileName of the file
+        in: path
+        name: fileName
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Remove a file
+      tags:
+      - file
+    get:
+      description: Get a file from S3 bucket
+      parameters:
+      - description: The groupID of the file
+        in: path
+        name: groupId
+        required: true
+        type: string
+      - description: The fileId of the file
+        in: path
+        name: fileId
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Get a file
+      tags:
+      - file
+  /files/profile/{fileName}:
+    get:
+      description: get profile photo from S3 bucket
+      parameters:
+      - description: the file name of the profile photo
+        in: path
+        name: fileName
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: get profile photo
+      tags:
+      - file
   /files/upload:
     post:
       description: Upload a file to database and S3 bucket
@@ -237,6 +340,15 @@ paths:
         name: group_id
         required: true
         type: integer
+      - description: Notes for the file
+        in: formData
+        name: notes
+        required: true
+        type: string
+      - description: Label name for the file
+        in: formData
+        name: label_name
+        type: string
       responses:
         "200":
           description: OK
@@ -548,40 +660,6 @@ paths:
       summary: Retrieve a group id given a user id
       tags:
       - group
-  /medications:
-    get:
-      description: get all user medications
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/models.Medication'
-            type: array
-      summary: Get All Meds
-      tags:
-      - medications
-    post:
-      description: add a medication to a users medlist
-      parameters:
-      - description: a medication
-        in: body
-        name: _
-        required: true
-        schema:
-          $ref: '#/definitions/models.Medication'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.Medication'
-        "400":
-          description: Bad Request
-          schema:
-            type: string
-      summary: add a medication
-      tags:
-      - medications
   /tasks:
     post:
       description: Create a new task
@@ -812,6 +890,32 @@ paths:
           schema:
             type: string
       summary: Remove Users From Task
+      tags:
+      - tasks
+  /tasks/{tid}/status/{status}:
+    get:
+      description: Get list of users assigned to a task by task ID
+      parameters:
+      - description: Task ID
+        in: path
+        name: tid
+        required: true
+        type: integer
+      - description: Task Status
+        in: path
+        name: status
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Get list of users assigned to a task
       tags:
       - tasks
   /tasks/assigned:

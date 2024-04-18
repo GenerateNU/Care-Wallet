@@ -11,7 +11,7 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-func GetTasksByQueryFromDB(pool *pgxpool.Pool, filterQuery TaskQuery) ([]models.Task, error) {
+func getTasksByQueryFromDB(pool *pgxpool.Pool, filterQuery TaskQuery) ([]models.Task, error) {
 	query_fields := []string{
 		filterQuery.TaskID,
 		filterQuery.TaskTitle,
@@ -62,10 +62,17 @@ func GetTasksByQueryFromDB(pool *pgxpool.Pool, filterQuery TaskQuery) ([]models.
 		results = append(results, task)
 	}
 
+	results, err = setTasksOverdue(results)
+
+	if err != nil {
+		print(err.Error(), "error setting tasks to overdue")
+		return nil, err
+	}
+
 	return results, nil
 }
 
-func AssignUsersToTaskInDB(pool *pgxpool.Pool, users []string, taskID string, assigner string) ([]models.TaskUser, error) {
+func assignUsersToTaskInDB(pool *pgxpool.Pool, users []string, taskID string, assigner string) ([]models.TaskUser, error) {
 	task_id, err := strconv.Atoi(taskID)
 	if err != nil {
 		return nil, err
@@ -87,7 +94,7 @@ func AssignUsersToTaskInDB(pool *pgxpool.Pool, users []string, taskID string, as
 	return assignedUsers, nil
 }
 
-func RemoveUsersFromTaskInDB(pool *pgxpool.Pool, users []string, taskID string) ([]models.TaskUser, error) {
+func removeUsersFromTaskInDB(pool *pgxpool.Pool, users []string, taskID string) ([]models.TaskUser, error) {
 	task_id, err := strconv.Atoi(taskID)
 	if err != nil {
 		print(err, "error converting task ID to int")
@@ -119,7 +126,7 @@ func RemoveUsersFromTaskInDB(pool *pgxpool.Pool, users []string, taskID string) 
 	return removedUsers, nil
 }
 
-func GetTasksByAssignedFromDB(pool *pgxpool.Pool, userIDs []string) ([]models.Task, error) {
+func getTasksByAssignedFromDB(pool *pgxpool.Pool, userIDs []string) ([]models.Task, error) {
 	var task_ids []int
 	var tasks []models.Task
 
@@ -157,11 +164,18 @@ func GetTasksByAssignedFromDB(pool *pgxpool.Pool, userIDs []string) ([]models.Ta
 		tasks = append(tasks, task)
 	}
 
-	return tasks, nil
+	newTasks, err := setTasksOverdue(tasks)
+
+	if err != nil {
+		print(err.Error(), "error setting tasks to overdue")
+		return nil, err
+	}
+
+	return newTasks, nil
 }
 
 // CreateTaskInDB creates a new task in the database and returns its ID
-func CreateTaskInDB(pool *pgxpool.Pool, newTask models.Task) (int, error) {
+func createTaskInDB(pool *pgxpool.Pool, newTask models.Task) (int, error) {
 	query := `
         INSERT INTO task (group_id, created_by, created_date, start_date, end_date, quick_task, notes, repeating, repeating_interval, repeating_end_date, task_status, task_type, task_info, task_title) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) RETURNING task_id`
 
@@ -188,7 +202,7 @@ func CreateTaskInDB(pool *pgxpool.Pool, newTask models.Task) (int, error) {
 }
 
 // DeleteTaskInDB deletes a task from the database by ID
-func DeleteTaskInDB(pool *pgxpool.Pool, taskID int) error {
+func deleteTaskInDB(pool *pgxpool.Pool, taskID int) error {
 	// Assuming "task" table structure, adjust the query based on your schema
 	query := "DELETE FROM task WHERE task_id = $1"
 
@@ -197,11 +211,9 @@ func DeleteTaskInDB(pool *pgxpool.Pool, taskID int) error {
 }
 
 // UpdateTaskInfoInDB updates all fields of a task in the database
-func UpdateTaskInfoInDB(pool *pgxpool.Pool, taskID int, taskFields models.Task) error {
+func updateTaskInfoInDB(pool *pgxpool.Pool, taskID int, taskFields models.Task) error {
 	// Construct the SQL query dynamically based on the task_fields parameter
-	query := `
-        UPDATE task SET task_title = $1, group_id = $2, created_by = $3, created_date = $4, start_date = $5, end_date = $6, quick_task = $7, notes = $8, repeating = $9, repeating_interval = $10, repeating_end_date = $11, task_status = $12, task_type = $13, task_info = $14 WHERE task_id = $15
-    `
+	query := `UPDATE task SET task_title = $1, group_id = $2, created_by = $3, created_date = $4, start_date = $5, end_date = $6, quick_task = $7, notes = $8, repeating = $9, repeating_interval = $10, repeating_end_date = $11, task_status = $12, task_type = $13, task_info = $14 WHERE task_id = $15`
 
 	// Execute the SQL query with the provided task fields and task ID
 	_, err := pool.Exec(context.Background(), query,
@@ -221,11 +233,12 @@ func UpdateTaskInfoInDB(pool *pgxpool.Pool, taskID int, taskFields models.Task) 
 		taskFields.TaskInfo,
 		taskID,
 	)
+
 	return err
 }
 
 // GetTaskByID fetches a task from the database by its ID
-func GetTaskByID(pool *pgxpool.Pool, taskID int) (models.Task, error) {
+func getTaskByID(pool *pgxpool.Pool, taskID int) (models.Task, error) {
 	query := `SELECT * FROM task WHERE task_id = $1`
 
 	var task models.Task
@@ -246,10 +259,23 @@ func GetTaskByID(pool *pgxpool.Pool, taskID int) (models.Task, error) {
 		&task.TaskType,
 		&task.TaskInfo,
 	)
-	return task, err
+
+	if err != nil {
+		print(err.Error(), "error querying task by ID")
+		return task, err
+	}
+
+	tasks, err := setTasksOverdue([]models.Task{task})
+
+	if err != nil {
+		print(err.Error(), "error setting tasks to overdue")
+		return task, err
+	}
+
+	return tasks[len(tasks)-1], err
 }
 
-func GetUsersAssignedToTaskFromDB(pool *pgxpool.Pool, taskID int) ([]string, error) {
+func getUsersAssignedToTaskFromDB(pool *pgxpool.Pool, taskID int) ([]string, error) {
 	var userIDs []string
 
 	// Get all user IDs assigned to the task
@@ -274,4 +300,32 @@ func GetUsersAssignedToTaskFromDB(pool *pgxpool.Pool, taskID int) ([]string, err
 	}
 
 	return userIDs, nil
+}
+
+func setTasksOverdue(tasks []models.Task) ([]models.Task, error) {
+	// Get the current date
+	currentDate := time.Now()
+
+	for i, task := range tasks {
+		// Check if the current date is greater than the end date of the task and isnt complete
+		if task.TaskStatus != "COMPLETE" && task.TaskStatus != "INCOMPLETE" && currentDate.After(*task.EndDate) {
+			// If it is, set the task status to "OVERDUE"
+			tasks[i].TaskStatus = "OVERDUE"
+		}
+	}
+
+	// Return the updated tasks
+	return tasks, nil
+}
+
+func updateTaskStatusInDB(pool *pgxpool.Pool, taskID int, newStatus string) error {
+	query := `UPDATE task SET task_status = $1 WHERE task_id = $2`
+
+	// Execute the SQL query with the provided task fields and task ID
+	_, err := pool.Exec(context.Background(), query,
+		newStatus,
+		taskID,
+	)
+
+	return err
 }
