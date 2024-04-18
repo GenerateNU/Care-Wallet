@@ -10,36 +10,28 @@ import {
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { CWDropdown } from '../components/Dropdown';
-import { BackButton } from '../components/nav_buttons/BackButton';
-import { ForwardButton } from '../components/nav_buttons/ForwardButton';
-import { StyledDatePicker } from '../components/task_creation/DatePicker';
-import { DateTimeDisplay } from '../components/task_creation/DateTimeDisplay';
-import { RadioGroup } from '../components/task_creation/RadioGroup';
-import { TextInputLine } from '../components/task_creation/TextInputLine';
-import { TextInputParagraph } from '../components/task_creation/TextInputParagraph';
-import { useCareWalletContext } from '../contexts/CareWalletContext';
-import { AppStackNavigation } from '../navigation/types';
-import { useGroup } from '../services/group';
-import { useLabelsByGroup } from '../services/label';
-import { addNewTaskMutation } from '../services/task';
-import { useUsers } from '../services/user';
-import { Task } from '../types/task';
-import { TaskTypeToBackendTypeMap } from '../types/type';
-import { User } from '../types/user';
+import { CWDropdown } from '../../components/Dropdown';
+import { BackButton } from '../../components/nav_buttons/BackButton';
+import { ForwardButton } from '../../components/nav_buttons/ForwardButton';
+import { StyledDatePicker } from '../../components/task_creation/DatePicker';
+import { DateTimeDisplay } from '../../components/task_creation/DateTimeDisplay';
+import { RadioGroup } from '../../components/task_creation/RadioGroup';
+import { TextInputLine } from '../../components/task_creation/TextInputLine';
+import { TextInputParagraph } from '../../components/task_creation/TextInputParagraph';
+import { useCareWalletContext } from '../../contexts/CareWalletContext';
+import { AppStackNavigation } from '../../navigation/types';
+import { useGroup } from '../../services/group';
+import { useLabelsByGroup } from '../../services/label';
+import { addNewTaskMutation } from '../../services/task';
+import { useUsers } from '../../services/user';
+import { Task } from '../../types/task';
+import { TaskTypeToBackendTypeMap } from '../../types/type';
 
 enum RepeatOptions {
   NONE = 'NONE',
   DAILY = 'DAILY',
   WEEKLY = 'WEEKLY',
   MONTHLY = 'MONTHLY'
-}
-
-function findUserByName(users: User[], searchName: string): User['user_id'] {
-  return users.find((user) => {
-    const userFullName = user.first_name + ' ' + user.last_name;
-    return userFullName.toLowerCase() === searchName.toLowerCase(); // Case-insensitive comparison
-  })?.user_id;
 }
 
 type ParamList = {
@@ -152,9 +144,9 @@ export default function AddTaskDetails() {
   }, [label]);
 
   // Assigned to task
-  const [assignedTo, setAssignedTo] = useState('SELECT');
+  const [assignedTo, setAssignedTo] = useState({ label: 'SELECT', value: '' });
   useEffect(() => {
-    handleChange('Assigned To', assignedTo);
+    handleChange('Assigned To', assignedTo.value);
   }, [assignedTo]);
 
   // Task date
@@ -211,11 +203,7 @@ export default function AddTaskDetails() {
       console.log('No end time selected, defaulting to start time');
     }
 
-    const usersList = users ?? []; // Use an empty array if users is undefined
-    const assignedToUserId = findUserByName(
-      usersList,
-      taskDetails['Assigned To']
-    );
+    const assignedToUserId = taskDetails['Assigned To'];
 
     const newTask: Task = {
       task_title: taskDetails['Title'],
@@ -278,8 +266,11 @@ export default function AddTaskDetails() {
           <View className="relative z-20 mx-4">
             <CWDropdown
               selected={repeat}
-              items={Object.values(RepeatOptions)}
-              setLabel={setRepeat}
+              items={Object.values(RepeatOptions).map((option) => ({
+                label: option,
+                value: option
+              }))}
+              setLabel={(option) => setRepeat(option.label)}
             />
           </View>
 
@@ -307,7 +298,7 @@ export default function AddTaskDetails() {
           )}
           {/* If Event is selected */}
           {values['Schedule Type'] === 'Event' && (
-            <View>
+            <>
               <DateTimeDisplay
                 title={'Date*'}
                 elements={[taskDate]}
@@ -327,29 +318,35 @@ export default function AddTaskDetails() {
               />
               <DateTimePickerModal
                 date={startTime}
+                textColor="#1A56C4"
                 isVisible={startTimePickerVisible}
-                mode={'time'}
+                mode="time"
                 onConfirm={handleConfirmStartTime}
                 onCancel={() => setStartTimePickerVisible(false)}
               />
               <DateTimePickerModal
                 date={endTime}
+                textColor="#1A56C4"
                 isVisible={endTimePickerVisible}
-                mode={'time'}
+                mode="time"
                 onConfirm={handleConfirmEndTime}
                 onCancel={() => setEndTimePickerVisible(false)}
               />
-            </View>
+            </>
           )}
           <View className="relative z-20 mx-4 mb-0 mt-4">
             <Text className="mb-2 font-carewallet-montserrat-semibold">
               {'LABEL*'}
             </Text>
             <CWDropdown
-              top
               selected={label}
-              items={labels?.map((label) => label.label_name) || []}
-              setLabel={setLabel}
+              items={
+                labels?.map((label) => ({
+                  label: label.label_name,
+                  value: label.label_name
+                })) || []
+              }
+              setLabel={(label) => setLabel(label.label)}
             />
           </View>
           <View className="relative z-40 mx-4 mb-0 mt-1">
@@ -357,13 +354,14 @@ export default function AddTaskDetails() {
               {'ASSIGN'}
             </Text>
             <CWDropdown
-              top
-              selected={assignedTo}
+              selected={assignedTo.label}
               items={
-                users?.map((user) => user.first_name + ' ' + user.last_name) ||
-                []
+                users?.map((user) => ({
+                  label: `${user.first_name} ${user.last_name}`,
+                  value: user.user_id
+                })) || []
               }
-              setLabel={setAssignedTo}
+              setLabel={(user) => setAssignedTo(user)}
             />
           </View>
           <View className="m-2 flex flex-row justify-end">

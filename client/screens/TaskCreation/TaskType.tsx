@@ -15,15 +15,15 @@ import {
 } from 'react-native-gesture-handler';
 import { Button, Text } from 'react-native-paper';
 
-import Financial from '../assets/task-creation/financial.svg';
-import Home from '../assets/task-creation/home.svg';
-import Other from '../assets/task-creation/other.svg';
-import Personal from '../assets/task-creation/personal.svg';
-import RedPill from '../assets/task-creation/red-pill.svg';
-import { BackButton } from '../components/nav_buttons/BackButton';
-import { CloseButton } from '../components/nav_buttons/CloseButton';
-import { AppStackNavigation } from '../navigation/types';
-import { Category, CategoryToTypeMap } from '../types/type';
+import Financial from '../../assets/task-creation/financial.svg';
+import Home from '../../assets/task-creation/home.svg';
+import Other from '../../assets/task-creation/other.svg';
+import Personal from '../../assets/task-creation/personal.svg';
+import RedPill from '../../assets/task-creation/red-pill.svg';
+import { BackButton } from '../../components/nav_buttons/BackButton';
+import { CloseButton } from '../../components/nav_buttons/CloseButton';
+import { AppStackNavigation } from '../../navigation/types';
+import { Category, CategoryToTypeMap } from '../../types/type';
 
 export default function TaskType() {
   const navigation = useNavigation<AppStackNavigation>();
