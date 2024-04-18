@@ -47,3 +47,11 @@ export function GetStatusPill({ status }: { status: string }) {
     }
   }
 }
+
+export const StatusColor: Record<string, string> = {
+  TODO: '',
+  OVERDUE: 'bg-carewallet-orange',
+  COMPLETE: 'bg-carewallet-green',
+  INPROGRESS: 'bg-carewallet-yellow',
+  INCOMPLETE: 'bg-carewallet-coral'
+};

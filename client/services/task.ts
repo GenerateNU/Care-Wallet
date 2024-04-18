@@ -29,6 +29,14 @@ const getTaskByAssigned = async (userId: string): Promise<Task[]> => {
   return data;
 };
 
+const getAssignedByTask = async (taskID: string): Promise<string> => {
+  if (!parseInt(taskID)) return '';
+  const { data } = await axios.get(`${api_url}/tasks/${taskID}/assigned`);
+  console.log(data);
+
+  return data.at(0);
+};
+
 const getFilteredTasks = async (
   queryParams: TaskQueryParams
 ): Promise<Task[]> => {
@@ -57,6 +65,9 @@ const editTask = async (taskID: string, updatedTask: Task): Promise<Task> => {
   return response.data;
 };
 
+const updateTaskStatus = async (taskID: string, status: string) =>
+  await axios.put(`${api_url}/tasks/${taskID}/status/${status}`);
+
 export const useFilteredTasks = (queryParams: TaskQueryParams) => {
   const { data: tasks, isLoading: tasksIsLoading } = useQuery<Task[]>({
     queryKey: ['filteredTaskList'],
@@ -80,29 +91,8 @@ export const useTaskByAssigned = (userId: string) => {
   return { taskByUser, taskByUserIsLoading };
 };
 
-export const useTaskByStatus = (taskId: string) => {
-  const {
-    data: task,
-    status: newStatus,
-    refetch
-  } = useQuery<Task>({
-    queryKey: ['taskStatus', taskId],
-    queryFn: () => getTask(taskId)
-  });
-
-  const taskStatus = task ? task.task_status : null;
-
-  const setTaskStatus = async (newTaskStatus: string) => {
-    const updatedTask = { ...task, task_status: newTaskStatus };
-    await editTask(taskId, updatedTask);
-    // Refetch the task data to reflect the updated status
-    refetch();
-  };
-
-  return { taskStatus, newStatus, setTaskStatus };
-};
-
 export const useTaskById = (taskId: string) => {
+  const queryClient = useQueryClient();
   const { data: task, isLoading: taskIsLoading } = useQuery<Task>({
     queryKey: ['task', taskId],
     queryFn: () => getTask(taskId)
@@ -115,11 +105,29 @@ export const useTaskById = (taskId: string) => {
     queryFn: () => getTaskLabels(taskId)
   });
 
+  const { data: assigned, isLoading: assignedIsLoading } = useQuery<string>({
+    queryKey: ['assigned', taskId],
+    queryFn: () => getAssignedByTask(taskId)
+  });
+
+  const { mutate: updateTaskStatusMutation } = useMutation({
+    mutationFn: (taskStatus: string) => updateTaskStatus(taskId, taskStatus),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['task', taskId] });
+    },
+    onError: (err) => {
+      console.error('ERROR: Failed to Update Task Status. Code:', err);
+    }
+  });
+
   return {
     task,
     taskIsLoading,
     taskLabels,
-    taskLabelsIsLoading
+    taskLabelsIsLoading,
+    assigned,
+    assignedIsLoading,
+    updateTaskStatusMutation
   };
 };
 
