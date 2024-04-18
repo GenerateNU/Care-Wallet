@@ -5,7 +5,7 @@ import { TaskLabel } from '../types/label';
 import { Task } from '../types/task';
 import { api_url } from './api-links';
 
-type TaskQueryParams = {
+export type TaskQueryParams = {
   taskID?: string;
   groupID?: number;
   createdBy?: string;
@@ -68,14 +68,19 @@ const updateTaskStatus = async (taskID: string, status: string) =>
   await axios.put(`${api_url}/tasks/${taskID}/status/${status}`);
 
 export const useFilteredTasks = (queryParams: TaskQueryParams) => {
-  const { data: tasks, isLoading: tasksIsLoading } = useQuery<Task[]>({
+  const {
+    data: tasks,
+    isLoading: tasksIsLoading,
+    refetch: refetchTask
+  } = useQuery<Task[]>({
     queryKey: ['filteredTaskList'],
     queryFn: () => getFilteredTasks(queryParams),
     refetchInterval: 20000
   });
   return {
     tasks,
-    tasksIsLoading
+    tasksIsLoading,
+    refetchTask
   };
 };
 
