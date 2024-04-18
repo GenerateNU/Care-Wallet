@@ -49,6 +49,11 @@ export function FilterBottomSheet({
     setFilters(updatedFilters);
   };
 
+  // Check to see if filter is selected
+  const isFilterSelected = (key: string, value: string | number | boolean) => {
+    return filters[key as keyof TaskQueryParams] === value;
+  };
+
   return (
     <BottomSheet
       ref={bottomSheetRef}
@@ -76,7 +81,7 @@ export function FilterBottomSheet({
                 title: 'Quick Tasks',
                 element: (
                   <FilterCircleCard
-                    selected={false}
+                    selected={isFilterSelected('quickTask', true)}
                     title="Quick Tasks"
                     onPress={() => handleFilterToggle('quickTask', true)}
                   />
@@ -91,7 +96,7 @@ export function FilterBottomSheet({
                 title: TaskTypeDescriptions[category] || '',
                 element: (
                   <FilterCircleCard
-                    selected={false}
+                    selected={isFilterSelected('taskType', category)}
                     title={TaskTypeDescriptions[category] || ''}
                     onPress={() => handleFilterToggle('taskType', category)}
                   />
@@ -106,7 +111,10 @@ export function FilterBottomSheet({
                 title: status,
                 element: (
                   <FilterCircleCard
-                    selected={false}
+                    selected={isFilterSelected(
+                      'taskStatus',
+                      status.toUpperCase()
+                    )}
                     title={status}
                     onPress={() =>
                       handleFilterToggle('taskStatus', status.toUpperCase())
@@ -123,7 +131,7 @@ export function FilterBottomSheet({
                 title: user?.first_name || '',
                 element: (
                   <FilterCircleCard
-                    selected={false}
+                    selected={isFilterSelected('createdBy', user?.user_id)}
                     title={user?.first_name || ''}
                     onPress={() =>
                       handleFilterToggle('createdBy', user?.user_id)
