@@ -320,3 +320,15 @@ func setTasksOverdue(tasks []models.Task) ([]models.Task, error) {
 	// Return the updated tasks
 	return tasks, nil
 }
+
+func updateTaskStatusInDB(pool *pgxpool.Pool, taskID int, newStatus string) error {
+	query := `UPDATE task SET task_status = $1 WHERE task_id = $2`
+
+	// Execute the SQL query with the provided task fields and task ID
+	_, err := pool.Exec(context.Background(), query,
+		newStatus,
+		taskID,
+	)
+
+	return err
+}

@@ -27,6 +27,7 @@ func TaskGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 		{
 			byId.GET("", c.getTaskByID)
 			byId.DELETE("", c.deleteTask)
+			byId.PUT("/status/:status", c.updateTaskStatus)
 			byId.PUT("", c.updateTaskInfo)
 			byId.GET("/assigned", c.getUsersAssignedToTask)
 			byId.POST("/assign", c.assignUsersToTask)
@@ -350,4 +351,33 @@ func (pg *PgModel) getUsersAssignedToTask(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, userIDs)
+}
+
+// GetUsersAssignedToTask godoc
+//
+//	@summary		Get list of users assigned to a task
+//	@description	Get list of users assigned to a task by task ID
+//	@tags			tasks
+//	@param			tid		path		int	true	"Task ID"
+//	@param			status	path		int	true	"Task Status"
+//	@success		200		{object}	string
+//	@failure		400		{object}	string
+//	@router			/tasks/{tid}/status/{status} [get]
+func (pg *PgModel) updateTaskStatus(c *gin.Context) {
+	taskIDStr := c.Param("tid")
+	newStatus := c.Param("status")
+	fmt.Print(newStatus)
+	taskID, err := strconv.Atoi(taskIDStr)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	err = updateTaskStatusInDB(pg.Conn, taskID, newStatus)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, "")
 }

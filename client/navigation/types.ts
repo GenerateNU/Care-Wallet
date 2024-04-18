@@ -25,6 +25,7 @@ export type AppStackParamList = {
     taskCreation: string;
   };
   Settings: undefined;
+  CareGroup: undefined;
 };
 
 export type AppStackNavigation = NavigationProp<AppStackParamList>;

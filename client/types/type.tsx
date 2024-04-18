@@ -27,6 +27,14 @@ export enum Category {
   OTHER = 'Other'
 }
 
+export enum Status {
+  INCOMPLETE = 'INCOMPLETE',
+  COMPLETE = 'COMPLETE',
+  INPROGRESS = 'INPROGRESS',
+  OVERDUE = 'OVERDUE',
+  TODO = 'TODO'
+}
+
 export const TypeToCategoryMap: Record<string, Category> = {
   med_mgmt: Category.HEALTH,
   dr_appt: Category.HEALTH,
