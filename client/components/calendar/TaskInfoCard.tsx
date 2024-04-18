@@ -3,12 +3,12 @@ import { Text, View } from 'react-native';
 
 import { clsx } from 'clsx';
 import moment from 'moment';
-import { WebView } from 'react-native-webview';
 
+// import { WebView } from 'react-native-webview';
 import Calendar from '../../assets/Date_today.svg';
 import Time from '../../assets/Time.svg';
-import { useProfileFile } from '../../services/file';
-import { useUser } from '../../services/user';
+// import { useProfileFile } from '../../services/file';
+// import { useUser } from '../../services/user';
 import { Task } from '../../types/task';
 import { TaskLabel } from '../../types/taskLabel';
 import {
@@ -131,37 +131,27 @@ export function TaskInfoComponent({
             ))}
         </View>
       </View>
-      <View
-        style={{
-          position: 'absolute',
-          bottom: 10,
-          right: 10,
-          zIndex: 9999
-        }}
-      >
-        <ProfileImage userId={task.created_by} />
-      </View>
     </View>
   );
 }
 
-function ProfileImage(userId: string) {
-  console.log(userId);
-  const { user } = useUser(userId);
-  const { file } = useProfileFile(user?.profile_picture ?? '');
-  console.log(user);
-  return (
-    <View>
-      {user?.profile_picture ? (
-        <View className="h-15 w-15 mb-1">
-          <WebView
-            source={{ uri: file }}
-            className="flex-1 rounded-full border border-carewallet-gray"
-          />
-        </View>
-      ) : (
-        <View className="mb-1 mt-4 h-20 w-20 rounded-full bg-carewallet-lightergray" />
-      )}
-    </View>
-  );
-}
+// function ProfileImage(userId: {userId: string}) {
+//   console.log(userId.userId);
+//   const { user } = useUser(userId.userId);
+//   const { file } = useProfileFile(user?.profile_picture ?? '');
+//   console.log(user);
+//   return (
+//     <View>
+//       {user?.profile_picture ? (
+//         <View className="h-15 w-15 mb-1">
+//           <WebView
+//             source={{ uri: file }}
+//             className="flex-1 rounded-full border border-carewallet-gray"
+//           />
+//         </View>
+//       ) : (
+//         <View className="mb-1 mt-4 h-20 w-20 rounded-full bg-carewallet-lightergray" />
+//       )}
+//     </View>
+//   );
+// }
