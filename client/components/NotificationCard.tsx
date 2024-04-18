@@ -3,48 +3,67 @@ import { Text, View } from 'react-native';
 
 import moment from 'moment';
 
+import Check from '../assets/notifications/check-icon.svg';
+import Clock from '../assets/notifications/clock-icon.svg';
+import Confirmation from '../assets/notifications/confirmation-icon.svg';
+
+interface notifCardElements {
+  title: string;
+  description: string;
+  icon: JSX.Element;
+}
+
 export function NotificationCard({
   notification_type,
-  title,
-  due_date,
-  task_id // delete task_id, we dont need it for navigation anymore cause its done on the screen
+  task_title
 }: {
   notification_type: string;
-  title: string;
-  due_date: Date;
-  task_id: number;
+  task_title: string;
 }) {
   // notification_type: 'due_soon' | 'status_update' | 'task_confirmation' | 'task_accepted'';
-  const descriptionText = () => {
-    console.log(task_id);
-    if (notification_type === 'due_soon') {
-      return title + ' due in ' + moment(due_date).fromNow(true);
-    }
-    if (notification_type === 'status_update') {
-      return 'Remeember to update status of ' + title;
-    }
-    // if (notification_type === 'created_today') {
-    //   return 'Created Today';
-    // }
-    else {
-      return 'invalid task type';
+
+  const stuff = (): notifCardElements => {
+    switch (notification_type) {
+      case 'due_soon':
+        return {
+          title: 'TASK DUE SOON',
+          description: task_title + ' due in ' + moment(due_date).fromNow(true),
+          icon: <Clock />
+        };
+      case 'task_confirmation':
+        return {
+          title: 'TASK CONFIRMATION',
+          description: task_title + ' task created',
+          icon: <Confirmation />
+        };
+      case 'task_accepted':
+        return {
+          title: 'TASK ACCEPTED',
+          description: /*USERNAME*/ 'Someone accepted this task',
+          icon: <Check />
+        };
+      case 'status_update':
+        return {
+          title: 'UPDATE TASK',
+          description: task_title + ' task needs to be updated',
+          icon: <Check />
+        };
+      case 'pending':
+        return {
+          title: 'PENDING TASK',
+          description: 'You have been assigned a task. Accept or Decline',
+          icon: <Check />
+        };
+      default:
+        return {
+          title: 'TASK NOTIFICATION',
+          description: 'task notification',
+          icon: <Confirmation />
+        };
     }
   };
 
-  const type_to_text = () => {
-    if (notification_type === 'due_soon') {
-      return 'TASK DUE SOON';
-    }
-    if (notification_type === 'status_update') {
-      return 'STATUS UPDATE';
-    }
-    // if (notification_type === 'created_today') {
-    //   return TaskTypeDescriptions[TaskTypeDescriptions['created_today']];
-    // }
-    else {
-      return 'invalid task type';
-    }
-  };
+  const notif = stuff();
 
   /**  <Text className="mt-3 flex flex-row space-x-10">
   {descriptionText()}
@@ -55,26 +74,12 @@ export function NotificationCard({
     <View className="mb-6 flex rounded-lg border border-carewallet-lightgray bg-carewallet-white p-4">
       <View className="flex w-full flex-col items-start justify-between">
         <Text className="mb-2 bg-carewallet-yellow text-center font-carewallet-montserrat-bold">
-          {type_to_text()}
+          {notif.title}
         </Text>
         <Text className="mb-2 bg-carewallet-yellow text-center font-carewallet-montserrat text-carewallet-black">
-          {descriptionText()}
+          {notif.description}
         </Text>
       </View>
     </View>
   );
 }
-
-/**
- *   return (
-    <View className="bg-white mb-6 rounded-lg border border-carewallet-yellow p-10">
-      <View className="mb-2 flex flex-col justify-between">
-        <Text className="self-start text-xl">{type_to_text()}</Text>
-        <Text className="mb-2 font-carewallet-manrope-bold text-carewallet-blackr">
-          {descriptionText()}
-        </Text>
-      </View>
-    </View>
-  );
-
- */

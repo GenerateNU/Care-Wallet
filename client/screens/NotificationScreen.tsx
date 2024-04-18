@@ -46,7 +46,7 @@ export default function NotificationScreen() {
       // todo: make sure to check if there is an end date present
       dueSoon.sort(
         (a, b) =>
-          new Date(a.end_date!).getTime() - new Date(b.end_date!).getTime()
+          new Date(b.end_date!).getTime() - new Date(a.end_date!).getTime()
       );
       overdue.sort(
         (a, b) =>
