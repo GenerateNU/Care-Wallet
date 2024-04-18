@@ -55,8 +55,30 @@ const getTaskLabels = async (taskID: string): Promise<TaskLabel[]> => {
 };
 
 const addNewTask = async (newTask: Task): Promise<Task> => {
-  const response = await axios.post(`${api_url}/tasks`, newTask);
-  return response.data;
+  const task_response = await axios.post(`${api_url}/tasks`, newTask);
+  console.log('Added task: ', task_response.data);
+  const label_body = {
+    group_id: newTask.group_id, // Adjust the group_id as needed
+    label_name: newTask.label // Adjust the label_name as needed
+  };
+  const label_response = await axios.post(
+    `${api_url}/tasks/${task_response.data['task_id']}/labels`,
+    label_body
+  );
+  console.log('Added label: ', label_response.data);
+
+  const assigned_to_body = {
+    assigner: newTask.created_by,
+    userIDs: [newTask.assigned_to]
+  };
+
+  console.log('Assigning task to user: ', newTask.assigned_to);
+  const assigned_to_response = await axios.post(
+    `${api_url}/tasks/${task_response.data['task_id']}/assign`,
+    assigned_to_body
+  );
+  console.log('Assigned task to user: ', assigned_to_response.data);
+  return assigned_to_response.data;
 };
 
 const editTask = async (taskID: string, updatedTask: Task): Promise<Task> => {
@@ -139,8 +161,10 @@ export const addNewTaskMutation = () => {
   const queryClient = useQueryClient();
 
   const { mutate: addTaskMutation } = useMutation({
-    mutationFn: (newTask: Task) => addNewTask(newTask),
+    mutationFn: (newTask: Task) =>
+      addNewTask({ ...newTask, task_status: 'TODO' }),
     onSuccess: () => {
+      console.log('Task Added Successfully');
       queryClient.invalidateQueries({ queryKey: ['filteredTaskList'] });
     },
     onError: (err) => {
