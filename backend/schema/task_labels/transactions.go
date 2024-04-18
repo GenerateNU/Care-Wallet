@@ -21,7 +21,7 @@ func getLabelsByTaskInDB(conn *pgxpool.Pool, taskId string) ([]models.Task_Label
 
 	for rows.Next() {
 		task := models.Task_Label{}
-		err := rows.Scan(&task.GroupId, &task.TaskId, &task.LabelName)
+		err := rows.Scan(&task.TaskId, &task.GroupId, &task.LabelName)
 
 		if err != nil {
 			print(err, "error scanning tasks by query")

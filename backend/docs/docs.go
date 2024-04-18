@@ -803,6 +803,45 @@ const docTemplate = `{
                 }
             }
         },
+        "/tasks/labels/tasks": {
+            "get": {
+                "description": "gets the information about multiple labals given their task id",
+                "tags": [
+                    "task labels"
+                ],
+                "summary": "gets the information about multiple labels",
+                "parameters": [
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "Task IDs",
+                        "name": "taskIDs",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Task_Label"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/tasks/{tid}": {
             "get": {
                 "description": "get a task given its id",
