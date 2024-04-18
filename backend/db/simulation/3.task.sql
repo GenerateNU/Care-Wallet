@@ -76,9 +76,9 @@ VALUES
 -- Insert tasks for Danny Rollo
 INSERT INTO task (task_title, group_id, created_by, created_date, start_date, end_date, notes, task_status, task_type, quick_task)
 VALUES
-  ('Workout', 5, 'onrQs8HVGBVMPNz4Fk1uE94bSxg1', '2020-02-17 08:00:00', '2024-04-19 08:30:00', '2024-04-19 09:30:00', 'Gym session', 'TODO', 'financial', FALSE),
-  ('Update Resume', 5, 'onrQs8HVGBVMPNz4Fk1uE94bSxg1', '2020-02-18 11:00:00', '2024-04-20 08:30:00', '2024-04-20 09:30:00', 'Add recent achievements', 'TODO', 'other', TRUE),
-  ('Grocery Shopping', 5, 'onrQs8HVGBVMPNz4Fk1uE94bSxg1', '2020-02-19 14:00:00', '2024-04-19 14:30:00', '2024-04-19 15:30:00', 'Buy groceries for the week', 'TODO', 'other', FALSE)
+  ('Workout', 5, 'pTBhZsE9BaOxltkGUfoBAUDote43', '2020-02-17 08:00:00', '2024-04-19 08:30:00', '2024-04-19 09:30:00', 'Gym session', 'TODO', 'financial', FALSE),
+  ('Update Resume', 5, 'pTBhZsE9BaOxltkGUfoBAUDote43', '2020-02-18 11:00:00', '2024-04-20 08:30:00', '2024-04-20 09:30:00', 'Add recent achievements', 'TODO', 'other', TRUE),
+  ('Grocery Shopping', 5, 'pTBhZsE9BaOxltkGUfoBAUDote43', '2020-02-19 14:00:00', '2024-04-19 14:30:00', '2024-04-19 15:30:00', 'Buy groceries for the week', 'TODO', 'other', FALSE)
 ;
 
 -- Insert tasks for Narayan Sharma
@@ -132,9 +132,9 @@ VALUES
   (11, 'mPeo3d3MiXfnpPJADWgFD9ZcB2M2', 'ACCEPTED', 'mPeo3d3MiXfnpPJADWgFD9ZcB2M2', NOW()),
   (12, 'mPeo3d3MiXfnpPJADWgFD9ZcB2M2', 'ACCEPTED', 'mPeo3d3MiXfnpPJADWgFD9ZcB2M2', NOW()),
 
-  (13, 'onrQs8HVGBVMPNz4Fk1uE94bSxg1', 'ACCEPTED', 'onrQs8HVGBVMPNz4Fk1uE94bSxg1', NOW()),
-  (14, 'onrQs8HVGBVMPNz4Fk1uE94bSxg1', 'ACCEPTED', 'onrQs8HVGBVMPNz4Fk1uE94bSxg1', NOW()),
-  (15, 'onrQs8HVGBVMPNz4Fk1uE94bSxg1', 'ACCEPTED', 'onrQs8HVGBVMPNz4Fk1uE94bSxg1', NOW()),
+  (13, 'pTBhZsE9BaOxltkGUfoBAUDote43', 'ACCEPTED', 'pTBhZsE9BaOxltkGUfoBAUDote43', NOW()),
+  (14, 'pTBhZsE9BaOxltkGUfoBAUDote43', 'ACCEPTED', 'pTBhZsE9BaOxltkGUfoBAUDote43', NOW()),
+  (15, 'pTBhZsE9BaOxltkGUfoBAUDote43', 'ACCEPTED', 'pTBhZsE9BaOxltkGUfoBAUDote43', NOW()),
 
   (16, '8Sy7xBkGiGQv4ZKphcQfY8PxAqw1', 'ACCEPTED', '8Sy7xBkGiGQv4ZKphcQfY8PxAqw1', NOW()),
   (17, '8Sy7xBkGiGQv4ZKphcQfY8PxAqw1', 'ACCEPTED', '8Sy7xBkGiGQv4ZKphcQfY8PxAqw1', NOW()),

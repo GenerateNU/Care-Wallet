@@ -21,7 +21,8 @@ INSERT INTO label (group_id, label_name, label_color)
 VALUES
   (5, 'Financial', 'orange'),
   (5, 'Appointments', 'green'),
-  (5, 'Medication', 'red')
+  (5, 'Medication', 'red'),
+  (5, 'Household', 'purple')
 ;
 
 INSERT INTO task_labels (task_id, group_id, label_name)
@@ -33,20 +34,20 @@ VALUES
   (5, 5, 'Appointments'),
   (6, 5, 'Financial'),
   (7, 5, 'Appointments'),
-  (8, 1, 'Medication'),
-  (9, 2, 'Appointments'),
-  (10, 3, 'Financial'),
-  (11, 4, 'Household'),
+  (8, 5, 'Medication'),
+  (9, 5, 'Appointments'),
+  (10, 5, 'Financial'),
+  (11, 5, 'Household'),
   (12, 5, 'Financial'),
   (13, 5, 'Appointments'),
-  (14, 1, 'Medication'),
-  (15, 2, 'Appointments'),
-  (16, 3, 'Financial'),
-  (17, 4, 'Household'),
+  (14, 5, 'Medication'),
+  (15, 5, 'Appointments'),
+  (16, 5, 'Financial'),
+  (17, 5, 'Household'),
   (18, 5, 'Financial'),
   (19, 5, 'Appointments'),
-  (20, 3, 'Financial'),
-  (21, 4, 'Household'),
+  (20, 5, 'Financial'),
+  (21, 5, 'Household'),
   (22, 5, 'Financial'),
   (23, 5, 'Appointments'),
   (24, 5, 'Financial')
