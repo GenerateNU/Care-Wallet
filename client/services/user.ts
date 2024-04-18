@@ -5,6 +5,7 @@ import { User } from '../types/user';
 import { api_url } from './api-links';
 
 const getUser = async (userId: string): Promise<User> => {
+  if (!userId) return {} as User;
   const { data } = await axios.get(`${api_url}/user/${userId}`);
   return data;
 };

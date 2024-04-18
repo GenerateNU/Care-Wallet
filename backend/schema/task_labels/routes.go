@@ -1,7 +1,9 @@
 package task_labels
 
 import (
+	"carewallet/models"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -13,14 +15,58 @@ type PgModel struct {
 
 func TaskGroup(v1 *gin.RouterGroup, c *PgModel) *gin.RouterGroup {
 
-	tasks := v1.Group(":tid/labels")
+	tasks := v1.Group("")
 	{
-		tasks.POST("", c.addLabelToTask)
-		tasks.DELETE("", c.removeLabelFromTask)
-		tasks.GET("", c.getLabelsByTask)
+		labelByTaskID := tasks.Group(":tid/labels")
+		{
+			labelByTaskID.POST("", c.addLabelToTask)
+			labelByTaskID.DELETE("", c.removeLabelFromTask)
+			labelByTaskID.GET("", c.getLabelsByTask)
+		}
+
+		labelByTaskIDs := tasks.Group("labels/tasks")
+		{
+			labelByTaskIDs.GET("", c.getLabelsByTasks)
+		}
 	}
 
 	return tasks
+}
+
+type LabelsQuery struct {
+	TaskIDs []string `form:"taskIDs"`
+}
+
+// getLabelsByTasks godoc
+//
+//	@summary		gets the information about multiple labels
+//	@description	gets the information about multiple labals given their task id
+//	@tags			task labels
+//
+//	@param			taskIDs	query		[]string	true	"Task IDs"
+//
+//	@success		200		{array}		models.Task_Label
+//	@failure		400		{object}	string
+//	@router			/tasks/labels/tasks [GET]
+func (pg *PgModel) getLabelsByTasks(c *gin.Context) {
+
+	taskIDs := c.Query("taskIDs")
+	taskQuery := LabelsQuery{
+		TaskIDs: strings.Split(taskIDs, ","),
+	}
+
+	var labels []models.Task_Label
+
+	for _, element := range taskQuery.TaskIDs {
+		label, err := getLabelsByTaskInDB(pg.Conn, element)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, err.Error())
+			return
+		}
+		labels = append(labels, label...)
+	}
+
+	c.JSON(http.StatusOK, labels)
 }
 
 // GetLabelsByTask godoc
