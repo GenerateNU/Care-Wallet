@@ -20,6 +20,8 @@ import { useTaskById } from '../services/task';
 import { useUser } from '../services/user';
 import {
   CategoryIconsMap,
+  categoryToBGColor,
+  categoryToTextColor,
   Status,
   TaskTypeDescriptions,
   TypeToCategoryMap
@@ -30,32 +32,6 @@ type ParamList = {
     id: string;
   };
 };
-
-function categoryToColor(category: string) {
-  switch (TaskTypeDescriptions[category]) {
-    case 'Medication Management':
-      return 'text-carewallet-pink';
-    case 'Doctor Appointment':
-      return 'text-carewallet-pink';
-    case 'Financial Task':
-      return 'text-carewallet-green';
-    default:
-      return 'text-carewallet-coral';
-  }
-}
-
-function categoryToBGColor(category: string) {
-  switch (TaskTypeDescriptions[category]) {
-    case 'Medication Management':
-      return 'bg-carewallet-pink/20';
-    case 'Doctor Appointment':
-      return 'bg-carewallet-pink/20';
-    case 'Financial Task':
-      return 'bg-carewallet-green/10';
-    default:
-      return 'bg-carewallet-coral/20';
-  }
-}
 
 export default function SingleTaskScreen() {
   const route = useRoute<RouteProp<ParamList, 'mt'>>();
@@ -170,7 +146,7 @@ export default function SingleTaskScreen() {
                       }
                     </View>
                     <Text
-                      className={`font-carewallet-manrope ${categoryToColor(task?.task_type ?? 'other')}`}
+                      className={`font-carewallet-manrope ${categoryToTextColor(task?.task_type ?? 'other')}`}
                     >
                       {TaskTypeDescriptions[task?.task_type ?? 'other']}
                     </Text>

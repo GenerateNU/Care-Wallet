@@ -10,6 +10,8 @@ import { Task } from '../../types/task';
 import { TaskLabel } from '../../types/taskLabel';
 import {
   CategoryIconsMap,
+  categoryToBGColor,
+  categoryToTextColor,
   TaskTypeDescriptions,
   TypeToCategoryMap
 } from '../../types/type';
@@ -26,36 +28,6 @@ function statusToString(status: string) {
       return 'bg-carewallet-orange';
     default:
       return 'border border-carewallet-gray bg-care-wallet-gray';
-  }
-}
-
-function categoryToColor(category: string) {
-  switch (TaskTypeDescriptions[category]) {
-    case 'Medication Management':
-      return 'text-carewallet-pink';
-    case 'Doctor Appointment':
-      return 'text-carewallet-pink';
-    case 'Financial Task':
-      return 'text-carewallet-green';
-    case 'Other Task':
-      return 'text-carewallet-coral';
-    default:
-      return 'text-carewallet-white';
-  }
-}
-
-function categoryToBGColor(category: string) {
-  switch (TaskTypeDescriptions[category]) {
-    case 'Medication Management':
-      return 'bg-carewallet-pink/20';
-    case 'Doctor Appointment':
-      return 'bg-carewallet-pink/20';
-    case 'Financial Task':
-      return 'bg-carewallet-green/10';
-    case 'Other Task':
-      return 'bg-carewallet-coral/20';
-    default:
-      return 'bg-carewallet-white';
   }
 }
 
@@ -109,7 +81,7 @@ export function TaskInfoComponent({
             {CategoryIconsMap[TypeToCategoryMap[task?.task_type ?? 'Other']]}
           </View>
           <Text
-            className={`font-carewallet-manrope ${categoryToColor(task?.task_type ?? 'Other Task')}`}
+            className={`font-carewallet-manrope ${categoryToTextColor(task?.task_type ?? 'Other Task')}`}
           >
             {TaskTypeDescriptions[task.task_type]}
           </Text>
