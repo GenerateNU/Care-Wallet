@@ -19,7 +19,7 @@ export function CWDropdown({
     <View className="mb-3">
       <View
         className={clsx(
-          'flex h-14 w-full flex-row items-center rounded-lg bg-carewallet-blue/20',
+          'flex h-14 w-full flex-row items-center rounded-lg bg-carewallet-lightblue',
           isOpen && 'rounded-b-none rounded-t-lg'
         )}
         onTouchEnd={() => setIsOpen(!isOpen)}
