@@ -22,6 +22,7 @@ export type AppStackParamList = {
   CalendarTopNav: undefined;
   TaskCreation: { taskType: string };
   Settings: undefined;
+  CareGroup: undefined;
 };
 
 export type AppStackNavigation = NavigationProp<AppStackParamList>;
