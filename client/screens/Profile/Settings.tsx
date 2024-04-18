@@ -1,6 +1,8 @@
 import React from 'react';
 import { ScrollView, Text, View } from 'react-native';
 
+import { useNavigation } from '@react-navigation/native';
+
 import Bell from '../../assets/profile/settings/bell.svg';
 import Clock from '../../assets/profile/settings/clock.svg';
 import Comment from '../../assets/profile/settings/comment.svg';
@@ -12,8 +14,11 @@ import GroupScan from '../../assets/profile/settings/group_scan.svg';
 import { BackButton } from '../../components/nav_buttons/BackButton';
 import { SettingsButtonGroup } from '../../components/SettingsButtonGroup';
 import { MainLayout } from '../../layouts/MainLayout';
+import { AppStackNavigation } from '../../navigation/types';
 
 export default function Settings() {
+  const navigation = useNavigation<AppStackNavigation>();
+
   return (
     <View>
       <View className="h-[8vh] bg-carewallet-white" />
@@ -38,7 +43,9 @@ export default function Settings() {
                   {
                     text: 'Manage Caregiver Capabilities',
                     icon: <GroupScan />,
-                    onPress: () => {}
+                    onPress: () => {
+                      navigation.navigate('CareGroup');
+                    }
                   }
                 ]}
               />
