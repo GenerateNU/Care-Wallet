@@ -1,11 +1,11 @@
 import React from 'react';
 
-import AddTaskDetails from '../screens/AddTaskDetails';
 import Dashboard from '../screens/Auth/Dashboard';
 import LoginPage from '../screens/Auth/LoginPage';
 import Register from '../screens/Auth/Register';
-import TaskCreation from '../screens/TaskCreation';
-import TaskType from '../screens/TaskType';
+import AddTaskDetails from '../screens/TaskCreation/AddTaskDetails';
+import TaskCreation from '../screens/TaskCreation/TaskCreation';
+import TaskType from '../screens/TaskCreation/TaskType';
 import { AppStackBottomTabNavigator } from './AppStackBottomTabNavigator';
 import { AppStack } from './types';
 

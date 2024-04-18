@@ -8,19 +8,19 @@ import {
   ScrollView
 } from 'react-native-gesture-handler';
 
-import FinancialBg from '../assets/task-creation/financial-bg.svg';
-import HealthBg from '../assets/task-creation/health-bg.svg';
-import HomeBg from '../assets/task-creation/home-bg.svg';
-import OtherBg from '../assets/task-creation/other-bg.svg';
-import PersonalBg from '../assets/task-creation/personal-bg.svg';
-import { BackButton } from '../components/nav_buttons/BackButton';
-import { ForwardButton } from '../components/nav_buttons/ForwardButton';
-import { AddressComponent } from '../components/task_creation/AddressComponent';
-import { RadioGroup } from '../components/task_creation/RadioGroup';
-import { TextInputLine } from '../components/task_creation/TextInputLine';
-import { TextInputParagraph } from '../components/task_creation/TextInputParagraph';
-import { AppStackNavigation } from '../navigation/types';
-import { TaskCreationJson } from '../types/task-creation-json';
+import FinancialBg from '../../assets/task-creation/financial-bg.svg';
+import HealthBg from '../../assets/task-creation/health-bg.svg';
+import HomeBg from '../../assets/task-creation/home-bg.svg';
+import OtherBg from '../../assets/task-creation/other-bg.svg';
+import PersonalBg from '../../assets/task-creation/personal-bg.svg';
+import { BackButton } from '../../components/nav_buttons/BackButton';
+import { ForwardButton } from '../../components/nav_buttons/ForwardButton';
+import { AddressComponent } from '../../components/task_creation/AddressComponent';
+import { RadioGroup } from '../../components/task_creation/RadioGroup';
+import { TextInputLine } from '../../components/task_creation/TextInputLine';
+import { TextInputParagraph } from '../../components/task_creation/TextInputParagraph';
+import { AppStackNavigation } from '../../navigation/types';
+import { TaskCreationJson } from '../../types/task-creation-json';
 
 const TaskTitleToTextColorMap: { [key: string]: string } = {
   'Medication Management': 'text-carewallet-pink',

@@ -162,7 +162,8 @@ export const addNewTaskMutation = () => {
   const queryClient = useQueryClient();
 
   const { mutate: addTaskMutation } = useMutation({
-    mutationFn: (newTask: Task) => addNewTask(newTask),
+    mutationFn: (newTask: Task) =>
+      addNewTask({ ...newTask, task_status: 'TODO' }),
     onSuccess: () => {
       console.log('Task Added Successfully');
       queryClient.invalidateQueries({ queryKey: ['filteredTaskList'] });
