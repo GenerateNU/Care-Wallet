@@ -34,17 +34,16 @@ type ParamList = {
 function categoryToColor(category: string) {
   switch (TaskTypeDescriptions[category]) {
     case 'Medication Management':
-      return 'carewallet-pink';
+      return 'text-carewallet-pink';
     case 'Doctor Appointment':
-      return 'carewallet-pink';
+      return 'text-carewallet-pink';
     case 'Financial Task':
-      return 'carewallet-green';
-    case 'OTHER':
-      return 'carewallet-white';
+      return 'text-carewallet-green';
     default:
-      return 'carewallet-white';
+      return 'text-carewallet-coral';
   }
 }
+
 function categoryToBGColor(category: string) {
   switch (TaskTypeDescriptions[category]) {
     case 'Medication Management':
@@ -53,10 +52,8 @@ function categoryToBGColor(category: string) {
       return 'bg-carewallet-pink/20';
     case 'Financial Task':
       return 'bg-carewallet-green/10';
-    case 'OTHER':
-      return 'bg-carewallet-white';
     default:
-      return 'bg-carewallet-white';
+      return 'bg-carewallet-coral/20';
   }
 }
 
@@ -70,6 +67,9 @@ export default function SingleTaskScreen() {
     assigned,
     updateTaskStatusMutation
   } = useTaskById(id);
+
+  console.log('task', id);
+  console.log(task?.task_type);
 
   const { user } = useUser(assigned ?? '');
 
@@ -159,20 +159,20 @@ export default function SingleTaskScreen() {
                   <View
                     className={clsx(
                       'mr-auto flex flex-row items-center space-x-2 rounded-full border border-carewallet-lightgray px-2 py-1',
-                      categoryToBGColor(task?.task_type ?? 'Other')
+                      categoryToBGColor(task?.task_type ?? 'other')
                     )}
                   >
                     <View>
                       {
                         CategoryIconsMap[
-                          TypeToCategoryMap[task?.task_type ?? 'Other']
+                          TypeToCategoryMap[task?.task_type ?? 'other']
                         ]
                       }
                     </View>
                     <Text
-                      className={`font-carewallet-manrope text-${categoryToColor(task?.task_type ?? '')}`}
+                      className={`font-carewallet-manrope ${categoryToColor(task?.task_type ?? 'other')}`}
                     >
-                      {TaskTypeDescriptions[task?.task_type ?? '']}
+                      {TaskTypeDescriptions[task?.task_type ?? 'other']}
                     </Text>
                   </View>
                 </View>
