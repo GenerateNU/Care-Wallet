@@ -32,7 +32,6 @@ const getTaskByAssigned = async (userId: string): Promise<Task[]> => {
 const getAssignedByTask = async (taskID: string): Promise<string> => {
   if (!parseInt(taskID)) return '';
   const { data } = await axios.get(`${api_url}/tasks/${taskID}/assigned`);
-  console.log(data);
 
   return data.at(0);
 };
@@ -107,7 +106,8 @@ export const useTaskById = (taskId: string) => {
 
   const { data: assigned, isLoading: assignedIsLoading } = useQuery<string>({
     queryKey: ['assigned', taskId],
-    queryFn: () => getAssignedByTask(taskId)
+    queryFn: () => getAssignedByTask(taskId),
+    retry: 2
   });
 
   const { mutate: updateTaskStatusMutation } = useMutation({

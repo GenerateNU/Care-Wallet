@@ -7,22 +7,21 @@ import _ from 'lodash';
 
 import ArrowUp from '../assets/ArrowUp.svg';
 import { AppStackNavigation } from '../navigation/types';
-import { useTaskById } from '../services/task';
 import { Status } from '../types/type';
 import { StatusColor } from './GetStatusPill';
 
 export function DropUp({
   selected,
   items,
-  taskId
+  updateTaskStatusMutation
 }: {
   selected: string;
   items?: { label: Status; value: Status }[];
   setLabel?: (label: string) => void;
   taskId: string;
+  updateTaskStatusMutation: (status: Status) => void;
 }) {
   const navigation = useNavigation<AppStackNavigation>();
-  const { updateTaskStatusMutation } = useTaskById(taskId);
 
   const [isOpen, setIsOpen] = useState(false);
 
