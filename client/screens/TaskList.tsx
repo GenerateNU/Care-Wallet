@@ -1,4 +1,10 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
 import {
   ActivityIndicator,
   Pressable,
@@ -35,13 +41,14 @@ export default function TaskListScreen() {
   const [filters, setFilters] = useState<TaskQueryParams>({
     groupID: userGroup.groupID
   });
-  const [temporaryFilter, setTemporaryFilter] = useState<TaskQueryParams>({
-    groupID: userGroup.groupID
-  });
-  const { tasks, tasksIsLoading } = useFilteredTasks(filters);
+  const { tasks, tasksIsLoading, refetchTask } = useFilteredTasks(filters);
   const { labels, labelsIsLoading } = useLabelsByTasks(
     tasks?.map((task) => task.task_id) ?? []
   );
+
+  useEffect(() => {
+    refetchTask();
+  }, [filters]);
 
   const snapToIndex = (index: number) =>
     bottomSheetRef.current?.snapToIndex(index);
@@ -59,11 +66,6 @@ export default function TaskListScreen() {
   );
   const { roles } = useGroup(userGroup.groupID);
   const { users } = useUsers(roles?.map((role) => role.user_id) || []);
-
-  function handleFilterClose(): void {
-    setFilters({ ...temporaryFilter, groupID: userGroup.groupID });
-    console.log('Filter closed', filters);
-  }
 
   // Filter tasks based on search query in multiple fields and labels
   const filteredTasks = tasks?.filter((task) => {
@@ -187,9 +189,8 @@ export default function TaskListScreen() {
           categories={[...new Set(tasks?.map((task) => task.task_type))]}
           labels={[...new Set(labels?.map((label) => label.label_name))]}
           statuses={['Complete', 'Incomplete', 'Partial']}
-          filters={temporaryFilter}
-          setFilters={setTemporaryFilter}
-          onFilterClose={handleFilterClose}
+          filters={filters}
+          setFilters={setFilters}
         />
       </GestureHandlerRootView>
     </SafeAreaView>

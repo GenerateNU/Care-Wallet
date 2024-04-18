@@ -11,7 +11,6 @@ import { User } from '../../types/user';
 import { FilterCircleCard } from './FilterCircleCard';
 import { TaskListFilter } from './TaskFilter';
 
-// On close, send query with all of the aggregated filters
 export function FilterBottomSheet({
   bottomSheetRef,
   snapPoints,
@@ -20,7 +19,6 @@ export function FilterBottomSheet({
   categories,
   labels,
   statuses,
-  onFilterClose,
   filters,
   setFilters
 }: {
@@ -31,10 +29,26 @@ export function FilterBottomSheet({
   categories: string[];
   statuses: string[];
   labels: string[];
-  onFilterClose: () => void;
   filters: TaskQueryParams;
   setFilters: (filters: TaskQueryParams) => void;
 }) {
+  // Function to handle filter toggle (select and unselect)
+  const handleFilterToggle = (
+    key: string,
+    value: string | number | boolean
+  ) => {
+    const updatedFilters: { [key: string]: string | number | boolean } = {
+      ...filters
+    };
+    if (updatedFilters[key] === value) {
+      delete updatedFilters[key];
+    } else {
+      updatedFilters[key] = value;
+    }
+    console.log(updatedFilters);
+    setFilters(updatedFilters);
+  };
+
   return (
     <BottomSheet
       ref={bottomSheetRef}
@@ -43,7 +57,6 @@ export function FilterBottomSheet({
       enablePanDownToClose={true}
       backdropComponent={renderBackdrop}
       style={{ flex: 1, width: '100%' }}
-      onClose={onFilterClose}
     >
       <ScrollView>
         <View className="space-y-5">
@@ -62,7 +75,11 @@ export function FilterBottomSheet({
               {
                 title: 'Quick Tasks',
                 element: (
-                  <FilterCircleCard selected={false} title="Quick Tasks" />
+                  <FilterCircleCard
+                    selected={false}
+                    title="Quick Tasks"
+                    onPress={() => handleFilterToggle('quickTask', true)}
+                  />
                 )
               }
             ]}
@@ -76,9 +93,7 @@ export function FilterBottomSheet({
                   <FilterCircleCard
                     selected={false}
                     title={TaskTypeDescriptions[category] || ''}
-                    onPress={() =>
-                      setFilters({ ...filters, taskType: category })
-                    }
+                    onPress={() => handleFilterToggle('taskType', category)}
                   />
                 )
               };
@@ -94,10 +109,7 @@ export function FilterBottomSheet({
                     selected={false}
                     title={status}
                     onPress={() =>
-                      setFilters({
-                        ...filters,
-                        taskStatus: status.toUpperCase()
-                      })
+                      handleFilterToggle('taskStatus', status.toUpperCase())
                     }
                   />
                 )
@@ -114,7 +126,7 @@ export function FilterBottomSheet({
                     selected={false}
                     title={user?.first_name || ''}
                     onPress={() =>
-                      setFilters({ ...filters, createdBy: user?.user_id })
+                      handleFilterToggle('createdBy', user?.user_id)
                     }
                   />
                 )
