@@ -1125,6 +1125,45 @@ const docTemplate = `{
                 }
             }
         },
+        "/tasks/{tid}/status/{status}": {
+            "get": {
+                "description": "Get list of users assigned to a task by task ID",
+                "tags": [
+                    "tasks"
+                ],
+                "summary": "Get list of users assigned to a task",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Task ID",
+                        "name": "tid",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Task Status",
+                        "name": "status",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/user": {
             "get": {
                 "description": "gets the information about multiple users given their user id",

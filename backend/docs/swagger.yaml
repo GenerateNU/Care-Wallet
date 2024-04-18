@@ -892,6 +892,32 @@ paths:
       summary: Remove Users From Task
       tags:
       - tasks
+  /tasks/{tid}/status/{status}:
+    get:
+      description: Get list of users assigned to a task by task ID
+      parameters:
+      - description: Task ID
+        in: path
+        name: tid
+        required: true
+        type: integer
+      - description: Task Status
+        in: path
+        name: status
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Get list of users assigned to a task
+      tags:
+      - tasks
   /tasks/assigned:
     get:
       description: get tasks assigned to given users
