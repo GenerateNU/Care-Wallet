@@ -79,7 +79,7 @@ export function NotificationCard({
         <View className="flex flex-row items-center">
           {notif.icon}
 
-          <View className="flex w-fit flex-col pl-4">
+          <View className="flex  w-[60vw] flex-col  pl-4">
             <Text className="mb-2 mt-3 font-carewallet-montserrat-bold">
               {notif.title}
             </Text>
