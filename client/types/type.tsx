@@ -4,6 +4,7 @@ import FinancialLegal from '../assets/calendar/financial&legal.svg';
 import HealthMedical from '../assets/calendar/health&medical.svg';
 import HomeLifestyle from '../assets/calendar/home&lifestyle.svg';
 import Personal from '../assets/calendar/personal.svg';
+import Other from '../assets/task-creation/other.svg';
 
 export enum TypeOfTask {
   MEDICATION = 'Medication Management',
@@ -27,11 +28,25 @@ export enum Category {
   OTHER = 'Other'
 }
 
+export enum Status {
+  INCOMPLETE = 'INCOMPLETE',
+  COMPLETE = 'COMPLETE',
+  INPROGRESS = 'INPROGRESS',
+  OVERDUE = 'OVERDUE',
+  TODO = 'TODO'
+}
+
 export const TypeToCategoryMap: Record<string, Category> = {
   med_mgmt: Category.HEALTH,
   dr_appt: Category.HEALTH,
   financial: Category.FINANCIAL,
-  other: Category.OTHER
+  other: Category.OTHER,
+  diet: Category.HEALTH,
+  grmg: Category.PERSONAL,
+  fml_convos: Category.PERSONAL,
+  shpping: Category.PERSONAL,
+  activities: Category.HOME,
+  hlth_ins: Category.FINANCIAL
 };
 
 export const CategoryToTypeMap: Record<Category, TypeOfTask[]> = {
@@ -39,7 +54,6 @@ export const CategoryToTypeMap: Record<Category, TypeOfTask[]> = {
   [Category.HEALTH]: [
     TypeOfTask.MEDICATION,
     TypeOfTask.APPOINTMENTS,
-    TypeOfTask.GROOMING,
     TypeOfTask.DIET
   ],
   [Category.PERSONAL]: [
@@ -55,14 +69,34 @@ export const CategoryToTypeMap: Record<Category, TypeOfTask[]> = {
 
 export const TaskTypeDescriptions: Record<string, string> = {
   med_mgmt: 'Medication Management',
-  dr_appt: 'Doctor Appointment',
-  financial: 'Financial Task',
-  other: 'Other Task'
+  dr_appt: 'Physician Appointment',
+  diet: 'Diet',
+  grmg: 'Grooming',
+  fml_convos: 'Family Conversations',
+  shpping: 'Shopping & Errands',
+  activities: 'Activities',
+  hlth_ins: 'Health Insurance',
+  financial: 'Pay Bills',
+  other: 'Other'
+};
+
+export const TaskTypeToBackendTypeMap: Record<string, string> = {
+  'Medication Management': 'med_mgmt',
+  'Physician Appointments': 'dr_appt',
+  Grooming: 'grmg',
+  'Family Conversations': 'fml_convos',
+  'Shopping & Errands': 'shpping',
+  'Pay Bills': 'financial',
+  Diet: 'diet',
+  Activities: 'activities',
+  'Health Insurance': 'hlth_ins',
+  Other: 'other'
 };
 
 export const CategoryIconsMap: Record<string, JSX.Element> = {
   'Financial & Legal': <FinancialLegal />,
   'Health & Medical': <HealthMedical />,
   'Home & Lifestyle': <HomeLifestyle />,
-  Personal: <Personal />
+  Personal: <Personal />,
+  Other: <Other />
 };

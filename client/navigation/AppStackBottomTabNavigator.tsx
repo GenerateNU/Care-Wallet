@@ -19,6 +19,7 @@ export function AppStackBottomTabNavigator() {
       screenOptions={{
         tabBarActiveTintColor: 'white',
         tabBarInactiveTintColor: '#D9D9D9',
+        freezeOnBlur: true,
         tabBarStyle: {
           backgroundColor: '#1A56C4'
         },

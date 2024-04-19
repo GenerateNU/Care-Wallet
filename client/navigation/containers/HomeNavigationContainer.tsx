@@ -10,7 +10,8 @@ export function HomeNavigationContainer() {
   return (
     <AppStack.Navigator
       screenOptions={{
-        headerShown: false
+        headerShown: false,
+        freezeOnBlur: true
       }}
     >
       <AppStack.Screen

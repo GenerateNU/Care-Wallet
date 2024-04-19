@@ -17,10 +17,32 @@ const getLabelsByGroup = async (groupID: number): Promise<TaskLabel[]> => {
   return uniques;
 };
 
+const getLabelsByTasks = async (task_ids: number[]): Promise<TaskLabel[]> => {
+  if (task_ids.length === 0) return [];
+  const taskIDs = task_ids.map((id) => id);
+  const { data } = await axios.get(`${api_url}/tasks/labels/tasks`, {
+    params: { taskIDs: taskIDs.join(',') }
+  });
+
+  console.log('data: ', data);
+
+  return data;
+};
+
 export const useLabelsByGroup = (groupID: number) => {
   const { data: labels, isLoading: labelsIsLoading } = useQuery<TaskLabel[]>({
     queryKey: ['labels', groupID],
     queryFn: () => getLabelsByGroup(groupID)
+  });
+
+  return { labels, labelsIsLoading };
+};
+
+export const useLabelsByTasks = (task_ids: number[]) => {
+  const { data: labels, isLoading: labelsIsLoading } = useQuery<TaskLabel[]>({
+    queryKey: ['labels', task_ids],
+    queryFn: () => getLabelsByTasks(task_ids),
+    enabled: task_ids.length > 0
   });
 
   return { labels, labelsIsLoading };

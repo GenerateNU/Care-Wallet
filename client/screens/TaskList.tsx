@@ -1,7 +1,13 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
 import {
+  ActivityIndicator,
   Pressable,
-  SafeAreaView,
   ScrollView,
   Text,
   TextInput,
@@ -11,40 +17,44 @@ import {
 import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
 import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
 import { useNavigation } from '@react-navigation/native';
-import DropDownPicker from 'react-native-dropdown-picker';
+import moment from 'moment';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Button } from 'react-native-paper';
 
+import Search from '../assets/calendar/search.svg';
 import { CalendarTaskListTopNav } from '../components/calendar/CalendarTaskListTopNav';
 import { TaskInfoComponent } from '../components/calendar/TaskInfoCard';
-import { CloseButton } from '../components/nav_buttons/CloseButton';
+import { FilterBottomSheet } from '../components/filter/FilterBottomSheet';
 import { useCareWalletContext } from '../contexts/CareWalletContext';
+import { MainLayout } from '../layouts/MainLayout';
 import { AppStackNavigation } from '../navigation/types';
-import { useFilteredTasks } from '../services/task';
+import { useGroup } from '../services/group';
+import { useLabelsByTasks } from '../services/label';
+import { TaskQueryParams, useFilteredTasks } from '../services/task';
+import { useUsers } from '../services/user';
 import { Task } from '../types/task';
 
 export default function TaskListScreen() {
-  const { group } = useCareWalletContext();
+  const { group: userGroup } = useCareWalletContext();
   const navigator = useNavigation<AppStackNavigation>();
   const [canPress, setCanPress] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  const { tasks } = useFilteredTasks({ groupID: group.groupID });
+  const [filters, setFilters] = useState<TaskQueryParams>({
+    groupID: userGroup.groupID
+  });
+  const { tasks, tasksIsLoading, refetchTask } = useFilteredTasks(filters);
+  const { labels, labelsIsLoading } = useLabelsByTasks(
+    tasks?.map((task) => task.task_id) ?? []
+  );
+
+  useEffect(() => {
+    refetchTask();
+  }, [filters]);
 
   const snapToIndex = (index: number) =>
     bottomSheetRef.current?.snapToIndex(index);
-  const [open, setOpen] = useState(false);
-  const [selectedLabel, setSelectedLabel] = useState<null | string>('Test');
-  const filters = Object.values('Temp' || {}).map((filter) => ({
-    label: filter[0],
-    value: filter[0]
-  }));
   const snapPoints = useMemo(() => ['60%'], []);
   const bottomSheetRef = useRef<BottomSheet>(null);
-  const closeBottomSheet = () => {
-    if (bottomSheetRef.current) {
-      bottomSheetRef.current.close();
-    }
-  };
   const renderBackdrop = useCallback(
     (props: BottomSheetDefaultBackdropProps) => (
       <BottomSheetBackdrop
@@ -55,6 +65,8 @@ export default function TaskListScreen() {
     ),
     []
   );
+  const { roles } = useGroup(userGroup.groupID);
+  const { users } = useUsers(roles?.map((role) => role.user_id) || []);
 
   // Filter tasks based on search query in multiple fields and labels
   const filteredTasks = tasks?.filter((task) => {
@@ -74,14 +86,14 @@ export default function TaskListScreen() {
   });
 
   // Filter tasks based on categories
-  const pastDueTasks = tasks?.filter(
-    (task) => task?.end_date || '' < String(new Date())
+  const pastDueTasks = tasks?.filter((task) =>
+    moment(task?.end_date).isBefore(moment())
   );
   const inProgressTasks = tasks?.filter(
     (task) => task?.task_status === 'PARTIAL'
   );
-  const inFutureTasks = tasks?.filter(
-    (task) => (task?.start_date || '') > String(new Date())
+  const inFutureTasks = tasks?.filter((task) =>
+    moment(task?.end_date).isAfter(moment())
   );
   const completeTasks = tasks?.filter(
     (task) => task?.task_status === 'COMPLETE'
@@ -97,8 +109,10 @@ export default function TaskListScreen() {
       return null;
     }
     return (
-      <View>
-        <Text className="text-lg text-carewallet-black">{title}</Text>
+      <View className="mb-5 mt-3">
+        <Text className="mb-3 font-carewallet-manrope-bold text-lg text-carewallet-black">
+          {title}
+        </Text>
         {tasks.map((task, index) => {
           return (
             <Pressable
@@ -109,11 +123,10 @@ export default function TaskListScreen() {
               }}
             >
               <TaskInfoComponent
-                id={task.task_id}
-                name={task?.task_title}
-                category={task?.task_type}
-                status={task?.task_status}
-                date={task?.start_date ? new Date(task.start_date) : new Date()}
+                task={task}
+                taskLabels={labels?.filter(
+                  (label) => label.task_id === task.task_id
+                )}
               />
             </Pressable>
           );
@@ -122,78 +135,65 @@ export default function TaskListScreen() {
     );
   };
 
+  if (tasksIsLoading || labelsIsLoading) {
+    return (
+      <View className="w-full flex-1 items-center justify-center bg-carewallet-white text-3xl">
+        <ActivityIndicator size="large" />
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
+
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <MainLayout>
       <CalendarTaskListTopNav navigator={navigator} current="TaskList" />
       <GestureHandlerRootView>
         <ScrollView
-          className="mb-0 flex w-[100vw] pl-4 pr-4 pt-4"
+          className="mb-28 flex w-[100vw] pl-4 pr-4 pt-4"
           onScrollBeginDrag={() => setCanPress(false)}
           onScrollEndDrag={() => setCanPress(true)}
         >
           <View className="mb-5 flex-row items-center">
             <TextInput
-              className="mr-4 h-10 flex-1 overflow-hidden rounded-full border-2 border-carewallet-gray px-2"
-              placeholder="Search..."
+              className="mr-4 h-14 flex-1 overflow-hidden rounded-md border border-carewallet-gray bg-carewallet-white px-8 font-carewallet-montserrat text-carewallet-black"
+              placeholder="Search"
               onChangeText={(text) => {
                 setSearchQuery(text);
               }}
             />
-            <View className="mr-2 flex flex-row justify-end">
+            <View className="pointer-events-none absolute inset-y-5 ml-3 flex items-center pr-3">
+              <Search />
+            </View>
+            <View className=" flex flex-row justify-end">
               <Button
-                className="h-[40px] items-center justify-center rounded-xl bg-carewallet-gray text-sm"
+                className="mr-4 h-14 items-center justify-center rounded-xl border-carewallet-gray bg-carewallet-white font-carewallet-montserrat text-sm"
                 textColor="black"
                 mode="outlined"
                 onPress={() => snapToIndex(0)}
               >
-                Filter
+                FILTER
               </Button>
             </View>
           </View>
-          <Text className="text-xl font-bold text-carewallet-black">
-            Task List (all tasks of all time)
-          </Text>
-          {filteredTasks && renderSection(filteredTasks, 'All Tasks')}
-          {pastDueTasks && renderSection(pastDueTasks, 'Past Due')}
-          {inProgressTasks && renderSection(inProgressTasks, 'In Progress')}
-          {inFutureTasks && renderSection(inFutureTasks, 'Future')}
-          {completeTasks && renderSection(completeTasks, 'Done')}
-          {incompleteTasks &&
-            renderSection(incompleteTasks, 'Marked as Incomplete')}
+          {filteredTasks && renderSection(filteredTasks, '')}
+          {pastDueTasks && renderSection(pastDueTasks, 'PAST DUE')}
+          {inProgressTasks && renderSection(inProgressTasks, 'IN PROGRESS')}
+          {inFutureTasks && renderSection(inFutureTasks, 'FUTURE')}
+          {completeTasks && renderSection(completeTasks, 'DONE')}
+          {incompleteTasks && renderSection(incompleteTasks, 'INCOMPLETE')}
         </ScrollView>
-        <BottomSheet
-          ref={bottomSheetRef}
-          index={-1}
+        <FilterBottomSheet
+          bottomSheetRef={bottomSheetRef}
+          renderBackdrop={renderBackdrop}
           snapPoints={snapPoints}
-          enablePanDownToClose={true}
-          backdropComponent={renderBackdrop}
-          style={{ flex: 1, width: '100%' }}
-        >
-          <View>
-            <View className="flex flex-row justify-between">
-              <Text className="m-5 text-2xl font-bold">Filter</Text>
-              <CloseButton onPress={closeBottomSheet} />
-            </View>
-
-            <DropDownPicker
-              open={open}
-              value={selectedLabel}
-              items={filters}
-              setOpen={setOpen}
-              setValue={setSelectedLabel}
-              placeholder="Labels"
-              style={{
-                width: '95%',
-                marginLeft: 'auto',
-                marginRight: 'auto',
-                borderRadius: 0,
-                borderColor: 'transparent',
-                borderBottomColor: 'black'
-              }}
-            />
-          </View>
-        </BottomSheet>
+          users={users ?? []}
+          categories={[...new Set(tasks?.map((task) => task.task_type))]}
+          labels={[...new Set(labels?.map((label) => label.label_name))]}
+          statuses={['Complete', 'Incomplete', 'Partial']}
+          filters={filters}
+          setFilters={setFilters}
+        />
       </GestureHandlerRootView>
-    </SafeAreaView>
+    </MainLayout>
   );
 }
