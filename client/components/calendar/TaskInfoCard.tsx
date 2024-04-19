@@ -1,18 +1,13 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 
-import { clsx } from 'clsx';
 import moment from 'moment';
 
 import Calendar from '../../assets/Date_today.svg';
 import Time from '../../assets/Time.svg';
 import { Task } from '../../types/task';
 import { TaskLabel } from '../../types/taskLabel';
-import {
-  CategoryIconsMap,
-  TaskTypeDescriptions,
-  TypeToCategoryMap
-} from '../../types/type';
+import { GetCategoryPill } from '../GetCategoryPill';
 
 function statusToString(status: string) {
   switch (status) {
@@ -29,36 +24,6 @@ function statusToString(status: string) {
   }
 }
 
-function categoryToColor(category: string) {
-  switch (TaskTypeDescriptions[category]) {
-    case 'Medication Management':
-      return 'carewallet-pink';
-    case 'Doctor Appointment':
-      return 'carewallet-pink';
-    case 'Financial Task':
-      return 'carewallet-green';
-    case 'OTHER':
-      return 'carewallet-white';
-    default:
-      return 'carewallet-white';
-  }
-}
-
-function categoryToBGColor(category: string) {
-  switch (TaskTypeDescriptions[category]) {
-    case 'Medication Management':
-      return 'bg-carewallet-pink/20';
-    case 'Doctor Appointment':
-      return 'bg-carewallet-pink/20';
-    case 'Financial Task':
-      return 'bg-carewallet-green/10';
-    case 'OTHER':
-      return 'bg-carewallet-white';
-    default:
-      return 'bg-carewallet-white';
-  }
-}
-
 export function TaskInfoComponent({
   task,
   taskLabels
@@ -66,11 +31,22 @@ export function TaskInfoComponent({
   task: Task;
   taskLabels: TaskLabel[] | undefined;
 }) {
+  const time = `${
+    moment(task?.start_date).format('HH DD YYYY') ===
+    moment(task?.end_date).format('HH DD YYYY')
+      ? moment(task?.start_date).format('h:mm A')
+      : `${
+          moment(task?.start_date).format('A') ===
+          moment(task?.end_date).format('A')
+            ? moment(task?.start_date).format('h:mm')
+            : moment(task?.start_date).format('h:mm A')
+        } - ${moment(task?.end_date).format('h:mm A')}`
+  }`;
   return (
     <View className="mb-6 rounded-2xl border border-carewallet-gray bg-carewallet-white p-4">
       <View className="mb-2 flex flex-col justify-between">
         <View className="flex-row items-center">
-          <View className="flex flex-row items-center space-x-2">
+          <View className="flex w-[60vw] flex-row flex-wrap items-center space-x-2">
             <Text className="font-carewallet-manrope-semibold text-xl">
               {task.task_title}
             </Text>
@@ -92,28 +68,12 @@ export function TaskInfoComponent({
           </View>
           <View className="flex flex-row items-center space-x-2">
             <Time />
-            <Text className="font-carewallet-manrope">
-              {moment(task.end_date).format('hh:mm A')}
-            </Text>
+            <Text className="font-carewallet-manrope">{time}</Text>
           </View>
         </View>
       </View>
       <View className="space-y-2">
-        <View
-          className={clsx(
-            'mr-auto flex flex-row items-center space-x-2 rounded-full border border-carewallet-lightgray px-2 py-1',
-            categoryToBGColor(task?.task_type ?? 'Other')
-          )}
-        >
-          <View>
-            {CategoryIconsMap[TypeToCategoryMap[task?.task_type ?? 'Other']]}
-          </View>
-          <Text
-            className={`font-carewallet-manrope text-${categoryToColor(task.task_type)}`}
-          >
-            {TaskTypeDescriptions[task.task_type]}
-          </Text>
-        </View>
+        <GetCategoryPill category={task.task_type} />
         <View>
           {taskLabels &&
             taskLabels.map((label) => (

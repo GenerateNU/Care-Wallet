@@ -21,7 +21,7 @@ export default function FileUploadScreen() {
   const { user, group } = useCareWalletContext();
   const { uploadFileMutation } = useFile();
   const [fileTitle, setFileTitle] = useState('');
-  const [label, setLabel] = useState({ label: 'Select Label', value: '' });
+  const [label, setLabel] = useState({ label: 'Select', value: '' });
   const [additionalNotes, setAdditionalNotes] = useState('');
   const [pickedFile, setPickedFile] = useState<DocumentPickerAsset | null>(
     null
@@ -67,7 +67,7 @@ export default function FileUploadScreen() {
         });
 
         setFileTitle('');
-        setLabel({ label: 'Select Label', value: '' });
+        setLabel({ label: 'Select', value: '' });
         setAdditionalNotes('');
         setPickedFile(null);
       }

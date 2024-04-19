@@ -61,11 +61,15 @@ const addNewTask = async (newTask: Task): Promise<Task> => {
     group_id: newTask.group_id, // Adjust the group_id as needed
     label_name: newTask.label // Adjust the label_name as needed
   };
-  const label_response = await axios.post(
-    `${api_url}/tasks/${task_response.data['task_id']}/labels`,
-    label_body
-  );
-  console.log('Added label: ', label_response.data);
+
+  if (newTask.label === '') {
+    const label_response = await axios.post(
+      `${api_url}/tasks/${task_response.data['task_id']}/labels`,
+      label_body
+    );
+
+    console.log('Added label: ', label_response.data);
+  }
 
   const assigned_to_body = {
     assigner: newTask.created_by,
@@ -73,6 +77,7 @@ const addNewTask = async (newTask: Task): Promise<Task> => {
   };
 
   console.log('Assigning task to user: ', newTask.assigned_to);
+
   const assigned_to_response = await axios.post(
     `${api_url}/tasks/${task_response.data['task_id']}/assign`,
     assigned_to_body
@@ -96,8 +101,7 @@ export const useFilteredTasks = (queryParams: TaskQueryParams) => {
     refetch: refetchTask
   } = useQuery<Task[]>({
     queryKey: ['filteredTaskList'],
-    queryFn: () => getFilteredTasks(queryParams),
-    refetchInterval: 20000
+    queryFn: () => getFilteredTasks(queryParams)
   });
   return {
     tasks,

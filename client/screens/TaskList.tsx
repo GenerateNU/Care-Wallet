@@ -8,7 +8,6 @@ import React, {
 import {
   ActivityIndicator,
   Pressable,
-  SafeAreaView,
   ScrollView,
   Text,
   TextInput,
@@ -18,6 +17,7 @@ import {
 import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
 import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
 import { useNavigation } from '@react-navigation/native';
+import moment from 'moment';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Button } from 'react-native-paper';
 
@@ -26,6 +26,7 @@ import { CalendarTaskListTopNav } from '../components/calendar/CalendarTaskListT
 import { TaskInfoComponent } from '../components/calendar/TaskInfoCard';
 import { FilterBottomSheet } from '../components/filter/FilterBottomSheet';
 import { useCareWalletContext } from '../contexts/CareWalletContext';
+import { MainLayout } from '../layouts/MainLayout';
 import { AppStackNavigation } from '../navigation/types';
 import { useGroup } from '../services/group';
 import { useLabelsByTasks } from '../services/label';
@@ -85,14 +86,14 @@ export default function TaskListScreen() {
   });
 
   // Filter tasks based on categories
-  const pastDueTasks = tasks?.filter(
-    (task) => task?.end_date || '' < String(new Date())
+  const pastDueTasks = tasks?.filter((task) =>
+    moment(task?.end_date).isBefore(moment())
   );
   const inProgressTasks = tasks?.filter(
     (task) => task?.task_status === 'PARTIAL'
   );
-  const inFutureTasks = tasks?.filter(
-    (task) => (task?.start_date || '') > String(new Date())
+  const inFutureTasks = tasks?.filter((task) =>
+    moment(task?.end_date).isAfter(moment())
   );
   const completeTasks = tasks?.filter(
     (task) => task?.task_status === 'COMPLETE'
@@ -144,11 +145,11 @@ export default function TaskListScreen() {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <MainLayout>
       <CalendarTaskListTopNav navigator={navigator} current="TaskList" />
       <GestureHandlerRootView>
         <ScrollView
-          className="mb-0 flex w-[100vw] pl-4 pr-4 pt-4"
+          className="mb-28 flex w-[100vw] pl-4 pr-4 pt-4"
           onScrollBeginDrag={() => setCanPress(false)}
           onScrollEndDrag={() => setCanPress(true)}
         >
@@ -193,6 +194,6 @@ export default function TaskListScreen() {
           setFilters={setFilters}
         />
       </GestureHandlerRootView>
-    </SafeAreaView>
+    </MainLayout>
   );
 }

@@ -19,7 +19,7 @@ export function CWDropdown({
     <View className="mb-3 bg-carewallet-white">
       {isOpen && (
         <View className="absolute bottom-14 z-50 flex flex-row flex-wrap rounded-lg border border-carewallet-blue/20 bg-carewallet-white">
-          {selected !== 'Select Label' && (
+          {selected !== 'Select' && (
             <View
               className="h-14 w-full justify-center rounded-lg border-t border-carewallet-blue/20"
               onTouchEnd={() => {

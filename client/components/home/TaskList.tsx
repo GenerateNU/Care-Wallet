@@ -18,7 +18,7 @@ export function TaskList() {
   const navigation = useNavigation<AppStackNavigation>();
 
   return (
-    <View className="mt-10 overflow-hidden rounded-lg border border-carewallet-blue/10">
+    <View className="mt-10 overflow-hidden rounded-lg border border-carewallet-blue/10 bg-carewallet-white">
       <View
         className="flex flex-row items-center overflow-hidden bg-carewallet-blue/10"
         onTouchEnd={() => {

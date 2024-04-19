@@ -18,6 +18,7 @@ module.exports = {
       'carewallet-gray': '#BEBEBE',
       'carewallet-lightgray': '#D9D9D9',
       'carewallet-lightergray': '#0000000D',
+      'carewallet-lightblue': '#DDE6F6',
       'carewallet-blue': '#1A56C4',
       'carewallet-green': '#4DB8A6',
       'carewallet-coral': '#FF6258',

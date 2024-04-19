@@ -4,6 +4,7 @@ import FinancialLegal from '../assets/calendar/financial&legal.svg';
 import HealthMedical from '../assets/calendar/health&medical.svg';
 import HomeLifestyle from '../assets/calendar/home&lifestyle.svg';
 import Personal from '../assets/calendar/personal.svg';
+import Other from '../assets/task-creation/other.svg';
 
 export enum TypeOfTask {
   MEDICATION = 'Medication Management',
@@ -39,7 +40,13 @@ export const TypeToCategoryMap: Record<string, Category> = {
   med_mgmt: Category.HEALTH,
   dr_appt: Category.HEALTH,
   financial: Category.FINANCIAL,
-  other: Category.OTHER
+  other: Category.OTHER,
+  diet: Category.HEALTH,
+  grmg: Category.PERSONAL,
+  fml_convos: Category.PERSONAL,
+  shpping: Category.PERSONAL,
+  activities: Category.HOME,
+  hlth_ins: Category.FINANCIAL
 };
 
 export const CategoryToTypeMap: Record<Category, TypeOfTask[]> = {
@@ -90,5 +97,6 @@ export const CategoryIconsMap: Record<string, JSX.Element> = {
   'Financial & Legal': <FinancialLegal />,
   'Health & Medical': <HealthMedical />,
   'Home & Lifestyle': <HomeLifestyle />,
-  Personal: <Personal />
+  Personal: <Personal />,
+  Other: <Other />
 };
