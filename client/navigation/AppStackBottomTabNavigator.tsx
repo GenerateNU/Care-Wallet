@@ -6,9 +6,9 @@ import Bell from '../assets/bottom-nav/bell.svg';
 import Calendar from '../assets/bottom-nav/calendar.svg';
 import HomeIcon from '../assets/bottom-nav/home.svg';
 import User from '../assets/bottom-nav/user.svg';
-import Home from '../screens/Home';
 import { CalendarNavigationContainer } from './containers/CalendarNavigationContainer';
 import { HomeNavigationContainer } from './containers/HomeNavigationContainer';
+import { NotificationNavigationContainer } from './containers/NotificationNavigationContainer';
 import { ProfileNavigationContainer } from './containers/ProfileNavigationContainer';
 
 const AppStackBottomTab = createBottomTabNavigator();
@@ -45,13 +45,13 @@ export function AppStackBottomTabNavigator() {
         component={CalendarNavigationContainer}
       />
       <AppStackBottomTab.Screen
-        name="Notifications"
+        name="NotificationsContainer"
         options={{
-          headerShown: true,
+          headerShown: false,
           tabBarIcon: ({ color }) => <Bell color={color} />,
           tabBarLabel: () => null
         }}
-        component={Home}
+        component={NotificationNavigationContainer}
       />
       <AppStackBottomTab.Screen
         name="ProfileScreens"
