@@ -19,9 +19,19 @@ export function FileTile({ name, label, url }: FileTileProps): JSX.Element {
             className="h-full w-full flex-1 rounded-md border border-carewallet-gray"
           />
         </View>
-        <View className="flex-grow">
-          <Text className="text-lg text-carewallet-black">{name}</Text>
-          <Text className="text-carewallet-black">{label}</Text>
+        <View className="flex w-[60vw] flex-col justify-center">
+          <View>
+            <Text className="font-carewallet-manrope-semibold text-xs text-carewallet-black">
+              {name}
+            </Text>
+          </View>
+          {label && (
+            <View className="mr-auto mt-1 w-fit rounded-lg border border-carewallet-gray px-2">
+              <Text className="mt-auto font-carewallet-manrope-semibold text-xs text-carewallet-black">
+                {label}
+              </Text>
+            </View>
+          )}
         </View>
       </View>
     </View>

@@ -33,14 +33,14 @@ export function GetCategoryPill({ category }: { category: string }) {
         <View
           className={clsx(
             'mr-auto flex flex-row items-center space-x-2 rounded-full border border-carewallet-lightgray px-2 py-1',
-            'bg-carewallet-yellow/20'
+            'bg-carewallet-orange/20'
           )}
         >
           <View>{CategoryIconsMap[TypeToCategoryMap[category]]}</View>
           <Text
             className={clsx(
               'font-carewallet-manrope',
-              'text-carewallet-yellow'
+              'text-carewallet-orange'
             )}
           >
             {TaskTypeDescriptions[category]}

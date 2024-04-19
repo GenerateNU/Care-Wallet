@@ -138,13 +138,13 @@ export default function AddTaskDetails() {
   };
 
   // Task label
-  const [label, setLabel] = useState('SELECT');
+  const [label, setLabel] = useState('Select');
   useEffect(() => {
     handleChange('Label', label);
   }, [label]);
 
   // Assigned to task
-  const [assignedTo, setAssignedTo] = useState({ label: 'SELECT', value: '' });
+  const [assignedTo, setAssignedTo] = useState({ label: 'Select', value: '' });
   useEffect(() => {
     handleChange('Assigned To', assignedTo.value);
   }, [assignedTo]);
@@ -206,11 +206,12 @@ export default function AddTaskDetails() {
     const assignedToUserId = taskDetails['Assigned To'];
 
     const newTask: Task = {
+      task_id: -1,
       task_title: taskDetails['Title'],
       group_id: 5, // hard coded group ID
       created_by: user.userID,
-      start_date: startDate.format(),
-      end_date: repeatingEndDate.format(),
+      start_date: startDate.add(1, 'day').format(),
+      end_date: repeatingEndDate.add(1, 'day').format(),
       quick_task: taskDetails['Schedule Type'] === 'Quick Task',
       notes: taskDetails['Description'] || taskSpecificsMap['Notes'] || '',
       repeating: repeating,
