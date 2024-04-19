@@ -100,33 +100,3 @@ export const CategoryIconsMap: Record<string, JSX.Element> = {
   Personal: <Personal />,
   Other: <Other />
 };
-
-export function categoryToTextColor(category: string) {
-  switch (TypeToCategoryMap[category]) {
-    case 'Health & Medical':
-      return 'text-carewallet-pink';
-    case 'Home & Lifestyle':
-      return 'text-carewallet-yellow';
-    case 'Personal':
-      return 'text-carewallet-purple';
-    case 'Financial & Legal':
-      return 'text-carewallet-green';
-    default:
-      return 'text-carewallet-coral';
-  }
-}
-
-export function categoryToBGColor(category: string) {
-  switch (TypeToCategoryMap[category]) {
-    case 'Health & Medical':
-      return 'bg-carewallet-pink/20';
-    case 'Home & Lifestyle':
-      return 'bg-carewallet-yellow/20';
-    case 'Personal':
-      return 'bg-carewallet-purple/20';
-    case 'Financial & Legal':
-      return 'bg-carewallet-green/20';
-    default:
-      return 'bg-carewallet-coral/20';
-  }
-}
