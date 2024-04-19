@@ -22,7 +22,7 @@ VALUES
   ('mPeo3d3MiXfnpPJADWgFD9ZcB2M2', 'Olivia', 'Sedarski', 'olivia@gmail.com', '', '', 'mPeo3d3MiXfnpPJADWgFD9ZcB2M2-IMG_5068.jpeg'),
   ('pTBhZsE9BaOxltkGUfoBAUDote43', 'Louis', 'Rollo', 'rollo.l@northeastern.edu', '', '', 'pTBhZsE9BaOxltkGUfoBAUDote43-IMG_3341.jpg'),
   ('8Sy7xBkGiGQv4ZKphcQfY8PxAqw1', 'Narayan', 'Sharma', 'sharma.na@northeastern.edu', '', '', '8Sy7xBkGiGQv4ZKphcQfY8PxAqw1-IMG_1777.JPG'),
-  ('iL7PnjS4axQffmlPceobjUUZ9DF2', 'Caitlin', 'Flynn', 'flynn.ca@northeastern.edu', '', '', NULL),
+  ('iL7PnjS4axQffmlPceobjUUZ9DF2', 'Caitlin', 'Flynn', 'flynn.ca@northeastern.edu', '', '', 'iL7PnjS4axQffmlPceobjUUZ9DF2-IMG_2428.jpg'),
   ('5JgN2PQxCRM9VoCiiFPlQPNqkL32', 'Linwood', 'Blaisdell', 'blaisdell.l@northeastern.edu', '', '', '5JgN2PQxCRM9VoCiiFPlQPNqkL32-IMG_6884.jpg'),
   ('P03ggWcw63N0RSY7ltbkeBoR6bd2', 'Chris', 'Wyatt', 'wyatt.c@northeastern.edu', '', '', 'P03ggWcw63N0RSY7ltbkeBoR6bd2-IMG_1597.jpeg'),
   ('9rIMSUo6qNf8ToTABkCfNqnByRv1', 'Haley', 'Martin', 'martin.hal@northeastern.edu', '', '', '9rIMSUo6qNf8ToTABkCfNqnByRv1-IMG_8603.jpg')
