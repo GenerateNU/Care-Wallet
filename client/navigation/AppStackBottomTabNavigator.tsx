@@ -44,7 +44,7 @@ export function AppStackBottomTabNavigator() {
         component={CalendarNavigationContainer}
       />
       <AppStackBottomTab.Screen
-        name="Notifications"
+        name="NotificationsContainer"
         options={{
           headerShown: false,
           tabBarIcon: ({ color }) => <Bell color={color} />,
