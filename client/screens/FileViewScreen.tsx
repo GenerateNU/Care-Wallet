@@ -4,6 +4,7 @@ import { FlatList, RefreshControl, Text, View } from 'react-native';
 import { FileTile } from '../components/file_management/FileTile';
 import { Header } from '../components/file_management/Header';
 import { useCareWalletContext } from '../contexts/CareWalletContext';
+import { MainLayout } from '../layouts/MainLayout';
 import { useAllFileByGroup } from '../services/file';
 
 export interface FileViewProps {
@@ -38,25 +39,28 @@ export default function FileViewScreen() {
   };
 
   return (
-    <View className="bg-carewallet-white/80">
-      <Header />
-      {groupFiles && groupFiles.length > 0 ? (
-        <FlatList
-          data={groupFiles}
-          renderItem={renderItem}
-          keyExtractor={keyExtractor}
-          className="h-5/6 bg-carewallet-white/80"
-          refreshControl={
-            <RefreshControl refreshing={isLoading} onRefresh={onRefresh} />
-          }
-        />
-      ) : (
-        <View className="flex h-[80vh] items-center justify-center bg-carewallet-white/80">
-          <Text className="text-xl text-carewallet-black">
-            No files have been uploaded.
-          </Text>
-        </View>
-      )}
+    <View>
+      <View className="h-[8vh] bg-carewallet-white" />
+      <MainLayout>
+        <Header />
+        {groupFiles && groupFiles.length > 0 ? (
+          <FlatList
+            data={groupFiles}
+            renderItem={renderItem}
+            keyExtractor={keyExtractor}
+            className="h-5/6"
+            refreshControl={
+              <RefreshControl refreshing={isLoading} onRefresh={onRefresh} />
+            }
+          />
+        ) : (
+          <View className="flex h-[80vh] items-center justify-center">
+            <Text className="text-xl text-carewallet-black">
+              No files have been uploaded.
+            </Text>
+          </View>
+        )}
+      </MainLayout>
     </View>
   );
 }

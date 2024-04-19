@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, SafeAreaView, Text, View } from 'react-native';
+import { ActivityIndicator, Text, View } from 'react-native';
 
 import BottomSheet from '@gorhom/bottom-sheet';
 import { useNavigation } from '@react-navigation/native';
@@ -19,6 +19,7 @@ import { CWExpanableCalendar } from '../components/calendar/ExpandableCalendar';
 import { QuickTask } from '../components/calendar/QuickTask';
 import { CWTimelineList } from '../components/calendar/TimelineList';
 import { useCareWalletContext } from '../contexts/CareWalletContext';
+import { MainLayout } from '../layouts/MainLayout';
 import { AppStackNavigation } from '../navigation/types';
 import { useFilteredTasks } from '../services/task';
 import { Task } from '../types/task';
@@ -147,43 +148,45 @@ export default function TimelineCalendarScreen() {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
-      <CalendarTaskListTopNav navigator={navigation} current="Calendar" />
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <CalendarProvider
-          date={moment(currentDate).format('YYYY-MM-DD')}
-          onDateChanged={onDateChanged}
-          showTodayButton
-          disabledOpacity={0.6}
-          theme={{
-            backgroundColor: 'white',
-            selectedDayBackgroundColor: '#1A56C4',
-            selectedDotColor: '#ffffff',
-            dotColor: '#ffffff',
-            todayButtonTextColor: '#1A56C4',
-            inactiveDotColor: '#1A56C4'
-          }}
-        >
-          <CWExpanableCalendar marked={marked} current={currentDate} />
-          <CWTimelineList
-            handleOpenPress={handleOpenPress}
-            navigation={navigation}
-            events={events}
-            tasks={tasks ?? []}
-          />
-          <View
-            className="absolute bottom-5 right-5 h-10 w-10 items-center justify-center rounded-xl bg-carewallet-blue"
-            onTouchEnd={() => navigation.navigate('TaskType')}
+    <MainLayout>
+      <View className="h-full">
+        <CalendarTaskListTopNav navigator={navigation} current="Calendar" />
+        <GestureHandlerRootView className="flex-1">
+          <CalendarProvider
+            date={moment(currentDate).format('YYYY-MM-DD')}
+            onDateChanged={onDateChanged}
+            showTodayButton
+            disabledOpacity={0.6}
+            theme={{
+              backgroundColor: 'white',
+              selectedDayBackgroundColor: '#1A56C4',
+              selectedDotColor: '#ffffff',
+              dotColor: '#ffffff',
+              todayButtonTextColor: '#1A56C4',
+              inactiveDotColor: '#1A56C4'
+            }}
           >
-            <Text className="text-4xl text-carewallet-white">+</Text>
-          </View>
-        </CalendarProvider>
-        <QuickTask
-          currentDayTasks={currentDayTasks ?? []}
-          navigation={navigation}
-          bottomSheetRef={bottomSheetRef}
-        />
-      </GestureHandlerRootView>
-    </SafeAreaView>
+            <CWExpanableCalendar marked={marked} current={currentDate} />
+            <CWTimelineList
+              handleOpenPress={handleOpenPress}
+              navigation={navigation}
+              events={events}
+              tasks={tasks ?? []}
+            />
+            <View
+              className="absolute bottom-5 right-5 h-10 w-10 items-center justify-center rounded-xl bg-carewallet-blue"
+              onTouchEnd={() => navigation.navigate('TaskType')}
+            >
+              <Text className="text-4xl text-carewallet-white">+</Text>
+            </View>
+          </CalendarProvider>
+          <QuickTask
+            currentDayTasks={currentDayTasks ?? []}
+            navigation={navigation}
+            bottomSheetRef={bottomSheetRef}
+          />
+        </GestureHandlerRootView>
+      </View>
+    </MainLayout>
   );
 }

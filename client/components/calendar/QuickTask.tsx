@@ -57,7 +57,7 @@ export function QuickTask({
             }}
           >
             <QuickTaskCard
-              name={item.notes}
+              name={item.task_title}
               label={item.task_type}
               status={item.task_status}
             />
