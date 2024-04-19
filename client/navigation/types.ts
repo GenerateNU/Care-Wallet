@@ -21,6 +21,9 @@ export type AppStackParamList = {
   CalendarContainer: undefined;
   CalendarTopNav: undefined;
   TaskCreation: { taskType: string };
+  AddTaskDetails: {
+    taskCreation: string;
+  };
   Settings: undefined;
   CareGroup: undefined;
 };

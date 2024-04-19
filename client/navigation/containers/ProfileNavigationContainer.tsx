@@ -15,7 +15,8 @@ export function ProfileNavigationContainer() {
   return (
     <AppStack.Navigator
       screenOptions={{
-        headerShown: false
+        headerShown: false,
+        freezeOnBlur: true
       }}
     >
       <AppStack.Screen name="Profile" component={Profile} />

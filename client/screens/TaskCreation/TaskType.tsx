@@ -15,15 +15,15 @@ import {
 } from 'react-native-gesture-handler';
 import { Button, Text } from 'react-native-paper';
 
-import Financial from '../assets/task-creation/financial.svg';
-import Home from '../assets/task-creation/home.svg';
-import Other from '../assets/task-creation/other.svg';
-import Personal from '../assets/task-creation/personal.svg';
-import RedPill from '../assets/task-creation/red-pill.svg';
-import { BackButton } from '../components/nav_buttons/BackButton';
-import { CloseButton } from '../components/nav_buttons/CloseButton';
-import { AppStackNavigation } from '../navigation/types';
-import { Category, CategoryToTypeMap } from '../types/type';
+import Financial from '../../assets/task-creation/financial.svg';
+import Home from '../../assets/task-creation/home.svg';
+import Other from '../../assets/task-creation/other.svg';
+import Personal from '../../assets/task-creation/personal.svg';
+import RedPill from '../../assets/task-creation/red-pill.svg';
+import { BackButton } from '../../components/nav_buttons/BackButton';
+import { CloseButton } from '../../components/nav_buttons/CloseButton';
+import { AppStackNavigation } from '../../navigation/types';
+import { Category, CategoryToTypeMap } from '../../types/type';
 
 export default function TaskType() {
   const navigation = useNavigation<AppStackNavigation>();
@@ -76,15 +76,14 @@ export default function TaskType() {
   return (
     <SafeAreaView className="flex-1 bg-carewallet-white">
       <GestureHandlerRootView>
-        <ScrollView className="h-full">
-          <View className="flex w-full flex-row items-center border-b border-carewallet-gray bg-carewallet-white">
-            <BackButton />
-            <Text className="mx-auto pr-20 font-carewallet-manrope-bold text-lg text-carewallet-blue">
-              Step 1 of 3
-            </Text>
-          </View>
-          <View className="my-2" />
-
+        <View className="flex w-full flex-row items-center border-b border-carewallet-gray bg-carewallet-white">
+          <BackButton />
+          <Text className="mx-auto my-7 pr-20 font-carewallet-manrope-bold text-lg text-carewallet-blue">
+            Step 1 of 3
+          </Text>
+        </View>
+        <View className="my-2" />
+        <ScrollView className="h-[90%]">
           <View className="flex w-full flex-row items-start justify-between px-4">
             <Text className="mx-1 font-carewallet-manrope-bold text-[24px]">
               Choose Type of Task

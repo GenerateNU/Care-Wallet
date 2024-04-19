@@ -2,7 +2,6 @@ import React from 'react';
 import { ActivityIndicator, Text, View } from 'react-native';
 
 import { RouteProp, useRoute } from '@react-navigation/native';
-import { clsx } from 'clsx';
 import moment from 'moment';
 import { IconButton } from 'react-native-paper';
 import { WebView } from 'react-native-webview';
@@ -12,53 +11,20 @@ import Edit from '../assets/profile/edit.svg';
 import Clock from '../assets/profile/settings/clock.svg';
 import Repeating from '../assets/repeating.svg';
 import { DropUp } from '../components/DropUp';
+import { GetCategoryPill } from '../components/GetCategoryPill';
 import { GetStatusPill } from '../components/GetStatusPill';
 import { BackButton } from '../components/nav_buttons/BackButton';
 import { MainLayout } from '../layouts/MainLayout';
 import { useProfileFile } from '../services/file';
 import { useTaskById } from '../services/task';
 import { useUser } from '../services/user';
-import {
-  CategoryIconsMap,
-  Status,
-  TaskTypeDescriptions,
-  TypeToCategoryMap
-} from '../types/type';
+import { Status } from '../types/type';
 
 type ParamList = {
   mt: {
     id: string;
   };
 };
-
-function categoryToColor(category: string) {
-  switch (TaskTypeDescriptions[category]) {
-    case 'Medication Management':
-      return 'carewallet-pink';
-    case 'Doctor Appointment':
-      return 'carewallet-pink';
-    case 'Financial Task':
-      return 'carewallet-green';
-    case 'OTHER':
-      return 'carewallet-white';
-    default:
-      return 'carewallet-white';
-  }
-}
-function categoryToBGColor(category: string) {
-  switch (TaskTypeDescriptions[category]) {
-    case 'Medication Management':
-      return 'bg-carewallet-pink/20';
-    case 'Doctor Appointment':
-      return 'bg-carewallet-pink/20';
-    case 'Financial Task':
-      return 'bg-carewallet-green/10';
-    case 'OTHER':
-      return 'bg-carewallet-white';
-    default:
-      return 'bg-carewallet-white';
-  }
-}
 
 export default function SingleTaskScreen() {
   const route = useRoute<RouteProp<ParamList, 'mt'>>();
@@ -70,6 +36,9 @@ export default function SingleTaskScreen() {
     assigned,
     updateTaskStatusMutation
   } = useTaskById(id);
+
+  console.log('task', id);
+  console.log(task?.task_type);
 
   const { user } = useUser(assigned ?? '');
 
@@ -156,25 +125,7 @@ export default function SingleTaskScreen() {
               <View className="mb-auto flex flex-row flex-wrap items-start space-x-2 pt-3">
                 <GetStatusPill status={task?.task_status ?? ''} />
                 <View className="space-y-2">
-                  <View
-                    className={clsx(
-                      'mr-auto flex flex-row items-center space-x-2 rounded-full border border-carewallet-lightgray px-2 py-1',
-                      categoryToBGColor(task?.task_type ?? 'Other')
-                    )}
-                  >
-                    <View>
-                      {
-                        CategoryIconsMap[
-                          TypeToCategoryMap[task?.task_type ?? 'Other']
-                        ]
-                      }
-                    </View>
-                    <Text
-                      className={`font-carewallet-manrope text-${categoryToColor(task?.task_type ?? '')}`}
-                    >
-                      {TaskTypeDescriptions[task?.task_type ?? '']}
-                    </Text>
-                  </View>
+                  <GetCategoryPill category={task?.task_type ?? ''} />
                 </View>
               </View>
               {taskLabels?.map((label, index) => (

@@ -10,7 +10,8 @@ export function CalendarNavigationContainer() {
   return (
     <AppStack.Navigator
       screenOptions={{
-        headerShown: false
+        headerShown: false,
+        freezeOnBlur: true
       }}
     >
       <AppStack.Screen name="Calendar" component={TimelineCalendarScreen} />

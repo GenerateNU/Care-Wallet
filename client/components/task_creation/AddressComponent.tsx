@@ -54,7 +54,7 @@ export function AddressComponent() {
           </Text>
           <TextInput
             className="border-gray-300 w-full rounded-md border border-carewallet-gray bg-carewallet-white px-4 py-2"
-            placeholder={'Fill in blank'}
+            placeholder={'XXX-XXX-XXXX'}
             autoComplete="tel"
             keyboardType="phone-pad"
           />

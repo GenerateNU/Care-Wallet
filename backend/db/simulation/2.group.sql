@@ -33,14 +33,6 @@ VALUES
 
 INSERT INTO group_roles (group_id, user_id, role)
 VALUES
-  (1, 'user1', 'PATIENT'),
-  (1, 'user2', 'PRIMARY'),
-  (2, 'user3', 'PRIMARY'),
-  (2, 'user4', 'SECONDARY'),
-  (3, 'user4', 'PATIENT'),
-  (4, 'user1', 'SECONDARY'),
-  (4, 'user3', 'SECONDARY'),
-
   -- Care-Wallet Team
   (5, 'fIoFY26mJnYWH8sNdfuVoxpnVnr1', 'PRIMARY'),
   (5, 'JamnX6TZf0dt6juozMRzNG5LMQd2', 'PRIMARY'),

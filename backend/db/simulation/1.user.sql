@@ -15,10 +15,6 @@ CREATE TABLE IF NOT EXISTS users (
 
 INSERT INTO users (user_id, first_name, last_name, email, phone, address, profile_picture)
 VALUES
-  ('user1', 'John', 'Smith', 'john.smith@example.com', '123-456-7890', '123 Main St', NULL),
-  ('user2', 'Jane', 'Doe', 'jane.doe@example.com', '987-654-3210', '456 Elm St', NULL),
-  ('user3', 'Bob', 'Johnson', 'bob.johnson@example.com', NULL, NULL, NULL),
-  ('user4', 'Emily', 'Garcia', 'emily.garcia@example.com', '555-1212', '789 Oak Ave', NULL),
   -- Care-Wallet Team
   ('fIoFY26mJnYWH8sNdfuVoxpnVnr1', 'Matt', 'McCoy', 'mattcmccoy01@gmail.com', '', '', 'fIoFY26mJnYWH8sNdfuVoxpnVnr1-IMG_1384.jpeg'),
   ('JamnX6TZf0dt6juozMRzNG5LMQd2', 'Andy', 'Cap', 'caplan.and@northeastern.edu', '', '', 'JamnX6TZf0dt6juozMRzNG5LMQd2-IMG_0916.HEIC'),
