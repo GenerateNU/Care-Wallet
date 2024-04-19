@@ -7,6 +7,7 @@ import { CareGroup } from '../../screens/Profile/CareGroup';
 import PatientView from '../../screens/Profile/PatientView';
 import Profile from '../../screens/Profile/Profile';
 import Settings from '../../screens/Profile/Settings';
+import SingleFile from '../../screens/SingleFile';
 import SingleTaskScreen from '../../screens/SingleTask';
 import TaskList from '../../screens/TaskList';
 import { AppStack } from '../types';
@@ -28,6 +29,7 @@ export function ProfileNavigationContainer() {
       <AppStack.Screen name="TaskDisplay" component={SingleTaskScreen} />
       <AppStack.Screen name="FileViewScreen" component={FileViewScreen} />
       <AppStack.Screen name="CareGroup" component={CareGroup} />
+      <AppStack.Screen name="SingleFile" component={SingleFile} />
     </AppStack.Navigator>
   );
 }

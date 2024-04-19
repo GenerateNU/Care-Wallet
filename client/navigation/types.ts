@@ -13,6 +13,7 @@ export type AppStackParamList = {
   FileUploadScreen: undefined;
   FileViewScreen: undefined;
   Landing: undefined;
+  SingleFile: { url: string; name: string; label: string };
   Calendar: undefined;
   Notifications: undefined;
   TaskType: undefined;
