@@ -70,7 +70,7 @@ export function Group({
                 if (canPress) setActiveUser(item.user_id);
               }}
             >
-              <SmallProfileImage user={item} />
+              <SmallProfileImageWithText user={item} />
             </View>
           );
         }}
@@ -79,11 +79,11 @@ export function Group({
   );
 }
 
-function SmallProfileImage({ user }: { user: User }) {
+function SmallProfileImageWithText({ user }: { user: User }) {
   const { file } = useProfileFile(user.profile_picture);
   return (
     <View>
-      {user?.profile_picture ? (
+      {user?.profile_picture && file ? (
         <View className="mb-1 h-20 w-20">
           <WebView
             source={{ uri: file }}
@@ -101,6 +101,29 @@ function SmallProfileImage({ user }: { user: User }) {
       <Text className="text-center font-carewallet-manrope-semibold text-base">
         {user.first_name}
       </Text>
+    </View>
+  );
+}
+
+export function SmallProfileImage({ user }: { user: User }) {
+  const { file } = useProfileFile(user.profile_picture);
+  return (
+    <View>
+      {user?.profile_picture && file ? (
+        <View className="mb-1 h-20 w-20">
+          <WebView
+            source={{ uri: file }}
+            className="flex-1 rounded-full border border-carewallet-gray"
+          />
+        </View>
+      ) : (
+        <View className="mb-1 h-20 w-20 rounded-full bg-carewallet-lightergray">
+          <Text className="my-auto items-center text-center font-carewallet-manrope-bold text-carewallet-blue">
+            {user.first_name.charAt(0)}
+            {user.last_name.charAt(0)}
+          </Text>
+        </View>
+      )}
     </View>
   );
 }
