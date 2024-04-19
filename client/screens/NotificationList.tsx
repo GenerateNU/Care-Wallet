@@ -204,7 +204,7 @@ export default function NotificationScreen() {
             ))}
             {overdueTasks.map((task, index) => (
               <Pressable
-                key={index + task.task_id}
+                key={index}
                 onTouchEnd={() => {
                   if (!canPress) return;
                   navigator.navigate('TaskDisplay', { id: task.task_id });
