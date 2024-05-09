@@ -54,7 +54,9 @@ of requests from the database.
 [Task](https://taskfile.dev) speeding up development by running long commands in
 quick phrases.
 
-[Nodemon](https://www.npmjs.com/package/nodemon) a tool that watches code and
+- Check out all of our commands in the `Taskfile.yaml` file!
+
+[Nodemon](https://www.npmjs.com/package/nodemon) | (optional) a tool that watches code and
 reloads the build if it sees changes.
 
 ## Before Running
@@ -63,6 +65,7 @@ Create an .env file in the root directory:
 
 ```
   EXPO_PUBLIC_API_DOMAIN=your-ngrok-static-domain-here
+  AWS_BUCKET_NAME=your-aws-s3-bucket-name-here
   AWS_ACCESS_KEY=your-aws-access-key-here
   AWS_SECRET_KEY=your-aws-secret-key-here
 ```
@@ -75,6 +78,14 @@ item below!
 
 [Pre-commit](https://pre-commit.com) standardizing code style and commits
 
+After installing, in the base folder run:
+
+```
+task pre-commit
+```
+
+This will run and install all of our hooks to ensure consistent formatting and structure in the code base.
+
 [Commitizen](https://commitizen-tools.github.io/commitizen/) organizing our
 commits into categories
 
@@ -84,6 +95,7 @@ commits into categories
 2. In the base of the repo: run `task start-docker`
 3. Then, open a new tab to run commands in: run `task start-backend` or
    `task start-dev`
+   - `task start-dev` utilizes nodemon to check for updates in the backend so installing nodemon is necessary to run this command
    - You can now view swagger: http://localhost:8080/swagger/index.html
 4. Next, in a new tab run `task start-ngrok`
 5. Finally, open one last new tab: run `task start-frontend`

@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"mime/multipart"
+	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -17,7 +18,7 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-var AWS_BUCKET_NAME = "care-wallet-storage"
+var AWS_BUCKET_NAME, _ = os.LookupEnv("AWS_BUCKET_NAME")
 
 type FileDetails struct {
 	FileID    int    `json:"fileId"`
